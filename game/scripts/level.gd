@@ -16,6 +16,8 @@ var _boss_started := false
 var _ended := false
 var _door: StaticBody2D = null
 
+const END_SCREEN := preload("res://scripts/end_screen.gd")
+
 # Elements UI (construits par code)
 var hud: CanvasLayer
 var hp_fill: ColorRect
@@ -36,6 +38,7 @@ func _physics_process(_delta: float) -> void:
 		return
 	if player and player.global_position.x > ARENA_X:
 		_start_boss_fight()
+
 
 # ---------------------------------------------------------------- Construction
 
@@ -210,43 +213,7 @@ func _on_boss_died() -> void:
 
 func _show_end_screen(message: String, color: Color, victory: bool) -> void:
 	await get_tree().create_timer(0.8).timeout
-	var layer := CanvasLayer.new()
-	layer.layer = 10
-	layer.process_mode = Node.PROCESS_MODE_ALWAYS
-	add_child(layer)
-
-	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.7)
-	dim.anchor_right = 1.0
-	dim.anchor_bottom = 1.0
-	layer.add_child(dim)
-
-	var title := Label.new()
-	title.text = message
-	title.add_theme_color_override("font_color", color)
-	title.add_theme_font_size_override("font_size", 20)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.anchor_right = 1.0
-	title.position = Vector2(0, 80)
-	title.size = Vector2(480, 30)
-	layer.add_child(title)
-
-	var btn := Button.new()
-	btn.text = "REESSAYER" if not victory else "REJOUER"
-	btn.size = Vector2(140, 26)
-	btn.position = Vector2(170, 140)
-	layer.add_child(btn)
-	btn.pressed.connect(func():
-		get_tree().paused = false
-		get_tree().reload_current_scene())
-
-	var menu := Button.new()
-	menu.text = "MENU"
-	menu.size = Vector2(140, 24)
-	menu.position = Vector2(170, 174)
-	layer.add_child(menu)
-	menu.pressed.connect(func():
-		get_tree().paused = false
-		get_tree().change_scene_to_file("res://scenes/ui/title.tscn"))
-
+	var screen := END_SCREEN.new()
+	add_child(screen)
+	screen.setup(message, color, victory)
 	get_tree().paused = true

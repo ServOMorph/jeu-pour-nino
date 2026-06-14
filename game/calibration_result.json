@@ -1,0 +1,86 @@
+{
+	"A": {
+		"index": 2,
+		"type": "button"
+	},
+	"B": {
+		"index": 1,
+		"type": "button"
+	},
+	"Croix bas": {
+		"index": 12,
+		"type": "button"
+	},
+	"Croix droite": {
+		"index": 14,
+		"type": "button"
+	},
+	"Croix gauche": {
+		"index": 13,
+		"type": "button"
+	},
+	"Croix haut": {
+		"index": 11,
+		"type": "button"
+	},
+	"L stick clic": {
+		"index": 10,
+		"type": "button"
+	},
+	"LB": {
+		"index": 4,
+		"type": "button"
+	},
+	"R stick clic": {
+		"index": 11,
+		"type": "button"
+	},
+	"RB": {
+		"index": 5,
+		"type": "button"
+	},
+	"Select": {
+		"index": 9,
+		"type": "button"
+	},
+	"Start": {
+		"index": 12,
+		"type": "button"
+	},
+	"Stick droit X": {
+		"direction": -1.0,
+		"index": 2,
+		"type": "axis"
+	},
+	"Stick droit Y": {
+		"direction": -1.0,
+		"index": 3,
+		"type": "axis"
+	},
+	"Stick gauche X": {
+		"direction": -1.0,
+		"index": 0,
+		"type": "axis"
+	},
+	"Stick gauche Y": {
+		"direction": -1.0,
+		"index": 1,
+		"type": "axis"
+	},
+	"X": {
+		"index": 3,
+		"type": "button"
+	},
+	"Y": {
+		"index": 0,
+		"type": "button"
+	},
+	"ZL": {
+		"index": 6,
+		"type": "button"
+	},
+	"ZR": {
+		"index": 7,
+		"type": "button"
+	}
+}

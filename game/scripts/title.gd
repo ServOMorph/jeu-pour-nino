@@ -51,13 +51,20 @@ func _ready() -> void:
 	hint_pad.size = Vector2(480, 16)
 	add_child(hint_pad)
 
+var _a_was := true  # true au depart : exige un relachement avant d'accepter A
+
 func _process(_delta: float) -> void:
 	if _started:
 		return
+	var a := false
 	for pad in Input.get_connected_joypads():
 		if Input.is_joy_button_pressed(pad, JOY_BUTTON_A):
-			_start_game()
-			return
+			a = true
+	# Front montant uniquement : evite qu'un A maintenu (depuis l'ecran de fin)
+	# relance le jeu des l'arrivee sur le titre.
+	if a and not _a_was:
+		_start_game()
+	_a_was = a
 
 func _start_game() -> void:
 	if _started:
