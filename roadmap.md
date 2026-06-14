@@ -1,115 +1,104 @@
-# Roadmap v1 — CoreDive Challenge (biome 1 jouable, combat de base, un boss)
+# Roadmap v2 — CoreDive Challenge (la boucle de ressources & de craft)
 
 *Roadmap de développement pour Godot. Chaque phase se termine par un jalon testable, pour avancer par petites itérations jouables plutôt que par gros blocs invisibles.*
 
-## Objectif de la v1
+> **v1 livrée** : squelette d'action complet — déplacement, combat de base, un boss, boucle complète (titre → run → victoire/défaite → relance), biome 1 fait main, support manette PowerA NSW. Voir l'historique git et `game/README.md`.
 
-Une boucle complète et jouable : le joueur démarre dans le biome 1 (niveau **conçu à la main**, pas encore généré procéduralement), se déplace, combat quelques ennemis basiques, puis affronte un boss. Victoire ou défaite, avec un écran de fin et la possibilité de relancer. C'est la base de gameplay sur laquelle tout le reste (craft, génération procédurale, biomes 2/3, méta-progression) viendra se greffer ensuite.
+## Objectif de la v2
 
----
+Transformer le couloir-combat de la v1 en un vrai **run façon Terraria** : le joueur **récolte des ressources** en chemin, les **fabrique en équipement** à un établi, et **devient tangiblement plus fort *pendant* le run** avant d'affronter le boss. C'est le cœur de l'ADN du jeu (GDD §5) et le signal le plus fort du profil joueur (244 h de Terraria, 488 h de 2D crafting/survie) — donc l'ajout le plus rentable maintenant.
 
-## Phase 0 — Mise en place du projet
+On **n'ajoute pas encore** la génération procédurale, le hub méta, ni les biomes 2/3 : on prouve d'abord que la boucle de craft est amusante, sur le biome 1 enrichi. Même discipline que la v1 (ne pas empiler deux gros chantiers à la fois).
 
-- [ ] Créer le projet Godot (figer une version, ex. Godot 4.x, pour éviter les surprises de compatibilité)
-- [ ] Définir une résolution de base basse (ex. 320×180 ou 480×270) avec mise à l'échelle entière (Project Settings > Display > Window) pour un rendu pixel art net
-- [ ] Désactiver le filtrage des textures (Project Settings > Rendering > Textures > Default Texture Filter = Nearest)
-- [ ] Mettre en place l'arborescence : `scenes/player`, `scenes/enemies`, `scenes/levels`, `scenes/ui`, `scripts/`, `assets/sprites`, `assets/tilesets`, `resources/`
-- [x] Configurer l'Input Map : gauche/droite, saut, attaque (clavier/souris + manette PowerA NSW via joymap.gd)
-- [ ] Récupérer un pack d'assets pixel art placeholder (gratuit, ex. Kenney.nl, itch.io) pour ne jamais être bloqué par l'art pendant le prototypage
-
-**Jalon** : projet Godot vide qui se lance, structure de dossiers prête.
+**Décisions de cadrage v2** :
+- **Périmètre** : boucle de craft seule (ressources + établi + paliers d'équipement + consommables), biome 1 enrichi.
+- **À la mort** : tout l'équipement et toutes les ressources sont perdus (GDD §5, tension maximale du run). La persistance méta (monnaie, déblocages, hub) arrive en v3.
 
 ---
 
-## Phase 1 — Personnage & déplacements
+## Phase 1 — Récolte de ressources
 
-- [ ] Scène Player : `CharacterBody2D` + `AnimatedSprite2D` + `CollisionShape2D`
-- [ ] Script de mouvement : gauche/droite, gravité, saut (ajouter un peu de tolérance — "coyote time", buffer de saut — pour un meilleur feel dès le départ)
-- [ ] Animations placeholder : idle, run, jump/fall
-- [ ] `Camera2D` qui suit le joueur, avec limites
-- [ ] Scène de test : une plateforme plate pour valider le mouvement isolément
+- [ ] Singleton autoload `Inventory` : compteurs de ressources du run (réinitialisé à chaque nouveau run)
+- [ ] Nœuds de ressources placés dans le niveau : filons minables (ex. pierre, cuivre), PV propres au filon
+- [ ] Récolte : le coup d'arme (ou une action dédiée) endommage puis casse un filon → drop de ressources dans l'inventaire
+- [ ] Feedback de récolte fort : flash du filon, particules, son — c'est ce qui rend la boucle satisfaisante (plus que le visuel)
+- [ ] Affichage HUD discret des ressources collectées
 
-**Jalon** : le joueur se déplace et saute dans une scène vide, et le mouvement "feel" bien (pas flottant, pas trop rigide) — c'est la base sur laquelle tout le reste repose, ça vaut le coup d'itérer ici avant d'avancer.
-
----
-
-## Phase 2 — Niveau du biome 1 (version statique)
-
-- [ ] Créer un `TileSet` pour le biome 1 (sol, murs, fond, décor — placeholder ok)
-- [ ] Construire à la main un niveau représentatif : un parcours avec quelques plateformes/obstacles, menant à une arène finale pour le boss
-- [ ] Définir la zone de spawn du joueur et les limites du niveau
-- [ ] Ajuster les limites de la `Camera2D` au niveau
-
-> Pour cette v1, le niveau est fait à la main — la génération procédurale (cf. GDD section 3) viendra remplacer ce niveau statique plus tard, une fois le gameplay validé. Ça évite de cumuler deux problèmes (gameplay + génération) en même temps.
-
-**Jalon** : le joueur peut parcourir le niveau du début jusqu'à l'arène du boss, sans bug de collision.
+**Jalon** : on parcourt le niveau, on casse des filons, le compteur monte avec un retour visuel/sonore satisfaisant. C'est le premier "plaisir Nino" du run.
 
 ---
 
-## Phase 3 — Combat de base & premiers ennemis
+## Phase 2 — Établi & craft
 
-- [ ] Système de santé du joueur : variable HP, fonction `take_damage()`, mort → signal "game over"
-- [ ] Attaque de mêlée : animation + hitbox temporaire (`Area2D`) activée pendant l'animation
-- [ ] Système hitbox/hurtbox générique, réutilisable pour le joueur et les ennemis
-- [ ] Feedback visuel des coups : flash sur l'ennemi touché, léger recul (knockback) — important pour le ressenti, peu coûteux à faire
-- [ ] 1 à 2 types d'ennemis basiques pour le biome 1 (ex. un ennemi au sol qui patrouille et attaque au contact ; éventuellement un ennemi volant simple), avec script générique (PV, dégâts, détection du joueur)
-- [ ] Placer ces ennemis dans le niveau
+- [ ] Station **établi/forge** posée dans le niveau (`Area2D` + prompt "interagir", clavier + manette)
+- [ ] Menu de craft minimal (3-4 recettes) : `ressource(s) → objet`, ouverture/fermeture propre (pause du run pendant le menu)
+- [ ] Données de recettes externalisées (`.tres` ou JSON) — réutilisable tel quel pour les futurs biomes (même code, données différentes)
+- [ ] Validation : impossible de crafter sans les ressources requises (feedback clair)
 
-**Jalon** : le joueur peut frapper et tuer les ennemis du biome 1, et peut mourir s'il prend trop de dégâts (game over basique, même un simple restart de la scène pour l'instant).
+**Jalon** : on s'approche de l'établi, on ouvre le menu, on fabrique un objet en dépensant ses ressources, le menu se referme et le run reprend.
 
 ---
 
-## Phase 4 — Le boss
+## Phase 3 — Paliers d'équipement
 
-- [ ] Concevoir l'arène du boss (espace dégagé, lisible, sans éléments parasites)
-- [ ] Scène du boss : PV élevés, sprite distinct (même placeholder, mais visuellement différencié)
-- [ ] 2 à 3 patterns d'attaque via une machine à états simple (ex. `idle → charge au sol → pause → attaque de zone → pause → projectile → ...`)
-- [ ] Barre de vie du boss affichée pendant le combat
-- [ ] Déclenchement du combat (ex. porte qui se ferme à l'entrée de l'arène, ou activation au contact)
-- [ ] Condition de victoire : boss vaincu → écran "Victoire / Noyau atteint"
+- [ ] Rendre les stats du joueur pilotables par l'équipement équipé (aujourd'hui en dur dans `player.gd` : dégâts, portée, PV max…)
+- [ ] 3 paliers d'arme craftables : bois → cuivre → fer (dégâts / portée croissants)
+- [ ] 1-2 paliers d'armure : réduction de dégâts ou +PV max
+- [ ] Équipement automatiquement actif une fois crafté (pas de gestion d'inventaire complexe en v2)
+- [ ] Feedback visuel du palier (couleur de l'arme / du joueur change) pour rendre la progression lisible
 
-**Jalon** : le joueur peut affronter le boss, perdre ou gagner, avec un retour clair à l'écran dans les deux cas. C'est le cœur du "défi" — prévoir du temps pour itérer sur les patterns jusqu'à ce que le combat soit lisible et juste.
+**Jalon** : crafter une meilleure arme rend les combats nettement plus faciles → **sensation de progression *pendant* le run**, pas seulement entre les runs.
 
 ---
 
-## Phase 5 — Boucle de jeu complète & HUD
+## Phase 4 — Consommables & tension du run
 
-- [ ] HUD joueur : barre de vie (et éventuellement un repère de progression dans le niveau)
-- [ ] Écran de game over avec "Réessayer" (recharge la scène du niveau)
-- [ ] Écran de victoire (boss vaincu)
-- [ ] Écran de titre minimal avec "Jouer"
-- [ ] Sons/musique basiques (placeholder) : coups, dégâts, ambiance, musique de boss
+- [ ] Potion de soin craftable (rend des PV)
+- [ ] 1-2 autres consommables simples (ex. bombe, ou grappin de déplacement — cité au GDD §5 comme excellent modèle)
+- [ ] Slot de consommable + touche d'usage (clavier + manette)
+- [ ] **Tout est perdu à la mort** (équipement + ressources + consommables) — la persistance méta, c'est v3
 
-**Jalon** : on lance le jeu depuis le menu, on joue un run complet (début → boss → victoire ou défaite), et on peut relancer sans bug. **C'est la v1 testable.**
+**Jalon** : on doit arbitrer ses ressources entre "crafter une meilleure arme" et "garder de quoi se soigner" → vraie décision de run, vraie tension.
+
+---
+
+## Phase 5 — Niveau étendu & rééquilibrage
+
+- [ ] Allonger / densifier le niveau biome 1 pour laisser de la place à la récolte et au craft (le couloir actuel ~1600px est trop court pour une boucle de craft)
+- [ ] Répartir filons et établi(s) pour rythmer le run (récolter avant l'établi, crafter avant le boss)
+- [ ] Rééquilibrer PV/dégâts des ennemis et du boss en tenant compte des paliers d'équipement (le boss doit rester un vrai mur sans bon stuff)
+- [ ] Ajuster les limites de la `Camera2D` au niveau étendu
+
+**Jalon** : un run complet "explore → récolte → craft → boss" qui dure ~8-15 min et **donne envie de recommencer**. **C'est la v2 testable.**
 
 ---
 
 ## Phase 6 — Playtest & ajustements
 
-- [ ] Tester toi-même en te mettant "à la place d'un nouveau joueur"
-- [ ] Si possible, faire tester par une tierce personne sans lui expliquer les contrôles au préalable
-- [ ] Ajuster l'équilibrage : dégâts, PV, vitesse des ennemis/boss, durée du niveau
-- [ ] Corriger les bugs de collision/animation les plus gênants
-- [ ] Noter les retours pour la suite (ce qui manque, ce qui frustre, ce qui marche bien)
+- [ ] Tester soi-même "à la place d'un nouveau joueur" : la boucle de craft est-elle lisible et gratifiante ?
+- [ ] Vérifier que la progression d'équipement se *ressent* clairement en combat
+- [ ] Équilibrer le coût des recettes (ni trop grindy, ni trivial) et le taux de drop des filons
+- [ ] Corriger les bugs les plus gênants (récolte, menu de craft, équipement)
+- [ ] Noter les retours pour la v3 (ce qui manque, ce qui frustre, ce qui marche)
 
-**Jalon** : v1 stable, jouable de bout en bout, avec une difficulté qui semble "juste" — ni trivial, ni impossible.
+**Jalon** : v2 stable, jouable de bout en bout, avec une boucle de craft qui semble "juste" — gratifiante sans être pénible.
 
 ---
 
-## Après la v1
+## Après la v2
 
-Une fois ce socle solide et amusant, les prochaines étapes (déjà esquissées dans le GDD) sont :
+Une fois la boucle de craft prouvée amusante, la trajectoire (alignée sur le GDD) :
 
-- Craft & équipement (GDD section 5)
-- Génération procédurale du biome 1, pour remplacer le niveau statique (GDD section 3)
-- Biomes 2 et 3 + zone du Noyau et son boss final
-- Progression méta & hub entre les runs (GDD section 6)
+- **v3 — Génération procédurale + hub méta** : génération du biome 1 (automate cellulaire ou rooms connectées, GDD §3/§11) pour remplacer le niveau statique, et hub entre les runs avec monnaie persistante + déblocages (GDD §6). La persistance "tout perdu à la mort" de la v2 devient alors "tout perdu sauf la monnaie méta".
+- **v4 — Biomes 2 & 3 + Noyau** : contenu réplicable grâce au système de données par biome posé en v2 (ennemis, recettes, tileset) + boss final (GDD §10).
+- **v5 — Polish** : art final (remplacer les Polygon2D placeholder), vrais sons/musique, équilibrage global de la difficulté.
 
 ---
 
 ## Astuces pour avancer efficacement
 
-- Utiliser des assets placeholder gratuits dès le départ pour ne jamais être bloqué par l'art pendant que le gameplay se construit — on remplace par de l'art final plus tard.
-- Tester après chaque tâche cochée plutôt qu'à la fin d'une phase entière : ça permet de repérer un mouvement "pas fun" ou un combat "pas lisible" tôt, avant d'avoir construit du contenu par-dessus.
-- Versionner avec git dès le début, même en solo : un commit par jalon (fin de phase) donne des points de retour en arrière propres.
-- Résister à l'envie d'ajouter du contenu (craft, procédural, biomes suivants) avant que les fondamentaux — déplacement, combat, boss — ne soient déjà "fun" tout seuls. C'est ce socle qui déterminera le ressenti global du jeu.
+- Garder les assets placeholder (Polygon2D de couleur) tant que la boucle de craft n'est pas validée — l'art final, c'est le polish (v5).
+- Externaliser dès la v2 les données (recettes, plus tard ennemis/ressources) dans des `Resource`/JSON : chaque futur biome ne sera qu'un jeu de données réutilisant le même code.
+- Tester après chaque tâche cochée plutôt qu'à la fin d'une phase : repérer tôt une récolte "pas satisfaisante" ou un craft "pas lisible".
+- Un commit par jalon (fin de phase) pour des points de retour propres.
+- Résister à l'envie d'attaquer le procédural ou les biomes suivants avant que la boucle récolte/craft/équipement ne soit déjà "fun" toute seule sur le biome 1.
