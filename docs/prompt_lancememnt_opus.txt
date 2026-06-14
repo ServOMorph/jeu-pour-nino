@@ -1,0 +1,26 @@
+```
+Avant de commencer à coder, lis attentivement ces deux documents :
+
+- "C:\Users\raph6\Documents\SerenIATech\SérénIATech_dev\Projets en cours\Jeu pour Nino\docs\Document de conception — Jeu pixel art run court & challenge.md"
+- "C:\Users\raph6\Documents\SerenIATech\SérénIATech_dev\Projets en cours\Jeu pour Nino\docs\roadmap.md"
+
+Une fois les deux documents lus et compris, suis la roadmap phase par phase
+(Phase 0 → Phase 5) pour produire une v1 complètement jouable de
+CoreDive Challenge : biome 1 construit à la main, combat de base, boss 1,
+boucle de jeu complète (titre → run → victoire ou game over → relance).
+
+Arrête-toi à la fin de la Phase 5 (roadmap). Ne commence pas le craft,
+la génération procédurale, les biomes 2/3 ou la méta-progression — tout
+cela viendra après validation de cette v1.
+
+Pour les sprites, utilise des rectangles de couleur placeholder (pas
+d'assets externes) : joueur = blanc, ennemis = rouge/orange selon le type,
+boss = violet, tuiles = gris foncé. L'art final sera ajouté plus tard.
+
+Valide chaque jalon de phase avant de passer à la suivante, exactement
+comme indiqué dans la roadmap.
+```
+
+---
+
+Court et direct — Opus lira lui-même le GDD et la roadmap, donc inutile de dupliquer leur contenu dans le prompt. Le `/goal` lui donne juste la mission, les contraintes de scope, et la convention placeholder pour les sprites.

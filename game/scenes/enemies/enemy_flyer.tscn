@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemy_flyer.gd" id="1"]
+
+[sub_resource type="RectangleShape2D" id="body"]
+size = Vector2(14, 10)
+
+[sub_resource type="RectangleShape2D" id="hit"]
+size = Vector2(16, 12)
+
+[node name="EnemyFlyer" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1")
+max_hp = 3
+contact_damage = 1
+
+[node name="Visual" type="Polygon2D" parent="."]
+color = Color(1, 0.55, 0.1, 1)
+polygon = PackedVector2Array(-7, 0, 0, -5, 7, 0, 0, 5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("body")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 8
+
+[node name="HurtShape" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("hit")
+
+[node name="ContactHitbox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 8
+
+[node name="ContactShape" type="CollisionShape2D" parent="ContactHitbox"]
+shape = SubResource("hit")
