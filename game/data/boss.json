@@ -1,6 +1,6 @@
 {
   "Boss": {
-    "max_hp":         40,
+    "max_hp":         60,
     "contact_damage":  2,
     "attack_count":    3,
     "physics": {

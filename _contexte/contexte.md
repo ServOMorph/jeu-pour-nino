@@ -10,8 +10,8 @@ Jeu de plateforme/action pixel art fait pour Nino. Un run court dans le biome 1,
 ## État actuel (réécrit intégralement à chaque /close)
 v1 complète. Run complet (explore → récolte → craft → boss) validé, nickel.
 Toutes valeurs gameplay externalisées dans game/data/ : player.json (groupé), weapons.json, armor.json, enemies.json, boss.json (groupé).
-Aucune constante numérique gameplay hardcodée dans les scripts.
-Menu dev : JOUER / JOUER 100 MIN / TEST BOSS.
+Menu titre 2 niveaux : accueil (JOUER / MODE DEV) → sous-menu dev (toggle 100 MIN / JOUER / ATELIER / TEST BOSS / RETOUR).
+Spawn "atelier" disponible (x=1040, sans ennemis). craft_menu hauteur dynamique.
 Prochaine session : définir axes v2.
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
@@ -23,3 +23,4 @@ Prochaine session : définir axes v2.
 - 2026-06-21 : Menu dev — option "JOUER 100 MIN" (Dev.dev_resources injecté après Inventory.reset()).
 - 2026-06-21 : Toutes valeurs gameplay dans game/data/*.json — aucune constante numérique dans les scripts.
 - 2026-06-21 : v1 complète — Phase 6 v1 validée, run complet de bout en bout fonctionnel.
+- 2026-06-21 : Menu titre 2 niveaux — sous-menu dev avec toggle 100 MIN et spawn atelier (title.gd refonte complète).

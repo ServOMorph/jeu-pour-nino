@@ -40,11 +40,33 @@ func _ready() -> void:
 func take_damage(amount: int, _knockback: Vector2) -> void:
 	_hp -= amount
 	_flash()
+	_burst_particles(4, false)
+	AudioManager.play("mine")
 	if _hp <= 0:
 		Inventory.add(ORE_DROP)
+		_burst_particles(10, true)
+		AudioManager.play("mine_break")
 		queue_free()
 
 func _flash() -> void:
 	var t := create_tween()
 	t.tween_property(_visual, "color", Color(1, 1, 1), 0.06)
 	t.tween_property(_visual, "color", Color(0.25, 0.55, 0.85), 0.10)
+
+func _burst_particles(count: int, big: bool) -> void:
+	var p := CPUParticles2D.new()
+	get_parent().add_child(p)
+	p.global_position = global_position
+	p.emitting = true
+	p.one_shot = true
+	p.explosiveness = 1.0
+	p.amount = count
+	var lt := 0.5 if big else 0.3
+	p.lifetime = lt
+	p.direction = Vector2(0, -1)
+	p.spread = 180.0
+	p.gravity = Vector2(0, 300)
+	p.initial_velocity_min = 40.0 if big else 20.0
+	p.initial_velocity_max = 100.0 if big else 50.0
+	p.color = Color(0.25, 0.55, 0.85)
+	get_tree().create_timer(lt + 0.1).timeout.connect(p.queue_free)

@@ -1,12 +1,11 @@
 # Signals — jeu   (MAJ 2026-06-21)
 
 ## Actions ouvertes
-- [P1|ouvert] Refacto étape D (externaliser données de niveau) — à faire AU MOMENT de la Phase 5, pas avant
+- [P2|ouvert] Refacto étape D (externaliser données de niveau) — différé post-v1
   fait quand: données de niveau dans un fichier JSON externe chargé par level.gd
   réf: game/scripts/level.gd
 
 ## Questions ouvertes
-(aucune)
 
 ## Échéances
 
@@ -21,22 +20,29 @@
 - Configs JSON : player.json (groupes movement/jump/combat/hurt/aim) / weapons.json / armor.json / enemies.json / boss.json (groupes Boss.physics/charge/slam/volley/flash + BossProjectile)
 - Stats équipement chargées au runtime — _apply_equipment() connecté à Inventory.items_changed
 - contact_damage ennemis = 2 ; armure_bois damage_reduction = 1 → 1 dégât avec armure
-- Menu dev : JOUER / JOUER 100 MIN / TEST BOSS (Dev.dev_resources injecté dans Inventory après reset)
+- Menu titre 2 niveaux : accueil (JOUER / MODE DEV) → sous-menu dev (toggle 100 MIN / JOUER / ATELIER / TEST BOSS / RETOUR)
+- Spawn "atelier" : x=1040, FLOOR_TOP-16, sans ennemis (level.gd _spawn_points)
+- craft_menu.gd : PH calculé dynamiquement = 26 + recipes.size() * ROW_H + 20
+- Piège manette title.gd : _a_was doit être mis à jour EN TÊTE de _process avant tout return anticipé
 
-## Dernière session (2026-06-21 — Phase 6 v1 validée)
+## Dernière session (2026-06-21 — polish UI menu & layout)
 # Session du 2026-06-21
 
 ## Décisions prises
-- Phase 6 v1 validée : run complet (explore → récolte → craft → boss) fonctionnel et fluide — v1 complète
+- Menu titre restructuré en 2 niveaux : accueil (JOUER / MODE DEV) → sous-menu dev (toggle 100 MIN / JOUER / ATELIER / TEST BOSS / RETOUR)
+- craft_menu.gd : hauteur du panel calculée dynamiquement (fix chevauchement "A: craft / B: fermer")
+- Suppression des indications clavier sur l'écran d'accueil (manette uniquement)
 
 ## Livrables produits ou modifiés
-(aucun fichier modifié cette session — validation uniquement)
+- game/scripts/title.gd : refonte complète 2 niveaux + fix double-déclenchement toggle (_a_was mis à jour en tête de _process)
+- game/scripts/craft_menu.gd : PH dynamique = 26 + recipes.size() × ROW_H + 20
+- game/scripts/level.gd : spawn "atelier" ajouté (x=1040, sans ennemis)
 
 ## Hypothèses validées / invalidées
-- VALIDE : run de bout en bout jouable, boss équilibré avec les valeurs actuelles de boss.json
+- INVALIDE : return anticipé dans _process avant mise à jour de _a_was → double-déclenchement manette → fix appliqué
 
 ## Prochaine étape exacte
-v1 complète. Prochaine session : définir les axes v2 (polish, contenu, nouvelles features).
+Tester : menu 2 niveaux, toggle 100 MIN fonctionnel, spawn atelier. Si OK → définir axes v2.
 
 ## Question bloquante pour la session suivante
 Aucune

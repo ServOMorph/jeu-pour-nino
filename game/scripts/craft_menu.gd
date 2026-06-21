@@ -4,8 +4,9 @@ const RECIPE_FILE := "res://data/recipes.json"
 const PX := 140.0
 const PY := 77.0
 const PW := 200.0
-const PH := 115.0
 const ROW_H := 22.0
+
+var PH := 115.0
 
 var _recipes: Array = []
 var _selected := 0
@@ -26,6 +27,7 @@ func _load_recipes() -> void:
 	var parsed: Variant = JSON.parse_string(f.get_as_text())
 	if parsed is Array:
 		_recipes = parsed
+	PH = 26.0 + _recipes.size() * ROW_H + 20.0
 
 func _build_ui() -> void:
 	var dim := ColorRect.new()
@@ -96,13 +98,18 @@ func _refresh() -> void:
 		var recipe: Dictionary = _recipes[i]
 		var cost := int(recipe["cost"])
 		var id: String = recipe["id"]
-		var done := Inventory.has_item(id)
+		var is_consumable: bool = recipe.get("consumable", false)
+		var done := false
+		if is_consumable:
+			done = Inventory.consumable == id
+		else:
+			done = Inventory.has_item(id)
 		var affordable := Inventory.resources >= cost
 
 		_row_bgs[i].color = Color(0.30, 0.26, 0.20) if i == _selected else Color(0.20, 0.18, 0.15)
 
 		if done:
-			_row_labels[i].text = "%s [CRAFT]" % recipe["name"]
+			_row_labels[i].text = "%s [PRET]" % recipe["name"]
 			_row_labels[i].modulate = Color(0.45, 0.70, 0.45)
 		elif affordable:
 			_row_labels[i].text = "%s — %d MIN" % [recipe["name"], cost]
@@ -129,8 +136,26 @@ func _try_craft(i: int) -> void:
 	if i >= _recipes.size():
 		return
 	var recipe: Dictionary = _recipes[i]
-	if Inventory.has_item(recipe["id"]):
-		return
+	var id: String = recipe["id"]
+	var is_consumable: bool = recipe.get("consumable", false)
+	if is_consumable:
+		if Inventory.consumable == id:
+			return
+	else:
+		if Inventory.has_item(id):
+			return
 	if Inventory.spend(int(recipe["cost"])):
-		Inventory.add_item(recipe["id"])
+		if is_consumable:
+			Inventory.add_consumable(id)
+		else:
+			Inventory.add_item(id)
 		_refresh()
+	else:
+		AudioManager.play("cant_craft")
+		_flash_fail(i)
+
+func _flash_fail(i: int) -> void:
+	var lbl := _row_labels[i]
+	var t := lbl.create_tween()
+	t.tween_property(lbl, "modulate", Color(1.0, 0.2, 0.2), 0.05)
+	t.tween_property(lbl, "modulate", Color(0.45, 0.45, 0.45), 0.20)

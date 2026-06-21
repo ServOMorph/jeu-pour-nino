@@ -3,9 +3,10 @@ extends CharacterBody2D
 signal health_changed(current: int, maximum: int)
 signal died
 
-const PLAYER_CONFIG  := "res://data/player.json"
-const WEAPONS_CONFIG := "res://data/weapons.json"
-const ARMOR_CONFIG   := "res://data/armor.json"
+const PLAYER_CONFIG      := "res://data/player.json"
+const WEAPONS_CONFIG     := "res://data/weapons.json"
+const ARMOR_CONFIG       := "res://data/armor.json"
+const CONSUMABLES_CONFIG := "res://data/consumables.json"
 
 var speed            := 130.0
 var accel            := 1600.0
@@ -49,9 +50,10 @@ var _invuln          := 0.0
 var _hurt_stun       := 0.0
 var _dead            := false
 
-var _player_cfg: Dictionary = {}
-var _weapon_cfg: Dictionary = {}
-var _armor_cfg:  Dictionary = {}
+var _player_cfg:      Dictionary = {}
+var _weapon_cfg:      Dictionary = {}
+var _armor_cfg:       Dictionary = {}
+var _consumable_cfg:  Dictionary = {}
 
 @onready var visual:        Polygon2D = $Visual
 @onready var attack_hitbox: Area2D    = $AttackHitbox
@@ -124,6 +126,12 @@ func _load_configs() -> void:
 		if parsed is Dictionary:
 			_armor_cfg = parsed
 
+	fp = FileAccess.open(CONSUMABLES_CONFIG, FileAccess.READ)
+	if fp:
+		parsed = JSON.parse_string(fp.get_as_text())
+		if parsed is Dictionary:
+			_consumable_cfg = parsed
+
 func _physics_process(delta: float) -> void:
 	if _dead:
 		return
@@ -161,6 +169,9 @@ func _physics_process(delta: float) -> void:
 			_end_attack()
 	if Input.is_action_just_pressed("attack") and _attack_cooldown <= 0.0 and _attack_timer <= 0.0:
 		_start_attack()
+
+	if Input.is_action_just_pressed("use_item"):
+		_use_consumable()
 
 	var aim := _get_aim_dir()
 	var aim_facing := 1 if aim.x >= 0.0 else -1
@@ -258,12 +269,14 @@ func _apply_equipment() -> void:
 	attack_range  = float(cbt.get("attack_range", attack_range))
 	damage_reduction = 0
 
-	for item_id in ["epee_fer", "epee_cuivre"]:
+	for item_id in ["epee_fer", "epee_cuivre", "epee_bois"]:
 		if Inventory.has_item(item_id) and item_id in _weapon_cfg:
 			var w: Dictionary = _weapon_cfg[item_id]
 			if "damage" in w: attack_damage = int(w["damage"])
 			if "range"  in w: attack_range  = float(w["range"])
 			break
+
+	_update_weapon_visual()
 
 	for item_id in _armor_cfg:
 		if Inventory.has_item(item_id):
@@ -277,6 +290,27 @@ func _apply_equipment() -> void:
 	else:
 		hp = min(hp, max_hp)
 	health_changed.emit(hp, max_hp)
+
+func _use_consumable() -> void:
+	if _dead or Inventory.consumable == "":
+		return
+	var id := Inventory.use_consumable()
+	if id in _consumable_cfg:
+		var cfg: Dictionary = _consumable_cfg[id]
+		if "heal" in cfg:
+			hp = min(hp + int(cfg["heal"]), max_hp)
+			health_changed.emit(hp, max_hp)
+	AudioManager.play("potion")
+
+func _update_weapon_visual() -> void:
+	if Inventory.has_item("epee_fer"):
+		attack_visual.color = Color(0.6, 0.75, 0.9)
+	elif Inventory.has_item("epee_cuivre"):
+		attack_visual.color = Color(0.9, 0.55, 0.2)
+	elif Inventory.has_item("epee_bois"):
+		attack_visual.color = Color(0.65, 0.45, 0.2)
+	else:
+		attack_visual.color = Color(1.0, 1.0, 1.0)
 
 func _screen_shake(amount: float) -> void:
 	var cam := get_node_or_null("Camera2D")

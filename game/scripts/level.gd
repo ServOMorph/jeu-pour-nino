@@ -9,10 +9,10 @@ const ORE_NODE := preload("res://scripts/ore_node.gd")
 const WORKBENCH_SCRIPT := preload("res://scripts/workbench.gd")
 const CRAFT_MENU_SCRIPT := preload("res://scripts/craft_menu.gd")
 
-const LEVEL_WIDTH := 1600.0
+const LEVEL_WIDTH := 3200.0
 const LEVEL_HEIGHT := 270.0
 const FLOOR_TOP := 240.0
-const ARENA_X := 1150.0
+const ARENA_X := 2600.0
 
 var player: CharacterBody2D
 var boss: Node = null
@@ -49,8 +49,9 @@ func _ready() -> void:
 # title.gd) suffit pour exposer un nouveau point de test.
 func _spawn_points() -> Dictionary:
 	return {
-		"start": {"pos": Vector2(60, FLOOR_TOP - 16), "enemies": true, "boss_active": false},
-		"boss": {"pos": Vector2(ARENA_X + 20, FLOOR_TOP - 16), "enemies": false, "boss_active": true},
+		"start":   {"pos": Vector2(60, FLOOR_TOP - 16),       "enemies": true,  "boss_active": false},
+		"atelier": {"pos": Vector2(1040, FLOOR_TOP - 16),    "enemies": false, "boss_active": false},
+		"boss":    {"pos": Vector2(ARENA_X + 60, FLOOR_TOP - 16), "enemies": false, "boss_active": true},
 	}
 
 func _resolve_spawn() -> Dictionary:
@@ -93,14 +94,25 @@ func _build_geometry() -> void:
 	# Murs lateraux
 	_add_platform(Rect2(-8, 0, 8, LEVEL_HEIGHT), c)
 	_add_platform(Rect2(LEVEL_WIDTH, 0, 8, LEVEL_HEIGHT), c)
-	# Plateformes du parcours
+	# Zone 1 (0-1100)
 	_add_platform(Rect2(250, 200, 90, 12), c)
 	_add_platform(Rect2(410, 165, 80, 12), c)
 	_add_platform(Rect2(560, 130, 80, 12), c)
 	_add_platform(Rect2(720, 175, 90, 12), c)
-	_add_platform(Rect2(560, 240 - 60, 16, 60), c) # petit obstacle/marche
-	_add_platform(Rect2(900, 190, 100, 12), c)
-	_add_platform(Rect2(1040, 150, 80, 12), c)
+	_add_platform(Rect2(560, 180, 16, 60), c)
+	_add_platform(Rect2(900, 195, 100, 12), c)
+	_add_platform(Rect2(1040, 155, 80, 12), c)
+	# Zone 2 (1100-2600)
+	_add_platform(Rect2(1200, 200, 90, 12), c)
+	_add_platform(Rect2(1380, 160, 80, 12), c)
+	_add_platform(Rect2(1540, 125, 80, 12), c)
+	_add_platform(Rect2(1700, 170, 90, 12), c)
+	_add_platform(Rect2(1700, 180, 16, 60), c)
+	_add_platform(Rect2(1900, 200, 100, 12), c)
+	_add_platform(Rect2(2060, 155, 80, 12), c)
+	_add_platform(Rect2(2220, 195, 90, 12), c)
+	_add_platform(Rect2(2400, 165, 80, 12), c)
+	_add_platform(Rect2(2520, 200, 120, 12), c)
 
 func _add_platform(rect: Rect2, color: Color) -> StaticBody2D:
 	var body := StaticBody2D.new()
@@ -136,11 +148,20 @@ func _spawn_player() -> void:
 	cam.limit_bottom = int(LEVEL_HEIGHT)
 
 func _spawn_enemies() -> void:
+	# Zone 1
 	_add_ground_enemy(Vector2(320, FLOOR_TOP - 8))
 	_add_ground_enemy(Vector2(680, FLOOR_TOP - 8))
-	_add_ground_enemy(Vector2(980, FLOOR_TOP - 8))
-	_add_flyer(Vector2(460, 150))
-	_add_flyer(Vector2(820, 140))
+	_add_flyer(Vector2(470, 145))
+	_add_flyer(Vector2(810, 140))
+	# Zone 2
+	_add_ground_enemy(Vector2(1150, FLOOR_TOP - 8))
+	_add_ground_enemy(Vector2(1500, FLOOR_TOP - 8))
+	_add_ground_enemy(Vector2(1860, FLOOR_TOP - 8))
+	_add_ground_enemy(Vector2(2200, FLOOR_TOP - 8))
+	_add_ground_enemy(Vector2(2450, FLOOR_TOP - 8))
+	_add_flyer(Vector2(1350, 145))
+	_add_flyer(Vector2(1760, 130))
+	_add_flyer(Vector2(2110, 145))
 
 func _add_ground_enemy(pos: Vector2) -> void:
 	var e := ENEMY_GROUND.instantiate()
@@ -155,17 +176,25 @@ func _add_flyer(pos: Vector2) -> void:
 func _spawn_boss() -> void:
 	boss = BOSS.instantiate()
 	add_child(boss)
-	boss.global_position = Vector2(1460, FLOOR_TOP - 18)
+	boss.global_position = Vector2(2860, FLOOR_TOP - 18)
 	boss.died.connect(_on_boss_died)
 
 func _spawn_ores() -> void:
 	var positions := [
+		# Zone 1 — avant l'etabli
 		Vector2(180, FLOOR_TOP - 15),
-		Vector2(295, 200 - 15),
-		Vector2(450, 165 - 15),
-		Vector2(590, FLOOR_TOP - 15),
+		Vector2(300, 200 - 15),
+		Vector2(460, 165 - 15),
+		Vector2(600, FLOOR_TOP - 15),
 		Vector2(760, 175 - 15),
-		Vector2(940, 190 - 15),
+		Vector2(1050, FLOOR_TOP - 15),
+		# Zone 2 — apres l'etabli
+		Vector2(1260, 200 - 15),
+		Vector2(1590, FLOOR_TOP - 15),
+		Vector2(1770, 170 - 15),
+		Vector2(2000, 200 - 15),
+		Vector2(2250, FLOOR_TOP - 15),
+		Vector2(2460, 165 - 15),
 	]
 	for pos in positions:
 		var ore := ORE_NODE.new()
@@ -177,7 +206,7 @@ func _spawn_workbench() -> void:
 	add_child(_craft_menu)
 	var wb := WORKBENCH_SCRIPT.new()
 	add_child(wb)
-	wb.global_position = Vector2(150, FLOOR_TOP - 9)
+	wb.global_position = Vector2(1100, FLOOR_TOP - 9)
 	wb.interact_requested.connect(_craft_menu.open)
 
 func _start_boss_fight() -> void:

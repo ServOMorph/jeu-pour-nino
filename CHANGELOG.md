@@ -1,3 +1,15 @@
+## v1.5 — 2026-06-21
+
+### Modifié
+- `game/scripts/title.gd` : refonte menu 2 niveaux (accueil / sous-menu dev avec toggle 100 MIN et spawn atelier) + fix double-déclenchement manette
+- `game/scripts/craft_menu.gd` : hauteur du panel dynamique (fix chevauchement hint A/B)
+- `game/scripts/level.gd` : spawn "atelier" ajouté (x=1040, sans ennemis)
+
+### Supprimé
+- Indications clavier sur l'écran d'accueil
+
+---
+
 ## v1.4 — 2026-06-21
 
 ### Validé

@@ -1,5 +1,7 @@
 [
+  {"id": "epee_bois",   "name": "Epee bois",   "cost": 2},
   {"id": "epee_cuivre", "name": "Epee cuivre", "cost": 4},
   {"id": "armure_bois", "name": "Armure bois", "cost": 3},
-  {"id": "epee_fer",    "name": "Epee fer",    "cost": 7}
+  {"id": "epee_fer",    "name": "Epee fer",    "cost": 7},
+  {"id": "potion",      "name": "Potion soin", "cost": 3, "consumable": true}
 ]
