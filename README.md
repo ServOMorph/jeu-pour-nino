@@ -55,15 +55,11 @@ Nécessite Godot 4.5 installé dans `D:\tmp\godot45\`. Ou ouvrir `game/project.g
 
 ## État actuel
 
-**v2 en cours — Phases 1, 2 & 3 implémentées.**
-Toutes les valeurs gameplay externalisées dans `game/data/` (player.json, weapons.json, armor.json, enemies.json, boss.json).
-Prochaine étape : Phase 6 v1 — run complet + ajustements difficulté boss.
+**v1 complète.** Run complet (explore → récolte → craft → boss) validé, nickel.
 
-Phase 1 : singleton `Inventory` (ressources du run) + filons minables dans le niveau (PV propres, drop au cassage).
+Toutes les valeurs gameplay externalisées dans `game/data/` (player.json, weapons.json, armor.json, enemies.json, boss.json). Aucune constante numérique hardcodée dans les scripts.
 
-Phase 2 : établi interactif (prompt Y, menu craft, pause du run) + 3 recettes externalisées en JSON. Controls manette : interact=Y, crafter=A, fermer=B.
-
-Phase 2 en attente de validation finale (A craft + B fermer) avant d'attaquer la Phase 3 (équipement pilotant les stats joueur).
+Prochaine session : définir les axes v2.
 
 ## Roadmap
 

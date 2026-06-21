@@ -1,10 +1,7 @@
 # Signals — jeu   (MAJ 2026-06-21)
 
 ## Actions ouvertes
-- [P1|ouvert] Phase 6 v1 : playtest & ajustements de difficulté boss
-  fait quand: run complet jouable de bout en bout, boss équilibré
-  réf: game/scripts/boss.gd, game/data/boss.json
-- [P2|ouvert] Refacto étape D (externaliser données de niveau) — à faire AU MOMENT de la Phase 5, pas avant
+- [P1|ouvert] Refacto étape D (externaliser données de niveau) — à faire AU MOMENT de la Phase 5, pas avant
   fait quand: données de niveau dans un fichier JSON externe chargé par level.gd
   réf: game/scripts/level.gd
 
@@ -26,28 +23,20 @@
 - contact_damage ennemis = 2 ; armure_bois damage_reduction = 1 → 1 dégât avec armure
 - Menu dev : JOUER / JOUER 100 MIN / TEST BOSS (Dev.dev_resources injecté dans Inventory après reset)
 
-## Dernière session (2026-06-21 — boss.json + externalisation complète)
+## Dernière session (2026-06-21 — Phase 6 v1 validée)
 # Session du 2026-06-21
 
 ## Décisions prises
-- boss.json créé : toutes les valeurs gameplay du boss et des projectiles externalisées
-- player.json restructuré en 5 groupes cohérents (movement, jump, combat, hurt, aim)
-- boss.json structuré en sous-groupes (physics, charge, slam, volley, durations, flash) + BossProjectile
-- Règle actée : aucune constante numérique gameplay ne doit rester hardcodée dans les scripts GDScript
+- Phase 6 v1 validée : run complet (explore → récolte → craft → boss) fonctionnel et fluide — v1 complète
 
 ## Livrables produits ou modifiés
-- game/data/boss.json : créé (Boss + BossProjectile, tous groupés)
-- game/data/player.json : restructuré en groupes, 10 nouvelles clés ajoutées (accel, friction, air_accel, max_fall, coyote_time, buffer, cut_factor, screen_shake, invuln_flash_rate, contact_dmg_default, aim.stick_deadzone, hurt.bounce_y, hurt.stun)
-- game/scripts/boss.gd : _load_config() complet, toutes constantes → vars lues depuis JSON
-- game/scripts/boss_projectile.gd : _load_config() depuis boss.json["BossProjectile"]
-- game/scripts/player.gd : _load_configs() adapté aux groupes JSON, _apply_equipment() sans fallbacks hardcodés
-- .claude/memory.md : règle externalisation ajoutée
+(aucun fichier modifié cette session — validation uniquement)
 
 ## Hypothèses validées / invalidées
-- VALIDE : toutes les valeurs des JSON étaient déjà câblées sauf boss.json (inexistant) et les nouvelles clés ajoutées cette session
+- VALIDE : run de bout en bout jouable, boss équilibré avec les valeurs actuelles de boss.json
 
 ## Prochaine étape exacte
-Phase 6 v1 : faire un run complet (explore → récolte → craft → boss) et ajuster la difficulté dans boss.json uniquement (HP, dégâts, vitesse projectiles, timings).
+v1 complète. Prochaine session : définir les axes v2 (polish, contenu, nouvelles features).
 
 ## Question bloquante pour la session suivante
 Aucune

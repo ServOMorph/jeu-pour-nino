@@ -1,3 +1,10 @@
+## v1.4 — 2026-06-21
+
+### Validé
+- Phase 6 v1 : run complet (explore → récolte → craft → boss) fonctionnel — v1 complète
+
+---
+
 ## v1.3 — 2026-06-21
 
 ### Ajouté
