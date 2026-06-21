@@ -53,7 +53,7 @@ Nécessite Godot 4.5 installé dans `D:\tmp\godot45\`. Ou ouvrir `game/project.g
 
 **v1 complète (v0.2.1)** — boucle jouable de bout en bout : écran titre → run biome 1 → boss → victoire/défaite → relance.
 
-Écran de fin centré, navigation manette (stick/croix + bouton A) et gestion anti-rebond du bouton A au retour sur le titre.
+Menu titre navigable (flèches/stick, validation A). Mode dev intégré : sélectionner "TEST BOSS" au menu pour spawn directement dans l'arène.
 
 Phase 6 (playtest & ajustements) en cours.
 

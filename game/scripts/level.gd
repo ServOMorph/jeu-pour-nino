@@ -29,9 +29,27 @@ func _ready() -> void:
 	_build_background()
 	_build_geometry()
 	_spawn_player()
-	_spawn_enemies()
+	var cfg := _resolve_spawn()
+	if cfg["enemies"]:
+		_spawn_enemies()
 	_spawn_boss()
 	_build_hud()
+	player.global_position = cfg["pos"]
+	if cfg["boss_active"]:
+		_start_boss_fight()
+
+# Registre des points de spawn dev. Ajouter une entree ici (+ un bouton dans
+# title.gd) suffit pour exposer un nouveau point de test.
+func _spawn_points() -> Dictionary:
+	return {
+		"start": {"pos": Vector2(60, FLOOR_TOP - 16), "enemies": true, "boss_active": false},
+		"boss": {"pos": Vector2(ARENA_X + 20, FLOOR_TOP - 16), "enemies": false, "boss_active": true},
+	}
+
+func _resolve_spawn() -> Dictionary:
+	var points := _spawn_points()
+	var key: String = Dev.spawn if Dev.spawn in points else "start"
+	return points[key]
 
 func _physics_process(_delta: float) -> void:
 	if _ended or _boss_started:

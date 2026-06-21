@@ -1,6 +1,17 @@
 extends Control
 
+const DEV_SPAWNS := [
+	{"key": "", "label": "JOUER"},
+	{"key": "boss", "label": "TEST BOSS"},
+]
+
+const COLOR_SELECTED := Color(1.0, 1.0, 1.0)
+const COLOR_IDLE    := Color(0.45, 0.45, 0.45)
+
 var _started := false
+var _selected := 0
+var _labels: Array[Label] = []
+var _a_was := true
 
 func _ready() -> void:
 	var bg := ColorRect.new()
@@ -26,42 +37,59 @@ func _ready() -> void:
 	sub.size = Vector2(480, 20)
 	add_child(sub)
 
-	var play := Button.new()
-	play.text = "JOUER"
-	play.size = Vector2(140, 30)
-	play.position = Vector2(170, 150)
-	add_child(play)
-	play.pressed.connect(_start_game)
-	play.grab_focus()
+	for i in DEV_SPAWNS.size():
+		var lbl := Label.new()
+		lbl.text = DEV_SPAWNS[i]["label"]
+		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		lbl.add_theme_font_size_override("font_size", 14)
+		lbl.position = Vector2(0, 148 + i * 26)
+		lbl.size = Vector2(480, 22)
+		add_child(lbl)
+		_labels.append(lbl)
 
 	var hint_kb := Label.new()
 	hint_kb.text = "Clavier : Q/D bouger   Espace sauter   Clic gauche attaquer"
 	hint_kb.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint_kb.add_theme_font_size_override("font_size", 9)
-	hint_kb.position = Vector2(0, 210)
+	hint_kb.position = Vector2(0, 220)
 	hint_kb.size = Vector2(480, 16)
 	add_child(hint_kb)
 
 	var hint_pad := Label.new()
-	hint_pad.text = "Manette : stick gauche bouger   A sauter   RB attaquer   A lancer"
+	hint_pad.text = "Manette : stick gauche bouger   A sauter   RB attaquer"
 	hint_pad.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint_pad.add_theme_font_size_override("font_size", 9)
 	hint_pad.add_theme_color_override("font_color", Color(0.6, 0.8, 1.0))
-	hint_pad.position = Vector2(0, 228)
+	hint_pad.position = Vector2(0, 234)
 	hint_pad.size = Vector2(480, 16)
 	add_child(hint_pad)
 
-var _a_was := true  # true au depart : exige un relachement avant d'accepter A
+	_refresh_selection()
+
+func _refresh_selection() -> void:
+	for i in _labels.size():
+		_labels[i].add_theme_color_override("font_color",
+			COLOR_SELECTED if i == _selected else COLOR_IDLE)
 
 func _process(_delta: float) -> void:
 	if _started:
 		return
+
+	if Input.is_action_just_pressed("ui_down") or Input.is_action_just_pressed("move_right"):
+		_selected = (_selected + 1) % DEV_SPAWNS.size()
+		_refresh_selection()
+	elif Input.is_action_just_pressed("ui_up") or Input.is_action_just_pressed("move_left"):
+		_selected = (_selected - 1 + DEV_SPAWNS.size()) % DEV_SPAWNS.size()
+		_refresh_selection()
+
+	if Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("jump"):
+		_start_game()
+		return
+
 	var a := false
 	for pad in Input.get_connected_joypads():
 		if Input.is_joy_button_pressed(pad, JOY_BUTTON_A):
 			a = true
-	# Front montant uniquement : evite qu'un A maintenu (depuis l'ecran de fin)
-	# relance le jeu des l'arrivee sur le titre.
 	if a and not _a_was:
 		_start_game()
 	_a_was = a
@@ -70,4 +98,5 @@ func _start_game() -> void:
 	if _started:
 		return
 	_started = true
+	Dev.spawn = DEV_SPAWNS[_selected]["key"]
 	get_tree().change_scene_to_file("res://scenes/levels/biome1.tscn")

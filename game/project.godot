@@ -16,6 +16,7 @@ config/icon="res://icon.svg"
 
 JoyMap="*res://scripts/joymap.gd"
 AudioManager="*res://scripts/audio.gd"
+Dev="*res://scripts/dev.gd"
 
 [display]
 
