@@ -117,7 +117,7 @@ func _start_attack() -> void:
 		return
 	var hit := false
 	for area in attack_hitbox.get_overlapping_areas():
-		if area.is_in_group("enemy_hurtbox"):
+		if area.is_in_group("enemy_hurtbox") or area.is_in_group("mineable_hurtbox"):
 			var target := area.get_parent()
 			if target.has_method("take_damage"):
 				target.take_damage(attack_damage, aim * ATTACK_KNOCKBACK)

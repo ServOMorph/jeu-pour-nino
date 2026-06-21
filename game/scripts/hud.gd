@@ -3,10 +3,12 @@ extends CanvasLayer
 var _hp_fill: ColorRect
 var _boss_bar_root: Control
 var _boss_fill: ColorRect
+var _res_label: Label
 
 func setup(player: Node, boss: Node) -> void:
 	_build_player_bar(player)
 	_build_boss_bar(boss)
+	_build_resource_counter()
 
 func _build_player_bar(player: Node) -> void:
 	var hp_bg := ColorRect.new()
@@ -47,6 +49,18 @@ func _build_boss_bar(boss: Node) -> void:
 	b_label.add_theme_font_size_override("font_size", 9)
 	_boss_bar_root.add_child(b_label)
 	boss.health_changed.connect(_on_boss_health_changed)
+
+func _build_resource_counter() -> void:
+	_res_label = Label.new()
+	_res_label.position = Vector2(8, 24)
+	_res_label.add_theme_font_size_override("font_size", 10)
+	_res_label.modulate = Color(0.6, 0.85, 1.0)
+	add_child(_res_label)
+	Inventory.resources_changed.connect(_on_resources_changed)
+	_on_resources_changed(Inventory.resources)
+
+func _on_resources_changed(current: int) -> void:
+	_res_label.text = "MIN %d" % current
 
 func show_boss_bar() -> void:
 	_boss_bar_root.visible = true

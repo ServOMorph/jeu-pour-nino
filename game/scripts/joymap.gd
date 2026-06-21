@@ -48,6 +48,11 @@ func _setup_input() -> void:
 	_add_joypad_axis("move_right",   JOY_AXIS_LEFT_X,  1.0)
 	_add_joypad_button("move_left",  JOY_BUTTON_DPAD_LEFT)
 	_add_joypad_button("move_right", JOY_BUTTON_DPAD_RIGHT)
+	if not InputMap.has_action("interact"):
+		InputMap.add_action("interact", 0.5)
+	_add_joypad_button("interact",   JOY_BUTTON_Y)
+	_add_joypad_button("ui_accept",  JOY_BUTTON_A)
+	_add_joypad_button("ui_cancel",  JOY_BUTTON_B)
 
 # --- helpers ---
 

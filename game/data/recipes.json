@@ -1,0 +1,5 @@
+[
+  {"id": "epee_cuivre", "name": "Epee cuivre", "cost": 4},
+  {"id": "armure_bois", "name": "Armure bois", "cost": 3},
+  {"id": "epee_fer",    "name": "Epee fer",    "cost": 7}
+]

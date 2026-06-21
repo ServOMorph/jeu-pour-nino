@@ -5,6 +5,10 @@ const ENEMY_GROUND := preload("res://scenes/enemies/enemy_ground.tscn")
 const ENEMY_FLYER := preload("res://scenes/enemies/enemy_flyer.tscn")
 const BOSS := preload("res://scenes/enemies/boss.tscn")
 
+const ORE_NODE := preload("res://scripts/ore_node.gd")
+const WORKBENCH_SCRIPT := preload("res://scripts/workbench.gd")
+const CRAFT_MENU_SCRIPT := preload("res://scripts/craft_menu.gd")
+
 const LEVEL_WIDTH := 1600.0
 const LEVEL_HEIGHT := 270.0
 const FLOOR_TOP := 240.0
@@ -20,9 +24,11 @@ const END_SCREEN := preload("res://scripts/end_screen.gd")
 const HUD_SCRIPT := preload("res://scripts/hud.gd")
 
 var _hud: CanvasLayer
+var _craft_menu: CanvasLayer
 
 func _ready() -> void:
 	randomize()
+	Inventory.reset()
 	_build_background()
 	_build_geometry()
 	_spawn_player()
@@ -30,6 +36,8 @@ func _ready() -> void:
 	if cfg["enemies"]:
 		_spawn_enemies()
 	_spawn_boss()
+	_spawn_ores()
+	_spawn_workbench()
 	_setup_hud()
 	player.global_position = cfg["pos"]
 	if cfg["boss_active"]:
@@ -147,6 +155,28 @@ func _spawn_boss() -> void:
 	add_child(boss)
 	boss.global_position = Vector2(1460, FLOOR_TOP - 18)
 	boss.died.connect(_on_boss_died)
+
+func _spawn_ores() -> void:
+	var positions := [
+		Vector2(180, FLOOR_TOP - 15),
+		Vector2(295, 200 - 15),
+		Vector2(450, 165 - 15),
+		Vector2(590, FLOOR_TOP - 15),
+		Vector2(760, 175 - 15),
+		Vector2(940, 190 - 15),
+	]
+	for pos in positions:
+		var ore := ORE_NODE.new()
+		add_child(ore)
+		ore.global_position = pos
+
+func _spawn_workbench() -> void:
+	_craft_menu = CRAFT_MENU_SCRIPT.new()
+	add_child(_craft_menu)
+	var wb := WORKBENCH_SCRIPT.new()
+	add_child(wb)
+	wb.global_position = Vector2(150, FLOOR_TOP - 9)
+	wb.interact_requested.connect(_craft_menu.open)
 
 func _start_boss_fight() -> void:
 	_boss_started = true

@@ -26,6 +26,9 @@ Nécessite Godot 4.5 installé dans `D:\tmp\godot45\`. Ou ouvrir `game/project.g
 | Sauter | A |
 | Attaquer | RB (visée vers le stick droit) |
 | Viser | Stick droit |
+| Interagir (établi) | Y |
+| Crafter | A |
+| Fermer menu | B |
 
 ## Structure du projet
 
@@ -52,11 +55,13 @@ Nécessite Godot 4.5 installé dans `D:\tmp\godot45\`. Ou ouvrir `game/project.g
 
 ## État actuel
 
-**v1 complète (v0.2.1)** — boucle jouable de bout en bout : écran titre → run biome 1 → boss → victoire/défaite → relance.
+**v2 en cours — Phases 1 & 2 implémentées.**
 
-Menu titre navigable (flèches/stick, validation A). Mode dev intégré : sélectionner "TEST BOSS" au menu pour spawn directement dans l'arène.
+Phase 1 : singleton `Inventory` (ressources du run) + filons minables dans le niveau (PV propres, drop au cassage).
 
-Refacto préparatoire v2 effectuée : interface de dégâts unifiée, stats joueur pilotables par l'équipement, HUD découplé. Prochaine étape : roadmap v2 Phase 1 (boucle de ressources & craft).
+Phase 2 : établi interactif (prompt Y, menu craft, pause du run) + 3 recettes externalisées en JSON. Controls manette : interact=Y, crafter=A, fermer=B.
+
+Phase 2 en attente de validation finale (A craft + B fermer) avant d'attaquer la Phase 3 (équipement pilotant les stats joueur).
 
 ## Roadmap
 
