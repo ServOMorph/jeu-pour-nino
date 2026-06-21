@@ -14,3 +14,4 @@ Phase 6 (playtest & ajustements) en cours. Prochaine étape : boucle de ressourc
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
 - 2026-06-21 : Initialisation du protocole vibecoding.
+- 2026-06-21 : Adoption du protocole vibecoding v2.2 — gestion contexte inter-sessions via /start /close.
