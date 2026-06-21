@@ -1,3 +1,16 @@
+## v1.3 — 2026-06-21
+
+### Ajouté
+- `game/data/boss.json` : toutes valeurs du boss externalisées (groupes Boss.physics/charge/slam/volley/flash + BossProjectile)
+
+### Modifié
+- `game/data/player.json` : restructuré en groupes (movement, jump, combat, hurt, aim) + 10 nouvelles clés
+- `game/scripts/boss.gd` : toutes constantes → vars chargées depuis boss.json
+- `game/scripts/boss_projectile.gd` : _load_config() depuis boss.json["BossProjectile"]
+- `game/scripts/player.gd` : _load_configs() adapté aux groupes JSON, fallbacks sans valeurs hardcodées
+
+---
+
 ## v1.2 — 2026-06-21
 
 ### Ajouté

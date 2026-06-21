@@ -55,7 +55,9 @@ Nécessite Godot 4.5 installé dans `D:\tmp\godot45\`. Ou ouvrir `game/project.g
 
 ## État actuel
 
-**v2 en cours — Phases 1 & 2 implémentées.**
+**v2 en cours — Phases 1, 2 & 3 implémentées.**
+Toutes les valeurs gameplay externalisées dans `game/data/` (player.json, weapons.json, armor.json, enemies.json, boss.json).
+Prochaine étape : Phase 6 v1 — run complet + ajustements difficulté boss.
 
 Phase 1 : singleton `Inventory` (ressources du run) + filons minables dans le niveau (PV propres, drop au cassage).
 

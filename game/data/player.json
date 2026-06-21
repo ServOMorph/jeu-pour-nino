@@ -1,12 +1,37 @@
 {
-  "speed":            130.0,
-  "jump_velocity":   -320.0,
-  "gravity":          800.0,
-  "fall_gravity":    1050.0,
-  "max_hp":             6,
-  "attack_damage":      2,
-  "attack_range":      16.0,
-  "invuln_time":        0.8,
-  "attack_knockback": 180.0,
-  "hurt_knockback":   200.0
+  "movement": {
+    "speed":     130.0,
+    "accel":    1600.0,
+    "friction": 1400.0,
+    "air_accel":1000.0,
+    "max_fall":  360.0
+  },
+  "jump": {
+    "velocity":    -320.0,
+    "gravity":      800.0,
+    "fall_gravity":1050.0,
+    "coyote_time":   0.10,
+    "buffer":        0.10,
+    "cut_factor":    0.4
+  },
+  "combat": {
+    "max_hp":           6,
+    "attack_damage":    2,
+    "attack_range":    16.0,
+    "attack_duration":  0.18,
+    "attack_cooldown":  0.32,
+    "attack_knockback":180.0,
+    "screen_shake":     3.0
+  },
+  "hurt": {
+    "knockback":           200.0,
+    "bounce_y":           -120.0,
+    "stun":                 0.18,
+    "invuln_time":          0.8,
+    "invuln_flash_rate":   20,
+    "contact_dmg_default":  1
+  },
+  "aim": {
+    "stick_deadzone": 0.2
+  }
 }

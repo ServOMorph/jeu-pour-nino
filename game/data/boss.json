@@ -1,0 +1,46 @@
+{
+  "Boss": {
+    "max_hp":         40,
+    "contact_damage":  2,
+    "attack_count":    3,
+    "physics": {
+      "gravity":          800.0,
+      "max_fall":         400.0,
+      "idle_decel":       300.0,
+      "slam_rise_decel":  200.0,
+      "pause_decel":      300.0
+    },
+    "charge": {
+      "speed":    150.0,
+      "min_dist":  60.0,
+      "duration":   1.2
+    },
+    "slam": {
+      "jump_velocity": -260.0,
+      "fall_velocity":  700.0,
+      "hit_range":       70.0,
+      "trauma":           6.0,
+      "rise_duration":    0.5,
+      "pause_duration":   0.8
+    },
+    "volley": {
+      "count":         3,
+      "spread_deg":   18.0,
+      "duration":      0.5,
+      "pause_duration":0.7
+    },
+    "durations": {
+      "idle":         0.5,
+      "attack_pause": 0.6
+    },
+    "flash": {
+      "duration":   0.1,
+      "modulate":   2.5
+    }
+  },
+  "BossProjectile": {
+    "speed":    110.0,
+    "lifetime":   4.0,
+    "damage":     1
+  }
+}

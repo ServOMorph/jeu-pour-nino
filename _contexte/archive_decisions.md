@@ -5,3 +5,7 @@
 - 2026-06-21 : Mode dev intégré au menu (navigable, autoload Dev, registre _spawn_points() scalable).
 - 2026-06-21 : JUMP_VELOCITY -250 → -320 pour permettre le saut par-dessus le boss.
 - 2026-06-21 : Refacto v2 cadrée — A+B+C avant Phase 1, étape D (données niveau externalisées) reportée à la Phase 5.
+- 2026-06-21 : `take_damage(int, Vector2)` = interface unique pour tous les receveurs de dégâts.
+- 2026-06-21 : Stats joueur (max_hp, attack_damage, attack_range) en var, pilotables par le futur équipement.
+- 2026-06-21 : HUD extrait dans hud.gd autonome (découplé de level.gd).
+- 2026-06-21 : Phase 1 complète — autoload Inventory + filons minables.

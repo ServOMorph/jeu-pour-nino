@@ -22,3 +22,6 @@ A=btn2, B=btn1, X=btn3, Y=btn0, LB=btn4, RB=btn5, ZL=btn6, ZR=btn7, Select=btn9,
 - `ui_cancel` n'inclut pas `JOY_BUTTON_B` par défaut → l'ajouter explicitement via `joymap.gd`.
 
 **Règle contrôles (décision 2026-06-21) :** manette uniquement. Pas de bindings clavier sur les nouvelles actions. Toute nouvelle action → binding joypad ajouté dans `joymap.gd`, pas dans `project.godot`.
+
+## 2026-06-21 — Externalisation valeurs gameplay
+Toutes les valeurs numériques gameplay (stats, timings, physique, feel) doivent être dans les JSON de `game/data/`. Aucune constante numérique gameplay ne doit rester hardcodée dans les scripts GDScript. S'applique à `player.gd`, `boss.gd`, `enemy_base.gd` et tout nouveau script gameplay.
