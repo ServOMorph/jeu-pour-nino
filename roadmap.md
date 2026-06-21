@@ -18,9 +18,9 @@ On **n'ajoute pas encore** la génération procédurale, le hub méta, ni les bi
 
 ## Phase 1 — Récolte de ressources
 
-- [ ] Singleton autoload `Inventory` : compteurs de ressources du run (réinitialisé à chaque nouveau run)
-- [ ] Nœuds de ressources placés dans le niveau : filons minables (ex. pierre, cuivre), PV propres au filon
-- [ ] Récolte : le coup d'arme (ou une action dédiée) endommage puis casse un filon → drop de ressources dans l'inventaire
+- [x] Singleton autoload `Inventory` : compteurs de ressources du run (réinitialisé à chaque nouveau run)
+- [x] Nœuds de ressources placés dans le niveau : filons minables (ex. pierre, cuivre), PV propres au filon
+- [x] Récolte : le coup d'arme (ou une action dédiée) endommage puis casse un filon → drop de ressources dans l'inventaire
 - [ ] Feedback de récolte fort : flash du filon, particules, son — c'est ce qui rend la boucle satisfaisante (plus que le visuel)
 - [ ] Affichage HUD discret des ressources collectées
 
@@ -30,9 +30,9 @@ On **n'ajoute pas encore** la génération procédurale, le hub méta, ni les bi
 
 ## Phase 2 — Établi & craft
 
-- [ ] Station **établi/forge** posée dans le niveau (`Area2D` + prompt "interagir", clavier + manette)
-- [ ] Menu de craft minimal (3-4 recettes) : `ressource(s) → objet`, ouverture/fermeture propre (pause du run pendant le menu)
-- [ ] Données de recettes externalisées (`.tres` ou JSON) — réutilisable tel quel pour les futurs biomes (même code, données différentes)
+- [x] Station **établi/forge** posée dans le niveau (`Area2D` + prompt "interagir", manette Y)
+- [x] Menu de craft minimal (3 recettes) : `ressource(s) → objet`, ouverture/fermeture propre (pause du run pendant le menu)
+- [x] Données de recettes externalisées (JSON) — réutilisable tel quel pour les futurs biomes
 - [ ] Validation : impossible de crafter sans les ressources requises (feedback clair)
 
 **Jalon** : on s'approche de l'établi, on ouvre le menu, on fabrique un objet en dépensant ses ressources, le menu se referme et le run reprend.

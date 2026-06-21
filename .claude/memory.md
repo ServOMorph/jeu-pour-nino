@@ -1,0 +1,24 @@
+# Mémoire projet
+<!-- Fichier géré via /memory. Ne pas modifier manuellement sauf pour supprimer des entrées. -->
+
+## 2026-06-21 — Manette et contrôles input
+
+**Manette :** PowerA NSW Wired Controller — GUID `03002d7bd620000019a7000000000000`, calibrée le 2026-06-14.
+
+**Architecture :** input centralisée dans `game/scripts/joymap.gd` (autoload). Aucun index joypad codé en dur ailleurs. Si la manette change → relancer `scenes/ui/calibration.tscn`.
+
+**Mapping brut calibré :**
+A=btn2, B=btn1, X=btn3, Y=btn0, LB=btn4, RB=btn5, ZL=btn6, ZR=btn7, Select=btn9, Start=btn12, L stick clic=btn10, R stick clic=btn11, Croix=hat switch (h0.1/4/8/2), Stick gauche=axes 0/1, Stick droit=axes 2/3.
+
+**Actions → bindings :**
+- move : stick gauche / croix
+- jump : JOY_BUTTON_A
+- attack : JOY_BUTTON_RIGHT_SHOULDER
+- interact : JOY_BUTTON_Y
+- ui_accept : JOY_BUTTON_A, ui_cancel : JOY_BUTTON_B
+
+**Pièges Godot :**
+- `JOY_BUTTON_X` réservé à `ui_up` par défaut → ne pas utiliser pour action custom.
+- `ui_cancel` n'inclut pas `JOY_BUTTON_B` par défaut → l'ajouter explicitement via `joymap.gd`.
+
+**Règle contrôles (décision 2026-06-21) :** manette uniquement. Pas de bindings clavier sur les nouvelles actions. Toute nouvelle action → binding joypad ajouté dans `joymap.gd`, pas dans `project.godot`.

@@ -24,35 +24,25 @@
 - craft_menu.gd : PROCESS_MODE_ALWAYS + _process (pas _input) pour input fiable en pause
 - Établi à x=150 (DEBUG) — à déplacer à sa position définitive avant livraison Phase 2
 
-## Dernière session (2026-06-21)
+## Dernière session (2026-06-21 — méta/mémoire)
 # Session du 2026-06-21
 
 ## Décisions prises
-- Phase 1 complète : autoload `Inventory` + filons minables dans le niveau
-- Phase 2 implémentée : établi interactif + menu de craft + recettes JSON externalisées
-- Manette uniquement : `interact`→Y, `ui_accept`→A, `ui_cancel`→B ajoutés dans joymap.gd
-- `_process` + `PROCESS_MODE_ALWAYS` retenu pour craft_menu (plus fiable qu'`_input` en pause)
+- Mémoire persistante migrée du dossier auto (`memory/`) vers `.claude/memory.md` (manette + règle contrôles ; Ollama exclu)
+- CLAUDE.md mis à jour : commande `/memory` → `/create_memory`
+- Fichiers du dossier auto `memory/` à supprimer (décision actée, non encore exécutée)
 
 ## Livrables produits ou modifiés
-- game/scripts/inventory.gd : créé (autoload Inventory — resources, items, spend, add_item, has_item)
-- game/scripts/ore_node.gd : créé (filons minables, PV propres, drop ressources)
-- game/scripts/workbench.gd : créé (StaticBody2D, zone Area2D mask=2, signal interact_requested)
-- game/scripts/craft_menu.gd : créé (CanvasLayer layer=10, PROCESS_MODE_ALWAYS, pause run)
-- game/data/recipes.json : créé (3 recettes externalisées)
-- game/scripts/joymap.gd : étendu (interact=Y, ui_accept=A, ui_cancel=B)
-- game/scripts/level.gd : étendu (_spawn_workbench, établi à x=150 debug)
+- `.claude/memory.md` : créé (synthèse manette PowerA NSW + règle contrôles manette uniquement)
+- `.claude/CLAUDE.md` : mis à jour par l'utilisateur
 
 ## Hypothèses validées / invalidées
-- VALIDE : collision_mask=2 obligatoire (player sur layer 2, pas layer 1)
-- VALIDE : `_process` + PROCESS_MODE_ALWAYS plus fiable qu'`_input` pendant pause
-- VALIDE : Godot UI defaults ne bindent pas JOY_BUTTON_A/B → ajout explicite requis
-- INVALIDE : JOY_BUTTON_X pour interact → conflit avec `ui_up` Godot → pivot : JOY_BUTTON_Y
-- EN ATTENTE : confirmation A (craft) et B (fermer) opérationnels après fix joymap
+- VALIDE : dossier `memory/` auto contenait une référence morte (`ollama_operational.md` absent)
 
 ## Prochaine étape exacte
-1. Confirmer A (craft) + B (fermer) fonctionnels en jeu
-2. Déplacer l'établi de x=150 (debug) à sa position définitive dans le niveau
-3. Si Phase 2 validée → attaquer Phase 3 (stats joueur pilotées par équipement crafté)
+1. Supprimer les fichiers de `C:\Users\raph6\.claude\projects\d--ServOMorph-Jeu-pour-Nino\memory\`
+2. Reprendre Phase 2 : confirmer A (craft) + B (fermer) en jeu, déplacer établi à position définitive
+3. Si Phase 2 validée → Phase 3 (stats joueur pilotées par équipement crafté)
 
 ## Question bloquante pour la session suivante
-A (craft) confirmé fonctionnel en jeu après les derniers fixes joymap ?
+Aucune
