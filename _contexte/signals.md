@@ -1,7 +1,8 @@
 # Signals — jeu   (MAJ 2026-06-21)
 
 ## Actions ouvertes
-- [P1|ouvert] Démarrer la première session de travail avec /start jeu
+- [P1|ouvert] Phase 6 : playtest & ajustements (en cours)
+- [P2|ouvert] Démarrer boucle de ressources & craft (roadmap v2)
 
 ## Questions ouvertes
 

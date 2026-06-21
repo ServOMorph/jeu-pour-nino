@@ -8,7 +8,9 @@ Jeu de plateforme/action pixel art fait pour Nino. Un run court dans le biome 1,
 - GDScript
 
 ## État actuel (réécrit intégralement à chaque /close)
-Projet initialisé. Aucun livrable produit.
+v1 complète (v0.2.1) — boucle jouable de bout en bout : titre → biome 1 → boss → victoire/défaite → relance.
+Contrôles clavier et manette PowerA NSW opérationnels. Écran de fin centré, anti-rebond bouton A.
+Phase 6 (playtest & ajustements) en cours. Prochaine étape : boucle de ressources & craft (roadmap v2).
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
 - 2026-06-21 : Initialisation du protocole vibecoding.
