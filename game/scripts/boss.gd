@@ -131,12 +131,12 @@ func _slam_impact() -> void:
 		var cam = _player.get_node_or_null("Camera2D")
 		if cam and cam.has_method("add_trauma"):
 			cam.add_trauma(6.0)
-	# Onde de choc : degats si le joueur est au sol et proche
 	if _player and is_instance_valid(_player):
 		var dx: float = abs(_player.global_position.x - global_position.x)
 		if dx < 70.0 and _player.has_method("take_damage"):
 			if _player.is_on_floor():
-				_player.take_damage(contact_damage, global_position.x)
+				var dir := (_player.global_position - global_position).normalized()
+				_player.take_damage(contact_damage, dir)
 
 func _die() -> void:
 	state = State.SLEEP

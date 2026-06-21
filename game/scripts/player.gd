@@ -14,15 +14,17 @@ const MAX_FALL := 360.0
 const COYOTE_TIME := 0.10
 const JUMP_BUFFER := 0.10
 
-const MAX_HP := 6
 const ATTACK_DURATION := 0.18
 const ATTACK_COOLDOWN := 0.32
-const ATTACK_DAMAGE := 2
 const ATTACK_KNOCKBACK := 180.0
 const INVULN_TIME := 0.8
 const HURT_KNOCKBACK := 200.0
 
-var hp := MAX_HP
+var max_hp := 6
+var attack_damage := 2
+var attack_range := 16.0
+
+var hp: int
 var facing := 1
 var _coyote := 0.0
 var _jump_buffer := 0.0
@@ -38,10 +40,11 @@ var _dead := false
 @onready var hurtbox: Area2D = $Hurtbox
 
 func _ready() -> void:
+	hp = max_hp
 	attack_hitbox.monitoring = false
 	attack_visual.visible = false
 	hurtbox.area_entered.connect(_on_hurtbox_area_entered)
-	health_changed.emit(hp, MAX_HP)
+	health_changed.emit(hp, max_hp)
 
 func _physics_process(delta: float) -> void:
 	if _dead:
@@ -54,7 +57,6 @@ func _physics_process(delta: float) -> void:
 	else:
 		visual.color = Color(1, 1, 1)
 
-	# Timers de saut
 	if is_on_floor():
 		_coyote = COYOTE_TIME
 	else:
@@ -63,22 +65,18 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("jump"):
 		_jump_buffer = JUMP_BUFFER
 
-	# Gravite
 	if not is_on_floor():
 		var g := GRAVITY if velocity.y < 0.0 else FALL_GRAVITY
 		velocity.y = min(velocity.y + g * delta, MAX_FALL)
 
-	# Saut (coyote + buffer)
 	if _jump_buffer > 0.0 and _coyote > 0.0:
 		velocity.y = JUMP_VELOCITY
 		_jump_buffer = 0.0
 		_coyote = 0.0
 		AudioManager.play("jump")
-	# Saut variable : relacher coupe l'ascension
 	if Input.is_action_just_released("jump") and velocity.y < JUMP_VELOCITY * 0.4:
 		velocity.y = JUMP_VELOCITY * 0.4
 
-	# Attaque
 	if _attack_timer > 0.0:
 		_attack_timer -= delta
 		if _attack_timer <= 0.0:
@@ -86,14 +84,12 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("attack") and _attack_cooldown <= 0.0 and _attack_timer <= 0.0:
 		_start_attack()
 
-	# Orientation selon la visée (stick droit ou souris)
 	var aim := _get_aim_dir()
 	var aim_facing := 1 if aim.x >= 0.0 else -1
 	if aim_facing != facing:
 		facing = aim_facing
 		_update_facing()
 
-	# Deplacement horizontal
 	if _hurt_stun > 0.0:
 		_hurt_stun -= delta
 	else:
@@ -113,10 +109,9 @@ func _start_attack() -> void:
 	_attack_timer = ATTACK_DURATION
 	_attack_cooldown = ATTACK_COOLDOWN
 	var aim := _get_aim_dir()
-	attack_hitbox.position = aim * 16.0
+	attack_hitbox.position = aim * attack_range
 	attack_hitbox.monitoring = true
 	attack_visual.visible = true
-	# Applique les degats aux hurtbox ennemies en contact
 	await get_tree().physics_frame
 	if not attack_hitbox.monitoring:
 		return
@@ -125,7 +120,7 @@ func _start_attack() -> void:
 		if area.is_in_group("enemy_hurtbox"):
 			var target := area.get_parent()
 			if target.has_method("take_damage"):
-				target.take_damage(ATTACK_DAMAGE, aim * ATTACK_KNOCKBACK)
+				target.take_damage(attack_damage, aim * ATTACK_KNOCKBACK)
 				hit = true
 	if hit:
 		_screen_shake()
@@ -141,18 +136,17 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 		var dmg := 1
 		if "contact_damage" in src:
 			dmg = int(src.contact_damage)
-		take_damage(dmg, src.global_position.x)
+		var knockback := (global_position - src.global_position).normalized()
+		take_damage(dmg, knockback)
 
-func take_damage(amount: int, from_x: float) -> void:
+func take_damage(amount: int, knockback: Vector2) -> void:
 	if _dead or _invuln > 0.0:
 		return
 	hp = max(0, hp - amount)
-	health_changed.emit(hp, MAX_HP)
+	health_changed.emit(hp, max_hp)
 	_invuln = INVULN_TIME
-	var kdir := signf(global_position.x - from_x)
-	if kdir == 0.0:
-		kdir = -float(facing)
-	velocity.x = kdir * HURT_KNOCKBACK
+	var dir := knockback if knockback != Vector2.ZERO else Vector2(-float(facing), 0.0)
+	velocity.x = dir.normalized().x * HURT_KNOCKBACK
 	velocity.y = -120.0
 	_hurt_stun = 0.18
 	_screen_shake()

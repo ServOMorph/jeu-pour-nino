@@ -17,12 +17,9 @@ var _ended := false
 var _door: StaticBody2D = null
 
 const END_SCREEN := preload("res://scripts/end_screen.gd")
+const HUD_SCRIPT := preload("res://scripts/hud.gd")
 
-# Elements UI (construits par code)
-var hud: CanvasLayer
-var hp_fill: ColorRect
-var boss_bar_root: Control
-var boss_fill: ColorRect
+var _hud: CanvasLayer
 
 func _ready() -> void:
 	randomize()
@@ -33,7 +30,7 @@ func _ready() -> void:
 	if cfg["enemies"]:
 		_spawn_enemies()
 	_spawn_boss()
-	_build_hud()
+	_setup_hud()
 	player.global_position = cfg["pos"]
 	if cfg["boss_active"]:
 		_start_boss_fight()
@@ -150,7 +147,6 @@ func _spawn_boss() -> void:
 	add_child(boss)
 	boss.global_position = Vector2(1460, FLOOR_TOP - 18)
 	boss.died.connect(_on_boss_died)
-	boss.health_changed.connect(_on_boss_health_changed)
 
 func _start_boss_fight() -> void:
 	_boss_started = true
@@ -158,61 +154,14 @@ func _start_boss_fight() -> void:
 	_door = _add_platform(Rect2(ARENA_X - 8, FLOOR_TOP - 140, 16, 140), Color(0.4, 0.15, 0.35))
 	if boss and is_instance_valid(boss):
 		boss.activate()
-	boss_bar_root.visible = true
+	_hud.show_boss_bar()
 
 # ---------------------------------------------------------------------- HUD
 
-func _build_hud() -> void:
-	hud = CanvasLayer.new()
-	add_child(hud)
-
-	# Barre de vie joueur
-	var hp_bg := ColorRect.new()
-	hp_bg.color = Color(0, 0, 0, 0.6)
-	hp_bg.position = Vector2(8, 8)
-	hp_bg.size = Vector2(84, 12)
-	hud.add_child(hp_bg)
-	hp_fill = ColorRect.new()
-	hp_fill.color = Color(0.9, 0.25, 0.3)
-	hp_fill.position = Vector2(10, 10)
-	hp_fill.size = Vector2(80, 8)
-	hud.add_child(hp_fill)
-	var hp_label := Label.new()
-	hp_label.text = "VIE"
-	hp_label.position = Vector2(96, 6)
-	hp_label.add_theme_font_size_override("font_size", 10)
-	hud.add_child(hp_label)
-
-	player.health_changed.connect(_on_player_health_changed)
-	_on_player_health_changed(player.hp, player.MAX_HP)
-
-	# Barre de vie boss (cachee au depart)
-	boss_bar_root = Control.new()
-	boss_bar_root.position = Vector2(90, 244)
-	boss_bar_root.visible = false
-	hud.add_child(boss_bar_root)
-	var b_bg := ColorRect.new()
-	b_bg.color = Color(0, 0, 0, 0.6)
-	b_bg.size = Vector2(304, 14)
-	boss_bar_root.add_child(b_bg)
-	boss_fill = ColorRect.new()
-	boss_fill.color = Color(0.6, 0.2, 0.85)
-	boss_fill.position = Vector2(2, 2)
-	boss_fill.size = Vector2(300, 10)
-	boss_bar_root.add_child(boss_fill)
-	var b_label := Label.new()
-	b_label.text = "GARDIEN DU NOYAU"
-	b_label.position = Vector2(0, -14)
-	b_label.add_theme_font_size_override("font_size", 9)
-	boss_bar_root.add_child(b_label)
-
-func _on_player_health_changed(current: int, maximum: int) -> void:
-	var ratio: float = float(current) / float(maximum)
-	hp_fill.size.x = 80.0 * ratio
-
-func _on_boss_health_changed(current: int, maximum: int) -> void:
-	var ratio: float = float(current) / float(maximum)
-	boss_fill.size.x = 300.0 * ratio
+func _setup_hud() -> void:
+	_hud = HUD_SCRIPT.new()
+	add_child(_hud)
+	_hud.setup(player, boss)
 
 # --------------------------------------------------------------- Fin de partie
 
@@ -226,7 +175,7 @@ func _on_boss_died() -> void:
 	if _ended:
 		return
 	_ended = true
-	boss_bar_root.visible = false
+	_hud.hide_boss_bar()
 	_show_end_screen("NOYAU ATTEINT - VICTOIRE", Color(0.4, 0.85, 0.5), true)
 
 func _show_end_screen(message: String, color: Color, victory: bool) -> void:
