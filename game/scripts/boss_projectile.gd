@@ -20,5 +20,5 @@ func _on_area_entered(area: Area2D) -> void:
 	if area.is_in_group("player_hurtbox"):
 		var player := area.get_parent()
 		if player.has_method("take_damage"):
-			player.take_damage(DAMAGE, global_position.x)
+			player.take_damage(DAMAGE, direction)
 		queue_free()

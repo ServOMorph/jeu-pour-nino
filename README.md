@@ -45,6 +45,7 @@ Nécessite Godot 4.5 installé dans `D:\tmp\godot45\`. Ou ouvrir `game/project.g
         ├── player.gd
         ├── boss.gd
         ├── level.gd
+        ├── hud.gd      # HUD (barres de vie joueur/boss)
         ├── audio.gd    # sons générés en runtime
         └── joymap.gd   # mapping manette PowerA NSW
 ```
@@ -55,7 +56,7 @@ Nécessite Godot 4.5 installé dans `D:\tmp\godot45\`. Ou ouvrir `game/project.g
 
 Menu titre navigable (flèches/stick, validation A). Mode dev intégré : sélectionner "TEST BOSS" au menu pour spawn directement dans l'arène.
 
-Phase 6 (playtest & ajustements) en cours.
+Refacto préparatoire v2 effectuée : interface de dégâts unifiée, stats joueur pilotables par l'équipement, HUD découplé. Prochaine étape : roadmap v2 Phase 1 (boucle de ressources & craft).
 
 ## Roadmap
 
