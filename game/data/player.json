@@ -1,0 +1,12 @@
+{
+  "speed":            130.0,
+  "jump_velocity":   -320.0,
+  "gravity":          800.0,
+  "fall_gravity":    1050.0,
+  "max_hp":             6,
+  "attack_damage":      2,
+  "attack_range":      16.0,
+  "invuln_time":        0.8,
+  "attack_knockback": 180.0,
+  "hurt_knockback":   200.0
+}

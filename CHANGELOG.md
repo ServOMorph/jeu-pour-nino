@@ -1,3 +1,17 @@
+## v1.2 — 2026-06-21
+
+### Ajouté
+- Phase 3 : stats joueur pilotées par équipement crafté (arme 3 paliers, armure 1 palier + damage_reduction)
+- Configs externalisées : `game/data/player.json`, `weapons.json`, `armor.json`, `enemies.json`
+- Menu dev : option "JOUER 100 MIN" (Dev.dev_resources)
+
+### Modifié
+- `enemy_base.gd` : HP et contact_damage chargés depuis enemies.json (contact_damage 1→2)
+- `enemy_ground.tscn` : max_hp 4→5
+- `player.gd` : constantes de mouvement converties en vars configurables via player.json
+
+---
+
 ## v1.1 — 2026-06-21
 
 ### Modifié

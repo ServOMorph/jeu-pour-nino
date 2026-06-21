@@ -1,8 +1,9 @@
 extends Control
 
 const DEV_SPAWNS := [
-	{"key": "", "label": "JOUER"},
-	{"key": "boss", "label": "TEST BOSS"},
+	{"key": "", "label": "JOUER", "resources": 0},
+	{"key": "", "label": "JOUER 100 MIN", "resources": 100},
+	{"key": "boss", "label": "TEST BOSS", "resources": 0},
 ]
 
 const COLOR_SELECTED := Color(1.0, 1.0, 1.0)
@@ -99,4 +100,5 @@ func _start_game() -> void:
 		return
 	_started = true
 	Dev.spawn = DEV_SPAWNS[_selected]["key"]
+	Dev.dev_resources = DEV_SPAWNS[_selected]["resources"]
 	get_tree().change_scene_to_file("res://scenes/levels/biome1.tscn")

@@ -29,6 +29,8 @@ var _craft_menu: CanvasLayer
 func _ready() -> void:
 	randomize()
 	Inventory.reset()
+	if Dev.dev_resources > 0:
+		Inventory.add(Dev.dev_resources)
 	_build_background()
 	_build_geometry()
 	_spawn_player()

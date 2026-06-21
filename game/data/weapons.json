@@ -1,0 +1,4 @@
+{
+  "epee_cuivre": {"damage": 4, "range": 18.0},
+  "epee_fer":    {"damage": 5, "range": 20.0}
+}

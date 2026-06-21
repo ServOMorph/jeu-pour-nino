@@ -1,0 +1,4 @@
+{
+  "EnemyGround": {"max_hp": 5, "contact_damage": 2},
+  "EnemyFlyer":  {"max_hp": 3, "contact_damage": 2}
+}
