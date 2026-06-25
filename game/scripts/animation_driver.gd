@@ -57,7 +57,7 @@ func _load_config() -> void:
 		sprite_frames.set_animation_loop(state_name, loop)
 		if frames is Array:
 			for frame_path in frames:
-				var texture := load(String(frame_path))
+				var texture := _load_texture(String(frame_path))
 				if texture is Texture2D:
 					sprite_frames.add_frame(state_name, texture)
 
@@ -65,3 +65,16 @@ func _apply_offset(state_cfg: Dictionary) -> void:
 	var offset_cfg: Variant = state_cfg.get("offset", [0.0, 0.0])
 	if offset_cfg is Array and offset_cfg.size() >= 2:
 		offset = Vector2(float(offset_cfg[0]), float(offset_cfg[1]))
+
+func _load_texture(frame_path: String) -> Texture2D:
+	if not frame_path.begins_with("res://"):
+		var texture := load(frame_path)
+		return texture if texture is Texture2D else null
+	var ext := frame_path.get_extension().to_lower()
+	if ext not in ["png", "webp"]:
+		var imported_texture := load(frame_path)
+		return imported_texture if imported_texture is Texture2D else null
+	var image := Image.load_from_file(ProjectSettings.globalize_path(frame_path))
+	if image == null or image.is_empty():
+		return null
+	return ImageTexture.create_from_image(image)

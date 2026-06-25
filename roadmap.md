@@ -193,8 +193,8 @@ Objectif :
 
 ### Plan d'action précis
 
-- [ ] Mettre à jour les scènes et collisions si la nouvelle taille réelle du player impose un recalage de hitbox ou d'offset.
-- [ ] Refaire un sprite master du player en `40x56` et le valider en jeu avant toute série complète.
+- [x] Mettre à jour les scènes et collisions si la nouvelle taille réelle du player impose un recalage de hitbox ou d'offset.
+- [x] Refaire un sprite master du player en `40x56` et le valider techniquement avant toute série complète.
 - [ ] Refaire ensuite les frames player :
   - idle ;
   - run 1 ;

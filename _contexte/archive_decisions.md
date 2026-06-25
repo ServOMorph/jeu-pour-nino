@@ -14,3 +14,5 @@
 - 2026-06-21 : Phase 3 complète — stats joueur pilotées par équipement via weapons.json / armor.json.
 - 2026-06-21 : Configs externalisées : player.json, weapons.json, armor.json, enemies.json.
 - 2026-06-21 : contact_damage ennemis = 2 ; armure_bois damage_reduction = 1.
+- 2026-06-21 : Menu dev — option "JOUER 100 MIN" (Dev.dev_resources injecté après Inventory.reset()).
+- 2026-06-21 : Toutes valeurs gameplay dans game/data/*.json — aucune constante numérique dans les scripts.

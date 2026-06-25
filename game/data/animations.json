@@ -5,9 +5,9 @@
       "idle": {
         "fps": 1.0,
         "loop": true,
-        "offset": [0.0, 0.0],
+        "offset": [0.0, -16.0],
         "frames": [
-          "res://assets/sprites/player/player_idle.png"
+          "res://assets/sprites/player/player_idle_v2.png"
         ]
       },
       "run": {
@@ -46,17 +46,17 @@
       "hurt": {
         "fps": 1.0,
         "loop": false,
-        "offset": [0.0, 0.0],
+        "offset": [0.0, -16.0],
         "frames": [
-          "res://assets/sprites/player/player_idle.png"
+          "res://assets/sprites/player/player_idle_v2.png"
         ]
       },
       "dead": {
         "fps": 1.0,
         "loop": false,
-        "offset": [0.0, 0.0],
+        "offset": [0.0, -16.0],
         "frames": [
-          "res://assets/sprites/player/player_idle.png"
+          "res://assets/sprites/player/player_idle_v2.png"
         ]
       }
     }

@@ -59,17 +59,18 @@ Nécessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ou
 
 ## État actuel
 
-**v2.1 validée.** Première passe design pixel art intégrée.
+**v2.1 validée.** Chantier animation et refonte visuelle des sprites personnages lancé.
 
-Sprites générés un par un selon `docs/process_generation_sprites.md`, branchés dans Godot, ramenés à la taille des anciens rectangles/carrés et alignés visuellement au sol.
+Les animations passent par un driver partagé (`game/scripts/animation_driver.gd`) piloté par `game/data/animations.json`.
+La nouvelle cible visuelle des personnages est un standard plus fin type Terraria, avec player cible `40x56`.
 
-Menu pause en jeu sur Start/Menu : reprendre, recommencer, quitter le programme, mode dev runtime et téléports atelier/boss. Le menu de défaite permet aussi de fermer le jeu.
+Un nouvel idle player `player_idle_v2.png` est intégré pour test qualité. Les autres frames player sont encore anciennes, donc le rendu du personnage n'est pas encore homogène.
 
 Toutes les valeurs gameplay et données de niveau sont externalisées dans `game/data/` (player.json, weapons.json, armor.json, enemies.json, boss.json, level.json). Aucune constante numérique gameplay ne doit être hardcodée dans les scripts.
 
 Godot 4.5 est disponible via `D:\Godot\godot.exe`. Validation headless OK.
 
-Prochaine session : tester visuellement le menu pause, les téléports dev et les offsets sprites, puis définir la suite v3.
+Prochaine session : tester visuellement l'idle v2 en jeu réel, puis refaire run, jump et attack dans le même standard.
 
 ## Roadmap
 

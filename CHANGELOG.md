@@ -1,3 +1,14 @@
+## v1.10 — 2026-06-25
+
+### Ajouté
+- Driver d'animation partagé `game/scripts/animation_driver.gd` piloté par `game/data/animations.json`.
+- Nouvel idle player `player_idle_v2.png` intégré pour test qualité.
+
+### Modifié
+- Direction visuelle personnages recalée vers un standard type Terraria avec player cible `40x56`.
+- `docs/process_generation_sprites.md`, `roadmap.md`, `README.md` et `_contexte/` mis à jour pour refléter le chantier animation.
+- Flip gauche/droite du player corrigé et scènes player/mobs/boss branchées sur le nouveau pipeline d'animation.
+
 ## v1.9 — 2026-06-25
 
 ### Ajouté

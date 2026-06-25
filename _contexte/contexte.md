@@ -8,15 +8,13 @@ Jeu de plateforme/action pixel art fait pour Nino. Un run court dans le biome 1,
 - GDScript
 
 ## État actuel (réécrit intégralement à chaque /close)
-v2.1 validée, puis première passe design pixel art intégrée : sprites générés un par un et branchés dans Godot.
-Sprites recalés à la taille des anciens rectangles/carrés et ancrés visuellement au sol.
-Menu pause en jeu ajouté sur Start : reprendre, recommencer, quitter, mode dev runtime et téléport atelier/boss.
-Menu de défaite : option fermer le jeu ajoutée.
-Prochaine étape : tester visuellement menu pause, offsets sprites et décider la suite v3.
+v2.1 validée ; chantier animation lancé avec un driver partagé piloté par `game/data/animations.json`.
+Direction visuelle personnages recalée vers un standard type Terraria, avec player cible `40x56`.
+Un nouvel idle player `player_idle_v2.png` est intégré et branché pour test qualité en jeu.
+Les autres frames player restent anciennes, donc le rendu complet n'est pas encore cohérent.
+Prochaine étape : valider l'idle v2 en jeu réel puis refaire run, jump et attack dans le même standard.
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
-- 2026-06-21 : Menu dev — option "JOUER 100 MIN" (Dev.dev_resources injecté après Inventory.reset()).
-- 2026-06-21 : Toutes valeurs gameplay dans game/data/*.json — aucune constante numérique dans les scripts.
 - 2026-06-21 : v1 complète — Phase 6 v1 validée, run complet de bout en bout fonctionnel.
 - 2026-06-21 : Menu titre 2 niveaux — sous-menu dev avec toggle 100 MIN et spawn atelier (title.gd refonte complète).
 - 2026-06-25 : Données de niveau externalisées dans game/data/level.json, chargé par level.gd.
@@ -25,3 +23,5 @@ Prochaine étape : tester visuellement menu pause, offsets sprites et décider l
 - 2026-06-25 : v2.1 validée utilisateur — gameplay testé nickel, correctifs finaux intégrés.
 - 2026-06-25 : Sprites finaux générés un par un selon `docs/process_generation_sprites.md`, pas par découpe de planche.
 - 2026-06-25 : Menu pause runtime sur Start — quitter ferme le programme, dev runtime sans redémarrage sauf téléports.
+- 2026-06-25 : Animations branchées sur un driver partagé `game/scripts/animation_driver.gd` piloté par `game/data/animations.json`.
+- 2026-06-25 : Nouvelle cible visuelle personnages type Terraria — player `40x56`, attaque `48x56`, idle v2 intégré pour test.

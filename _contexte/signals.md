@@ -1,6 +1,9 @@
 # Signals — jeu   (MAJ 2026-06-25)
 
 ## Actions ouvertes
+- [P1] Refaire toutes les frames du player dans le nouveau standard visuel Terraria-like.
+  fait quand: idle, run1, run2, jump et attack utilisent tous des sprites cohérents en 40x56/48x56 validés en jeu.
+  réf: `docs/process_generation_sprites.md`, `game/data/animations.json`, `game/assets/sprites/player/`
 - [P2] Étendre la logique d'équipement obsolète aux armures si plusieurs paliers sont ajoutés.
   fait quand: si plusieurs armures existent, les paliers dépassés disparaissent de l'établi.
   réf: `game/scripts/craft_menu.gd`, `game/data/recipes.json`, `game/data/armor.json`
@@ -31,30 +34,33 @@
 - Mode dev VIE INF : Dev.infinite_hp fait ignorer les dégâts dans player.gd
 - Menu pause en jeu : bouton menu/Start, pause le jeu, permet reprendre, recommencer, retour menu et dev runtime ; atelier/boss téléportent le joueur
 - Sprites : utiliser `docs/process_generation_sprites.md` ; générer les sprites un par un, ne pas découper une planche pour les assets finaux
+- Nouvelle cible visuelle personnages : lisibilité type Terraria ; player `40x56`, attack `48x56`
+- `game/scripts/animation_driver.gd` charge les frames d'animation depuis `game/data/animations.json`
+- `player_idle_v2.png` est l'idle intégré en test ; les autres frames player sont encore anciennes
 - craft_menu.gd : PH calculé dynamiquement = 26 + recipes.size() * ROW_H + 20
 - Piège manette title.gd : _a_was doit être mis à jour EN TÊTE de _process avant tout return anticipé
 
-## Dernière session (2026-06-25 — sprites et menu pause)
+## Dernière session (2026-06-25 — animation partagée et idle v2)
 # Session du 2026-06-25
 
 ## Décisions prises
-- Sprites finaux générés un par un, pas depuis une planche découpée.
-- Menu pause runtime ajouté sur Start ; quitter ferme le programme.
+- Direction visuelle personnages recalée vers un standard type Terraria, avec player cible `40x56`.
+- Le système d'animation passe par un driver partagé piloté par `animations.json`.
 
 ## Livrables produits ou modifiés
-- docs/charte_graphique_pixel_art_dark_fantasy.md : charte graphique ajoutée.
-- docs/process_generation_sprites.md : process de génération sprite ajouté.
-- game/assets/sprites/* : sprites pixel art générés, réduits et alignés au sol.
-- game/scripts/pause_menu.gd / level.gd / joymap.gd : menu pause runtime ajouté.
-- game/scripts/end_screen.gd : option fermer le jeu ajoutée en défaite.
+- docs/process_generation_sprites.md : standard Terraria-like et règle de finesse visuelle ajoutés.
+- game/scripts/animation_driver.gd / game/data/animations.json : couche d'animation partagée ajoutée.
+- game/scenes/player/player.tscn / game/scripts/player.gd : player branché sur le driver et flip gauche/droite corrigé.
+- game/scenes/enemies/* / game/scripts/enemy_*.gd / game/scripts/boss.gd : mobs et boss branchés sur le driver.
+- game/assets/sprites/player/player_idle_v2.png : nouvel idle player intégré pour test qualité.
 
 ## Hypothèses validées / invalidées
-- VALIDE : les sprites intégrés chargent dans Godot et le niveau démarre en headless.
-- VALIDE : la génération unitaire donne de meilleurs assets que le découpage de planche.
-- EN ATTENTE : test réel manette du menu pause et validation visuelle finale des offsets sprites.
+- VALIDE : la cible `40x56` donne un idle nettement plus fin que l'ancien `14x24`.
+- VALIDE : le driver d'animation partagé charge le projet et le niveau en headless.
+- EN ATTENTE : validation visuelle en jeu réel de l'idle v2, de son ancrage au sol et de la rupture avec les anciennes frames.
 
 ## Prochaine étape exacte
-Tester en jeu réel le menu pause Start, les téléports dev et l'alignement visuel des sprites.
+Tester en jeu réel l'idle v2 du player, puis refaire run1, run2, jump et attack dans le même standard avant de juger le rendu global.
 
 ## Question bloquante pour la session suivante
 Aucune
