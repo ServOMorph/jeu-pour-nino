@@ -6,6 +6,13 @@ Pour les sprites du jeu, ne pas découper une planche globale générée.
 
 La méthode retenue est de générer les sprites **un par un**, avec une specification stable par asset, puis de les intégrer individuellement dans Godot.
 
+Pour les personnages, la cible visuelle de référence devient un rendu **proche de la lisibilité de Terraria** :
+- frame de player autour de `40x56` pixels ;
+- silhouette nette ;
+- peu de bruit ;
+- détails lisibles à taille de jeu ;
+- pas de réduction agressive vers un micro-format ensuite.
+
 ## Pourquoi
 
 Le découpage d'une planche pose trop de problèmes :
@@ -22,6 +29,9 @@ La génération unitaire donne un meilleur contrôle sur :
 - la lisibilité ;
 - la cohérence entre assets ;
 - l'intégration Godot.
+
+La réduction vers des sprites trop petits donne un résultat grossier même si l'image source est bonne.
+Pour éviter cela, les personnages doivent être conçus **directement** à leur taille de jeu finale, sans pipeline basé sur une forte réduction.
 
 ## Source artistique
 
@@ -56,14 +66,14 @@ Demander :
 
 | Asset | Taille cible |
 |---|---:|
-| Joueur idle | 48x58 |
-| Joueur course 1 | 48x58 |
-| Joueur course 2 | 48x58 |
-| Joueur saut | 48x60 |
-| Joueur attaque | 58x46 |
-| Mob au sol | 58x34 |
-| Mob volant | 62x46 |
-| Boss gardien | 112x128 |
+| Joueur idle | 40x56 |
+| Joueur course 1 | 40x56 |
+| Joueur course 2 | 40x56 |
+| Joueur saut | 40x56 |
+| Joueur attaque | 48x56 |
+| Mob au sol | 32x32 |
+| Mob volant | 32x24 |
+| Boss gardien | 96x128 |
 | Établi | 58x40 |
 | Minerai cuivre | 34x34 |
 | Minerai fer | 34x34 |
@@ -73,6 +83,22 @@ Demander :
 | Tile mur biome 1 | 32x32 |
 
 Ces tailles peuvent être ajustées si le gameplay l'exige, mais elles doivent rester stables pendant une série d'assets.
+
+## Règle de finesse visuelle
+
+Pour obtenir des sprites plus fins :
+- ne pas viser "plus de détails", viser "meilleure lecture" ;
+- limiter le bruit de texture ;
+- limiter la palette par matériau ;
+- privilégier de gros volumes propres plutôt que des micro-détails ;
+- garder une séparation lisible entre peau, cuir, métal et tissu ;
+- vérifier le sprite à **100% de sa taille de jeu**, pas seulement zoomé.
+
+Un sprite est rejeté si :
+- il devient boueux à taille réelle ;
+- les matériaux se confondent ;
+- la silhouette du personnage se casse ;
+- la réduction détruit les détails importants.
 
 ## Prompt de base
 
@@ -127,9 +153,10 @@ Do not use #00ff00 anywhere in the subject.
    - `enemy_ground.png`
    - etc.
 4. Importer via Godot si nécessaire.
-5. Vérifier que la scène charge en headless.
-6. Vérifier visuellement dans une scène ou une planche de contrôle.
-7. Ajuster les offsets ou collisions si le sprite dépasse la hitbox.
+5. Vérifier que le sprite est utilisé à sa taille de gameplay cible, sans réduction destructrice de dernière minute.
+6. Vérifier que la scène charge en headless.
+7. Vérifier visuellement dans une scène ou une planche de contrôle.
+8. Ajuster les offsets ou collisions si le sprite dépasse la hitbox.
 
 ## Validation minimale
 
@@ -138,6 +165,7 @@ Un sprite est accepté si :
 - il a un fond transparent propre ;
 - il n'a pas de pixels parasites visibles ;
 - il respecte la charte dark fantasy ;
+- il reste fin et propre à la taille cible ;
 - il ne modifie pas la hitbox gameplay sans décision explicite ;
 - Godot charge le projet sans erreur.
 

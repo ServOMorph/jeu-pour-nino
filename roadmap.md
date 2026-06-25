@@ -112,6 +112,13 @@ La v2.1 ne doit pas lancer la génération procédurale, les nouveaux biomes ou 
 
 ## Chantier animation — Player puis mobs
 
+### Décision de direction artistique
+
+- Les sprites actuels sont jugés trop grossiers.
+- Nouvelle cible : lisibilité et finesse proches d'un sprite de personnage Terraria.
+- Référence de taille retenue pour le player : **40x56 px par frame**.
+- Conséquence : le pipeline de génération et d'intégration doit être recalé sur cette taille, pas sur les sprites réduits actuels.
+
 ### Diagnostic existant
 
 - Le rendu des personnages repose actuellement sur des `Sprite2D` statiques.
@@ -132,10 +139,25 @@ La v2.1 ne doit pas lancer la génération procédurale, les nouveaux biomes ou 
   - boss : sleep, idle, charge, volley, slam_rise, slam_fall, pause, hurt, dead
 - Les hitboxes sont indépendantes des sprites. Les animations ne doivent pas modifier les collisions sans décision explicite.
 
+### Nouveau standard de taille
+
+- Player :
+  - idle / run / jump : `40x56`
+  - attack : `48x56`
+- Mob au sol : `32x32`
+- Mob volant : `32x24`
+- Boss gardien : `96x128`
+
+Objectif :
+- obtenir un rendu plus fin ;
+- éviter les réductions destructrices ;
+- garder une grille claire pour toute la production d'animations.
+
 ### Process d'animation
 
 1. Produire les frames une par une, comme pour le process sprite actuel. Ne pas générer de planche finale à découper.
 2. Garder une taille stable par entité et par famille d'animation.
+   Pour le player, la base est désormais `40x56`.
 3. Nommer les fichiers avec un schéma déterministe :
    - `player_idle_01.png`
    - `player_run_01.png`
@@ -151,6 +173,7 @@ La v2.1 ne doit pas lancer la génération procédurale, les nouveaux biomes ou 
    - silhouette lisible à taille réelle ;
    - pieds ou point d'ancrage cohérents ;
    - pas de changement de hitbox induit ;
+   - finesse visuelle conservée à taille de jeu ;
    - style cohérent avec la charte dark fantasy.
 7. Intégrer les animations dans Godot via `AnimatedSprite2D` ou `SpriteFrames`, avec une couche script commune pour piloter l'état visuel.
 8. Définir les vitesses d'animation dans JSON, pas en dur dans les scripts.
@@ -170,6 +193,14 @@ La v2.1 ne doit pas lancer la génération procédurale, les nouveaux biomes ou 
 
 ### Plan d'action précis
 
+- [ ] Mettre à jour les scènes et collisions si la nouvelle taille réelle du player impose un recalage de hitbox ou d'offset.
+- [ ] Refaire un sprite master du player en `40x56` et le valider en jeu avant toute série complète.
+- [ ] Refaire ensuite les frames player :
+  - idle ;
+  - run 1 ;
+  - run 2 ;
+  - jump ;
+  - attack.
 - [x] Créer `game/data/animations.json` avec les vitesses et noms d'animations du player, des mobs et du boss.
 - [x] Créer `game/scripts/animation_driver.gd`.
 - [x] Remplacer le `Sprite2D` du player par une structure compatible animation, sans modifier les collisions.
@@ -217,6 +248,8 @@ La v2.1 ne doit pas lancer la génération procédurale, les nouveaux biomes ou 
 
 ### Risques à surveiller
 
+- Passer à une vraie taille de rendu type Terraria peut obliger à recalibrer offsets, hitboxes et placement caméra.
+- Si les nouveaux sprites sont juste des upscales des anciens, le résultat restera mauvais.
 - Le player a une frame d'attaque plus large que les autres images : il faudra préserver l'ancrage visuel pour éviter un déplacement apparent.
 - Les mobs n'ont pas encore assez de frames pour de vraies animations : le driver doit accepter des animations à une seule frame.
 - Le boss a des états riches mais une seule image : l'architecture doit être prête avant de produire toutes les frames boss.
