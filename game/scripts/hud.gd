@@ -4,6 +4,7 @@ var _hp_fill: ColorRect
 var _boss_bar_root: Control
 var _boss_fill: ColorRect
 var _res_label: Label
+var _coin_label: Label
 var _consumable_label: Label
 
 func setup(player: Node, boss: Node) -> void:
@@ -60,22 +61,34 @@ func _build_resource_counter() -> void:
 	Inventory.resources_changed.connect(_on_resources_changed)
 	_on_resources_changed(Inventory.resources)
 
+	_coin_label = Label.new()
+	_coin_label.position = Vector2(8, 36)
+	_coin_label.add_theme_font_size_override("font_size", 10)
+	_coin_label.modulate = Color(1.0, 0.82, 0.25)
+	add_child(_coin_label)
+	Inventory.coins_changed.connect(_on_coins_changed)
+	_on_coins_changed(Inventory.coins)
+
 	_consumable_label = Label.new()
-	_consumable_label.position = Vector2(8, 36)
+	_consumable_label.position = Vector2(8, 48)
 	_consumable_label.add_theme_font_size_override("font_size", 10)
 	add_child(_consumable_label)
 	Inventory.consumable_changed.connect(_on_consumable_changed)
-	_on_consumable_changed(Inventory.consumable)
+	_on_consumable_changed("")
 
 func _on_resources_changed(current: int) -> void:
 	_res_label.text = "MIN %d" % current
 
+func _on_coins_changed(current: int) -> void:
+	_coin_label.text = "OR %d" % current
+
 func _on_consumable_changed(id: String) -> void:
-	if id == "":
+	var count := Inventory.get_consumable_count("potion")
+	if count <= 0:
 		_consumable_label.text = "LB: —"
 		_consumable_label.modulate = Color(0.4, 0.4, 0.4)
 	else:
-		_consumable_label.text = "LB: POTION"
+		_consumable_label.text = "LB: POTION x%d" % count
 		_consumable_label.modulate = Color(0.5, 1.0, 0.5)
 
 func show_boss_bar() -> void:

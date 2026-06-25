@@ -8,6 +8,7 @@ const ENEMY_CONFIG_FILE := "res://data/enemies.json"
 @export var max_hp := 5
 @export var contact_damage := 1
 @export var gravity := 800.0
+@export var coin_reward := 0
 
 var hp := 0
 var _flash := 0.0
@@ -29,19 +30,32 @@ func _ready() -> void:
 	_on_ready()
 
 func _load_config() -> void:
-	var f := FileAccess.open(ENEMY_CONFIG_FILE, FileAccess.READ)
-	if f == null:
-		return
-	var parsed: Variant = JSON.parse_string(f.get_as_text())
-	if not parsed is Dictionary:
-		return
-	var cfg: Variant = parsed.get(name, null)
-	if not cfg is Dictionary:
+	var cfg := _get_enemy_config()
+	if cfg.is_empty():
 		return
 	if "max_hp" in cfg:
 		max_hp = int(cfg["max_hp"])
 	if "contact_damage" in cfg:
 		contact_damage = int(cfg["contact_damage"])
+	if "gravity" in cfg:
+		gravity = float(cfg["gravity"])
+	if "coin_reward" in cfg:
+		coin_reward = int(cfg["coin_reward"])
+
+func _get_enemy_config() -> Dictionary:
+	var f := FileAccess.open(ENEMY_CONFIG_FILE, FileAccess.READ)
+	if f == null:
+		return {}
+	var parsed: Variant = JSON.parse_string(f.get_as_text())
+	if not parsed is Dictionary:
+		return {}
+	var cfg: Variant = parsed.get(_get_config_key(), null)
+	if not cfg is Dictionary:
+		return {}
+	return cfg
+
+func _get_config_key() -> String:
+	return name
 
 func _on_ready() -> void:
 	pass
@@ -67,5 +81,7 @@ func _process(delta: float) -> void:
 
 func _die() -> void:
 	_dead = true
+	if coin_reward > 0:
+		Inventory.add_coins(coin_reward)
 	died.emit(self)
 	queue_free()

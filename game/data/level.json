@@ -38,23 +38,38 @@
   },
   "spawns": {
     "start": {"pos": [60, 224], "enemies": true, "boss_active": false},
-    "atelier": {"pos": [1040, 224], "enemies": false, "boss_active": false},
+    "atelier": {"pos": [1040, 224], "enemies": true, "boss_active": false},
     "boss": {"pos": [2660, 224], "enemies": false, "boss_active": true}
   },
   "enemies": [
     {"type": "ground", "pos": [320, 232]},
+    {"type": "ground", "pos": [520, 232]},
     {"type": "ground", "pos": [680, 232]},
     {"type": "flyer", "pos": [470, 145]},
     {"type": "flyer", "pos": [810, 140]},
+    {"type": "ground", "pos": [960, 232]},
     {"type": "ground", "pos": [1150, 232]},
+    {"type": "flyer", "pos": [1120, 135]},
+    {"type": "ground", "pos": [1280, 232]},
     {"type": "ground", "pos": [1500, 232]},
+    {"type": "flyer", "pos": [1510, 145]},
     {"type": "ground", "pos": [1860, 232]},
+    {"type": "ground", "pos": [2020, 232]},
     {"type": "ground", "pos": [2200, 232]},
+    {"type": "flyer", "pos": [2310, 135]},
     {"type": "ground", "pos": [2450, 232]},
+    {"type": "ground", "pos": [2520, 232]},
     {"type": "flyer", "pos": [1350, 145]},
     {"type": "flyer", "pos": [1760, 130]},
     {"type": "flyer", "pos": [2110, 145]}
   ],
+  "respawn": {
+    "enabled": true,
+    "delay": 18.0,
+    "retry_delay": 5.0,
+    "min_player_distance": 220.0,
+    "max_alive": 12
+  },
   "ores": [
     [180, 225],
     [300, 185],

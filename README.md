@@ -27,6 +27,8 @@ Nécessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ou
 | Attaquer | RB (visée vers le stick droit) |
 | Viser | Stick droit |
 | Interagir (établi) | Y |
+| Courir | Clic stick gauche |
+| Utiliser potion | LB |
 | Crafter | A |
 | Fermer menu | B |
 
@@ -35,7 +37,7 @@ Nécessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ou
 ```
 .
 ├── run.py              # Lance le jeu directement
-├── roadmap.md          # Phases de développement v1
+├── roadmap.md          # Roadmap active v2.1
 ├── docs/               # GDD et profil joueur
 └── game/               # Projet Godot
     ├── project.godot
@@ -55,14 +57,16 @@ Nécessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ou
 
 ## État actuel
 
-**v1 complète.** Run complet (explore → récolte → craft → boss) validé, nickel.
+**v2.1 en cours de validation.** Difficulté, potions multiples, progression équipement, course, respawn mobs et boss validés utilisateur.
+
+Monnaie de run implémentée et affichée dans le HUD, à revalider après correction des mobs volants. Potions empilables, sprint au clic stick gauche uniquement au sol, spawn atelier en mode dev avec ennemis.
 
 Toutes les valeurs gameplay et données de niveau sont externalisées dans `game/data/` (player.json, weapons.json, armor.json, enemies.json, boss.json, level.json). Aucune constante numérique gameplay ne doit être hardcodée dans les scripts.
 
-Menu titre 2 niveaux validé : accueil → sous-menu dev avec toggle 100 MIN, atelier et test boss. Godot 4.5 est disponible via `D:\Godot\godot.exe`.
+Godot 4.5 est disponible via `D:\Godot\godot.exe`. Validation headless OK.
 
-Prochaine session : définir les axes v2.
+Prochaine session : tester un run complet v2.1 et vérifier l'or des flyers.
 
 ## Roadmap
 
-Voir [roadmap.md](roadmap.md) pour le détail des phases. Après la v1 : craft, génération procédurale, biomes 2 et 3, méta-progression.
+Voir [roadmap.md](roadmap.md) pour le détail de la v2.1. Après la v2.1 : refacto complet, génération procédurale, hub méta, biomes 2 et 3, polish.

@@ -1,3 +1,19 @@
+## v1.7 — 2026-06-25
+
+### Ajouté
+- Potions de soin empilables, monnaie de run affichée dans le HUD, sprint au clic stick gauche, respawn des mobs.
+- Roadmap active v2.1 et archive de l'ancienne roadmap v2.
+
+### Modifié
+- Difficulté générale augmentée : densité de mobs, stats ennemis, boss plus exigeant.
+- Spawn atelier en mode dev avec ennemis.
+- README.md, roadmap.md et _contexte/ mis à jour pour la clôture v2.1.
+
+### Corrigé
+- Mobs volants : clé de configuration explicite pour récupérer correctement la récompense d'or.
+
+---
+
 ## v1.6 — 2026-06-25
 
 ### Ajouté

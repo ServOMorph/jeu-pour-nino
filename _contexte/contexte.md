@@ -8,15 +8,13 @@ Jeu de plateforme/action pixel art fait pour Nino. Un run court dans le biome 1,
 - GDScript
 
 ## État actuel (réécrit intégralement à chaque /close)
-v1 complète. Run complet (explore → récolte → craft → boss) validé, nickel.
-Toutes valeurs gameplay et données de niveau externalisées dans game/data/, dont level.json.
-Menu titre 2 niveaux validé : accueil → sous-menu dev avec toggle 100 MIN, atelier, test boss.
-Godot 4.5 disponible via D:\Godot\godot.exe ; validation headless OK.
-Prochaine session : définir axes v2.
+v2.1 en cours de validation : difficulté, potions multiples, progression équipement, course, respawn mobs et boss validés utilisateur.
+Monnaie de run implémentée, affichée dans le HUD, à revalider après correction des mobs volants.
+Sprint au clic stick gauche, uniquement au sol ; spawn atelier en mode dev charge maintenant les ennemis.
+Toutes valeurs gameplay et données de niveau sont dans game/data/ ; validation Godot headless OK.
+Prochaine étape : tester un run complet v2.1 et vérifier l'or des flyers.
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
-- 2026-06-21 : Phase 2 complète — établi + craft_menu (CanvasLayer, PROCESS_MODE_ALWAYS) + recettes JSON externalisées.
-- 2026-06-21 : Manette uniquement pour nouvelles actions — ui_accept=A, ui_cancel=B, interact=Y (joymap.gd).
 - 2026-06-21 : Phase 3 complète — stats joueur pilotées par équipement via weapons.json / armor.json.
 - 2026-06-21 : Configs externalisées : player.json, weapons.json, armor.json, enemies.json.
 - 2026-06-21 : contact_damage ennemis = 2 ; armure_bois damage_reduction = 1.
@@ -25,3 +23,5 @@ Prochaine session : définir axes v2.
 - 2026-06-21 : v1 complète — Phase 6 v1 validée, run complet de bout en bout fonctionnel.
 - 2026-06-21 : Menu titre 2 niveaux — sous-menu dev avec toggle 100 MIN et spawn atelier (title.gd refonte complète).
 - 2026-06-25 : Données de niveau externalisées dans game/data/level.json, chargé par level.gd.
+- 2026-06-25 : Roadmap active v2.1 — retours playtest avant v3, ancienne v2 archivée.
+- 2026-06-25 : v2.1 gameplay — potions empilables, monnaie de run, sprint au sol, respawn mobs, boss durci.

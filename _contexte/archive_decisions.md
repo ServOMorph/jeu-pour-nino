@@ -9,3 +9,5 @@
 - 2026-06-21 : Stats joueur (max_hp, attack_damage, attack_range) en var, pilotables par le futur équipement.
 - 2026-06-21 : HUD extrait dans hud.gd autonome (découplé de level.gd).
 - 2026-06-21 : Phase 1 complète — autoload Inventory + filons minables.
+- 2026-06-21 : Phase 2 complète — établi + craft_menu (CanvasLayer, PROCESS_MODE_ALWAYS) + recettes JSON externalisées.
+- 2026-06-21 : Manette uniquement pour nouvelles actions — ui_accept=A, ui_cancel=B, interact=Y (joymap.gd).

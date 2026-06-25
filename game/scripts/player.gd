@@ -9,6 +9,7 @@ const ARMOR_CONFIG       := "res://data/armor.json"
 const CONSUMABLES_CONFIG := "res://data/consumables.json"
 
 var speed            := 130.0
+var sprint_speed     := 175.0
 var accel            := 1600.0
 var friction         := 1400.0
 var air_accel        := 1000.0
@@ -80,11 +81,12 @@ func _load_configs() -> void:
 			_player_cfg = parsed
 			var mov: Variant = parsed.get("movement", {})
 			if mov is Dictionary:
-				if "speed"     in mov: speed     = float(mov["speed"])
-				if "accel"     in mov: accel     = float(mov["accel"])
-				if "friction"  in mov: friction  = float(mov["friction"])
-				if "air_accel" in mov: air_accel = float(mov["air_accel"])
-				if "max_fall"  in mov: max_fall  = float(mov["max_fall"])
+				if "speed"        in mov: speed        = float(mov["speed"])
+				if "sprint_speed" in mov: sprint_speed = float(mov["sprint_speed"])
+				if "accel"        in mov: accel        = float(mov["accel"])
+				if "friction"     in mov: friction     = float(mov["friction"])
+				if "air_accel"    in mov: air_accel    = float(mov["air_accel"])
+				if "max_fall"     in mov: max_fall     = float(mov["max_fall"])
 			var jmp: Variant = parsed.get("jump", {})
 			if jmp is Dictionary:
 				if "velocity"    in jmp: jump_velocity    = float(jmp["velocity"])
@@ -185,7 +187,8 @@ func _physics_process(delta: float) -> void:
 		var dir := Input.get_axis("move_left", "move_right")
 		if dir != 0.0:
 			var a := accel if is_on_floor() else air_accel
-			velocity.x = move_toward(velocity.x, dir * speed, a * delta)
+			var target_speed := sprint_speed if is_on_floor() and Input.is_action_pressed("sprint") else speed
+			velocity.x = move_toward(velocity.x, dir * target_speed, a * delta)
 		else:
 			velocity.x = move_toward(velocity.x, 0.0, friction * delta)
 
@@ -292,7 +295,7 @@ func _apply_equipment() -> void:
 	health_changed.emit(hp, max_hp)
 
 func _use_consumable() -> void:
-	if _dead or Inventory.consumable == "":
+	if _dead or Inventory.get_consumable_count("potion") <= 0:
 		return
 	var id := Inventory.use_consumable()
 	if id in _consumable_cfg:

@@ -1,104 +1,109 @@
-# Roadmap v2 — CoreDive Challenge (la boucle de ressources & de craft)
+# Roadmap v2.1 — Retours playtest & difficulté
 
-*Roadmap de développement pour Godot. Chaque phase se termine par un jalon testable, pour avancer par petites itérations jouables plutôt que par gros blocs invisibles.*
+*Roadmap active. L'ancienne roadmap v2 est archivée dans `archives/roadmap/roadmap_v2_core_dive_2026-06-25.md`.*
 
-> **v1 livrée** : squelette d'action complet — déplacement, combat de base, un boss, boucle complète (titre → run → victoire/défaite → relance), biome 1 fait main, support manette PowerA NSW. Voir l'historique git et `game/README.md`.
+## Objectif de la v2.1
 
-## Objectif de la v2
+Corriger les retours de playtest avant de passer à la v3. Le jeu doit devenir plus difficile, plus tendu, et garder de la pression pendant tout le run, y compris autour de l'atelier.
 
-Transformer le couloir-combat de la v1 en un vrai **run façon Terraria** : le joueur **récolte des ressources** en chemin, les **fabrique en équipement** à un établi, et **devient tangiblement plus fort *pendant* le run** avant d'affronter le boss. C'est le cœur de l'ADN du jeu (GDD §5) et le signal le plus fort du profil joueur (244 h de Terraria, 488 h de 2D crafting/survie) — donc l'ajout le plus rentable maintenant.
-
-On **n'ajoute pas encore** la génération procédurale, le hub méta, ni les biomes 2/3 : on prouve d'abord que la boucle de craft est amusante, sur le biome 1 enrichi. Même discipline que la v1 (ne pas empiler deux gros chantiers à la fois).
-
-**Décisions de cadrage v2** :
-- **Périmètre** : boucle de craft seule (ressources + établi + paliers d'équipement + consommables), biome 1 enrichi.
-- **À la mort** : tout l'équipement et toutes les ressources sont perdus (GDD §5, tension maximale du run). La persistance méta (monnaie, déblocages, hub) arrive en v3.
+La v2.1 ne doit pas lancer la génération procédurale, les nouveaux biomes ou le hub méta complet. Elle sert à solidifier le run actuel.
 
 ---
 
-## Phase 1 — Récolte de ressources
+## Phase 1 — Difficulté générale
 
-- [x] Singleton autoload `Inventory` : compteurs de ressources du run (réinitialisé à chaque nouveau run)
-- [x] Nœuds de ressources placés dans le niveau : filons minables (ex. pierre, cuivre), PV propres au filon
-- [x] Récolte : le coup d'arme (ou une action dédiée) endommage puis casse un filon → drop de ressources dans l'inventaire
-- [x] Feedback de récolte fort : flash du filon, particules, son — c'est ce qui rend la boucle satisfaisante (plus que le visuel)
-- [x] Affichage HUD discret des ressources collectées
+- [x] Augmenter la difficulté générale du run : ennemis, pression, dégâts, rythme ou coût des erreurs.
+- [x] Vérifier que le jeu reste jouable sans devenir injuste.
+- [ ] Tester un run complet après équilibrage.
 
-**Jalon** : on parcourt le niveau, on casse des filons, le compteur monte avec un retour visuel/sonore satisfaisant. C'est le premier "plaisir Nino" du run.
+**Jalon** : le run demande plus d'attention et d'exécution, sans casser la boucle explore → récolte → craft → boss.
 
 ---
 
-## Phase 2 — Établi & craft
+## Phase 2 — Potions multiples
 
-- [x] Station **établi/forge** posée dans le niveau (`Area2D` + prompt "interagir", manette Y)
-- [x] Menu de craft minimal (3 recettes) : `ressource(s) → objet`, ouverture/fermeture propre (pause du run pendant le menu)
-- [x] Données de recettes externalisées (JSON) — réutilisable tel quel pour les futurs biomes
-- [x] Validation : impossible de crafter sans les ressources requises (feedback clair)
+- [x] Permettre d'avoir plusieurs potions de soin en stock.
+- [x] Afficher clairement le nombre de potions disponibles dans le HUD.
+- [x] Consommer une seule potion à chaque utilisation.
+- [x] Réinitialiser le stock de potions à chaque nouveau run ou mort.
 
-**Jalon** : on s'approche de l'établi, on ouvre le menu, on fabrique un objet en dépensant ses ressources, le menu se referme et le run reprend.
-
----
-
-## Phase 3 — Paliers d'équipement
-
-- [x] Rendre les stats du joueur pilotables par l'équipement équipé (aujourd'hui en dur dans `player.gd` : dégâts, portée, PV max…)
-- [x] 3 paliers d'arme craftables : bois → cuivre → fer (dégâts / portée croissants)
-- [x] 1-2 paliers d'armure : réduction de dégâts ou +PV max
-- [x] Équipement automatiquement actif une fois crafté (pas de gestion d'inventaire complexe en v2)
-- [x] Feedback visuel du palier (couleur de l'arme / du joueur change) pour rendre la progression lisible
-
-**Jalon** : crafter une meilleure arme rend les combats nettement plus faciles → **sensation de progression *pendant* le run**, pas seulement entre les runs.
+**Jalon** : le joueur peut préparer plusieurs soins avant le boss et les utiliser un par un.
 
 ---
 
-## Phase 4 — Consommables & tension du run
+## Phase 3 — Progression propre de l'équipement
 
-- [x] Potion de soin craftable (rend des PV)
-- [ ] 1-2 autres consommables simples (ex. bombe, ou grappin de déplacement — cité au GDD §5 comme excellent modèle)
-- [x] Slot de consommable + touche d'usage (clavier + manette)
-- [x] **Tout est perdu à la mort** (équipement + ressources + consommables) — la persistance méta, c'est v3
+- [x] Retirer de l'établi les armes déjà dépassées.
+- [x] Après achat de l'épée cuivre, masquer ou désactiver l'épée bois.
+- [x] Appliquer la même règle à toutes les futures améliorations d'arme.
+- [ ] Étendre la logique aux armures si plusieurs paliers deviennent disponibles.
 
-**Jalon** : on doit arbitrer ses ressources entre "crafter une meilleure arme" et "garder de quoi se soigner" → vraie décision de run, vraie tension.
-
----
-
-## Phase 5 — Niveau étendu & rééquilibrage
-
-- [x] Allonger / densifier le niveau biome 1 pour laisser de la place à la récolte et au craft (le couloir actuel ~1600px est trop court pour une boucle de craft)
-- [x] Répartir filons et établi(s) pour rythmer le run (récolter avant l'établi, crafter avant le boss)
-- [x] Rééquilibrer PV/dégâts des ennemis et du boss en tenant compte des paliers d'équipement (le boss doit rester un vrai mur sans bon stuff)
-- [x] Ajuster les limites de la `Camera2D` au niveau étendu
-
-**Jalon** : un run complet "explore → récolte → craft → boss" qui dure ~8-15 min et **donne envie de recommencer**. **C'est la v2 testable.**
+**Jalon** : l'établi ne propose plus d'améliorations obsolètes une fois un meilleur palier obtenu.
 
 ---
 
-## Phase 6 — Playtest & ajustements
+## Phase 4 — Course
 
-- [x] Tester soi-même "à la place d'un nouveau joueur" : la boucle de craft est-elle lisible et gratifiante ?
-- [x] Vérifier que la progression d'équipement se *ressent* clairement en combat
-- [x] Équilibrer le coût des recettes (ni trop grindy, ni trivial) et le taux de drop des filons
-- [x] Corriger les bugs les plus gênants (récolte, menu de craft, équipement)
-- [ ] Noter les retours pour la v3 (ce qui manque, ce qui frustre, ce qui marche)
+- [x] Ajouter une action manette pour courir plus vite.
+- [x] Ajouter le binding dans `game/scripts/joymap.gd`, pas dans `project.godot`.
+- [x] Externaliser les valeurs de vitesse/endurance/timing dans `game/data/*.json`.
+- [x] Vérifier que la course ne casse pas les sauts, collisions, combats ou limites caméra.
 
-**Jalon** : v2 stable, jouable de bout en bout, avec une boucle de craft qui semble "juste" — gratifiante sans être pénible.
-
----
-
-## Après la v2
-
-Une fois la boucle de craft prouvée amusante, la trajectoire (alignée sur le GDD) :
-
-- **v3 — Génération procédurale + hub méta** : génération du biome 1 (automate cellulaire ou rooms connectées, GDD §3/§11) pour remplacer le niveau statique, et hub entre les runs avec monnaie persistante + déblocages (GDD §6). La persistance "tout perdu à la mort" de la v2 devient alors "tout perdu sauf la monnaie méta".
-- **v4 — Biomes 2 & 3 + Noyau** : contenu réplicable grâce au système de données par biome posé en v2 (ennemis, recettes, tileset) + boss final (GDD §10).
-- **v5 — Polish** : art final (remplacer les Polygon2D placeholder), vrais sons/musique, équilibrage global de la difficulté.
+**Jalon** : le joueur peut accélérer ses déplacements avec un bouton dédié, de façon fiable à la manette.
 
 ---
 
-## Astuces pour avancer efficacement
+## Phase 5 — Respawn des mobs
 
-- Garder les assets placeholder (Polygon2D de couleur) tant que la boucle de craft n'est pas validée — l'art final, c'est le polish (v5).
-- Externaliser dès la v2 les données (recettes, plus tard ennemis/ressources) dans des `Resource`/JSON : chaque futur biome ne sera qu'un jeu de données réutilisant le même code.
-- Tester après chaque tâche cochée plutôt qu'à la fin d'une phase : repérer tôt une récolte "pas satisfaisante" ou un craft "pas lisible".
-- Un commit par jalon (fin de phase) pour des points de retour propres.
-- Résister à l'envie d'attaquer le procédural ou les biomes suivants avant que la boucle récolte/craft/équipement ne soit déjà "fun" toute seule sur le biome 1.
+- [x] Faire respawn les ennemis pour éviter que le retour à l'atelier soit vide.
+- [x] Définir les règles de respawn : délai, distance minimale du joueur, limite par zone.
+- [x] Externaliser les valeurs de respawn dans `game/data/*.json`.
+- [x] Éviter les respawns injustes directement sur le joueur.
+
+**Jalon** : revenir vers l'atelier garde une pression ennemie sans spawn injuste.
+
+---
+
+## Phase 6 — Monnaie
+
+- [x] Implémenter la monnaie du jeu.
+- [x] Définir comment elle est gagnée pendant le run.
+- [x] Afficher la monnaie dans le HUD.
+- [x] Définir si elle est perdue à la mort en v2.1 ou conservée pour préparer la v3.
+
+**Jalon** : la monnaie existe, elle est visible, gagnable et son comportement à la mort est explicite.
+
+---
+
+## Phase 7 — Boss plus difficile
+
+- [x] Augmenter la difficulté du boss.
+- [x] Ajuster ses PV, dégâts, rythme ou patterns.
+- [ ] Vérifier qu'il reste battable avec une bonne préparation.
+- [ ] Vérifier qu'il reste un vrai mur sans équipement correct.
+
+**Jalon** : le boss redevient un test final crédible du run.
+
+---
+
+## Validation v2.1
+
+- [ ] Run complet testé de bout en bout.
+- [x] Difficulté validée.
+- [x] Potions multiples validées.
+- [x] Progression d'équipement validée.
+- [x] Course validée.
+- [x] Respawn mobs validé.
+- [ ] Monnaie validée.
+- [x] Boss validé.
+
+**Jalon final** : v2.1 jouable avec une vraie tension de run, plusieurs soins possibles, une progression d'équipement propre, des ennemis qui maintiennent la pression, une monnaie fonctionnelle et un boss plus exigeant.
+
+---
+
+## Après la v2.1
+
+- refacto complet de la codebase
+- **v3 — Génération procédurale + hub méta** : génération du biome 1 et hub entre les runs avec monnaie persistante + déblocages.
+- **v4 — Biomes 2 & 3 + Noyau** : contenu réplicable grâce au système de données par biome.
+- **v5 — Polish** : art final, vrais sons/musique, équilibrage global.

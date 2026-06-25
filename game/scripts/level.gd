@@ -17,6 +17,7 @@ var _boss_started := false
 var _ended := false
 var _door: StaticBody2D = null
 var _level_cfg: Dictionary = {}
+var _living_enemies := 0
 
 const END_SCREEN := preload("res://scripts/end_screen.gd")
 const HUD_SCRIPT := preload("res://scripts/hud.gd")
@@ -139,22 +140,53 @@ func _spawn_player(spawn_pos: Vector2) -> void:
 
 func _spawn_enemies() -> void:
 	for cfg in _level_cfg["enemies"]:
-		var pos := _vec2(cfg["pos"])
-		match String(cfg["type"]):
-			"ground":
-				_add_ground_enemy(pos)
-			"flyer":
-				_add_flyer(pos)
+		_spawn_enemy_from_config(cfg)
 
-func _add_ground_enemy(pos: Vector2) -> void:
+func _spawn_enemy_from_config(cfg: Dictionary) -> void:
+	var pos := _vec2(cfg["pos"])
+	var enemy: Node = null
+	match String(cfg["type"]):
+		"ground":
+			enemy = _add_ground_enemy(pos)
+		"flyer":
+			enemy = _add_flyer(pos)
+	if enemy:
+		_living_enemies += 1
+		enemy.died.connect(_on_enemy_died.bind(cfg))
+
+func _add_ground_enemy(pos: Vector2) -> Node:
 	var e := ENEMY_GROUND.instantiate()
 	add_child(e)
 	e.global_position = pos
+	return e
 
-func _add_flyer(pos: Vector2) -> void:
+func _add_flyer(pos: Vector2) -> Node:
 	var e := ENEMY_FLYER.instantiate()
 	add_child(e)
 	e.global_position = pos
+	return e
+
+func _on_enemy_died(_enemy: Node, cfg: Dictionary) -> void:
+	_living_enemies = max(0, _living_enemies - 1)
+	var respawn: Dictionary = _level_cfg.get("respawn", {})
+	if not bool(respawn.get("enabled", false)):
+		return
+	if _ended or _boss_started:
+		return
+	get_tree().create_timer(float(respawn["delay"])).timeout.connect(_try_respawn_enemy.bind(cfg))
+
+func _try_respawn_enemy(cfg: Dictionary) -> void:
+	var respawn: Dictionary = _level_cfg.get("respawn", {})
+	if _ended or _boss_started:
+		return
+	if _living_enemies >= int(respawn["max_alive"]):
+		return
+	if player and is_instance_valid(player):
+		var pos := _vec2(cfg["pos"])
+		if player.global_position.distance_to(pos) < float(respawn["min_player_distance"]):
+			get_tree().create_timer(float(respawn["retry_delay"])).timeout.connect(_try_respawn_enemy.bind(cfg))
+			return
+	_spawn_enemy_from_config(cfg)
 
 func _spawn_boss() -> void:
 	boss = BOSS.instantiate()

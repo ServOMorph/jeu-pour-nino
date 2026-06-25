@@ -54,12 +54,15 @@ func _setup_input() -> void:
 	if not InputMap.has_action("use_item"):
 		InputMap.add_action("use_item", 0.5)
 	_add_joypad_button("use_item",   JOY_BUTTON_LEFT_SHOULDER)
+	if not InputMap.has_action("sprint"):
+		InputMap.add_action("sprint", 0.5)
+	_add_joypad_button("sprint",     JOY_BUTTON_LEFT_STICK)
 	_add_joypad_button("ui_accept",  JOY_BUTTON_A)
 	_add_joypad_button("ui_cancel",  JOY_BUTTON_B)
 
 # --- helpers ---
 
-func _add_joypad_button(action: String, button: JoyButton) -> void:
+func _add_joypad_button(action: String, button: int) -> void:
 	if not InputMap.has_action(action):
 		return
 	# Evite les doublons

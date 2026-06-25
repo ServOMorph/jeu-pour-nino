@@ -9,6 +9,7 @@ const ROW_H := 22.0
 var PH := 115.0
 
 var _recipes: Array = []
+var _visible_recipes: Array = []
 var _selected := 0
 var _row_bgs: Array[ColorRect] = []
 var _row_labels: Array[Label] = []
@@ -84,6 +85,7 @@ func _build_row(i: int) -> void:
 	_row_labels.append(lbl)
 
 func open() -> void:
+	_sync_visible_recipes()
 	_selected = 0
 	_refresh()
 	visible = true
@@ -94,15 +96,19 @@ func close() -> void:
 	get_tree().paused = false
 
 func _refresh() -> void:
+	_sync_visible_recipes()
 	for i in _recipes.size():
-		var recipe: Dictionary = _recipes[i]
+		var row_visible := i < _visible_recipes.size()
+		_row_bgs[i].visible = row_visible
+		_row_labels[i].visible = row_visible
+		if not row_visible:
+			continue
+		var recipe: Dictionary = _visible_recipes[i]
 		var cost := int(recipe["cost"])
 		var id: String = recipe["id"]
 		var is_consumable: bool = recipe.get("consumable", false)
 		var done := false
-		if is_consumable:
-			done = Inventory.consumable == id
-		else:
+		if not is_consumable:
 			done = Inventory.has_item(id)
 		var affordable := Inventory.resources >= cost
 
@@ -124,24 +130,25 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
 		close()
 	elif Input.is_action_just_pressed("ui_up"):
-		_selected = (_selected - 1 + _recipes.size()) % _recipes.size()
+		if _visible_recipes.is_empty():
+			return
+		_selected = (_selected - 1 + _visible_recipes.size()) % _visible_recipes.size()
 		_refresh()
 	elif Input.is_action_just_pressed("ui_down"):
-		_selected = (_selected + 1) % _recipes.size()
+		if _visible_recipes.is_empty():
+			return
+		_selected = (_selected + 1) % _visible_recipes.size()
 		_refresh()
 	elif Input.is_action_just_pressed("ui_accept"):
 		_try_craft(_selected)
 
 func _try_craft(i: int) -> void:
-	if i >= _recipes.size():
+	if i >= _visible_recipes.size():
 		return
-	var recipe: Dictionary = _recipes[i]
+	var recipe: Dictionary = _visible_recipes[i]
 	var id: String = recipe["id"]
 	var is_consumable: bool = recipe.get("consumable", false)
-	if is_consumable:
-		if Inventory.consumable == id:
-			return
-	else:
+	if not is_consumable:
 		if Inventory.has_item(id):
 			return
 	if Inventory.spend(int(recipe["cost"])):
@@ -159,3 +166,22 @@ func _flash_fail(i: int) -> void:
 	var t := lbl.create_tween()
 	t.tween_property(lbl, "modulate", Color(1.0, 0.2, 0.2), 0.05)
 	t.tween_property(lbl, "modulate", Color(0.45, 0.45, 0.45), 0.20)
+
+func _sync_visible_recipes() -> void:
+	_visible_recipes.clear()
+	for recipe in _recipes:
+		if _is_recipe_obsolete(recipe):
+			continue
+		_visible_recipes.append(recipe)
+	if _visible_recipes.is_empty():
+		_selected = 0
+	else:
+		_selected = clampi(_selected, 0, _visible_recipes.size() - 1)
+
+func _is_recipe_obsolete(recipe: Dictionary) -> bool:
+	var id: String = recipe["id"]
+	if id == "epee_bois" and (Inventory.has_item("epee_cuivre") or Inventory.has_item("epee_fer")):
+		return true
+	if id == "epee_cuivre" and Inventory.has_item("epee_fer"):
+		return true
+	return false
