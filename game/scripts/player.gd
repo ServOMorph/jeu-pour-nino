@@ -50,6 +50,7 @@ var _attack_cooldown := 0.0
 var _invuln          := 0.0
 var _hurt_stun       := 0.0
 var _dead            := false
+var _air_sprint      := false
 
 var _player_cfg:      Dictionary = {}
 var _weapon_cfg:      Dictionary = {}
@@ -145,19 +146,22 @@ func _physics_process(delta: float) -> void:
 	else:
 		visual.color = Color(1, 1, 1)
 
-	if is_on_floor():
+	var on_floor := is_on_floor()
+	if on_floor:
 		_coyote = coyote_time
+		_air_sprint = false
 	else:
 		_coyote = max(0.0, _coyote - delta)
 	_jump_buffer = max(0.0, _jump_buffer - delta)
 	if Input.is_action_just_pressed("jump"):
 		_jump_buffer = jump_buffer_time
 
-	if not is_on_floor():
+	if not on_floor:
 		var g := gravity if velocity.y < 0.0 else fall_gravity
 		velocity.y = min(velocity.y + g * delta, max_fall)
 
 	if _jump_buffer > 0.0 and _coyote > 0.0:
+		_air_sprint = on_floor and Input.is_action_pressed("sprint")
 		velocity.y = jump_velocity
 		_jump_buffer = 0.0
 		_coyote = 0.0
@@ -186,8 +190,10 @@ func _physics_process(delta: float) -> void:
 	else:
 		var dir := Input.get_axis("move_left", "move_right")
 		if dir != 0.0:
-			var a := accel if is_on_floor() else air_accel
-			var target_speed := sprint_speed if is_on_floor() and Input.is_action_pressed("sprint") else speed
+			var moving_on_floor := is_on_floor()
+			var a := accel if moving_on_floor else air_accel
+			var sprinting := (moving_on_floor and Input.is_action_pressed("sprint")) or (not moving_on_floor and _air_sprint)
+			var target_speed := sprint_speed if sprinting else speed
 			velocity.x = move_toward(velocity.x, dir * target_speed, a * delta)
 		else:
 			velocity.x = move_toward(velocity.x, 0.0, friction * delta)
@@ -233,6 +239,8 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 
 func take_damage(amount: int, knockback: Vector2) -> void:
 	if _dead or _invuln > 0.0:
+		return
+	if Dev.infinite_hp:
 		return
 	hp = max(0, hp - max(1, amount - damage_reduction))
 	health_changed.emit(hp, max_hp)

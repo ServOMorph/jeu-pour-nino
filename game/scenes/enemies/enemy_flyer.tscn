@@ -10,7 +10,7 @@ size = Vector2(16, 12)
 
 [node name="EnemyFlyer" type="CharacterBody2D"]
 collision_layer = 4
-collision_mask = 1
+collision_mask = 3
 script = ExtResource("1")
 max_hp = 3
 contact_damage = 1

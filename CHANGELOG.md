@@ -1,3 +1,17 @@
+## v1.8 — 2026-06-25
+
+### Ajouté
+- Mode dev : toggle `VIE INF` dans le menu, relié à `Dev.infinite_hp`.
+- Collisions physiques entre joueur et mobs.
+
+### Modifié
+- v2.1 marquée validée après playtest complet.
+- Respawn des mobs volants corrigé et quantité de flyers réduite.
+- Sprint aérien : un saut lancé en sprint conserve la vitesse rapide.
+- README.md, roadmap.md et `_contexte/` mis à jour pour la clôture.
+
+---
+
 ## v1.7 — 2026-06-25
 
 ### Ajouté

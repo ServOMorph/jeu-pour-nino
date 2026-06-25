@@ -57,15 +57,15 @@ Nécessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ou
 
 ## État actuel
 
-**v2.1 en cours de validation.** Difficulté, potions multiples, progression équipement, course, respawn mobs et boss validés utilisateur.
+**v2.1 validée.** Gameplay testé nickel par l'utilisateur.
 
-Monnaie de run implémentée et affichée dans le HUD, à revalider après correction des mobs volants. Potions empilables, sprint au clic stick gauche uniquement au sol, spawn atelier en mode dev avec ennemis.
+Difficulté, potions multiples, progression équipement, course, respawn mobs, monnaie et boss validés. Correctifs finaux intégrés : saut sprint conserve sa vitesse, flyers respawn, collisions physiques joueur/mobs, vie infinie en mode dev.
 
 Toutes les valeurs gameplay et données de niveau sont externalisées dans `game/data/` (player.json, weapons.json, armor.json, enemies.json, boss.json, level.json). Aucune constante numérique gameplay ne doit être hardcodée dans les scripts.
 
 Godot 4.5 est disponible via `D:\Godot\godot.exe`. Validation headless OK.
 
-Prochaine session : tester un run complet v2.1 et vérifier l'or des flyers.
+Prochaine session : définir la suite v3.
 
 ## Roadmap
 

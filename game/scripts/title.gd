@@ -9,6 +9,7 @@ const COLOR_TOGGLE_ON := Color(0.4, 1.0, 0.4)
 var _state    := State.MAIN
 var _selected := 0
 var _dev_res  := false
+var _dev_hp   := false
 var _started  := false
 var _a_was    := true
 
@@ -18,7 +19,7 @@ var _main_labels: Array[Label] = []
 var _dev_labels:  Array[Label] = []
 
 const MAIN_ENTRIES := ["JOUER", "MODE DEV"]
-const DEV_ENTRIES  := ["[ ] 100 MIN", "JOUER", "ATELIER", "TEST BOSS", "RETOUR"]
+const DEV_ENTRIES  := ["[ ] 100 MIN", "[ ] VIE INF", "JOUER", "ATELIER", "TEST BOSS", "RETOUR"]
 
 func _ready() -> void:
 	var bg := ColorRect.new()
@@ -118,14 +119,16 @@ func _refresh() -> void:
 					COLOR_SELECTED if i == _selected else COLOR_IDLE)
 		State.DEV:
 			for i in _dev_labels.size():
-				var is_toggle := i == 0
+				var is_toggle := i <= 1
 				if is_toggle:
-					_dev_labels[i].text = "[X] 100 MIN" if _dev_res else "[ ] 100 MIN"
+					var enabled := _dev_res if i == 0 else _dev_hp
+					var label := "100 MIN" if i == 0 else "VIE INF"
+					_dev_labels[i].text = ("[X] %s" if enabled else "[ ] %s") % label
 					var col: Color
 					if i == _selected:
-						col = COLOR_TOGGLE_ON if _dev_res else COLOR_SELECTED
+						col = COLOR_TOGGLE_ON if enabled else COLOR_SELECTED
 					else:
-						col = COLOR_TOGGLE_ON if _dev_res else COLOR_IDLE
+						col = COLOR_TOGGLE_ON if enabled else COLOR_IDLE
 					_dev_labels[i].add_theme_color_override("font_color", col)
 				else:
 					_dev_labels[i].add_theme_color_override("font_color",
@@ -169,10 +172,11 @@ func _confirm() -> void:
 		State.DEV:
 			match _selected:
 				0: _dev_res = not _dev_res; _refresh()
-				1: _start_game("", 100 if _dev_res else 0)
-				2: _start_game("atelier", 100 if _dev_res else 0)
-				3: _start_game("boss", 0)
-				4: _show_main()
+				1: _dev_hp = not _dev_hp; _refresh()
+				2: _start_game("", 100 if _dev_res else 0)
+				3: _start_game("atelier", 100 if _dev_res else 0)
+				4: _start_game("boss", 0)
+				5: _show_main()
 
 func _start_game(spawn: String, resources: int) -> void:
 	if _started:
@@ -180,4 +184,5 @@ func _start_game(spawn: String, resources: int) -> void:
 	_started = true
 	Dev.spawn = spawn
 	Dev.dev_resources = resources
+	Dev.infinite_hp = _dev_hp
 	get_tree().change_scene_to_file("res://scenes/levels/biome1.tscn")

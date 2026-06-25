@@ -58,17 +58,14 @@
     {"type": "ground", "pos": [2200, 232]},
     {"type": "flyer", "pos": [2310, 135]},
     {"type": "ground", "pos": [2450, 232]},
-    {"type": "ground", "pos": [2520, 232]},
-    {"type": "flyer", "pos": [1350, 145]},
-    {"type": "flyer", "pos": [1760, 130]},
-    {"type": "flyer", "pos": [2110, 145]}
+    {"type": "ground", "pos": [2520, 232]}
   ],
   "respawn": {
     "enabled": true,
     "delay": 18.0,
     "retry_delay": 5.0,
     "min_player_distance": 220.0,
-    "max_alive": 12
+    "max_alive": 17
   },
   "ores": [
     [180, 225],

@@ -180,6 +180,7 @@ func _try_respawn_enemy(cfg: Dictionary) -> void:
 	if _ended or _boss_started:
 		return
 	if _living_enemies >= int(respawn["max_alive"]):
+		get_tree().create_timer(float(respawn["retry_delay"])).timeout.connect(_try_respawn_enemy.bind(cfg))
 		return
 	if player and is_instance_valid(player):
 		var pos := _vec2(cfg["pos"])

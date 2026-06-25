@@ -14,7 +14,7 @@ La v2.1 ne doit pas lancer la génération procédurale, les nouveaux biomes ou 
 
 - [x] Augmenter la difficulté générale du run : ennemis, pression, dégâts, rythme ou coût des erreurs.
 - [x] Vérifier que le jeu reste jouable sans devenir injuste.
-- [ ] Tester un run complet après équilibrage.
+- [x] Tester un run complet après équilibrage.
 
 **Jalon** : le run demande plus d'attention et d'exécution, sans casser la boucle explore → récolte → craft → boss.
 
@@ -79,8 +79,8 @@ La v2.1 ne doit pas lancer la génération procédurale, les nouveaux biomes ou 
 
 - [x] Augmenter la difficulté du boss.
 - [x] Ajuster ses PV, dégâts, rythme ou patterns.
-- [ ] Vérifier qu'il reste battable avec une bonne préparation.
-- [ ] Vérifier qu'il reste un vrai mur sans équipement correct.
+- [x] Vérifier qu'il reste battable avec une bonne préparation.
+- [x] Vérifier qu'il reste un vrai mur sans équipement correct.
 
 **Jalon** : le boss redevient un test final crédible du run.
 
@@ -88,13 +88,13 @@ La v2.1 ne doit pas lancer la génération procédurale, les nouveaux biomes ou 
 
 ## Validation v2.1
 
-- [ ] Run complet testé de bout en bout.
+- [x] Run complet testé de bout en bout.
 - [x] Difficulté validée.
 - [x] Potions multiples validées.
 - [x] Progression d'équipement validée.
 - [x] Course validée.
 - [x] Respawn mobs validé.
-- [ ] Monnaie validée.
+- [x] Monnaie validée.
 - [x] Boss validé.
 
 **Jalon final** : v2.1 jouable avec une vraie tension de run, plusieurs soins possibles, une progression d'équipement propre, des ennemis qui maintiennent la pression, une monnaie fonctionnelle et un boss plus exigeant.
