@@ -1,0 +1,215 @@
+{
+  "player": {
+    "default_state": "idle",
+    "states": {
+      "idle": {
+        "fps": 1.0,
+        "loop": true,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/player/player_idle.png"
+        ]
+      },
+      "run": {
+        "fps": 8.0,
+        "loop": true,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/player/player_run1.png",
+          "res://assets/sprites/player/player_run2.png"
+        ]
+      },
+      "jump": {
+        "fps": 1.0,
+        "loop": false,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/player/player_jump.png"
+        ]
+      },
+      "fall": {
+        "fps": 1.0,
+        "loop": false,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/player/player_jump.png"
+        ]
+      },
+      "attack": {
+        "fps": 12.0,
+        "loop": false,
+        "offset": [0.0, 2.0],
+        "frames": [
+          "res://assets/sprites/player/player_attack.png"
+        ]
+      },
+      "hurt": {
+        "fps": 1.0,
+        "loop": false,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/player/player_idle.png"
+        ]
+      },
+      "dead": {
+        "fps": 1.0,
+        "loop": false,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/player/player_idle.png"
+        ]
+      }
+    }
+  },
+  "enemy_ground": {
+    "default_state": "idle",
+    "states": {
+      "idle": {
+        "fps": 1.0,
+        "loop": true,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/enemies/enemy_ground.png"
+        ]
+      },
+      "walk": {
+        "fps": 4.0,
+        "loop": true,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/enemies/enemy_ground.png"
+        ]
+      },
+      "hurt": {
+        "fps": 1.0,
+        "loop": false,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/enemies/enemy_ground.png"
+        ]
+      },
+      "dead": {
+        "fps": 1.0,
+        "loop": false,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/enemies/enemy_ground.png"
+        ]
+      }
+    }
+  },
+  "enemy_flyer": {
+    "default_state": "idle",
+    "states": {
+      "idle": {
+        "fps": 1.0,
+        "loop": true,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/enemies/enemy_flyer.png"
+        ]
+      },
+      "fly": {
+        "fps": 6.0,
+        "loop": true,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/enemies/enemy_flyer.png"
+        ]
+      },
+      "hurt": {
+        "fps": 1.0,
+        "loop": false,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/enemies/enemy_flyer.png"
+        ]
+      },
+      "dead": {
+        "fps": 1.0,
+        "loop": false,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/enemies/enemy_flyer.png"
+        ]
+      }
+    }
+  },
+  "boss": {
+    "default_state": "sleep",
+    "states": {
+      "sleep": {
+        "fps": 1.0,
+        "loop": true,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/enemies/boss_guardian.png"
+        ]
+      },
+      "idle": {
+        "fps": 1.0,
+        "loop": true,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/enemies/boss_guardian.png"
+        ]
+      },
+      "charge": {
+        "fps": 8.0,
+        "loop": true,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/enemies/boss_guardian.png"
+        ]
+      },
+      "volley": {
+        "fps": 6.0,
+        "loop": true,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/enemies/boss_guardian.png"
+        ]
+      },
+      "slam_rise": {
+        "fps": 6.0,
+        "loop": true,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/enemies/boss_guardian.png"
+        ]
+      },
+      "slam_fall": {
+        "fps": 6.0,
+        "loop": true,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/enemies/boss_guardian.png"
+        ]
+      },
+      "pause": {
+        "fps": 1.0,
+        "loop": true,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/enemies/boss_guardian.png"
+        ]
+      },
+      "hurt": {
+        "fps": 1.0,
+        "loop": false,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/enemies/boss_guardian.png"
+        ]
+      },
+      "dead": {
+        "fps": 1.0,
+        "loop": false,
+        "offset": [0.0, 0.0],
+        "frames": [
+          "res://assets/sprites/enemies/boss_guardian.png"
+        ]
+      }
+    }
+  }
+}

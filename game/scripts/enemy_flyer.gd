@@ -33,6 +33,13 @@ func _load_flyer_config() -> void:
 	if "hit_stun_decel" in cfg:
 		hit_stun_decel = float(cfg["hit_stun_decel"])
 
+func _get_visual_state() -> String:
+	if _dead:
+		return "dead"
+	if hit_stun > 0.0:
+		return "hurt"
+	return "fly" if velocity.length() > 1.0 else "idle"
+
 func _physics_process(delta: float) -> void:
 	if _dead:
 		return
@@ -54,6 +61,6 @@ func _physics_process(delta: float) -> void:
 		velocity = to_target.normalized() * speed
 	else:
 		velocity = Vector2.ZERO
-	if visual and abs(velocity.x) > 1.0:
-		visual.scale.x = sign(velocity.x)
+	if abs(velocity.x) > 1.0:
+		_set_visual_facing(velocity.x)
 	move_and_slide()

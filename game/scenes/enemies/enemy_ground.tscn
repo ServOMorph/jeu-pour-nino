@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/enemy_ground.gd" id="1"]
-[ext_resource type="Texture2D" path="res://assets/sprites/enemies/enemy_ground.png" id="2"]
+[ext_resource type="Script" path="res://scripts/animation_driver.gd" id="2"]
 
 [sub_resource type="RectangleShape2D" id="body"]
 size = Vector2(16, 16)
@@ -16,8 +16,9 @@ script = ExtResource("1")
 max_hp = 5
 contact_damage = 1
 
-[node name="Visual" type="Sprite2D" parent="."]
-texture = ExtResource("2")
+[node name="Visual" type="AnimatedSprite2D" parent="."]
+script = ExtResource("2")
+entity_key = "enemy_ground"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("body")

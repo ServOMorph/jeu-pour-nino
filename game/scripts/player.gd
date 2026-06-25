@@ -57,7 +57,7 @@ var _weapon_cfg:      Dictionary = {}
 var _armor_cfg:       Dictionary = {}
 var _consumable_cfg:  Dictionary = {}
 
-@onready var visual:        Sprite2D  = $Visual
+@onready var visual = $Visual
 @onready var attack_hitbox: Area2D    = $AttackHitbox
 @onready var attack_visual: Polygon2D = $AttackHitbox/AttackVisual
 @onready var hurtbox:       Area2D    = $Hurtbox
@@ -69,6 +69,8 @@ func _ready() -> void:
 	attack_visual.visible = false
 	hurtbox.area_entered.connect(_on_hurtbox_area_entered)
 	Inventory.items_changed.connect(_apply_equipment)
+	_update_facing()
+	_update_visual()
 	health_changed.emit(hp, max_hp)
 
 func _load_configs() -> void:
@@ -179,29 +181,58 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("use_item"):
 		_use_consumable()
 
+	var move_dir := Input.get_axis("move_left", "move_right")
 	var aim := _get_aim_dir()
-	var aim_facing := 1 if aim.x >= 0.0 else -1
-	if aim_facing != facing:
-		facing = aim_facing
-		_update_facing()
+	_update_facing_from_input(move_dir, aim)
 
 	if _hurt_stun > 0.0:
 		_hurt_stun -= delta
 	else:
-		var dir := Input.get_axis("move_left", "move_right")
-		if dir != 0.0:
+		if move_dir != 0.0:
 			var moving_on_floor := is_on_floor()
 			var a := accel if moving_on_floor else air_accel
 			var sprinting := (moving_on_floor and Input.is_action_pressed("sprint")) or (not moving_on_floor and _air_sprint)
 			var target_speed := sprint_speed if sprinting else speed
-			velocity.x = move_toward(velocity.x, dir * target_speed, a * delta)
+			velocity.x = move_toward(velocity.x, move_dir * target_speed, a * delta)
 		else:
 			velocity.x = move_toward(velocity.x, 0.0, friction * delta)
 
 	move_and_slide()
+	_update_visual()
 
 func _update_facing() -> void:
-	visual.scale.x = facing
+	visual.set_facing(facing)
+
+func _update_facing_from_input(move_dir: float, aim: Vector2) -> void:
+	var next_facing := facing
+	if absf(move_dir) > 0.0:
+		next_facing = 1 if move_dir > 0.0 else -1
+	elif absf(aim.x) > 0.0:
+		next_facing = 1 if aim.x >= 0.0 else -1
+	if next_facing != facing:
+		facing = next_facing
+		_update_facing()
+
+func _update_visual() -> void:
+	visual.play_state(_get_visual_state(), _get_visual_speed())
+
+func _get_visual_state() -> String:
+	if _dead:
+		return "dead"
+	if _hurt_stun > 0.0:
+		return "hurt"
+	if _attack_timer > 0.0:
+		return "attack"
+	if not is_on_floor():
+		return "jump" if velocity.y < 0.0 else "fall"
+	if abs(velocity.x) > 5.0:
+		return "run"
+	return "idle"
+
+func _get_visual_speed() -> float:
+	if _get_visual_state() != "run":
+		return 1.0
+	return clampf(abs(velocity.x) / max(speed, 1.0), 0.8, max(1.0, sprint_speed / max(speed, 1.0)))
 
 func _start_attack() -> void:
 	_attack_timer = attack_duration
@@ -258,6 +289,7 @@ func _die() -> void:
 	_dead = true
 	velocity = Vector2.ZERO
 	visual.modulate = Color(0.4, 0.4, 0.4)
+	_update_visual()
 	AudioManager.play("gameover")
 	died.emit()
 

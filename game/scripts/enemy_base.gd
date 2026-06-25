@@ -15,7 +15,7 @@ var _flash := 0.0
 var _dead := false
 var hit_stun := 0.0
 
-@onready var visual: Node2D = get_node_or_null("Visual")
+@onready var visual = get_node_or_null("Visual")
 
 func _ready() -> void:
 	_load_config()
@@ -28,6 +28,7 @@ func _ready() -> void:
 	if contact:
 		contact.add_to_group("enemy_contact")
 	_on_ready()
+	_update_visual()
 
 func _load_config() -> void:
 	var cfg := _get_enemy_config()
@@ -47,10 +48,10 @@ func _get_enemy_config() -> Dictionary:
 	if f == null:
 		return {}
 	var parsed: Variant = JSON.parse_string(f.get_as_text())
-	if not parsed is Dictionary:
+	if parsed is not Dictionary:
 		return {}
 	var cfg: Variant = parsed.get(_get_config_key(), null)
-	if not cfg is Dictionary:
+	if cfg is not Dictionary:
 		return {}
 	return cfg
 
@@ -59,6 +60,26 @@ func _get_config_key() -> String:
 
 func _on_ready() -> void:
 	pass
+
+func _get_visual_state() -> String:
+	if _dead:
+		return "dead"
+	if hit_stun > 0.0:
+		return "hurt"
+	return "idle"
+
+func _get_visual_speed() -> float:
+	return 1.0
+
+func _update_visual() -> void:
+	if visual and visual.has_method("play_state"):
+		visual.play_state(_get_visual_state(), _get_visual_speed())
+
+func _set_visual_facing(direction: float) -> void:
+	if direction == 0.0:
+		return
+	if visual and visual.has_method("set_facing"):
+		visual.set_facing(int(sign(direction)))
 
 func take_damage(amount: int, knockback: Vector2) -> void:
 	if _dead:
@@ -78,10 +99,12 @@ func _process(delta: float) -> void:
 		visual.modulate = Color(3, 3, 3)
 	else:
 		visual.modulate = Color(1, 1, 1)
+	_update_visual()
 
 func _die() -> void:
 	_dead = true
 	if coin_reward > 0:
 		Inventory.add_coins(coin_reward)
+	_update_visual()
 	died.emit(self)
 	queue_free()

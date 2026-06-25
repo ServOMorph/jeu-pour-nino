@@ -28,6 +28,15 @@ func _load_ground_config() -> void:
 	if "hit_stun_decel" in cfg:
 		hit_stun_decel = float(cfg["hit_stun_decel"])
 
+func _get_visual_state() -> String:
+	if _dead:
+		return "dead"
+	if hit_stun > 0.0:
+		return "hurt"
+	if abs(velocity.x) > 1.0:
+		return "walk"
+	return "idle"
+
 func _physics_process(delta: float) -> void:
 	if _dead:
 		return
@@ -52,7 +61,6 @@ func _physics_process(delta: float) -> void:
 		if is_on_wall():
 			_dir = -_dir
 		velocity.x = _dir * speed
-		if visual:
-			visual.scale.x = sign(_dir)
+		_set_visual_facing(_dir)
 
 	move_and_slide()

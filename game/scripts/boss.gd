@@ -50,7 +50,7 @@ var _player: Node2D = null
 var _facing := -1.0
 var _slam_origin_y := 0.0
 
-@onready var visual: Sprite2D = $Visual
+@onready var visual = $Visual
 @onready var hurtbox: Area2D = $Hurtbox
 
 func _load_config() -> void:
@@ -58,10 +58,10 @@ func _load_config() -> void:
 	if f == null:
 		return
 	var parsed: Variant = JSON.parse_string(f.get_as_text())
-	if not parsed is Dictionary:
+	if parsed is not Dictionary:
 		return
 	var cfg: Variant = parsed.get("Boss", null)
-	if not cfg is Dictionary:
+	if cfg is not Dictionary:
 		return
 	if "max_hp"         in cfg: max_hp         = int(cfg["max_hp"])
 	if "contact_damage" in cfg: contact_damage = int(cfg["contact_damage"])
@@ -108,6 +108,7 @@ func _ready() -> void:
 	hurtbox.add_to_group("enemy_hurtbox")
 	_player = get_tree().get_first_node_in_group("player")
 	set_physics_process(false)
+	_update_visual()
 
 func activate() -> void:
 	_player = get_tree().get_first_node_in_group("player")
@@ -131,6 +132,7 @@ func _process(delta: float) -> void:
 		visual.modulate = Color(flash_modulate, flash_modulate, flash_modulate)
 	else:
 		visual.modulate = Color(1, 1, 1)
+	_update_visual()
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor() and state != State.SLAM_RISE:
@@ -142,7 +144,7 @@ func _physics_process(delta: float) -> void:
 		_facing = sign(_player.global_position.x - global_position.x)
 		if _facing == 0:
 			_facing = -1.0
-		visual.scale.x = _facing
+		_update_facing()
 
 	_state_time -= delta
 
@@ -174,6 +176,34 @@ func _physics_process(delta: float) -> void:
 				_set_state(State.IDLE, dur_idle)
 
 	move_and_slide()
+
+func _update_facing() -> void:
+	if visual and visual.has_method("set_facing"):
+		visual.set_facing(int(_facing))
+
+func _update_visual() -> void:
+	if visual and visual.has_method("play_state"):
+		visual.play_state(_get_visual_state())
+
+func _get_visual_state() -> String:
+	if hp <= 0:
+		return "dead"
+	match state:
+		State.SLEEP:
+			return "sleep"
+		State.IDLE:
+			return "idle"
+		State.CHARGE:
+			return "charge"
+		State.VOLLEY:
+			return "volley"
+		State.SLAM_RISE:
+			return "slam_rise"
+		State.SLAM_FALL:
+			return "slam_fall"
+		State.PAUSE:
+			return "pause"
+	return "hurt" if _flash > 0.0 else "idle"
 
 func _set_state(s: int, duration: float = 0.6) -> void:
 	state = s
@@ -220,6 +250,7 @@ func _die() -> void:
 	state = State.SLEEP
 	set_physics_process(false)
 	visual.modulate = Color(0.3, 0.2, 0.35)
+	_update_visual()
 	if coin_reward > 0:
 		Inventory.add_coins(coin_reward)
 	AudioManager.play("victory")
