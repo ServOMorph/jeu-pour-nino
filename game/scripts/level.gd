@@ -21,9 +21,11 @@ var _living_enemies := 0
 
 const END_SCREEN := preload("res://scripts/end_screen.gd")
 const HUD_SCRIPT := preload("res://scripts/hud.gd")
+const PAUSE_MENU_SCRIPT := preload("res://scripts/pause_menu.gd")
 
 var _hud: CanvasLayer
 var _craft_menu: CanvasLayer
+var _pause_menu: CanvasLayer
 
 func _ready() -> void:
 	randomize()
@@ -41,6 +43,7 @@ func _ready() -> void:
 	_spawn_ores()
 	_spawn_workbench()
 	_setup_hud()
+	_setup_pause_menu()
 	if cfg["boss_active"]:
 		_start_boss_fight()
 
@@ -71,6 +74,12 @@ func _physics_process(_delta: float) -> void:
 	var dims: Dictionary = _level_cfg["dimensions"]
 	if player and player.global_position.x > float(dims["arena_x"]):
 		_start_boss_fight()
+
+func _process(_delta: float) -> void:
+	if _ended:
+		return
+	if Input.is_action_just_pressed("pause_menu") and _pause_menu and not _pause_menu.is_open():
+		_open_pause_menu()
 
 
 # ---------------------------------------------------------------- Construction
@@ -210,9 +219,12 @@ func _spawn_workbench() -> void:
 	wb.interact_requested.connect(_craft_menu.open)
 
 func _start_boss_fight() -> void:
+	if _boss_started:
+		return
 	_boss_started = true
 	var door: Dictionary = _level_cfg["boss_door"]
-	_door = _add_platform(_rect(door["rect"]), _color(door["color"]))
+	if _door == null:
+		_door = _add_platform(_rect(door["rect"]), _color(door["color"]))
 	if boss and is_instance_valid(boss):
 		boss.activate()
 	_hud.show_boss_bar()
@@ -232,6 +244,57 @@ func _setup_hud() -> void:
 	_hud = HUD_SCRIPT.new()
 	add_child(_hud)
 	_hud.setup(player, boss)
+
+func _setup_pause_menu() -> void:
+	_pause_menu = PAUSE_MENU_SCRIPT.new()
+	add_child(_pause_menu)
+	_pause_menu.resume_requested.connect(_close_pause_menu)
+	_pause_menu.restart_requested.connect(_restart_run)
+	_pause_menu.title_requested.connect(_return_to_title)
+	_pause_menu.dev_resources_requested.connect(_toggle_dev_resources)
+	_pause_menu.dev_hp_requested.connect(_toggle_dev_hp)
+	_pause_menu.teleport_requested.connect(_teleport_to_spawn)
+
+func _open_pause_menu() -> void:
+	if _craft_menu and _craft_menu.visible:
+		return
+	get_tree().paused = true
+	_pause_menu.open_menu()
+
+func _close_pause_menu() -> void:
+	if _pause_menu:
+		_pause_menu.hide_menu()
+	get_tree().paused = false
+
+func _restart_run() -> void:
+	get_tree().paused = false
+	get_tree().reload_current_scene()
+
+func _return_to_title() -> void:
+	get_tree().paused = false
+	get_tree().quit()
+
+func _toggle_dev_resources() -> void:
+	if Dev.dev_resources > 0:
+		Dev.dev_resources = 0
+		Inventory.resources = max(0, Inventory.resources - 100)
+		Inventory.resources_changed.emit(Inventory.resources)
+	else:
+		Dev.dev_resources = 100
+		Inventory.add(100)
+
+func _toggle_dev_hp() -> void:
+	Dev.infinite_hp = not Dev.infinite_hp
+
+func _teleport_to_spawn(spawn_key: String) -> void:
+	var points: Dictionary = _level_cfg.get("spawns", {})
+	if not points.has(spawn_key) or player == null:
+		return
+	var cfg: Dictionary = points[spawn_key]
+	player.global_position = _vec2(cfg["pos"])
+	player.velocity = Vector2.ZERO
+	if bool(cfg.get("boss_active", false)):
+		_start_boss_fight()
 
 # --------------------------------------------------------------- Fin de partie
 

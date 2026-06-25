@@ -1,3 +1,18 @@
+## v1.9 — 2026-06-25
+
+### Ajouté
+- Charte graphique pixel art dark fantasy et process de génération de sprites un par un.
+- Sprites pixel art intégrés pour joueur, ennemis, boss, établi, minerais, icônes et tiles.
+- Menu pause en jeu sur Start/Menu avec reprendre, recommencer, quitter et mode dev runtime.
+- Option `FERMER LE JEU` dans le menu de défaite.
+
+### Modifié
+- Sprites recalés à la taille des anciens rectangles/carrés et alignés visuellement au sol.
+- L'option `QUITTER` du menu pause ferme maintenant le programme.
+- `_contexte/` et README.md mis à jour pour la clôture.
+
+---
+
 ## v1.8 — 2026-06-25
 
 ### Ajouté

@@ -12,3 +12,5 @@
 - 2026-06-21 : Phase 2 complète — établi + craft_menu (CanvasLayer, PROCESS_MODE_ALWAYS) + recettes JSON externalisées.
 - 2026-06-21 : Manette uniquement pour nouvelles actions — ui_accept=A, ui_cancel=B, interact=Y (joymap.gd).
 - 2026-06-21 : Phase 3 complète — stats joueur pilotées par équipement via weapons.json / armor.json.
+- 2026-06-21 : Configs externalisées : player.json, weapons.json, armor.json, enemies.json.
+- 2026-06-21 : contact_damage ennemis = 2 ; armure_bois damage_reduction = 1.

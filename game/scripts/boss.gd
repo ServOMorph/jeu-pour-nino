@@ -50,7 +50,7 @@ var _player: Node2D = null
 var _facing := -1.0
 var _slam_origin_y := 0.0
 
-@onready var visual: Polygon2D = $Visual
+@onready var visual: Sprite2D = $Visual
 @onready var hurtbox: Area2D = $Hurtbox
 
 func _load_config() -> void:
@@ -219,7 +219,7 @@ func _slam_impact() -> void:
 func _die() -> void:
 	state = State.SLEEP
 	set_physics_process(false)
-	visual.color = Color(0.3, 0.2, 0.35)
+	visual.modulate = Color(0.3, 0.2, 0.35)
 	if coin_reward > 0:
 		Inventory.add_coins(coin_reward)
 	AudioManager.play("victory")

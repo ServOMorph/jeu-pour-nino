@@ -3,9 +3,10 @@ extends StaticBody2D
 const ORE_SIZE := Vector2(14, 14)
 const ORE_HP := 3
 const ORE_DROP := 1
+const ORE_TEXTURE := preload("res://assets/sprites/objects/ore_copper.png")
 
 var _hp := ORE_HP
-var _visual: Polygon2D
+var _visual: Sprite2D
 
 func _ready() -> void:
 	collision_layer = 1
@@ -17,13 +18,8 @@ func _ready() -> void:
 	shape.shape = rs
 	add_child(shape)
 
-	_visual = Polygon2D.new()
-	_visual.color = Color(0.25, 0.55, 0.85)
-	var h := ORE_SIZE * 0.5
-	_visual.polygon = PackedVector2Array([
-		Vector2(-h.x, -h.y), Vector2(h.x, -h.y),
-		Vector2(h.x, h.y), Vector2(-h.x, h.y)
-	])
+	_visual = Sprite2D.new()
+	_visual.texture = ORE_TEXTURE
 	add_child(_visual)
 
 	var hurtbox := Area2D.new()
@@ -50,8 +46,8 @@ func take_damage(amount: int, _knockback: Vector2) -> void:
 
 func _flash() -> void:
 	var t := create_tween()
-	t.tween_property(_visual, "color", Color(1, 1, 1), 0.06)
-	t.tween_property(_visual, "color", Color(0.25, 0.55, 0.85), 0.10)
+	t.tween_property(_visual, "modulate", Color(1, 1, 1), 0.06)
+	t.tween_property(_visual, "modulate", Color(1, 1, 1, 1), 0.10)
 
 func _burst_particles(count: int, big: bool) -> void:
 	var p := CPUParticles2D.new()

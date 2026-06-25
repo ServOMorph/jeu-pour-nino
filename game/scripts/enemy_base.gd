@@ -15,7 +15,7 @@ var _flash := 0.0
 var _dead := false
 var hit_stun := 0.0
 
-@onready var visual: Polygon2D = get_node_or_null("Visual")
+@onready var visual: Node2D = get_node_or_null("Visual")
 
 func _ready() -> void:
 	_load_config()

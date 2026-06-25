@@ -56,6 +56,14 @@ func setup(message: String, color: Color, victory: bool) -> void:
 	menu.pressed.connect(_on_menu)
 	_buttons.append(menu)
 
+	if not victory:
+		var quit := Button.new()
+		quit.text = "FERMER LE JEU"
+		quit.custom_minimum_size = Vector2(200, 34)
+		vbox.add_child(quit)
+		quit.pressed.connect(_on_quit)
+		_buttons.append(quit)
+
 	_focus = 0
 	_buttons[0].grab_focus()
 
@@ -107,3 +115,6 @@ func _on_retry() -> void:
 func _on_menu() -> void:
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://scenes/ui/title.tscn")
+
+func _on_quit() -> void:
+	get_tree().quit()

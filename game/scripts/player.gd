@@ -57,7 +57,7 @@ var _weapon_cfg:      Dictionary = {}
 var _armor_cfg:       Dictionary = {}
 var _consumable_cfg:  Dictionary = {}
 
-@onready var visual:        Polygon2D = $Visual
+@onready var visual:        Sprite2D  = $Visual
 @onready var attack_hitbox: Area2D    = $AttackHitbox
 @onready var attack_visual: Polygon2D = $AttackHitbox/AttackVisual
 @onready var hurtbox:       Area2D    = $Hurtbox
@@ -142,9 +142,9 @@ func _physics_process(delta: float) -> void:
 	_attack_cooldown = max(0.0, _attack_cooldown - delta)
 	_invuln = max(0.0, _invuln - delta)
 	if _invuln > 0.0:
-		visual.color = Color(1, 1, 1) if int(_invuln * invuln_flash_rate) % 2 == 0 else Color(1, 0.4, 0.4)
+		visual.modulate = Color(1, 1, 1) if int(_invuln * invuln_flash_rate) % 2 == 0 else Color(1, 0.4, 0.4)
 	else:
-		visual.color = Color(1, 1, 1)
+		visual.modulate = Color(1, 1, 1)
 
 	var on_floor := is_on_floor()
 	if on_floor:
@@ -257,7 +257,7 @@ func take_damage(amount: int, knockback: Vector2) -> void:
 func _die() -> void:
 	_dead = true
 	velocity = Vector2.ZERO
-	visual.color = Color(0.4, 0.4, 0.4)
+	visual.modulate = Color(0.4, 0.4, 0.4)
 	AudioManager.play("gameover")
 	died.emit()
 

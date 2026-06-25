@@ -4,6 +4,7 @@ signal interact_requested
 
 const SIZE := Vector2(20, 18)
 const ZONE_SIZE := Vector2(60, 50)
+const WORKBENCH_TEXTURE := preload("res://assets/sprites/objects/workbench.png")
 
 var _in_range := false
 var _prompt: Label
@@ -18,22 +19,9 @@ func _ready() -> void:
 	shape.shape = rs
 	add_child(shape)
 
-	var body_vis := Polygon2D.new()
-	body_vis.color = Color(0.45, 0.30, 0.18)
-	var h := SIZE * 0.5
-	body_vis.polygon = PackedVector2Array([
-		Vector2(-h.x, -h.y), Vector2(h.x, -h.y),
-		Vector2(h.x, h.y), Vector2(-h.x, h.y)
-	])
+	var body_vis := Sprite2D.new()
+	body_vis.texture = WORKBENCH_TEXTURE
 	add_child(body_vis)
-
-	var top_vis := Polygon2D.new()
-	top_vis.color = Color(0.58, 0.42, 0.24)
-	top_vis.polygon = PackedVector2Array([
-		Vector2(-h.x, -h.y), Vector2(h.x, -h.y),
-		Vector2(h.x, -h.y + 5), Vector2(-h.x, -h.y + 5)
-	])
-	add_child(top_vis)
 
 	var zone := Area2D.new()
 	zone.collision_layer = 0

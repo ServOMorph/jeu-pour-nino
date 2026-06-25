@@ -14,7 +14,7 @@
 ## Contexte chaud
 - Ollama opérationnel sur cette machine — prêt pour délégation de tâches templated
 - Godot 4.5 disponible via `D:\Godot\godot.exe` ; le PATH utilisateur expose `godot` dans les nouveaux terminaux
-- Manette : interact=JOY_BUTTON_Y, ui_accept=JOY_BUTTON_A, ui_cancel=JOY_BUTTON_B, sprint=JOY_BUTTON_LEFT_STICK (tous dans joymap.gd)
+- Manette : interact=JOY_BUTTON_Y, ui_accept=JOY_BUTTON_A, ui_cancel=JOY_BUTTON_B, sprint=JOY_BUTTON_LEFT_STICK, pause_menu=JOY_BUTTON_START (tous dans joymap.gd)
 - Piège Godot : JOY_BUTTON_X = ui_up par défaut → ne pas l'utiliser pour action custom
 - craft_menu.gd : PROCESS_MODE_ALWAYS + _process (pas _input) pour input fiable en pause
 - Règle absolue : toute valeur numérique gameplay doit être dans game/data/*.json — aucune constante hardcodée dans les scripts
@@ -29,30 +29,32 @@
 - Respawn flyers corrigé ; 5 flyers initiaux ; respawn.max_alive = 17
 - Collisions physiques joueur/mobs activées via layers : joueur mask 5, ennemis mask 3
 - Mode dev VIE INF : Dev.infinite_hp fait ignorer les dégâts dans player.gd
+- Menu pause en jeu : bouton menu/Start, pause le jeu, permet reprendre, recommencer, retour menu et dev runtime ; atelier/boss téléportent le joueur
+- Sprites : utiliser `docs/process_generation_sprites.md` ; générer les sprites un par un, ne pas découper une planche pour les assets finaux
 - craft_menu.gd : PH calculé dynamiquement = 26 + recipes.size() * ROW_H + 20
 - Piège manette title.gd : _a_was doit être mis à jour EN TÊTE de _process avant tout return anticipé
 
-## Dernière session (2026-06-25 — validation v2.1)
+## Dernière session (2026-06-25 — sprites et menu pause)
 # Session du 2026-06-25
 
 ## Décisions prises
-- v2.1 validée utilisateur après playtest complet.
-- Vie infinie ajoutée au mode dev pour faciliter les tests.
+- Sprites finaux générés un par un, pas depuis une planche découpée.
+- Menu pause runtime ajouté sur Start ; quitter ferme le programme.
 
 ## Livrables produits ou modifiés
-- roadmap.md / _contexte/* : v2.1 marquée validée, actions ouvertes nettoyées.
-- game/scripts/player.gd : saut sprint conserve sa vitesse, vie infinie dev ignore les dégâts.
-- game/scripts/title.gd / dev.gd : toggle dev VIE INF ajouté.
-- game/scripts/level.gd / game/data/level.json : respawn flyers corrigé, quantité de flyers réduite.
-- game/scenes/* : collisions physiques joueur/mobs activées.
+- docs/charte_graphique_pixel_art_dark_fantasy.md : charte graphique ajoutée.
+- docs/process_generation_sprites.md : process de génération sprite ajouté.
+- game/assets/sprites/* : sprites pixel art générés, réduits et alignés au sol.
+- game/scripts/pause_menu.gd / level.gd / joymap.gd : menu pause runtime ajouté.
+- game/scripts/end_screen.gd : option fermer le jeu ajoutée en défaite.
 
 ## Hypothèses validées / invalidées
-- VALIDE : gameplay v2.1 testé nickel par l'utilisateur.
-- VALIDE : difficulté, potions multiples, progression équipement, course, respawn mobs, monnaie et boss validés utilisateur.
-- VALIDE : lancement Godot headless OK sur projet, titre et biome1.
+- VALIDE : les sprites intégrés chargent dans Godot et le niveau démarre en headless.
+- VALIDE : la génération unitaire donne de meilleurs assets que le découpage de planche.
+- EN ATTENTE : test réel manette du menu pause et validation visuelle finale des offsets sprites.
 
 ## Prochaine étape exacte
-Définir la suite v3.
+Tester en jeu réel le menu pause Start, les téléports dev et l'alignement visuel des sprites.
 
 ## Question bloquante pour la session suivante
 Aucune

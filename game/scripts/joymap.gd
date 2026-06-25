@@ -57,6 +57,9 @@ func _setup_input() -> void:
 	if not InputMap.has_action("sprint"):
 		InputMap.add_action("sprint", 0.5)
 	_add_joypad_button("sprint",     JOY_BUTTON_LEFT_STICK)
+	if not InputMap.has_action("pause_menu"):
+		InputMap.add_action("pause_menu", 0.5)
+	_add_joypad_button("pause_menu", JOY_BUTTON_START)
 	_add_joypad_button("ui_accept",  JOY_BUTTON_A)
 	_add_joypad_button("ui_cancel",  JOY_BUTTON_B)
 
