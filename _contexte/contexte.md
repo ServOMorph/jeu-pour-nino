@@ -9,9 +9,9 @@ Jeu de plateforme/action pixel art fait pour Nino. Un run court dans le biome 1,
 
 ## État actuel (réécrit intégralement à chaque /close)
 v1 complète. Run complet (explore → récolte → craft → boss) validé, nickel.
-Toutes valeurs gameplay externalisées dans game/data/ : player.json (groupé), weapons.json, armor.json, enemies.json, boss.json (groupé).
-Menu titre 2 niveaux : accueil (JOUER / MODE DEV) → sous-menu dev (toggle 100 MIN / JOUER / ATELIER / TEST BOSS / RETOUR).
-Spawn "atelier" disponible (x=1040, sans ennemis). craft_menu hauteur dynamique.
+Toutes valeurs gameplay et données de niveau externalisées dans game/data/, dont level.json.
+Menu titre 2 niveaux validé : accueil → sous-menu dev avec toggle 100 MIN, atelier, test boss.
+Godot 4.5 disponible via D:\Godot\godot.exe ; validation headless OK.
 Prochaine session : définir axes v2.
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
@@ -24,3 +24,4 @@ Prochaine session : définir axes v2.
 - 2026-06-21 : Toutes valeurs gameplay dans game/data/*.json — aucune constante numérique dans les scripts.
 - 2026-06-21 : v1 complète — Phase 6 v1 validée, run complet de bout en bout fonctionnel.
 - 2026-06-21 : Menu titre 2 niveaux — sous-menu dev avec toggle 100 MIN et spawn atelier (title.gd refonte complète).
+- 2026-06-25 : Données de niveau externalisées dans game/data/level.json, chargé par level.gd.

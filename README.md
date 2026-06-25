@@ -8,7 +8,7 @@ Jeu de plateforme/action pixel art fait pour Nino. Un run court dans le biome 1,
 python run.py
 ```
 
-Nécessite Godot 4.5 installé dans `D:\tmp\godot45\`. Ou ouvrir `game/project.godot` dans l'éditeur et appuyer sur **F5**.
+Nécessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ouvrir `game/project.godot` dans l'éditeur et appuyer sur **F5**.
 
 ## Contrôles
 
@@ -57,7 +57,9 @@ Nécessite Godot 4.5 installé dans `D:\tmp\godot45\`. Ou ouvrir `game/project.g
 
 **v1 complète.** Run complet (explore → récolte → craft → boss) validé, nickel.
 
-Toutes les valeurs gameplay externalisées dans `game/data/` (player.json, weapons.json, armor.json, enemies.json, boss.json). Aucune constante numérique hardcodée dans les scripts.
+Toutes les valeurs gameplay et données de niveau sont externalisées dans `game/data/` (player.json, weapons.json, armor.json, enemies.json, boss.json, level.json). Aucune constante numérique gameplay ne doit être hardcodée dans les scripts.
+
+Menu titre 2 niveaux validé : accueil → sous-menu dev avec toggle 100 MIN, atelier et test boss. Godot 4.5 est disponible via `D:\Godot\godot.exe`.
 
 Prochaine session : définir les axes v2.
 

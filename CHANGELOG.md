@@ -1,3 +1,18 @@
+## v1.6 — 2026-06-25
+
+### Ajouté
+- `game/data/level.json` : dimensions, couleurs, plateformes, spawns, ennemis, minerais, établi, boss et porte d'arène externalisés.
+
+### Modifié
+- `game/scripts/level.gd` : chargement des données de niveau depuis `level.json`.
+- `game/scripts/title.gd` : mise en page du menu dev corrigée et validée.
+- `README.md` et `_contexte/` : état projet mis à jour.
+
+### Validé
+- `level.json` parsable et lancement Godot headless OK avec Godot 4.5.
+
+---
+
 ## v1.5 — 2026-06-21
 
 ### Modifié

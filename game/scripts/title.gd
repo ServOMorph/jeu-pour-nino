@@ -29,18 +29,18 @@ func _ready() -> void:
 
 	var title := Label.new()
 	title.text = "CoreDive Challenge"
-	title.add_theme_font_size_override("font_size", 28)
+	title.add_theme_font_size_override("font_size", 24)
 	title.add_theme_color_override("font_color", Color(0.7, 0.4, 0.9))
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.position = Vector2(0, 60)
-	title.size = Vector2(480, 36)
+	title.position = Vector2(0, 28)
+	title.size = Vector2(480, 32)
 	add_child(title)
 
 	var sub := Label.new()
 	sub.text = "Sauras-tu atteindre le Noyau ?"
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	sub.add_theme_font_size_override("font_size", 11)
-	sub.position = Vector2(0, 100)
+	sub.position = Vector2(0, 66)
 	sub.size = Vector2(480, 20)
 	add_child(sub)
 
@@ -52,7 +52,7 @@ func _ready() -> void:
 	hint_pad.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint_pad.add_theme_font_size_override("font_size", 9)
 	hint_pad.add_theme_color_override("font_color", Color(0.6, 0.8, 1.0))
-	hint_pad.position = Vector2(0, 230)
+	hint_pad.position = Vector2(0, 246)
 	hint_pad.size = Vector2(480, 16)
 	add_child(hint_pad)
 
@@ -66,7 +66,7 @@ func _build_main_menu() -> void:
 		lbl.text = MAIN_ENTRIES[i]
 		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		lbl.add_theme_font_size_override("font_size", 14)
-		lbl.position = Vector2(0, 148 + i * 26)
+		lbl.position = Vector2(0, 126 + i * 28)
 		lbl.size = Vector2(480, 22)
 		_main_root.add_child(lbl)
 		_main_labels.append(lbl)
@@ -80,7 +80,7 @@ func _build_dev_menu() -> void:
 	dev_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	dev_title.add_theme_font_size_override("font_size", 11)
 	dev_title.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
-	dev_title.position = Vector2(0, 120)
+	dev_title.position = Vector2(0, 92)
 	dev_title.size = Vector2(480, 18)
 	_dev_root.add_child(dev_title)
 
@@ -89,7 +89,7 @@ func _build_dev_menu() -> void:
 		lbl.text = DEV_ENTRIES[i]
 		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		lbl.add_theme_font_size_override("font_size", 14)
-		lbl.position = Vector2(0, 144 + i * 26)
+		lbl.position = Vector2(0, 116 + i * 24)
 		lbl.size = Vector2(480, 22)
 		_dev_root.add_child(lbl)
 		_dev_labels.append(lbl)
