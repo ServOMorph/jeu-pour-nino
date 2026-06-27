@@ -1,256 +1,331 @@
-# Roadmap v2.1 — Retours playtest & difficulté
+# Roadmap CoreDive Challenge — v3
 
-*Roadmap active. L'ancienne roadmap v2 est archivée dans `archives/roadmap/roadmap_v2_core_dive_2026-06-25.md`.*
+Réf design : `docs/v3/CoreDive Challenge — Design Document v3.md`
 
-## Objectif de la v2.1
+## Principe directeur
 
-Corriger les retours de playtest avant de passer à la v3. Le jeu doit devenir plus difficile, plus tendu, et garder de la pression pendant tout le run, y compris autour de l'atelier.
+v3 n'est pas un rewrite. Le noyau gameplay (combat, feel, ennemis, animation, input, audio, pattern data-driven JSON) est conservé. v3 construit une couche méta-structurelle autour : persistance, HUB, biomes, mort-résurrection, cicatrices, boss adaptatif.
 
-La v2.1 ne doit pas lancer la génération procédurale, les nouveaux biomes ou le hub méta complet. Elle sert à solidifier le run actuel.
+Convention : toute tâche marquée **[game_art]** relève de la zone game_art (sprites, shaders, effets visuels). Le reste relève de la zone jeu.
 
----
-
-## Phase 1 — Difficulté générale
-
-- [x] Augmenter la difficulté générale du run : ennemis, pression, dégâts, rythme ou coût des erreurs.
-- [x] Vérifier que le jeu reste jouable sans devenir injuste.
-- [x] Tester un run complet après équilibrage.
-
-**Jalon** : le run demande plus d'attention et d'exécution, sans casser la boucle explore → récolte → craft → boss.
+Règle absolue maintenue : aucune valeur numérique gameplay hardcodée. Tout dans `game/data/*.json`.
 
 ---
 
-## Phase 2 — Potions multiples
+## Stratégie de tests
 
-- [x] Permettre d'avoir plusieurs potions de soin en stock.
-- [x] Afficher clairement le nombre de potions disponibles dans le HUD.
-- [x] Consommer une seule potion à chaque utilisation.
-- [x] Réinitialiser le stock de potions à chaque nouveau run ou mort.
+Infra mise en place dès la Phase 0 (GUT — Godot Unit Test). Cible : la logique data-driven et d'état, testable et critique (parsing JSON, save/load, RunState/MetaState, craft, génération, cicatrices, calcul du boss adaptatif). Le feel/physique reste validé manuellement en jeu.
 
-**Jalon** : le joueur peut préparer plusieurs soins avant le boss et les utiliser un par un.
+Règle : chaque phase livre ses tests en même temps que son code. Une phase n'est « faite » que si ses tests passent. Les tests des phases précédentes doivent rester verts (non-régression) — c'est le filet qui sécurise une refonte incrémentale.
 
----
+## Jalons de refacto
 
-## Phase 3 — Progression propre de l'équipement
-
-- [x] Retirer de l'établi les armes déjà dépassées.
-- [x] Après achat de l'épée cuivre, masquer ou désactiver l'épée bois.
-- [x] Appliquer la même règle à toutes les futures améliorations d'arme.
-- [ ] Étendre la logique aux armures si plusieurs paliers deviennent disponibles.
-
-**Jalon** : l'établi ne propose plus d'améliorations obsolètes une fois un meilleur palier obtenu.
+Trois points de consolidation placés là où la dette s'accumule naturellement, avant que la phase suivante ne la fige :
+- **R1** après Phase 2 — consolider la couche d'état (RunState/MetaState/Grimoire) avant de bâtir le HUB et les biomes dessus.
+- **R2** après Phase 5 — factoriser ce qui s'est dupliqué entre biomes, ennemis et boss avant d'empiler mort/cicatrices/adaptatif.
+- **R3** avant Phase 9 — préparer la modularité boss (extraire les modules réutilisables de `boss.gd`).
 
 ---
 
-## Phase 4 — Course
+## Phase 0 — Fondations : persistance et découplage état
 
-- [x] Ajouter une action manette pour courir plus vite.
-- [x] Ajouter le binding dans `game/scripts/joymap.gd`, pas dans `project.godot`.
-- [x] Externaliser les valeurs de vitesse/endurance/timing dans `game/data/*.json`.
-- [x] Vérifier que la course ne casse pas les sauts, collisions, combats ou limites caméra.
+Casser le couplage mono-run / mono-niveau avant tout le reste. Sans ça, chaque phase suivante se bat contre l'architecture.
 
-**Jalon** : le joueur peut accélérer ses déplacements avec un bouton dédié, de façon fiable à la manette.
+### Tâches
+- Créer un système de sauvegarde `user://` (JSON) : `game/scripts/save_manager.gd` (autoload).
+- Scinder `inventory.gd` en deux autoloads :
+  - `RunState` — éphémère, remis à zéro à chaque run : matériaux, équipement, consommables, monnaie, cicatrices.
+  - `MetaState` — persistant entre runs : Grimoire (recettes découvertes/maîtrisées), Points de Compétence.
+- Migrer les usages actuels de `Inventory` (`player.gd`, `craft_menu.gd`, `level.gd`, `hud.gd`, `dev.gd`) vers `RunState`.
+- Charger/sauver `MetaState` au démarrage et à la fin de run.
+- Installer GUT et créer `tests/` : premiers tests sur save/load (`SaveManager`), reset de `RunState`, persistance de `MetaState`.
 
----
+### Fait quand
+Un run modifie `RunState` sans toucher `MetaState`. Fermer/relancer le jeu conserve `MetaState`. Le jeu actuel reste jouable de bout en bout après migration. Tests save/load et état verts.
 
-## Phase 5 — Respawn des mobs
+### Dépend de
+Rien.
 
-- [x] Faire respawn les ennemis pour éviter que le retour à l'atelier soit vide.
-- [x] Définir les règles de respawn : délai, distance minimale du joueur, limite par zone.
-- [x] Externaliser les valeurs de respawn dans `game/data/*.json`.
-- [x] Éviter les respawns injustes directement sur le joueur.
-
-**Jalon** : revenir vers l'atelier garde une pression ennemie sans spawn injuste.
-
----
-
-## Phase 6 — Monnaie
-
-- [x] Implémenter la monnaie du jeu.
-- [x] Définir comment elle est gagnée pendant le run.
-- [x] Afficher la monnaie dans le HUD.
-- [x] Définir si elle est perdue à la mort en v2.1 ou conservée pour préparer la v3.
-
-**Jalon** : la monnaie existe, elle est visible, gagnable et son comportement à la mort est explicite.
+### Risques
+`Inventory` est référencé dans plusieurs scripts. Migration mécanique mais à faire d'un bloc pour éviter un état hybride. Tester un run complet après migration.
 
 ---
 
-## Phase 7 — Boss plus difficile
+## Phase 1 — Matériaux typés
 
-- [x] Augmenter la difficulté du boss.
-- [x] Ajuster ses PV, dégâts, rythme ou patterns.
-- [x] Vérifier qu'il reste battable avec une bonne préparation.
-- [x] Vérifier qu'il reste un vrai mur sans équipement correct.
+Le craft v3 consomme des matériaux distincts (bois, pierre, cuivre, fer, cristaux, fragments du Noyau...). Aujourd'hui `RunState.resources` est un seul entier.
 
-**Jalon** : le boss redevient un test final crédible du run.
+### Tâches
+- Remplacer `resources: int` par `materials: Dictionary` (id → quantité) dans `RunState`.
+- Créer `game/data/materials.json` (id, nom, biome source, rareté).
+- Adapter `ore_node.gd` : chaque gisement a un `material_id`.
+- Adapter `hud.gd` pour afficher les matériaux possédés.
+- Adapter `level.json` : les `ores` portent un type de matériau.
+- **[game_art]** sprites distincts par type de gisement/minerai.
 
----
+### Fait quand
+Miner un gisement ajoute le bon matériau. Le HUD reflète les quantités par type.
 
-## Validation v2.1
+### Dépend de
+Phase 0.
 
-- [x] Run complet testé de bout en bout.
-- [x] Difficulté validée.
-- [x] Potions multiples validées.
-- [x] Progression d'équipement validée.
-- [x] Course validée.
-- [x] Respawn mobs validé.
-- [x] Monnaie validée.
-- [x] Boss validé.
-
-**Jalon final** : v2.1 jouable avec une vraie tension de run, plusieurs soins possibles, une progression d'équipement propre, des ennemis qui maintiennent la pression, une monnaie fonctionnelle et un boss plus exigeant.
+### Risques
+Le mode dev « 100 MIN » suppose une monnaie unique. À réadapter (donner un stock de chaque matériau, ou garder une ressource debug).
 
 ---
 
-## Après la v2.1
+## Phase 2 — Grimoire, Points de Compétence, Craft v3
 
-- refacto complet de la codebase
-- **v3 — Génération procédurale + hub méta** : génération du biome 1 et hub entre les runs avec monnaie persistante + déblocages.
-- **v4 — Biomes 2 & 3 + Noyau** : contenu réplicable grâce au système de données par biome.
-- **v5 — Polish** : art final, vrais sons/musique, équilibrage global.
+### Tâches
+- Étendre `recipes.json` : `id`, `name`, `rarity`, `biome`, `skill_cost`, `materials` (dict), `discovered` (méta), `mastered` (méta), `consumable`.
+- Recettes de départ marquées maîtrisées par défaut (épée bois, armure bois, pioche, petite potion, torche, corde, établi portable).
+- Logique Grimoire dans `MetaState` : découverte (run) → maîtrise (dépense de PC entre runs).
+- Refondre `craft_menu.gd` : ne propose QUE les recettes maîtrisées dont les matériaux sont présents.
+- Gain de PC en fin de run (profondeur, élites, boss, salles secrètes, réussite) — même un run raté en rapporte.
+- Écran de déblocage des recettes (dépense de PC) — accessible au HUB. **[game_art]** mise en page/icônes du Grimoire.
+
+### Fait quand
+Découvrir une recette en run l'ajoute au Grimoire (persistant). La maîtriser coûte des PC. Une recette maîtrisée est craftable au prochain run si matériaux réunis. Tests verts : découverte, maîtrise (dépense PC), filtrage des recettes craftables, gain de PC en fin de run.
+
+### Dépend de
+Phases 0, 1.
+
+### Risques
+La logique d'obsolescence actuelle (`_is_recipe_obsolete`) est hardcodée pour les épées. À généraliser ou retirer au profit du système de paliers.
 
 ---
 
-## Chantier animation — Player puis mobs
+## Refacto R1 — Consolidation de la couche d'état
 
-### Décision de direction artistique
+Avant de bâtir le HUB et les biomes sur RunState/MetaState/Grimoire, stabiliser ces fondations.
 
-- Les sprites actuels sont jugés trop grossiers.
-- Nouvelle cible : lisibilité et finesse proches d'un sprite de personnage Terraria.
-- Référence de taille retenue pour le player : **40x56 px par frame**.
-- Conséquence : le pipeline de génération et d'intégration doit être recalé sur cette taille, pas sur les sprites réduits actuels.
+### Tâches
+- Revue de l'API RunState/MetaState : nommage cohérent, suppression des accès directs résiduels à l'ancien `Inventory`.
+- Centraliser les accès au Grimoire (un seul point d'entrée, pas de logique dispersée).
+- Nettoyer la logique d'obsolescence héritée des épées.
+- Compléter la couverture de tests de la couche d'état avant gel.
 
-### Diagnostic existant
+### Fait quand
+Aucune référence à l'ancien `Inventory` ne subsiste. Tests d'état exhaustifs et verts.
 
-- Le rendu des personnages repose actuellement sur des `Sprite2D` statiques.
-- Le player possède déjà cinq images séparées :
-  - `game/assets/sprites/player/player_idle.png` : 14x24
-  - `game/assets/sprites/player/player_run1.png` : 14x24
-  - `game/assets/sprites/player/player_run2.png` : 14x24
-  - `game/assets/sprites/player/player_jump.png` : 14x24
-  - `game/assets/sprites/player/player_attack.png` : 22x20
-- Les mobs ont chacun une seule image statique :
-  - `enemy_ground.png` : 16x16
-  - `enemy_flyer.png` : 14x10
-  - `boss_guardian.png` : 28x36
-- Les scripts contiennent déjà les états gameplay exploitables pour l'animation :
-  - player : idle, run, sprint, jump/fall, attack, hurt, dead
-  - enemy ground : patrol, turn, hit_stun, dead
-  - enemy flyer : hover, chase, hit_stun, dead
-  - boss : sleep, idle, charge, volley, slam_rise, slam_fall, pause, hurt, dead
-- Les hitboxes sont indépendantes des sprites. Les animations ne doivent pas modifier les collisions sans décision explicite.
+---
 
-### Nouveau standard de taille
+## Phase 3 — HUB et sélection de biome
 
-- Player :
-  - idle / run / jump : `40x56`
-  - attack : `48x56`
-- Mob au sol : `32x32`
-- Mob volant : `32x24`
-- Boss gardien : `96x128`
+### Tâches
+- Créer la scène HUB : point central, 4 directions accessibles. **[game_art]** décor du HUB.
+- Transformer `title.gd` : le menu lance le HUB (pas directement biome1).
+- Paramétrer le chargement de niveau : `level.gd` reçoit un `biome_id` et charge `game/data/biomes/<id>.json` au lieu de `level.json` fixe.
+- Retour au HUB après mort définitive ou fin de biome (au lieu de `get_tree().quit()`).
+- Accès au Grimoire/déblocage PC et à l'établi depuis le HUB.
 
-Objectif :
-- obtenir un rendu plus fin ;
-- éviter les réductions destructrices ;
-- garder une grille claire pour toute la production d'animations.
+### Fait quand
+Depuis le HUB, choisir une des 4 directions lance le biome correspondant. Mourir/finir ramène au HUB. Le mode dev reste fonctionnel.
 
-### Process d'animation
+### Dépend de
+Phases 0, 2.
 
-1. Produire les frames une par une, comme pour le process sprite actuel. Ne pas générer de planche finale à découper.
-2. Garder une taille stable par entité et par famille d'animation.
-   Pour le player, la base est désormais `40x56`.
-3. Nommer les fichiers avec un schéma déterministe :
-   - `player_idle_01.png`
-   - `player_run_01.png`
-   - `player_run_02.png`
-   - `enemy_ground_walk_01.png`
-   - `boss_charge_01.png`
-4. Stocker les frames finales dans :
-   - `game/assets/sprites/player/`
-   - `game/assets/sprites/enemies/`
-5. Garder les images source ou références hors runtime dans `generated_raw/` et `from_reference/`.
-6. Valider chaque frame avant intégration :
-   - fond transparent propre ;
-   - silhouette lisible à taille réelle ;
-   - pieds ou point d'ancrage cohérents ;
-   - pas de changement de hitbox induit ;
-   - finesse visuelle conservée à taille de jeu ;
-   - style cohérent avec la charte dark fantasy.
-7. Intégrer les animations dans Godot via `AnimatedSprite2D` ou `SpriteFrames`, avec une couche script commune pour piloter l'état visuel.
-8. Définir les vitesses d'animation dans JSON, pas en dur dans les scripts.
-9. Tester en headless puis en jeu réel à la manette.
+### Risques
+`level.gd` suppose des dimensions fixes et un boss à `arena_x`. Le paramétrage par biome doit abstraire ça proprement (préparer la Phase 4).
 
-### Architecture cible
+---
 
-- Créer une couche commune `game/scripts/animation_driver.gd`.
-- Rôle du driver :
-  - recevoir un état logique simple (`idle`, `run`, `jump`, `attack`, `hurt`, etc.) ;
-  - jouer l'animation correspondante si elle existe ;
-  - conserver la dernière animation si aucun changement n'est nécessaire ;
-  - gérer le flip horizontal sans toucher aux collisions ;
-  - lire les vitesses depuis une configuration JSON.
-- Le player, les mobs et le boss doivent seulement exposer leur état courant au driver.
-- Les scripts gameplay ne doivent pas contenir de logique de frame ou de timer visuel spécifique.
+## Phase 4 — Génération des biomes
 
-### Plan d'action précis
+Le point le plus risqué. **Décision arrêtée : assemblage de salles pré-authorées (templates).** Pas de PCG algorithmique pur. Plus contrôlable, garantit les ressources, compatible solo.
 
-- [x] Mettre à jour les scènes et collisions si la nouvelle taille réelle du player impose un recalage de hitbox ou d'offset.
-- [x] Refaire un sprite master du player en `40x56` et le valider techniquement avant toute série complète.
-- [ ] Refaire ensuite les frames player :
-  - idle ;
-  - run 1 ;
-  - run 2 ;
-  - jump ;
-  - attack.
-- [x] Créer `game/data/animations.json` avec les vitesses et noms d'animations du player, des mobs et du boss.
-- [x] Créer `game/scripts/animation_driver.gd`.
-- [x] Remplacer le `Sprite2D` du player par une structure compatible animation, sans modifier les collisions.
-- [x] Brancher les frames existantes du player :
-  - idle : `player_idle`
-  - run : alternance `player_run1` / `player_run2`
-  - jump/fall : `player_jump`
-  - attack : `player_attack`
-- [x] Ajouter dans `player.gd` une fonction unique qui calcule l'état visuel à partir du gameplay actuel.
-- [ ] Vérifier le player en jeu réel :
-  - idle ;
-  - course ;
-  - sprint ;
-  - saut ;
-  - attaque ;
-  - dégâts ;
-  - mort ;
-  - flip gauche/droite.
-- [x] Étendre le même driver à `EnemyBase`.
-- [ ] Ajouter les animations minimales du mob au sol :
-  - walk ;
-  - hurt ;
-  - dead si la mort n'est plus instantanée.
-- [ ] Ajouter les animations minimales du mob volant :
-  - fly/hover ;
-  - chase si visuellement distinct ;
-  - hurt ;
-  - dead si la mort n'est plus instantanée.
-- [x] Étendre le driver au boss.
-- [x] Mapper les états boss vers animations :
-  - sleep ;
-  - idle ;
-  - charge ;
-  - volley ;
-  - slam_rise ;
-  - slam_fall ;
-  - pause ;
-  - hurt ;
-  - dead.
-- [ ] Ajouter une scène ou commande de contrôle visuel pour afficher toutes les animations disponibles sans lancer un run complet.
-- [ ] Valider :
-  - `D:\Godot\godot.exe --headless --path game --quit`
-  - `D:\Godot\godot.exe --headless --path game res://scenes/levels/biome1.tscn --quit-after 2`
-  - test manuel manette en jeu réel.
+### Tâches
+- Définir un format de salle (template JSON : géométrie, points de spawn ennemis/ores/établi, connexions).
+- Générateur `game/scripts/biome_generator.gd` : assemble des salles selon une config de biome (longueur, pool de salles, garanties).
+- Garantie de ressources : la config impose un minimum de chaque matériau clé du biome.
+- Placement boss en fin de parcours généré.
+- Refondre `level.gd` pour consommer la sortie du générateur au lieu des rects fixes.
 
-### Risques à surveiller
+- Tests de génération : complétabilité (chemin start→boss toujours existant), présence garantie des ressources clés, validité des connexions entre salles.
 
-- Passer à une vraie taille de rendu type Terraria peut obliger à recalibrer offsets, hitboxes et placement caméra.
-- Si les nouveaux sprites sont juste des upscales des anciens, le résultat restera mauvais.
-- Le player a une frame d'attaque plus large que les autres images : il faudra préserver l'ancrage visuel pour éviter un déplacement apparent.
-- Les mobs n'ont pas encore assez de frames pour de vraies animations : le driver doit accepter des animations à une seule frame.
-- Le boss a des états riches mais une seule image : l'architecture doit être prête avant de produire toutes les frames boss.
-- Ne pas mélanger timing gameplay et timing animation. Les durées d'attaque, invulnérabilité, stun et dégâts restent pilotées par les JSON gameplay existants.
+### Fait quand
+Lancer un biome deux fois produit deux agencements différents, tous deux complétables, avec les ressources clés présentes. Tests de complétabilité et de garantie ressources verts sur N générations.
+
+### Dépend de
+Phase 3.
+
+### Risques
+- Garantie de complétabilité (le joueur ne doit jamais être bloqué). Couverte par tests automatisés sur la connectivité.
+- **[game_art]** : tilesets/décors par biome conditionnent le rendu — dépendance forte sur game_art.
+
+---
+
+## Phase 5 — Contenu des biomes 2, 3, 4
+
+### Tâches
+- Config + génération pour Mines Obscures, Îles Célestes, Descente vers le Noyau.
+- Ennemis spécifiques par biome (étendre `enemy_base.gd`, `enemies.json`).
+- Ressources spécifiques (déjà typées en Phase 1).
+- Boss de biome : Foreur Maudit, Orage Éternel, Gardien du Noyau (réutiliser/étendre `boss.gd`, `boss.json`).
+- **[game_art]** : sprites ennemis, sprites/animations des 3 boss, décors et tilesets des 3 biomes.
+
+### Fait quand
+Les 4 biomes sont jouables de bout en bout avec leurs ennemis, ressources et boss.
+
+### Dépend de
+Phase 4.
+
+### Risques
+Gros volume de contenu et d'art. Étaler par biome (Biome 2 complet avant d'attaquer Biome 3). Difficulté croissante à équilibrer.
+
+---
+
+## Refacto R2 — Factorisation biomes / ennemis / boss
+
+Les 4 biomes et leurs boss ont été produits incrémentalement : du code s'est dupliqué. Consolider avant d'empiler mort, cicatrices et boss adaptatif.
+
+### Tâches
+- Extraire les patterns communs des biomes (chargement config, génération, spawn) dans une base partagée.
+- Factoriser les comportements d'ennemis récurrents dans `enemy_base.gd`.
+- Unifier la structure des boss de biome (prépare R3 et la Phase 9).
+- Vérifier que toute la donnée gameplay est bien externalisée (audit anti-hardcode).
+
+### Fait quand
+Aucune duplication structurelle majeure entre biomes/boss. Tests de non-régression verts sur les 4 biomes.
+
+---
+
+## Phase 6 — Mort, Résurrection, Arène du Voile
+
+### Tâches
+- Intercepter la mort du joueur (`player.gd` `_die()` / `level.gd` `_on_player_died`) : au lieu de l'écran de fin, transition vers l'Arène du Voile.
+- Scène Arène du Voile (unique). **[game_art]** décor « tribunal cosmique ».
+- Gardiens du Voile : pool de combats (réutiliser l'archi boss), tirage aléatoire.
+- Difficulté croissante par nombre de résurrections dans le run (data-driven).
+- Victoire → résurrection à l'endroit de la mort, PV restaurés, cicatrice appliquée. Défaite → fin de run définitive.
+- **[game_art]** : sprites/patterns visuels des Gardiens.
+- Tests : sauvegarde/restauration de l'état de biome autour de l'aller-retour Arène, escalade de difficulté des Gardiens selon le compteur de résurrections.
+
+### Fait quand
+Mourir envoie à l'Arène. Vaincre le Gardien ressuscite le joueur dans le biome avec une cicatrice, **dans l'état exact où il l'avait quitté**. Perdre termine le run. Tests d'état biome verts.
+
+### Dépend de
+Phases 3, 5 (boss réutilisable). Cicatrices = Phase 7 (peut être stubbé d'abord).
+
+### Risques (À SURVEILLER — point critique)
+La résurrection doit restaurer l'état exact du biome (position joueur, ennemis vivants/morts, ressources minées, agencement généré). **Le biome ne doit surtout pas être régénéré au retour de l'Arène.** Concrètement : sérialiser l'état de run du biome avant la transition vers l'Arène, le restaurer au retour. Couvrir par un test dédié, ne pas se fier au seul test manuel.
+
+---
+
+## Phase 7 — Cicatrices
+
+### Tâches
+- `game/data/scars.json` : effets gameplay (modificateurs de stats).
+- Application comme modificateurs sur `player.gd` (le système `damage_reduction`/équipement actuel sert de modèle d'insertion).
+- Stockage des cicatrices actives dans `RunState`.
+- Tirage de la cicatrice à chaque résurrection.
+- **[game_art]** : effets visuels par palier (1 à 5+) via shaders + overlays de particules, PAS de refonte de spritesheet.
+
+### Fait quand
+Chaque résurrection applique une cicatrice qui modifie réellement le gameplay et l'apparence, persistante jusqu'à la fin du run.
+
+### Dépend de
+Phase 6.
+
+### Risques
+Cumul de cicatrices : éviter les combinaisons qui rendent le run injouable ou trivial. Équilibrage.
+
+---
+
+## Phase 8 — Porteurs de recettes
+
+### Tâches
+- Ennemis rares (Archiviste, Golem Artisan, Mineur Spectral, Forgeron Maudit) — apparition conditionnelle par biome.
+- Drop = découverte de recette (ajout au Grimoire via `MetaState`).
+- Catégories de drop cohérentes par porteur.
+- **[game_art]** : sprites des 4 porteurs.
+
+### Fait quand
+Vaincre un porteur ajoute une recette « Découverte » au Grimoire.
+
+### Dépend de
+Phases 2, 5.
+
+### Risques
+Taux d'apparition/drop à équilibrer pour que la collection soit gratifiante sans être frustrante.
+
+---
+
+## Refacto R3 — Modularité boss
+
+Préparer le boss adaptatif en extrayant les briques réutilisables des boss existants.
+
+### Tâches
+- Découper `boss.gd` en modules : corps, déplacement, pouvoir principal, mutations.
+- Définir l'interface d'assemblage de ces modules.
+- Valider l'architecture sur les boss de biome existants (ils doivent être ré-exprimables comme combinaisons de modules) avant de produire le Miroir.
+- Tests unitaires sur l'assemblage des modules.
+
+### Fait quand
+Les boss de biome fonctionnent via l'architecture modulaire. L'assemblage est testé et prêt pour la génération adaptative.
+
+---
+
+## Phase 9 — Miroir du Noyau (boss final adaptatif)
+
+### Tâches
+- Architecture modulaire : corps / déplacement / pouvoir principal / mutations (modules réutilisables sur base `boss.gd`).
+- Génération du boss à partir de 2 paramètres : biomes explorés + cicatrices accumulées (tracés dans `RunState`).
+- Déclenchement après le Gardien du Noyau (Biome 4).
+- **[game_art]** : modules visuels combinables (corps, effets de pouvoir, mutations).
+- Tests : génération du boss à partir de paramètres de run donnés (déterminisme), combinaisons extrêmes (tous biomes/toutes cicatrices, aucun).
+
+### Fait quand
+Atteindre le Noyau génère un boss reflétant le parcours du run. Deux runs différents produisent deux boss différents. Tests de génération (déterminisme + cas extrêmes) verts.
+
+### Dépend de
+Phases 5, 7.
+
+### Risques
+Combinatoire de modules = risque de bugs/équilibrage. Limiter le nombre de modules au départ, étendre ensuite. Tester les combinaisons extrêmes.
+
+---
+
+## Phase 10 — Intégration, équilibrage, polish
+
+### Tâches
+- Équilibrage global (PC, coûts de maîtrise, difficulté biomes, escalade Gardiens, cicatrices).
+- Boucle méta complète testée sur plusieurs runs.
+- Passes audio/feedback.
+- **[game_art]** : cohérence visuelle globale, passes finales.
+
+### Fait quand
+Un joueur peut enchaîner plusieurs runs, progresser via le Grimoire/PC, mourir et ressusciter, et atteindre le Miroir du Noyau dans une expérience cohérente.
+
+### Dépend de
+Toutes.
+
+---
+
+## Ordre de dépendances (résumé)
+
+```
+0 Fondations (+ infra tests GUT)
+└─ 1 Matériaux typés
+   └─ 2 Grimoire/PC/Craft
+      └─ R1 Consolidation état
+         └─ 3 HUB + sélection biome
+            └─ 4 Génération biomes (templates assemblés)
+               └─ 5 Contenu biomes 2/3/4
+                  └─ R2 Factorisation biomes/ennemis/boss
+                     ├─ 6 Mort/Résurrection/Voile
+                     │   └─ 7 Cicatrices
+                     │       └─ R3 Modularité boss
+                     │           └─ 9 Boss adaptatif (+ dépend de 5)
+                     └─ 8 Porteurs de recettes (dépend de 2 et 5)
+0..9 ─ 10 Intégration/polish
+```
+
+Tests : livrés à chaque phase, maintenus verts (non-régression) tout du long. Refacto : R1 (après 2), R2 (après 5), R3 (avant 9).
+
+## Risques transverses majeurs
+
+1. **Volume d'art (Phases 5/6/8/9)** — dépendance lourde sur game_art ; cadencer biome par biome.
+2. **Persistance de l'état de biome à la résurrection (Phase 6)** — À SURVEILLER : ne pas régénérer le biome au retour de l'Arène ; sérialiser/restaurer, couvrir par test dédié.
+3. **Équilibrage de la boucle méta (Phase 10)** — nécessite des runs complets répétés.
+4. **Dette inter-phases** — neutralisée par les jalons R1/R2/R3 ; ne pas les sauter sous pression de contenu.

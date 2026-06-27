@@ -1,12 +1,12 @@
 # Signals — jeu   (MAJ 2026-06-27)
 
 ## Actions ouvertes
-- [P1] Refaire toutes les frames du player dans le nouveau standard visuel Terraria-like.
+- [P1] Démarrer Phase 0 roadmap v3 : SaveManager + split Inventory → RunState/MetaState + GUT.
+  fait quand: un run modifie RunState sans toucher MetaState ; fermer/relancer conserve MetaState ; jeu actuel jouable de bout en bout ; tests save/load et état verts.
+  réf: `roadmap.md` Phase 0, `game/scripts/inventory.gd`, `game/scripts/level.gd`
+- [P2] Refaire toutes les frames du player dans le nouveau standard visuel Terraria-like. (zone game_art)
   fait quand: idle, run1, run2, jump et attack utilisent tous des sprites cohérents en 40x56/48x56 validés en jeu.
   réf: `docs/process_generation_sprites.md`, `game_art/data/animations.json`, `game_art/assets/player/`
-- [P2] Étendre la logique d'équipement obsolète aux armures si plusieurs paliers sont ajoutés.
-  fait quand: si plusieurs armures existent, les paliers dépassés disparaissent de l'établi.
-  réf: `game/scripts/craft_menu.gd`, `game/data/recipes.json`, `game/data/armor.json`
 
 ## Questions ouvertes
 
@@ -23,28 +23,29 @@
 - Piège Godot : JOY_BUTTON_X = ui_up par défaut → ne pas l'utiliser pour action custom
 - Règle absolue : toute valeur numérique gameplay dans game/data/*.json — aucune constante hardcodée
 - Piège manette title.gd : _a_was doit être mis à jour EN TÊTE de _process avant tout return anticipé
+- Roadmap v3 créée (11 phases, R1/R2/R3, tests GUT) — design doc dans docs/v3/
 
-## Dernière session (2026-06-27 — plein écran, clavier, pipeline sync)
+## Dernière session (2026-06-27 — design doc v3 + roadmap v3)
 
 # Session du 2026-06-27
 
 ## Décisions prises
-- Affichage jeu : plein écran 1920×1080 (viewport pixel reste 480×270 ×4, nearest).
-- Contrôles clavier complets ajoutés : flèches (move), Z (attack), E (interact), R (use_item), Shift (sprint), Echap (pause_menu).
-- Périmètre zone jeu : lancement, affichage, contrôles. Sprites/animations = zone game_art.
+- Design document v3 rédigé : 4 biomes libres, craft/Grimoire/PC, mort-résurrection/Voile, cicatrices (shaders), boss adaptatif modulaire (2 paramètres).
+- Templates assemblés retenus pour la génération de biomes (PCG pur écarté).
+- Roadmap v3 créée : 11 phases (0→10) + 3 jalons de refacto (R1/R2/R3) + stratégie de tests GUT intégrée.
 
 ## Livrables produits ou modifiés
-- game/project.godot : plein écran 1920×1080 + bindings clavier complets
-- run.py : appel sync() avant lancement Godot
-- sync.py (racine) : synchronise game_art/ → game/ (créé, appartient zone jeu)
+- docs/v3/CoreDive Challenge — Design Document v3.md : créé
+- roadmap.md : recréée pour v3 (phases 0→10, R1/R2/R3, tests, risques)
 
 ## Hypothèses validées / invalidées
-- VALIDE : jeu lancé avec succès après modifications (plein écran + clavier)
-- VALIDE : sync.py opérationnel (47 fichiers, parité game_art/ ↔ game/assets/sprites/)
+- VALIDE : pas besoin de rewrite — noyau gameplay conservé, v3 = couche méta-structurelle par-dessus
+- VALIDE : cicatrices visuelles = shaders/overlays uniquement, pas de refonte spritesheets
+- EN ATTENTE : équilibrage de la boucle méta (Phase 10, ne peut être validé qu'en jeu)
 
 ## Prochaine étape exacte
-Reprendre le chantier sprites player (zone game_art, Phase 1) : support spritesheets
-dans animation_driver.gd, puis régénérer les frames player via Codex dans le standard 40×56.
+Démarrer Phase 0 (zone jeu) : créer SaveManager, scinder Inventory → RunState/MetaState,
+installer GUT et premiers tests. Réf : roadmap.md Phase 0.
 
 ## Question bloquante pour la session suivante
 Aucune

@@ -63,10 +63,9 @@ Nécessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ou
 
 ## État actuel
 
-**v1.11.** Zone `game_art/` créée comme source de vérité des sprites et animations.
-`sync.py` synchronise vers `game/` avant chaque lancement. Affichage plein écran 1920×1080 et contrôles clavier complets ajoutés (zone jeu).
-Prochaine étape art : support spritesheets dans `animation_driver.gd`.
+**v1.12.** Gameplay v2.1 validé et stable. Design document v3 rédigé (`docs/v3/`). Roadmap v3 créée : 11 phases, 3 jalons de refacto (R1/R2/R3), stratégie de tests GUT.
+Prochaine étape : Phase 0 — persistance méta (SaveManager + split Inventory → RunState/MetaState).
 
 ## Roadmap
 
-Voir [roadmap.md](roadmap.md) pour le détail de la v2.1. Après la v2.1 : refacto complet, génération procédurale, hub méta, biomes 2 et 3, polish.
+Voir [roadmap.md](roadmap.md) — roadmap v3 complète (11 phases). Design document : [`docs/v3/CoreDive Challenge — Design Document v3.md`](docs/v3/CoreDive%20Challenge%20%E2%80%94%20Design%20Document%20v3.md).

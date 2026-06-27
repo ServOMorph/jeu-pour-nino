@@ -1,5 +1,16 @@
 # Archive — Décisions structurantes
 
+- 2026-06-21 : v1 complète — Phase 6 v1 validée, run complet de bout en bout fonctionnel.
+- 2026-06-21 : Menu titre 2 niveaux — sous-menu dev avec toggle 100 MIN et spawn atelier (title.gd refonte complète).
+- 2026-06-25 : Données de niveau externalisées dans game/data/level.json, chargé par level.gd.
+- 2026-06-25 : Roadmap active v2.1 — retours playtest avant v3, ancienne v2 archivée.
+- 2026-06-25 : v2.1 gameplay — potions empilables, monnaie de run, sprint au sol, respawn mobs, boss durci.
+- 2026-06-25 : v2.1 validée utilisateur — gameplay testé nickel, correctifs finaux intégrés.
+- 2026-06-25 : Sprites finaux générés un par un selon docs/process_generation_sprites.md, pas par découpe de planche.
+- 2026-06-25 : Menu pause runtime sur Start — quitter ferme le programme, dev runtime sans redémarrage sauf téléports.
+- 2026-06-25 : Animations branchées sur un driver partagé animation_driver.gd piloté par game/data/animations.json.
+- 2026-06-25 : Nouvelle cible visuelle personnages type Terraria — player 40x56, attaque 48x56, idle v2 intégré pour test.
+
 - 2026-06-21 : Initialisation du protocole vibecoding.
 - 2026-06-21 : Adoption du protocole vibecoding v2.2 — gestion contexte inter-sessions via /start /close.
 - 2026-06-21 : Mode dev intégré au menu (navigable, autoload Dev, registre _spawn_points() scalable).

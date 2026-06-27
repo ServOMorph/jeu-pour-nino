@@ -1,3 +1,13 @@
+## v1.14 — 2026-06-27
+
+### Ajouté
+- `docs/v3/CoreDive Challenge — Design Document v3.md` : design document complet de la v3 (4 biomes, Grimoire/PC, mort-résurrection, cicatrices shaders, boss adaptatif).
+- `roadmap.md` : roadmap v3 — 11 phases (0→10), 3 jalons de refacto (R1/R2/R3), stratégie de tests GUT intégrée.
+
+### Décision
+- Génération de biomes : templates assemblés (PCG pur écarté).
+- v3 = couche méta-structurelle par-dessus le noyau gameplay existant (pas de rewrite).
+
 ## v1.13 — 2026-06-27
 
 ### Ajouté
