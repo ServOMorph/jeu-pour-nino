@@ -4,6 +4,11 @@
 
 - [P2] Phase 2 : éditeur Godot — visualisation sprites/animations.
   fait quand: game_art/editeur/main.tscn se lance, galerie + preview animée en taille réelle.
+  réf: roadmap_editeur.md § Phase 2 + game_art/editeur/main.gd
+  état: fichiers créés (animation_driver.gd, main.gd, main.tscn), fenêtre Godot s'ouvre mais reste grise — bug UI à diagnostiquer.
+
+- [P2] Phase 2 : éditeur Godot — visualisation sprites/animations.
+  fait quand: game_art/editeur/main.tscn se lance, galerie + preview animée en taille réelle.
   réf: roadmap_editeur.md § Phase 2
 
 ## Blocages
