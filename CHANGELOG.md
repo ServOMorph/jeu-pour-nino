@@ -1,3 +1,13 @@
+## v1.11 — 2026-06-27
+
+### Ajouté
+- Zone `game_art/` créée : source de vérité des sprites et de `animations.json`.
+- `game_art/project.godot` : projet Godot éditeur autonome (res:// = game_art/).
+- `sync.py` : synchronise `game_art/assets/` → `game/assets/sprites/` et `animations.json` avant lancement.
+- `run.py` : appel automatique de `sync()` avant Godot.
+- Contrôles clavier complets ajoutés dans `game/project.godot` (flèches, Z, E, R, Shift, Echap).
+- Affichage plein écran 1920×1080 (`game/project.godot`).
+
 ## v1.10 — 2026-06-25
 
 ### Ajouté

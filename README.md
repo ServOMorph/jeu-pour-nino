@@ -15,9 +15,13 @@ Nécessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ou
 ### Clavier / Souris
 | Action | Touche |
 |--------|--------|
-| Se déplacer | Q / D |
+| Se déplacer | A / D ou Flèches gauche / droite |
 | Sauter | Espace |
-| Attaquer | Clic gauche (visée vers la souris) |
+| Attaquer | Clic gauche ou Z |
+| Interagir (établi) | E |
+| Utiliser potion | R |
+| Courir | Shift |
+| Menu pause | Echap |
 
 ### Manette (PowerA NSW Wired Controller)
 | Action | Bouton |
@@ -59,18 +63,9 @@ Nécessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ou
 
 ## État actuel
 
-**v2.1 validée.** Chantier animation et refonte visuelle des sprites personnages lancé.
-
-Les animations passent par un driver partagé (`game/scripts/animation_driver.gd`) piloté par `game/data/animations.json`.
-La nouvelle cible visuelle des personnages est un standard plus fin type Terraria, avec player cible `40x56`.
-
-Un nouvel idle player `player_idle_v2.png` est intégré pour test qualité. Les autres frames player sont encore anciennes, donc le rendu du personnage n'est pas encore homogène.
-
-Toutes les valeurs gameplay et données de niveau sont externalisées dans `game/data/` (player.json, weapons.json, armor.json, enemies.json, boss.json, level.json). Aucune constante numérique gameplay ne doit être hardcodée dans les scripts.
-
-Godot 4.5 est disponible via `D:\Godot\godot.exe`. Validation headless OK.
-
-Prochaine session : tester visuellement l'idle v2 en jeu réel, puis refaire run, jump et attack dans le même standard.
+**v1.11.** Zone `game_art/` créée comme source de vérité des sprites et animations.
+`sync.py` synchronise vers `game/` avant chaque lancement. Affichage plein écran 1920×1080 et contrôles clavier complets ajoutés (zone jeu).
+Prochaine étape art : support spritesheets dans `animation_driver.gd`.
 
 ## Roadmap
 

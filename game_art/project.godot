@@ -1,0 +1,21 @@
+; Engine configuration file.
+; Sprite & Animation Editor — game_art
+
+config_version=5
+
+[application]
+
+config/name="SpriteEditor"
+config/version="0.1.0"
+run/main_scene="res://editeur/main.tscn"
+config/features=PackedStringArray("4.5", "Forward Plus")
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="disabled"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0

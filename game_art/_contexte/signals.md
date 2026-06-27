@@ -1,0 +1,44 @@
+# Signals — game_art
+
+## Actions ouvertes
+
+- [P1] Finir Phase 0 : marquer game/assets/sprites et game/data/animations.json comme générés (.gitignore ou en-tête).
+  fait quand: .gitignore présent sur les fichiers générés dans game/.
+  réf: roadmap_editeur.md § Phase 0
+
+- [P1] Phase 1 : support spritesheets dans animation_driver.gd.
+  fait quand: animation_driver.gd lit sheet+frame_size+frames[] et un sprite player migré tourne en jeu.
+  réf: roadmap_editeur.md § Phase 1 + game/scripts/animation_driver.gd
+
+- [P2] Phase 2 : éditeur Godot — visualisation sprites/animations.
+  fait quand: game_art/editeur/main.tscn se lance, galerie + preview animée en taille réelle.
+  réf: roadmap_editeur.md § Phase 2
+
+## Blocages
+
+## Dernière session
+
+# Session du 2026-06-27
+
+## Décisions prises
+- game_art/ = source de vérité des sprites (res:// du projet éditeur Godot), synchro vers game/ via sync.py.
+- Format sprites cible : spritesheets (migration future via Codex).
+- Périmètre zone game_art : éditeur + sprites + animations uniquement. Contrôles clavier et affichage = zone jeu.
+
+## Livrables produits ou modifiés
+- game_art/roadmap_editeur.md : créé (phases 0 à 5)
+- game_art/project.godot : créé (projet éditeur Godot, res:// = game_art/)
+- game_art/assets/ : créé (47 sprites copiés depuis game/assets/sprites/)
+- game_art/data/animations.json : créé (source de vérité)
+- game_art/_contexte/ : initialisé et mis à jour
+
+## Hypothèses validées / invalidées
+- VALIDÉ : structure game_art/ opérationnelle comme source de vérité des sprites.
+- EN ATTENTE : sync.py (appartient zone jeu) — validé côté jeu, pas côté game_art.
+
+## Prochaine étape exacte
+Finir Phase 0 (.gitignore sur fichiers générés game/assets/sprites/ et game/data/animations.json),
+puis Phase 1 : étendre animation_driver.gd pour lire le format spritesheet et migrer un sprite player.
+
+## Question bloquante pour la session suivante
+Aucune
