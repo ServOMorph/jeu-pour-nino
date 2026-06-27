@@ -2,10 +2,6 @@
 
 ## Actions ouvertes
 
-- [P1] Phase 1 : support spritesheets dans animation_driver.gd.
-  fait quand: animation_driver.gd lit sheet+frame_size+frames[] et un sprite player migré tourne en jeu.
-  réf: roadmap_editeur.md § Phase 1 + game/scripts/animation_driver.gd
-
 - [P2] Phase 2 : éditeur Godot — visualisation sprites/animations.
   fait quand: game_art/editeur/main.tscn se lance, galerie + preview animée en taille réelle.
   réf: roadmap_editeur.md § Phase 2
@@ -13,6 +9,16 @@
 ## Blocages
 
 ## Dernière session
+
+# Session du 2026-06-27 (Phase 1)
+
+## Phase 1 complétée
+- animation_driver.gd étendu : si `sheet` présent → AtlasTexture (région calculée depuis frame_size + indices)
+- Rétro-compatible : chemin frames[] PNG conservé si sheet absent
+- player_run_sheet.png créé (28×24, 2 frames row-major)
+- animations.json : état `run` migré vers format sheet/frame_size/frames
+- Validé en jeu : animation run tourne sans erreur ni crash
+- Note : sprites player hétérogènes en taille (idle=40×56, run=14×24, attack=22×20) — migration complète vers spritesheets uniformes dépend de la re-génération art
 
 # Session du 2026-06-27 (suite)
 

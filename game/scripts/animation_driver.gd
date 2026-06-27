@@ -55,7 +55,22 @@ func _load_config() -> void:
 		sprite_frames.add_animation(state_name)
 		sprite_frames.set_animation_speed(state_name, fps)
 		sprite_frames.set_animation_loop(state_name, loop)
-		if frames is Array:
+		var sheet: Variant = state_cfg.get("sheet", null)
+		if sheet is String and not sheet.is_empty():
+			var frame_size_cfg: Variant = state_cfg.get("frame_size", [16, 16])
+			var fw := int(frame_size_cfg[0]) if frame_size_cfg is Array and frame_size_cfg.size() >= 2 else 16
+			var fh := int(frame_size_cfg[1]) if frame_size_cfg is Array and frame_size_cfg.size() >= 2 else 16
+			var base_tex := _load_texture(sheet)
+			if base_tex is Texture2D and frames is Array:
+				var cols := base_tex.get_width() / fw
+				for idx in frames:
+					var col := int(idx) % cols
+					var row := int(idx) / cols
+					var atlas := AtlasTexture.new()
+					atlas.atlas = base_tex
+					atlas.region = Rect2(col * fw, row * fh, fw, fh)
+					sprite_frames.add_frame(state_name, atlas)
+		elif frames is Array:
 			for frame_path in frames:
 				var texture := _load_texture(String(frame_path))
 				if texture is Texture2D:
