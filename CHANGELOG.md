@@ -1,3 +1,10 @@
+## v1.12 — 2026-06-27
+
+### Modifié
+- Affichage jeu en plein écran 1920×1080 (`game/project.godot`).
+- Contrôles clavier complets ajoutés : flèches (move), Z (attack), E (interact), R (use_item), Shift (sprint), Echap (pause_menu).
+- `run.py` : appel automatique de `sync.py` avant lancement Godot.
+
 ## v1.11 — 2026-06-27
 
 ### Ajouté

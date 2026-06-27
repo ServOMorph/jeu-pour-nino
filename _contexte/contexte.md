@@ -8,11 +8,10 @@ Jeu de plateforme/action pixel art fait pour Nino. Un run court dans le biome 1,
 - GDScript
 
 ## État actuel (réécrit intégralement à chaque /close)
-v2.1 validée ; chantier animation lancé avec un driver partagé piloté par `game/data/animations.json`.
-Direction visuelle personnages recalée vers un standard type Terraria, avec player cible `40x56`.
-Un nouvel idle player `player_idle_v2.png` est intégré et branché pour test qualité en jeu.
-Les autres frames player restent anciennes, donc le rendu complet n'est pas encore cohérent.
-Prochaine étape : valider l'idle v2 en jeu réel puis refaire run, jump et attack dans le même standard.
+v1.11. Affichage plein écran 1920×1080 actif. Contrôles clavier complets (flèches, Z, E, R, Shift, Echap).
+Pipeline art opérationnel : game_art/ = source de vérité, sync.py → game/ avant chaque lancement.
+Sprites player encore hétérogènes (frames anciennes + idle_v2). Chantier spritesheets à démarrer (zone game_art).
+Prochaine étape jeu : aucune action bloquante — attendre les nouveaux sprites pour valider le rendu global.
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
 - 2026-06-21 : v1 complète — Phase 6 v1 validée, run complet de bout en bout fonctionnel.
@@ -25,3 +24,6 @@ Prochaine étape : valider l'idle v2 en jeu réel puis refaire run, jump et atta
 - 2026-06-25 : Menu pause runtime sur Start — quitter ferme le programme, dev runtime sans redémarrage sauf téléports.
 - 2026-06-25 : Animations branchées sur un driver partagé `game/scripts/animation_driver.gd` piloté par `game/data/animations.json`.
 - 2026-06-25 : Nouvelle cible visuelle personnages type Terraria — player `40x56`, attaque `48x56`, idle v2 intégré pour test.
+- 2026-06-27 : Affichage plein écran 1920×1080 (viewport pixel 480×270 ×4, nearest).
+- 2026-06-27 : Contrôles clavier complets ajoutés (flèches, Z, E, R, Shift, Echap) — manette conservée.
+- 2026-06-27 : game_art/ = source de vérité sprites/animations ; sync.py → game/ ; zone jeu ne gère plus les sprites.
