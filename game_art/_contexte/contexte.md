@@ -12,9 +12,11 @@ pour visualiser, animer et auditer les sprites. Cible graphique : qualité Terra
 - Synchro vers jeu : sync.py à la racine projet (géré par zone jeu)
 
 ## État actuel
-game_art/ est la source de vérité des sprites (47 fichiers) et d'animations.json.
-project.godot éditeur créé (res:// = game_art/), éditeur pas encore développé.
-Phase 0 partiellement terminée. Phase 1 (spritesheets) à démarrer.
+Phase 0 et Phase 1 terminées. Phase 2 en cours (WIP).
+animation_driver.gd (jeu) supporte spritesheets via AtlasTexture, rétro-compatible PNG.
+État run player migré en spritesheet (player_run_sheet.png 28×24), validé en jeu.
+Éditeur Phase 2 : fichiers créés (main.tscn + main.gd + animation_driver.gd éditeur),
+fenêtre Godot s'ouvre mais rendu gris — bug UI à corriger session suivante.
 
 ## Décisions structurantes
 - game_art/ = racine du projet Godot éditeur (res:// pointe ici)

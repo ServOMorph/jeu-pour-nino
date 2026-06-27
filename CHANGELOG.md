@@ -1,3 +1,15 @@
+## v1.13 — 2026-06-27
+
+### Ajouté
+- `game_art/editeur/animation_driver.gd` : version éditeur avec remappage de chemin (`_editor_path`).
+- `game_art/editeur/main.gd` : UI éditeur programmatique (galerie entités/états, preview SubViewport 200×200, toolbar zoom x1/x3/x6/x8 + playback).
+- `game_art/editeur/main.tscn` : scène racine éditeur.
+- `game_art/assets/player/player_run_sheet.png` : spritesheet run player 28×24.
+
+### Modifié
+- `game/scripts/animation_driver.gd` : support spritesheets via `sheet`+`frame_size`+`frames[]` (AtlasTexture), rétro-compatible PNG.
+- `game_art/data/animations.json` : état `run` player migré vers format spritesheet.
+
 ## v1.12 — 2026-06-27
 
 ### Modifié
