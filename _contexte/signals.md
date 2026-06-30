@@ -1,10 +1,13 @@
-# Signals — jeu   (MAJ 2026-06-27)
+# Signals — jeu   (MAJ 2026-06-30)
 
 ## Actions ouvertes
-- [P1] Démarrer Phase 0 roadmap v3 : SaveManager + split Inventory → RunState/MetaState + GUT.
-  fait quand: un run modifie RunState sans toucher MetaState ; fermer/relancer conserve MetaState ; jeu actuel jouable de bout en bout ; tests save/load et état verts.
-  réf: `roadmap.md` Phase 0, `game/scripts/inventory.gd`, `game/scripts/level.gd`
-- [P2] Refaire toutes les frames du player dans le nouveau standard visuel Terraria-like. (zone game_art)
+- [P1] Valider Phase 0 en jeu : lancer GUT + run complet dans Godot 4.5.
+  fait quand: 20 tests GUT verts ; run de bout en bout sans erreur console.
+  réf: `game/tests/`, `game/scripts/run_state.gd`, `game/scripts/save_manager.gd`
+- [P2] Démarrer Phase 1 roadmap v3 : matériaux typés (materials: Dictionary dans RunState).
+  fait quand: miner ajoute le bon matériau ; HUD reflète les quantités par type ; tests verts.
+  réf: `roadmap.md` Phase 1, `game/scripts/run_state.gd`, `game/scripts/ore_node.gd`, `game/scripts/hud.gd`
+- [P3] Refaire toutes les frames du player dans le nouveau standard visuel Terraria-like. (zone game_art)
   fait quand: idle, run1, run2, jump et attack utilisent tous des sprites cohérents en 40x56/48x56 validés en jeu.
   réf: `docs/process_generation_sprites.md`, `game_art/data/animations.json`, `game_art/assets/player/`
 
@@ -23,29 +26,41 @@
 - Piège Godot : JOY_BUTTON_X = ui_up par défaut → ne pas l'utiliser pour action custom
 - Règle absolue : toute valeur numérique gameplay dans game/data/*.json — aucune constante hardcodée
 - Piège manette title.gd : _a_was doit être mis à jour EN TÊTE de _process avant tout return anticipé
-- Roadmap v3 créée (11 phases, R1/R2/R3, tests GUT) — design doc dans docs/v3/
+- GUT v9.7.0 installé dans game/addons/gut/ — activer via Project Settings → Plugins avant premier run
+- inventory.gd toujours présent mais plus référencé — peut être supprimé
 
-## Dernière session (2026-06-27 — design doc v3 + roadmap v3)
+## Dernière session (2026-06-30 — Phase 0 implémentée)
 
-# Session du 2026-06-27
+# Session du 2026-06-30
 
 ## Décisions prises
-- Design document v3 rédigé : 4 biomes libres, craft/Grimoire/PC, mort-résurrection/Voile, cicatrices (shaders), boss adaptatif modulaire (2 paramètres).
-- Templates assemblés retenus pour la génération de biomes (PCG pur écarté).
-- Roadmap v3 créée : 11 phases (0→10) + 3 jalons de refacto (R1/R2/R3) + stratégie de tests GUT intégrée.
+- Phase 0 roadmap v3 implémentée : RunState + MetaState + SaveManager + migration Inventory + GUT installé.
+- roadmap.md converti en liste de coches (- [ ] / - [x]) pour suivi visuel.
 
 ## Livrables produits ou modifiés
-- docs/v3/CoreDive Challenge — Design Document v3.md : créé
-- roadmap.md : recréée pour v3 (phases 0→10, R1/R2/R3, tests, risques)
+- game/scripts/run_state.gd : créé (autoload RunState, remplace Inventory)
+- game/scripts/meta_state.gd : créé (autoload MetaState, grimoire + PC)
+- game/scripts/save_manager.gd : créé (autoload SaveManager, user://meta_state.json)
+- game/scripts/player.gd : Inventory → RunState
+- game/scripts/craft_menu.gd : Inventory → RunState
+- game/scripts/hud.gd : Inventory → RunState
+- game/scripts/level.gd : Inventory → RunState + save_meta() en fin de run
+- game/project.godot : autoloads mis à jour (RunState, MetaState, SaveManager)
+- game/addons/gut/ : GUT v9.7.0 installé
+- game/.gut_editor_config.json : config GUT pointant vers res://tests/
+- game/tests/test_run_state.gd : 8 tests
+- game/tests/test_meta_state.gd : 9 tests
+- game/tests/test_save_manager.gd : 3 tests
+- roadmap.md : coches ajoutées + Phase 0 cochée
 
 ## Hypothèses validées / invalidées
-- VALIDE : pas besoin de rewrite — noyau gameplay conservé, v3 = couche méta-structurelle par-dessus
-- VALIDE : cicatrices visuelles = shaders/overlays uniquement, pas de refonte spritesheets
-- EN ATTENTE : équilibrage de la boucle méta (Phase 10, ne peut être validé qu'en jeu)
+- VALIDE : migration Inventory → RunState mécanique, sans casse de l'API existante
+- EN ATTENTE : tests GUT à exécuter dans Godot (GUT non vérifié en jeu)
+- EN ATTENTE : run complet à valider après migration
 
 ## Prochaine étape exacte
-Démarrer Phase 0 (zone jeu) : créer SaveManager, scinder Inventory → RunState/MetaState,
-installer GUT et premiers tests. Réf : roadmap.md Phase 0.
+Ouvrir Godot 4.5, activer GUT (Project Settings → Plugins), lancer "Run All" dans le panneau GUT.
+Valider un run complet (F5). Si tout est vert → commencer Phase 1 (matériaux typés).
 
 ## Question bloquante pour la session suivante
 Aucune

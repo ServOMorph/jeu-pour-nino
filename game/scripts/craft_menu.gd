@@ -109,8 +109,8 @@ func _refresh() -> void:
 		var is_consumable: bool = recipe.get("consumable", false)
 		var done := false
 		if not is_consumable:
-			done = Inventory.has_item(id)
-		var affordable := Inventory.resources >= cost
+			done = RunState.has_item(id)
+		var affordable := RunState.resources >= cost
 
 		_row_bgs[i].color = Color(0.30, 0.26, 0.20) if i == _selected else Color(0.20, 0.18, 0.15)
 
@@ -149,13 +149,13 @@ func _try_craft(i: int) -> void:
 	var id: String = recipe["id"]
 	var is_consumable: bool = recipe.get("consumable", false)
 	if not is_consumable:
-		if Inventory.has_item(id):
+		if RunState.has_item(id):
 			return
-	if Inventory.spend(int(recipe["cost"])):
+	if RunState.spend(int(recipe["cost"])):
 		if is_consumable:
-			Inventory.add_consumable(id)
+			RunState.add_consumable(id)
 		else:
-			Inventory.add_item(id)
+			RunState.add_item(id)
 		_refresh()
 	else:
 		AudioManager.play("cant_craft")
@@ -180,8 +180,8 @@ func _sync_visible_recipes() -> void:
 
 func _is_recipe_obsolete(recipe: Dictionary) -> bool:
 	var id: String = recipe["id"]
-	if id == "epee_bois" and (Inventory.has_item("epee_cuivre") or Inventory.has_item("epee_fer")):
+	if id == "epee_bois" and (RunState.has_item("epee_cuivre") or RunState.has_item("epee_fer")):
 		return true
-	if id == "epee_cuivre" and Inventory.has_item("epee_fer"):
+	if id == "epee_cuivre" and RunState.has_item("epee_fer"):
 		return true
 	return false

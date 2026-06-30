@@ -68,7 +68,7 @@ func _ready() -> void:
 	attack_hitbox.monitoring = false
 	attack_visual.visible = false
 	hurtbox.area_entered.connect(_on_hurtbox_area_entered)
-	Inventory.items_changed.connect(_apply_equipment)
+	RunState.items_changed.connect(_apply_equipment)
 	_update_facing()
 	_update_visual()
 	health_changed.emit(hp, max_hp)
@@ -313,7 +313,7 @@ func _apply_equipment() -> void:
 	damage_reduction = 0
 
 	for item_id in ["epee_fer", "epee_cuivre", "epee_bois"]:
-		if Inventory.has_item(item_id) and item_id in _weapon_cfg:
+		if RunState.has_item(item_id) and item_id in _weapon_cfg:
 			var w: Dictionary = _weapon_cfg[item_id]
 			if "damage" in w: attack_damage = int(w["damage"])
 			if "range"  in w: attack_range  = float(w["range"])
@@ -322,7 +322,7 @@ func _apply_equipment() -> void:
 	_update_weapon_visual()
 
 	for item_id in _armor_cfg:
-		if Inventory.has_item(item_id):
+		if RunState.has_item(item_id):
 			var a: Dictionary = _armor_cfg[item_id]
 			if "max_hp"           in a: max_hp           = int(a["max_hp"])
 			if "damage_reduction" in a: damage_reduction += int(a["damage_reduction"])
@@ -335,9 +335,9 @@ func _apply_equipment() -> void:
 	health_changed.emit(hp, max_hp)
 
 func _use_consumable() -> void:
-	if _dead or Inventory.get_consumable_count("potion") <= 0:
+	if _dead or RunState.get_consumable_count("potion") <= 0:
 		return
-	var id := Inventory.use_consumable()
+	var id := RunState.use_consumable()
 	if id in _consumable_cfg:
 		var cfg: Dictionary = _consumable_cfg[id]
 		if "heal" in cfg:
@@ -346,11 +346,11 @@ func _use_consumable() -> void:
 	AudioManager.play("potion")
 
 func _update_weapon_visual() -> void:
-	if Inventory.has_item("epee_fer"):
+	if RunState.has_item("epee_fer"):
 		attack_visual.color = Color(0.6, 0.75, 0.9)
-	elif Inventory.has_item("epee_cuivre"):
+	elif RunState.has_item("epee_cuivre"):
 		attack_visual.color = Color(0.9, 0.55, 0.2)
-	elif Inventory.has_item("epee_bois"):
+	elif RunState.has_item("epee_bois"):
 		attack_visual.color = Color(0.65, 0.45, 0.2)
 	else:
 		attack_visual.color = Color(1.0, 1.0, 1.0)

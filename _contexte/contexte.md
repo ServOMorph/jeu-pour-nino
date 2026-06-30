@@ -8,9 +8,10 @@ Jeu de plateforme/action pixel art fait pour Nino. Roguelite : exploration de bi
 - GDScript
 
 ## État actuel (réécrit intégralement à chaque /close)
-v1.12. Gameplay v2.1 validé et stable. Design document v3 rédigé (docs/v3/). Roadmap v3 créée : 11 phases, 3 jalons de refacto (R1/R2/R3), stratégie de tests GUT intégrée.
-Prochaine étape jeu : Phase 0 — SaveManager + split Inventory → RunState/MetaState + GUT.
-Zone game_art en attente : sprites player 40x56 standard Terraria-like (action [P2] non bloquante pour la zone jeu).
+v1.15. Phase 0 implémentée : RunState, MetaState, SaveManager créés ; Inventory migré ; GUT v9.7.0 installé (game/addons/gut/) ; 20 tests écrits.
+Phase 0 non encore validée en jeu (GUT + run complet à confirmer dans Godot).
+Prochaine étape jeu : valider Phase 0 en jeu, puis Phase 1 (matériaux typés).
+Zone game_art en attente : sprites player 40x56 standard Terraria-like.
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
 - 2026-06-27 : Affichage plein écran 1920×1080 (viewport pixel 480×270 ×4, nearest).
@@ -19,3 +20,4 @@ Zone game_art en attente : sprites player 40x56 standard Terraria-like (action [
 - 2026-06-27 : Design document v3 rédigé — 4 biomes libres, Grimoire/PC, mort-résurrection/Voile, cicatrices shaders, boss adaptatif modulaire.
 - 2026-06-27 : Génération biomes = templates assemblés (PCG pur écarté).
 - 2026-06-27 : Roadmap v3 créée — 11 phases, jalons refacto R1/R2/R3, stratégie tests GUT. Pas de rewrite : noyau gameplay conservé.
+- 2026-06-30 : Phase 0 implémentée — RunState/MetaState/SaveManager autoloads, Inventory retiré, GUT v9.7.0 installé, 20 tests Phase 0 écrits.

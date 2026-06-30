@@ -58,22 +58,22 @@ func _build_resource_counter() -> void:
 	_res_label.add_theme_font_size_override("font_size", 10)
 	_res_label.modulate = Color(0.6, 0.85, 1.0)
 	add_child(_res_label)
-	Inventory.resources_changed.connect(_on_resources_changed)
-	_on_resources_changed(Inventory.resources)
+	RunState.resources_changed.connect(_on_resources_changed)
+	_on_resources_changed(RunState.resources)
 
 	_coin_label = Label.new()
 	_coin_label.position = Vector2(8, 36)
 	_coin_label.add_theme_font_size_override("font_size", 10)
 	_coin_label.modulate = Color(1.0, 0.82, 0.25)
 	add_child(_coin_label)
-	Inventory.coins_changed.connect(_on_coins_changed)
-	_on_coins_changed(Inventory.coins)
+	RunState.coins_changed.connect(_on_coins_changed)
+	_on_coins_changed(RunState.coins)
 
 	_consumable_label = Label.new()
 	_consumable_label.position = Vector2(8, 48)
 	_consumable_label.add_theme_font_size_override("font_size", 10)
 	add_child(_consumable_label)
-	Inventory.consumable_changed.connect(_on_consumable_changed)
+	RunState.consumable_changed.connect(_on_consumable_changed)
 	_on_consumable_changed("")
 
 func _on_resources_changed(current: int) -> void:
@@ -83,7 +83,7 @@ func _on_coins_changed(current: int) -> void:
 	_coin_label.text = "OR %d" % current
 
 func _on_consumable_changed(id: String) -> void:
-	var count := Inventory.get_consumable_count("potion")
+	var count := RunState.get_consumable_count("potion")
 	if count <= 0:
 		_consumable_label.text = "LB: —"
 		_consumable_label.modulate = Color(0.4, 0.4, 0.4)

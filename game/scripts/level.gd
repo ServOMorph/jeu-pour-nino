@@ -30,9 +30,9 @@ var _pause_menu: CanvasLayer
 func _ready() -> void:
 	randomize()
 	_load_level_config()
-	Inventory.reset()
+	RunState.reset()
 	if Dev.dev_resources > 0:
-		Inventory.add(Dev.dev_resources)
+		RunState.add(Dev.dev_resources)
 	_build_background()
 	_build_geometry()
 	var cfg := _resolve_spawn()
@@ -277,11 +277,11 @@ func _return_to_title() -> void:
 func _toggle_dev_resources() -> void:
 	if Dev.dev_resources > 0:
 		Dev.dev_resources = 0
-		Inventory.resources = max(0, Inventory.resources - 100)
-		Inventory.resources_changed.emit(Inventory.resources)
+		RunState.resources = max(0, RunState.resources - 100)
+		RunState.resources_changed.emit(RunState.resources)
 	else:
 		Dev.dev_resources = 100
-		Inventory.add(100)
+		RunState.add(100)
 
 func _toggle_dev_hp() -> void:
 	Dev.infinite_hp = not Dev.infinite_hp
@@ -302,6 +302,7 @@ func _on_player_died() -> void:
 	if _ended:
 		return
 	_ended = true
+	SaveManager.save_meta()
 	_show_end_screen("VOUS ETES TOMBE", Color(0.8, 0.2, 0.2), false)
 
 func _on_boss_died() -> void:
@@ -309,6 +310,7 @@ func _on_boss_died() -> void:
 		return
 	_ended = true
 	_hud.hide_boss_bar()
+	SaveManager.save_meta()
 	_show_end_screen("NOYAU ATTEINT - VICTOIRE", Color(0.4, 0.85, 0.5), true)
 
 func _show_end_screen(message: String, color: Color, victory: bool) -> void:

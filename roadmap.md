@@ -32,13 +32,13 @@ Trois points de consolidation placés là où la dette s'accumule naturellement,
 Casser le couplage mono-run / mono-niveau avant tout le reste. Sans ça, chaque phase suivante se bat contre l'architecture.
 
 ### Tâches
-- Créer un système de sauvegarde `user://` (JSON) : `game/scripts/save_manager.gd` (autoload).
-- Scinder `inventory.gd` en deux autoloads :
+- [x] Créer un système de sauvegarde `user://` (JSON) : `game/scripts/save_manager.gd` (autoload).
+- [x] Scinder `inventory.gd` en deux autoloads :
   - `RunState` — éphémère, remis à zéro à chaque run : matériaux, équipement, consommables, monnaie, cicatrices.
   - `MetaState` — persistant entre runs : Grimoire (recettes découvertes/maîtrisées), Points de Compétence.
-- Migrer les usages actuels de `Inventory` (`player.gd`, `craft_menu.gd`, `level.gd`, `hud.gd`, `dev.gd`) vers `RunState`.
-- Charger/sauver `MetaState` au démarrage et à la fin de run.
-- Installer GUT et créer `tests/` : premiers tests sur save/load (`SaveManager`), reset de `RunState`, persistance de `MetaState`.
+- [x] Migrer les usages actuels de `Inventory` (`player.gd`, `craft_menu.gd`, `level.gd`, `hud.gd`) vers `RunState`.
+- [x] Charger/sauver `MetaState` au démarrage et à la fin de run.
+- [x] Installer GUT et créer `tests/` : premiers tests sur save/load (`SaveManager`), reset de `RunState`, persistance de `MetaState`.
 
 ### Fait quand
 Un run modifie `RunState` sans toucher `MetaState`. Fermer/relancer le jeu conserve `MetaState`. Le jeu actuel reste jouable de bout en bout après migration. Tests save/load et état verts.
@@ -56,12 +56,12 @@ Rien.
 Le craft v3 consomme des matériaux distincts (bois, pierre, cuivre, fer, cristaux, fragments du Noyau...). Aujourd'hui `RunState.resources` est un seul entier.
 
 ### Tâches
-- Remplacer `resources: int` par `materials: Dictionary` (id → quantité) dans `RunState`.
-- Créer `game/data/materials.json` (id, nom, biome source, rareté).
-- Adapter `ore_node.gd` : chaque gisement a un `material_id`.
-- Adapter `hud.gd` pour afficher les matériaux possédés.
-- Adapter `level.json` : les `ores` portent un type de matériau.
-- **[game_art]** sprites distincts par type de gisement/minerai.
+- [ ] Remplacer `resources: int` par `materials: Dictionary` (id → quantité) dans `RunState`.
+- [ ] Créer `game/data/materials.json` (id, nom, biome source, rareté).
+- [ ] Adapter `ore_node.gd` : chaque gisement a un `material_id`.
+- [ ] Adapter `hud.gd` pour afficher les matériaux possédés.
+- [ ] Adapter `level.json` : les `ores` portent un type de matériau.
+- [ ] **[game_art]** sprites distincts par type de gisement/minerai.
 
 ### Fait quand
 Miner un gisement ajoute le bon matériau. Le HUD reflète les quantités par type.
@@ -77,12 +77,12 @@ Le mode dev « 100 MIN » suppose une monnaie unique. À réadapter (donner un s
 ## Phase 2 — Grimoire, Points de Compétence, Craft v3
 
 ### Tâches
-- Étendre `recipes.json` : `id`, `name`, `rarity`, `biome`, `skill_cost`, `materials` (dict), `discovered` (méta), `mastered` (méta), `consumable`.
-- Recettes de départ marquées maîtrisées par défaut (épée bois, armure bois, pioche, petite potion, torche, corde, établi portable).
-- Logique Grimoire dans `MetaState` : découverte (run) → maîtrise (dépense de PC entre runs).
-- Refondre `craft_menu.gd` : ne propose QUE les recettes maîtrisées dont les matériaux sont présents.
-- Gain de PC en fin de run (profondeur, élites, boss, salles secrètes, réussite) — même un run raté en rapporte.
-- Écran de déblocage des recettes (dépense de PC) — accessible au HUB. **[game_art]** mise en page/icônes du Grimoire.
+- [ ] Étendre `recipes.json` : `id`, `name`, `rarity`, `biome`, `skill_cost`, `materials` (dict), `discovered` (méta), `mastered` (méta), `consumable`.
+- [ ] Recettes de départ marquées maîtrisées par défaut (épée bois, armure bois, pioche, petite potion, torche, corde, établi portable).
+- [ ] Logique Grimoire dans `MetaState` : découverte (run) → maîtrise (dépense de PC entre runs).
+- [ ] Refondre `craft_menu.gd` : ne propose QUE les recettes maîtrisées dont les matériaux sont présents.
+- [ ] Gain de PC en fin de run (profondeur, élites, boss, salles secrètes, réussite) — même un run raté en rapporte.
+- [ ] Écran de déblocage des recettes (dépense de PC) — accessible au HUB. **[game_art]** mise en page/icônes du Grimoire.
 
 ### Fait quand
 Découvrir une recette en run l'ajoute au Grimoire (persistant). La maîtriser coûte des PC. Une recette maîtrisée est craftable au prochain run si matériaux réunis. Tests verts : découverte, maîtrise (dépense PC), filtrage des recettes craftables, gain de PC en fin de run.
@@ -100,10 +100,10 @@ La logique d'obsolescence actuelle (`_is_recipe_obsolete`) est hardcodée pour l
 Avant de bâtir le HUB et les biomes sur RunState/MetaState/Grimoire, stabiliser ces fondations.
 
 ### Tâches
-- Revue de l'API RunState/MetaState : nommage cohérent, suppression des accès directs résiduels à l'ancien `Inventory`.
-- Centraliser les accès au Grimoire (un seul point d'entrée, pas de logique dispersée).
-- Nettoyer la logique d'obsolescence héritée des épées.
-- Compléter la couverture de tests de la couche d'état avant gel.
+- [ ] Revue de l'API RunState/MetaState : nommage cohérent, suppression des accès directs résiduels à l'ancien `Inventory`.
+- [ ] Centraliser les accès au Grimoire (un seul point d'entrée, pas de logique dispersée).
+- [ ] Nettoyer la logique d'obsolescence héritée des épées.
+- [ ] Compléter la couverture de tests de la couche d'état avant gel.
 
 ### Fait quand
 Aucune référence à l'ancien `Inventory` ne subsiste. Tests d'état exhaustifs et verts.
@@ -113,11 +113,11 @@ Aucune référence à l'ancien `Inventory` ne subsiste. Tests d'état exhaustifs
 ## Phase 3 — HUB et sélection de biome
 
 ### Tâches
-- Créer la scène HUB : point central, 4 directions accessibles. **[game_art]** décor du HUB.
-- Transformer `title.gd` : le menu lance le HUB (pas directement biome1).
-- Paramétrer le chargement de niveau : `level.gd` reçoit un `biome_id` et charge `game/data/biomes/<id>.json` au lieu de `level.json` fixe.
-- Retour au HUB après mort définitive ou fin de biome (au lieu de `get_tree().quit()`).
-- Accès au Grimoire/déblocage PC et à l'établi depuis le HUB.
+- [ ] Créer la scène HUB : point central, 4 directions accessibles. **[game_art]** décor du HUB.
+- [ ] Transformer `title.gd` : le menu lance le HUB (pas directement biome1).
+- [ ] Paramétrer le chargement de niveau : `level.gd` reçoit un `biome_id` et charge `game/data/biomes/<id>.json` au lieu de `level.json` fixe.
+- [ ] Retour au HUB après mort définitive ou fin de biome (au lieu de `get_tree().quit()`).
+- [ ] Accès au Grimoire/déblocage PC et à l'établi depuis le HUB.
 
 ### Fait quand
 Depuis le HUB, choisir une des 4 directions lance le biome correspondant. Mourir/finir ramène au HUB. Le mode dev reste fonctionnel.
@@ -135,13 +135,12 @@ Phases 0, 2.
 Le point le plus risqué. **Décision arrêtée : assemblage de salles pré-authorées (templates).** Pas de PCG algorithmique pur. Plus contrôlable, garantit les ressources, compatible solo.
 
 ### Tâches
-- Définir un format de salle (template JSON : géométrie, points de spawn ennemis/ores/établi, connexions).
-- Générateur `game/scripts/biome_generator.gd` : assemble des salles selon une config de biome (longueur, pool de salles, garanties).
-- Garantie de ressources : la config impose un minimum de chaque matériau clé du biome.
-- Placement boss en fin de parcours généré.
-- Refondre `level.gd` pour consommer la sortie du générateur au lieu des rects fixes.
-
-- Tests de génération : complétabilité (chemin start→boss toujours existant), présence garantie des ressources clés, validité des connexions entre salles.
+- [ ] Définir un format de salle (template JSON : géométrie, points de spawn ennemis/ores/établi, connexions).
+- [ ] Générateur `game/scripts/biome_generator.gd` : assemble des salles selon une config de biome (longueur, pool de salles, garanties).
+- [ ] Garantie de ressources : la config impose un minimum de chaque matériau clé du biome.
+- [ ] Placement boss en fin de parcours généré.
+- [ ] Refondre `level.gd` pour consommer la sortie du générateur au lieu des rects fixes.
+- [ ] Tests de génération : complétabilité (chemin start→boss toujours existant), présence garantie des ressources clés, validité des connexions entre salles.
 
 ### Fait quand
 Lancer un biome deux fois produit deux agencements différents, tous deux complétables, avec les ressources clés présentes. Tests de complétabilité et de garantie ressources verts sur N générations.
@@ -158,11 +157,11 @@ Phase 3.
 ## Phase 5 — Contenu des biomes 2, 3, 4
 
 ### Tâches
-- Config + génération pour Mines Obscures, Îles Célestes, Descente vers le Noyau.
-- Ennemis spécifiques par biome (étendre `enemy_base.gd`, `enemies.json`).
-- Ressources spécifiques (déjà typées en Phase 1).
-- Boss de biome : Foreur Maudit, Orage Éternel, Gardien du Noyau (réutiliser/étendre `boss.gd`, `boss.json`).
-- **[game_art]** : sprites ennemis, sprites/animations des 3 boss, décors et tilesets des 3 biomes.
+- [ ] Config + génération pour Mines Obscures, Îles Célestes, Descente vers le Noyau.
+- [ ] Ennemis spécifiques par biome (étendre `enemy_base.gd`, `enemies.json`).
+- [ ] Ressources spécifiques (déjà typées en Phase 1).
+- [ ] Boss de biome : Foreur Maudit, Orage Éternel, Gardien du Noyau (réutiliser/étendre `boss.gd`, `boss.json`).
+- [ ] **[game_art]** : sprites ennemis, sprites/animations des 3 boss, décors et tilesets des 3 biomes.
 
 ### Fait quand
 Les 4 biomes sont jouables de bout en bout avec leurs ennemis, ressources et boss.
@@ -180,10 +179,10 @@ Gros volume de contenu et d'art. Étaler par biome (Biome 2 complet avant d'atta
 Les 4 biomes et leurs boss ont été produits incrémentalement : du code s'est dupliqué. Consolider avant d'empiler mort, cicatrices et boss adaptatif.
 
 ### Tâches
-- Extraire les patterns communs des biomes (chargement config, génération, spawn) dans une base partagée.
-- Factoriser les comportements d'ennemis récurrents dans `enemy_base.gd`.
-- Unifier la structure des boss de biome (prépare R3 et la Phase 9).
-- Vérifier que toute la donnée gameplay est bien externalisée (audit anti-hardcode).
+- [ ] Extraire les patterns communs des biomes (chargement config, génération, spawn) dans une base partagée.
+- [ ] Factoriser les comportements d'ennemis récurrents dans `enemy_base.gd`.
+- [ ] Unifier la structure des boss de biome (prépare R3 et la Phase 9).
+- [ ] Vérifier que toute la donnée gameplay est bien externalisée (audit anti-hardcode).
 
 ### Fait quand
 Aucune duplication structurelle majeure entre biomes/boss. Tests de non-régression verts sur les 4 biomes.
@@ -193,13 +192,13 @@ Aucune duplication structurelle majeure entre biomes/boss. Tests de non-régress
 ## Phase 6 — Mort, Résurrection, Arène du Voile
 
 ### Tâches
-- Intercepter la mort du joueur (`player.gd` `_die()` / `level.gd` `_on_player_died`) : au lieu de l'écran de fin, transition vers l'Arène du Voile.
-- Scène Arène du Voile (unique). **[game_art]** décor « tribunal cosmique ».
-- Gardiens du Voile : pool de combats (réutiliser l'archi boss), tirage aléatoire.
-- Difficulté croissante par nombre de résurrections dans le run (data-driven).
-- Victoire → résurrection à l'endroit de la mort, PV restaurés, cicatrice appliquée. Défaite → fin de run définitive.
-- **[game_art]** : sprites/patterns visuels des Gardiens.
-- Tests : sauvegarde/restauration de l'état de biome autour de l'aller-retour Arène, escalade de difficulté des Gardiens selon le compteur de résurrections.
+- [ ] Intercepter la mort du joueur (`player.gd` `_die()` / `level.gd` `_on_player_died`) : au lieu de l'écran de fin, transition vers l'Arène du Voile.
+- [ ] Scène Arène du Voile (unique). **[game_art]** décor « tribunal cosmique ».
+- [ ] Gardiens du Voile : pool de combats (réutiliser l'archi boss), tirage aléatoire.
+- [ ] Difficulté croissante par nombre de résurrections dans le run (data-driven).
+- [ ] Victoire → résurrection à l'endroit de la mort, PV restaurés, cicatrice appliquée. Défaite → fin de run définitive.
+- [ ] **[game_art]** : sprites/patterns visuels des Gardiens.
+- [ ] Tests : sauvegarde/restauration de l'état de biome autour de l'aller-retour Arène, escalade de difficulté des Gardiens selon le compteur de résurrections.
 
 ### Fait quand
 Mourir envoie à l'Arène. Vaincre le Gardien ressuscite le joueur dans le biome avec une cicatrice, **dans l'état exact où il l'avait quitté**. Perdre termine le run. Tests d'état biome verts.
@@ -215,11 +214,11 @@ La résurrection doit restaurer l'état exact du biome (position joueur, ennemis
 ## Phase 7 — Cicatrices
 
 ### Tâches
-- `game/data/scars.json` : effets gameplay (modificateurs de stats).
-- Application comme modificateurs sur `player.gd` (le système `damage_reduction`/équipement actuel sert de modèle d'insertion).
-- Stockage des cicatrices actives dans `RunState`.
-- Tirage de la cicatrice à chaque résurrection.
-- **[game_art]** : effets visuels par palier (1 à 5+) via shaders + overlays de particules, PAS de refonte de spritesheet.
+- [ ] `game/data/scars.json` : effets gameplay (modificateurs de stats).
+- [ ] Application comme modificateurs sur `player.gd` (le système `damage_reduction`/équipement actuel sert de modèle d'insertion).
+- [ ] Stockage des cicatrices actives dans `RunState`.
+- [ ] Tirage de la cicatrice à chaque résurrection.
+- [ ] **[game_art]** : effets visuels par palier (1 à 5+) via shaders + overlays de particules, PAS de refonte de spritesheet.
 
 ### Fait quand
 Chaque résurrection applique une cicatrice qui modifie réellement le gameplay et l'apparence, persistante jusqu'à la fin du run.
@@ -235,10 +234,10 @@ Cumul de cicatrices : éviter les combinaisons qui rendent le run injouable ou t
 ## Phase 8 — Porteurs de recettes
 
 ### Tâches
-- Ennemis rares (Archiviste, Golem Artisan, Mineur Spectral, Forgeron Maudit) — apparition conditionnelle par biome.
-- Drop = découverte de recette (ajout au Grimoire via `MetaState`).
-- Catégories de drop cohérentes par porteur.
-- **[game_art]** : sprites des 4 porteurs.
+- [ ] Ennemis rares (Archiviste, Golem Artisan, Mineur Spectral, Forgeron Maudit) — apparition conditionnelle par biome.
+- [ ] Drop = découverte de recette (ajout au Grimoire via `MetaState`).
+- [ ] Catégories de drop cohérentes par porteur.
+- [ ] **[game_art]** : sprites des 4 porteurs.
 
 ### Fait quand
 Vaincre un porteur ajoute une recette « Découverte » au Grimoire.
@@ -256,10 +255,10 @@ Taux d'apparition/drop à équilibrer pour que la collection soit gratifiante sa
 Préparer le boss adaptatif en extrayant les briques réutilisables des boss existants.
 
 ### Tâches
-- Découper `boss.gd` en modules : corps, déplacement, pouvoir principal, mutations.
-- Définir l'interface d'assemblage de ces modules.
-- Valider l'architecture sur les boss de biome existants (ils doivent être ré-exprimables comme combinaisons de modules) avant de produire le Miroir.
-- Tests unitaires sur l'assemblage des modules.
+- [ ] Découper `boss.gd` en modules : corps, déplacement, pouvoir principal, mutations.
+- [ ] Définir l'interface d'assemblage de ces modules.
+- [ ] Valider l'architecture sur les boss de biome existants (ils doivent être ré-exprimables comme combinaisons de modules) avant de produire le Miroir.
+- [ ] Tests unitaires sur l'assemblage des modules.
 
 ### Fait quand
 Les boss de biome fonctionnent via l'architecture modulaire. L'assemblage est testé et prêt pour la génération adaptative.
@@ -269,11 +268,11 @@ Les boss de biome fonctionnent via l'architecture modulaire. L'assemblage est te
 ## Phase 9 — Miroir du Noyau (boss final adaptatif)
 
 ### Tâches
-- Architecture modulaire : corps / déplacement / pouvoir principal / mutations (modules réutilisables sur base `boss.gd`).
-- Génération du boss à partir de 2 paramètres : biomes explorés + cicatrices accumulées (tracés dans `RunState`).
-- Déclenchement après le Gardien du Noyau (Biome 4).
-- **[game_art]** : modules visuels combinables (corps, effets de pouvoir, mutations).
-- Tests : génération du boss à partir de paramètres de run donnés (déterminisme), combinaisons extrêmes (tous biomes/toutes cicatrices, aucun).
+- [ ] Architecture modulaire : corps / déplacement / pouvoir principal / mutations (modules réutilisables sur base `boss.gd`).
+- [ ] Génération du boss à partir de 2 paramètres : biomes explorés + cicatrices accumulées (tracés dans `RunState`).
+- [ ] Déclenchement après le Gardien du Noyau (Biome 4).
+- [ ] **[game_art]** : modules visuels combinables (corps, effets de pouvoir, mutations).
+- [ ] Tests : génération du boss à partir de paramètres de run donnés (déterminisme), combinaisons extrêmes (tous biomes/toutes cicatrices, aucun).
 
 ### Fait quand
 Atteindre le Noyau génère un boss reflétant le parcours du run. Deux runs différents produisent deux boss différents. Tests de génération (déterminisme + cas extrêmes) verts.
@@ -289,10 +288,10 @@ Combinatoire de modules = risque de bugs/équilibrage. Limiter le nombre de modu
 ## Phase 10 — Intégration, équilibrage, polish
 
 ### Tâches
-- Équilibrage global (PC, coûts de maîtrise, difficulté biomes, escalade Gardiens, cicatrices).
-- Boucle méta complète testée sur plusieurs runs.
-- Passes audio/feedback.
-- **[game_art]** : cohérence visuelle globale, passes finales.
+- [ ] Équilibrage global (PC, coûts de maîtrise, difficulté biomes, escalade Gardiens, cicatrices).
+- [ ] Boucle méta complète testée sur plusieurs runs.
+- [ ] Passes audio/feedback.
+- [ ] **[game_art]** : cohérence visuelle globale, passes finales.
 
 ### Fait quand
 Un joueur peut enchaîner plusieurs runs, progresser via le Grimoire/PC, mourir et ressusciter, et atteindre le Miroir du Noyau dans une expérience cohérente.

@@ -1,0 +1,16 @@
+{
+  "dirs": ["res://tests/"],
+  "prefix": "test_",
+  "suffix": ".gd",
+  "gut_on_top": false,
+  "should_maximize": false,
+  "compact_mode": false,
+  "font_size": 14,
+  "default_log_level": 1,
+  "treat_no_assert_as_success": false,
+  "ignore_pause_before_teardown": false,
+  "should_exit": false,
+  "should_exit_on_success": false,
+  "junit_xml_file": "",
+  "junit_xml_timestamp": false
+}

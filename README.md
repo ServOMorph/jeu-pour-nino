@@ -63,8 +63,8 @@ Nécessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ou
 
 ## État actuel
 
-**v1.12.** Gameplay v2.1 validé et stable. Design document v3 rédigé (`docs/v3/`). Roadmap v3 créée : 11 phases, 3 jalons de refacto (R1/R2/R3), stratégie de tests GUT.
-Prochaine étape : Phase 0 — persistance méta (SaveManager + split Inventory → RunState/MetaState).
+**v1.15.** Phase 0 implémentée : `RunState`, `MetaState`, `SaveManager` en autoloads ; `Inventory` migré ; GUT v9.7.0 installé ; 20 tests écrits.
+Phase 0 à valider en jeu (GUT + run complet). Prochaine étape : Phase 1 — matériaux typés.
 
 ## Roadmap
 

@@ -1,3 +1,20 @@
+## v1.15 — 2026-06-30
+
+### Ajouté
+- `game/scripts/run_state.gd` : autoload RunState (remplace Inventory, même API + serialize/deserialize).
+- `game/scripts/meta_state.gd` : autoload MetaState (grimoire + Points de Compétence, persistant).
+- `game/scripts/save_manager.gd` : autoload SaveManager (save/load MetaState vers user://meta_state.json).
+- `game/addons/gut/` : GUT v9.7.0 installé.
+- `game/tests/` : 20 tests GUT Phase 0 (RunState, MetaState, SaveManager).
+- `game/.gut_editor_config.json` : config GUT pointant vers res://tests/.
+- `roadmap.md` : coches de suivi ajoutées sur toutes les tâches.
+
+### Modifié
+- `game/project.godot` : autoloads Inventory → RunState + MetaState + SaveManager ; GUT activé.
+- `game/scripts/player.gd`, `craft_menu.gd`, `hud.gd`, `level.gd` : Inventory → RunState.
+- `game/scripts/level.gd` : SaveManager.save_meta() ajouté en fin de run (mort et victoire).
+- `roadmap.md` : Phase 0 cochée.
+
 ## v1.14 — 2026-06-27
 
 ### Ajouté
