@@ -63,9 +63,9 @@ Nécessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ou
 
 ## État actuel
 
-**v1.15.** Phase 0 implémentée : `RunState`, `MetaState`, `SaveManager` en autoloads ; `Inventory` migré ; GUT v9.7.0 installé ; 20 tests écrits.
-Phase 0 à valider en jeu (GUT + run complet). Prochaine étape : Phase 1 — matériaux typés.
+**v1.16.** Roadmap v3 refondue : boucle mort/résurrection/cicatrices avant le contenu des biomes 2/3/4, jalons jouables J1-J7, scope du Miroir du Noyau réduit à 2 paramètres, objectif de couverture de tests 85 %.
+Phase 0 (code) toujours à valider en jeu (GUT + run complet). Prochaine étape : Phase 1 — matériaux typés.
 
 ## Roadmap
 
-Voir [roadmap.md](roadmap.md) — roadmap v3 complète (11 phases). Design document : [`docs/v3/CoreDive Challenge — Design Document v3.md`](docs/v3/CoreDive%20Challenge%20%E2%80%94%20Design%20Document%20v3.md).
+Voir [roadmap.md](roadmap.md) — roadmap v3 complète, jalons jouables J1-J7. Design document : [`docs/v3/CoreDive Challenge — Design Document v3.md`](docs/v3/CoreDive%20Challenge%20%E2%80%94%20Design%20Document%20v3.md). Besoins d'assets : [`game_art/backlog_art.md`](game_art/backlog_art.md).

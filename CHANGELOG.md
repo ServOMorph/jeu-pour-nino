@@ -1,3 +1,15 @@
+## v1.16 — 2026-07-02
+
+### Ajouté
+- `game_art/backlog_art.md` : backlog des assets à produire par phase, alimenté depuis `roadmap.md`, consommé par les sessions game_art.
+- `roadmap.md` : jalons jouables J1 à J7 (une version stable jouable par jalon). Section « Backlog post-v3 » (coupes assumées). Jalon de refacto R1.5 après Phase 4.
+
+### Modifié
+- `roadmap.md` : réordonnancement — mort/résurrection/cicatrices (Phases 5-6) remontées avant le contenu des biomes 2/3/4 (Phase 7, étalée 7a/7b/7c) ; R2 déplacé après Phase 7 et étendu aux Gardiens du Voile.
+- `roadmap.md` : règle placeholders systématique — aucune phase jeu n'attend game_art, les tâches **[game_art]** alimentent le backlog dédié.
+- `roadmap.md` : scope du Miroir du Noyau limité à 2 paramètres (biomes explorés + cicatrices), documenté comme coupe assumée par rapport au design doc (4 paramètres).
+- `roadmap.md` : objectif de couverture de tests fixé à 85 % sur la logique data-driven/état, vérifié à chaque jalon de refacto (R1, R1.5, R2, R3).
+
 ## v1.15 — 2026-06-30
 
 ### Ajouté
