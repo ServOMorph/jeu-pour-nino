@@ -63,8 +63,8 @@ Nécessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ou
 
 ## État actuel
 
-**v1.16.** Roadmap v3 refondue : boucle mort/résurrection/cicatrices avant le contenu des biomes 2/3/4, jalons jouables J1-J7, scope du Miroir du Noyau réduit à 2 paramètres, objectif de couverture de tests 85 %.
-Phase 0 (code) toujours à valider en jeu (GUT + run complet). Prochaine étape : Phase 1 — matériaux typés.
+**v1.17.** `roadmap.md` détaillée pour implémentation directe (carte du code, schémas JSON cibles par phase) — scope et ordre des phases inchangés.
+Dette bloquante découverte : le jeu crashe actuellement (3 appels résiduels à l'autoload supprimé `Inventory`). À corriger avant de valider la Phase 0 en jeu. Prochaine étape : corriger cette dette, valider Phase 0, puis Phase 1 — matériaux typés.
 
 ## Roadmap
 

@@ -1,9 +1,9 @@
 # Signals — jeu   (MAJ 2026-07-02)
 
 ## Actions ouvertes
-- [P1] Valider Phase 0 en jeu : lancer GUT + run complet dans Godot 4.5.
-  fait quand: 20 tests GUT verts ; run de bout en bout sans erreur console.
-  réf: `game/tests/`, `game/scripts/run_state.gd`, `game/scripts/save_manager.gd`
+- [P1] Corriger la dette bloquante Phase 0 : 3 appels résiduels à l'autoload supprimé `Inventory` font crasher le jeu (minerai cassé, mort d'ennemi, mort du boss), puis valider Phase 0 en jeu.
+  fait quand: `ore_node.gd:42`, `enemy_base.gd:107`, `boss.gd:255` migrés vers `RunState` ; `inventory.gd` supprimé ; `grep -rn "Inventory" game/scripts` vide ; 20 tests GUT verts ; run complet (miner, crafter, tuer ennemis, battre boss, relancer) sans erreur console, `MetaState` conservé après relance.
+  réf: `roadmap.md` section « Dette bloquante Phase 0 »
 - [P2] Démarrer Phase 1 roadmap v3 : matériaux typés (materials: Dictionary dans RunState).
   fait quand: miner ajoute le bon matériau ; HUD reflète les quantités par type ; tests verts ; couverture ≥ 85 % sur le périmètre livré.
   réf: `roadmap.md` Phase 1, `game/scripts/run_state.gd`, `game/scripts/ore_node.gd`, `game/scripts/hud.gd`
@@ -33,30 +33,28 @@
 - inventory.gd toujours présent mais plus référencé — peut être supprimé
 - Nouveau : `game_art/backlog_art.md` centralise les besoins d'assets par phase — à consulter en priorité lors des sessions game_art
 - Roadmap réordonnée (2026-07-02) : mort/résurrection/cicatrices (Phases 5-6) désormais avant le contenu des biomes 2/3/4 (Phase 7, ex-Phase 5). Vérifier les numéros de phase avant de s'y référer dans du code ou des commentaires.
+- `roadmap.md` détaillée (2026-07-02, session 2) : chaque phase ancrée dans le code réel (fichiers, lignes, schémas JSON cibles). Phase 5 : décision retenue = conserver la scène biome en mémoire pendant l'Arène (pas de sérialisation complète).
+- `Inventory` : NE PLUS écrire "peut être supprimé" — 3 appels résiduels crashent le jeu (voir action P1). `inventory.gd` reste présent tant que ces 3 appels n'ont pas été migrés.
 
-## Dernière session (2026-07-02 — refonte roadmap v3 + backlog art)
+## Dernière session (2026-07-02 — roadmaps jeu et game_art détaillées pour implémentation Sonnet)
 
 # Session du 2026-07-02
 
 ## Décisions prises
-- Roadmap v3 réordonnée : boucle identitaire mort/résurrection/cicatrices (Phases 5-6) remontée avant le contenu des biomes 2/3/4 (Phase 7, étalée 7a/7b/7c), pour valider l'identité du jeu tôt et livrer des jalons jouables réguliers.
-- Jalons jouables J1 à J7 définis, chacun rattaché à une phase et un critère observable.
-- Règle placeholders systématique : aucune phase jeu n'attend game_art ; les besoins d'assets sont recensés dans un backlog dédié plutôt que de bloquer les critères « fait quand ».
-- Scope du Miroir du Noyau réduit à 2 paramètres (biomes explorés + cicatrices) ; « boss vaincus » et « style de jeu » du design doc repoussés en backlog post-v3.
-- Objectif de couverture de tests fixé à 85 % sur la logique data-driven/état, vérifié à chaque jalon de refacto.
-- Nouveau jalon de refacto R1.5 (après Phase 4) ajouté pour combler l'écart de 5 phases entre R1 et R2.
+- `roadmap.md` (v3) détaillée intégralement pour qu'un dev sans contexte préalable puisse implémenter : carte du code (autoloads, fichiers clés, lignes), schémas JSON cibles par phase, choix d'implémentation tranchés (ex. Phase 4 : générateur produit le même format que `level.json` actuel ; Phase 5 : scène biome conservée en mémoire plutôt que sérialisée).
+- `game_art/roadmap_editeur.md` détaillée de la même façon : état réel des fichiers de l'éditeur (galerie/preview déjà codées dans `main.gd`), diagnostic priorisé du bug de rendu gris, plan de sauvegarde JSON sûre pour l'inspecteur (Phase 3), spécification de l'audit (Phase 4).
 
 ## Livrables produits ou modifiés
-- `roadmap.md` : réécrite intégralement (réordonnancement, jalons jouables, règle placeholders, scope Miroir documenté, section Backlog post-v3, jalon R1.5, objectif de couverture 85 % intégré aux refactos R1/R1.5/R2/R3).
-- `game_art/backlog_art.md` : créé — backlog des assets à produire par phase, alimenté depuis la roadmap jeu, consommé par les sessions game_art.
+- `roadmap.md` : réécrite intégralement (détail d'implémentation, sans changement de scope/ordre des phases).
+- `game_art/roadmap_editeur.md` : réécrite intégralement (détail d'implémentation zone game_art, ne pas confondre avec le contexte propre à cette zone).
 
 ## Hypothèses validées / invalidées
-- VALIDE (décision utilisateur) : jalons jouables réguliers, remontée mort/résurrection avant contenu biomes, scope Miroir à 2 paramètres, placeholders systématiques.
-- EN ATTENTE : alignement du design document v3 sur le scope réduit du Miroir (2 vs 4 paramètres) — proposé, pas encore exécuté, pas de réponse de l'utilisateur.
-- EN ATTENTE : validation de la Phase 0 en jeu (GUT + run complet) — reportée, toujours ouverte depuis la session précédente.
+- INVALIDE : la Phase 0 était considérée « juste à valider en jeu » -> découverte en lisant le code que le jeu **crashe** actuellement (3 appels à l'autoload supprimé `Inventory` toujours présents dans `ore_node.gd`, `enemy_base.gd`, `boss.gd`). Pivot : nouvelle section « Dette bloquante » en tête de `roadmap.md`, à corriger avant toute validation.
+- EN ATTENTE : validation de la Phase 0 en jeu — reste ouverte, désormais conditionnée à la correction de la dette Inventory.
+- EN ATTENTE : alignement du design document v3 sur le scope réduit du Miroir (2 vs 4 paramètres) — toujours pas exécuté.
 
 ## Prochaine étape exacte
-Valider Phase 0 en jeu (P1, inchangé). Si l'utilisateur le demande, aligner le design doc v3 sur le scope 2 paramètres du Miroir du Noyau.
+Corriger les 3 appels `Inventory` résiduels + supprimer `inventory.gd`, puis valider Phase 0 en jeu (GUT + run complet). Ensuite Phase 1 (matériaux typés).
 
 ## Question bloquante pour la session suivante
 Aucune

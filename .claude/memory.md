@@ -25,3 +25,17 @@ A=btn2, B=btn1, X=btn3, Y=btn0, LB=btn4, RB=btn5, ZL=btn6, ZR=btn7, Select=btn9,
 
 ## 2026-06-21 — Externalisation valeurs gameplay
 Toutes les valeurs numériques gameplay (stats, timings, physique, feel) doivent être dans les JSON de `game/data/`. Aucune constante numérique gameplay ne doit rester hardcodée dans les scripts GDScript. S'applique à `player.gd`, `boss.gd`, `enemy_base.gd` et tout nouveau script gameplay.
+
+## 2026-06-27 — Risques animation v2.1
+
+**Recalibrage spatial :** passer de 14x24 à 40x56 va impacter offsets, hitboxes et placement caméra. Valider que les collisions ne changent pas inopinément.
+
+**Qualité upscale :** si les nouveaux sprites sont juste des upscales des anciens, le résultat restera mauvais. Refaire réellement plutôt que scaler.
+
+**Ancrage frame d'attaque :** `player_attack` (48x56) est plus large que idle/run/jump (40x56). Préserver l'ancrage visuel pour éviter un déplacement apparent du personnage en attaque.
+
+**Mobs sans frames :** mobs n'ont qu'une seule image statique. Architecture `animation_driver.gd` doit accepter animations à une frame (pas de crash, pas de boucle mal gérée).
+
+**Boss pas encore spritté :** boss une seule image = architecture `animation_driver.gd` doit être 100% prête avant production des frames boss. Pas de "test pendant la génération".
+
+**Ne pas mélanger timing :** durées attaque/invulnérabilité/stun/dégâts restent dans JSON gameplay, pas en dur dans animation. Animation = pur visuel, gameplay = pur gameplay.

@@ -1,3 +1,12 @@
+## v1.17 — 2026-07-02
+
+### Modifié
+- `roadmap.md` : détaillée intégralement pour implémentation directe — carte du code (autoloads, fichiers/lignes clés, schéma JSON actuel), schémas JSON cibles par phase, choix d'implémentation tranchés (génération biome 1 réutilisant le format `level.json` ; persistance de biome à la résurrection via scène conservée en mémoire). Scope et ordre des phases inchangés.
+- `game_art/roadmap_editeur.md` : détaillée de la même façon — état réel des fichiers de l'éditeur, diagnostic priorisé du bug de rendu gris, plan de sauvegarde JSON sûre et spécification de l'audit.
+
+### Corrigé
+- Dette bloquante Phase 0 identifiée (non corrigée) : 3 appels résiduels à l'autoload supprimé `Inventory` (`ore_node.gd`, `enemy_base.gd`, `boss.gd`) font crasher le jeu. Documentée en tête de `roadmap.md`.
+
 ## v1.16 — 2026-07-02
 
 ### Ajouté
