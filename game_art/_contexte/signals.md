@@ -2,35 +2,39 @@
 
 ## Actions ouvertes
 
-- [P1] Phase 2 : débugger rendu gris de l'éditeur Godot.
-  fait quand: game_art/editeur/main.tscn se lance et affiche galerie + preview animée.
-  réf: game_art/editeur/main.gd (UI créée programmatiquement dans _ready) — suspect : Control anchor ou ordre init.
+- [P2] Phase 2.2 : compléter la visualisation (infos frame, fond damier, état
+  play/pause visible, gestion textures manquantes).
+  fait quand: preview affiche frame/total + taille + fps + loop, fond damier visible,
+  bouton II/> reflète l'état, PNG manquant affiche damier magenta + warning console.
+  réf: game_art/editeur/main.gd, game_art/roadmap_editeur.md (section 2.2).
 
 ## Blocages
 
 ## Dernière session
 
-# Session du 2026-06-27
+# Session du 2026-07-03
 
 ## Décisions prises
-- Migration complète spritesheets reportée après éditeur fonctionnel (re-génération art via Codex).
-- Phase 2 démarrée : UI éditeur créée programmatiquement dans main.gd (pas de tscn complexe).
+- Aucune décision structurante nouvelle (session de correction de bugs bloquants).
 
 ## Livrables produits ou modifiés
-- game/scripts/animation_driver.gd : étendu Phase 1 (sheet + AtlasTexture, rétro-compatible PNG)
-- game_art/assets/player/player_run_sheet.png : spritesheet 28×24 créé
-- game_art/data/animations.json : état run player migré vers format spritesheet
-- game_art/editeur/animation_driver.gd : version éditeur avec _editor_path()
-- game_art/editeur/main.gd : UI programmatique (galerie + preview 200×200 + toolbar zoom/playback)
-- game_art/editeur/main.tscn : scène racine minimale
+- game_art/editeur/main.gd : `class_name AnimationDriverEditor` remplacé par
+  `preload()` + typage sur le script préchargé (robuste sans cache `.godot/`) ;
+  `HSplitContainer` unique (3 enfants, non supporté) remplacé par deux
+  `HSplitContainer` imbriqués (galerie | (preview | inspecteur)).
 
 ## Hypothèses validées / invalidées
-- VALIDÉ : animation_driver.gd lit sheet+AtlasTexture, rendu run correct en jeu.
-- EN ATTENTE : éditeur Godot — fenêtre s'ouvre mais reste grise, bug UI non résolu.
+- VALIDÉ : le rendu gris venait d'une erreur de parse GDScript (`class_name` non
+  résolu sans cache `.godot/` généré par l'éditeur Godot), pas d'un problème d'anchors.
+- VALIDÉ : `HSplitContainer` ne gère proprement que 2 enfants ; le 3e panneau
+  (inspecteur) se superposait au premier (galerie).
+- INVALIDE : hypothèse anchors du VBoxContainer racine — déjà correctement
+  configurés (anchor_right/bottom = 1.0) avant cette session.
 
 ## Prochaine étape exacte
-Ouvrir game_art/editeur/main.gd, diagnostiquer pourquoi _ready() ne rend pas l'UI
-(piste : Control sans anchor_right/bottom = 1.0 dans la tscn, ou set_anchors_preset appelé avant add_child).
+Phase 2.2 : ajouter le label d'infos de frame sous la preview, le fond damier,
+l'état play/pause visible sur le bouton, et le placeholder magenta pour textures
+manquantes (voir roadmap_editeur.md section 2.2).
 
 ## Question bloquante pour la session suivante
 Aucune

@@ -1,12 +1,13 @@
-extends Control
+extends VBoxContainer
 
 const ANIM_CONFIG := "res://data/animations.json"
+const AnimationDriverEditorScript := preload("res://editeur/animation_driver.gd")
 
 var _entity_list: ItemList
 var _state_list: ItemList
 var _preview_container: SubViewportContainer
 var _viewport: SubViewport
-var _driver: AnimationDriverEditor
+var _driver: AnimationDriverEditorScript
 var _entities: Dictionary = {}
 var _current_entity := ""
 var _paused := false
@@ -17,19 +18,20 @@ func _ready() -> void:
 	_load_entities()
 
 func _build_ui() -> void:
-	var vbox := VBoxContainer.new()
-	vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(vbox)
+	_build_toolbar(self)
 
-	_build_toolbar(vbox)
+	var hsplit_outer := HSplitContainer.new()
+	hsplit_outer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	add_child(hsplit_outer)
 
-	var hsplit := HSplitContainer.new()
-	hsplit.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	vbox.add_child(hsplit)
+	_build_gallery_panel(hsplit_outer)
 
-	_build_gallery_panel(hsplit)
-	_build_preview_panel(hsplit)
-	_build_inspector_panel(hsplit)
+	var hsplit_inner := HSplitContainer.new()
+	hsplit_inner.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hsplit_outer.add_child(hsplit_inner)
+
+	_build_preview_panel(hsplit_inner)
+	_build_inspector_panel(hsplit_inner)
 
 func _build_toolbar(parent: Control) -> void:
 	var bar := HBoxContainer.new()
@@ -106,7 +108,7 @@ func _build_preview_panel(parent: Control) -> void:
 	_viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
 	_preview_container.add_child(_viewport)
 
-	_driver = AnimationDriverEditor.new()
+	_driver = AnimationDriverEditorScript.new()
 	_driver.position = Vector2(100, 100)
 	_viewport.add_child(_driver)
 

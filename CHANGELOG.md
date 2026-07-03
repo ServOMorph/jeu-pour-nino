@@ -1,3 +1,11 @@
+## v1.18 — 2026-07-03
+
+### Corrigé
+- `game_art/editeur/main.gd` : rendu gris de l'éditeur résolu — `class_name AnimationDriverEditor`
+  (non résolu sans cache `.godot/`) remplacé par `preload()` + typage sur le script préchargé.
+- `game_art/editeur/main.gd` : chevauchement des panneaux galerie/inspecteur résolu —
+  `HSplitContainer` unique à 3 enfants (non supporté) remplacé par deux `HSplitContainer` imbriqués.
+
 ## v1.17 — 2026-07-02
 
 ### Modifié

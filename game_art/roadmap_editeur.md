@@ -32,7 +32,7 @@ et détecter les sprites manquants ou orphelins. Pas d'édition pixel par pixel
   (`_build_ui()`). `main.tscn` ne contient que le nœud racine + script. Conserver
   ce principe (pas de layout dans le .tscn).
 
-## État des lieux (2026-07-02)
+## État des lieux (2026-07-03)
 
 ### Fait
 - **Phase 0** ✅ : `project.godot` créé, assets migrés dans `game_art/assets/`,
@@ -41,6 +41,12 @@ et détecter les sprites manquants ou orphelins. Pas d'édition pixel par pixel
 - **Phase 1** ✅ : `game/scripts/animation_driver.gd` (jeu) supporte `sheet`/`frame_size`/
   indices via AtlasTexture, rétro-compatible liste de PNG. État `run` du player migré
   (`player_run_sheet.png` 28×24, `frame_size` [14, 24], frames [0, 1]). Validé en jeu.
+- **Phase 2.1** ✅ : rendu gris corrigé. Cause : `class_name AnimationDriverEditor` non
+  résolu (cache `.godot/` absent) → erreur de parse GDScript → `main.gd` ne s'exécutait
+  jamais. Correctif : `preload()` du script + typage dessus. Chevauchement visuel
+  labels galerie/inspecteur corrigé : `HSplitContainer` unique à 3 enfants (non
+  supporté) remplacé par deux `HSplitContainer` imbriqués. Validé par capture d'écran :
+  toolbar, galerie (4 entités, jusqu'à 7 états), preview animée, 3 panneaux distincts.
 
 ### Fichiers de l'éditeur existants
 | Fichier | Contenu actuel |
@@ -49,9 +55,8 @@ et détecter les sprites manquants ou orphelins. Pas d'édition pixel par pixel
 | `editeur/main.gd` | UI complète programmatique : toolbar (zoom x1/x3/x6/x8, boutons \|< II/> >\|), HSplit 3 panneaux (galerie entité+état / preview SubViewport 200×200 / inspecteur placeholder), chargement `animations.json`, sélection entité/état → `_driver.play_state()`, pause, frame par frame. |
 | `editeur/animation_driver.gd` | `AnimationDriverEditor` (extends AnimatedSprite2D, `class_name`) : reconstruit un `SpriteFrames` depuis `animations.json` (sheet AtlasTexture + fallback PNG), applique offset, traduit les chemins jeu→éditeur, charge les textures hors import. |
 
-### Bug bloquant connu : fenêtre grise au lancement
-La fenêtre s'ouvre mais rien ne s'affiche (fond gris uniforme = rien n'est dessiné,
-pas même les Labels/Boutons → l'UI n'est jamais construite → `main.gd` ne s'exécute pas).
+### Bug bloquant connu : fenêtre grise au lancement — RÉSOLU (2026-07-03)
+Voir Phase 2.1 ci-dessus.
 
 ### Assets réels (à date)
 - `assets/player/` : idle, idle_v2, jump, attack, run1, run2 (PNG unitaires) + `player_run_sheet.png`.
@@ -111,7 +116,7 @@ Règles :
 
 ### Phase 2 — Éditeur : visualisation (EN COURS)
 
-#### 2.1 Débugger le rendu gris (bloquant, à faire en premier)
+#### 2.1 Débugger le rendu gris (bloquant, à faire en premier) ✅
 
 Diagnostic — lancer Godot avec sortie console visible et lire les erreurs :
 ```

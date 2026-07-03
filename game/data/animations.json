@@ -14,10 +14,9 @@
         "fps": 8.0,
         "loop": true,
         "offset": [0.0, 0.0],
-        "frames": [
-          "res://assets/sprites/player/player_run1.png",
-          "res://assets/sprites/player/player_run2.png"
-        ]
+        "sheet": "res://assets/sprites/player/player_run_sheet.png",
+        "frame_size": [14, 24],
+        "frames": [0, 1]
       },
       "jump": {
         "fps": 1.0,
