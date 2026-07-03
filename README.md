@@ -5,7 +5,7 @@ Jeu de plateforme/action pixel art fait pour Nino. Un run court dans le biome 1,
 ## Lancer le jeu
 
 ```
-python run.py
+python run_game.py
 ```
 
 Nécessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ouvrir `game/project.godot` dans l'éditeur et appuyer sur **F5**.
@@ -41,7 +41,9 @@ Nécessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ou
 
 ```
 .
-├── run.py              # Lance le jeu directement
+├── run_game.py         # Lance le jeu directement
+├── run_editeur.py      # Lance l'éditeur game_art
+├── run_edit_game.py    # Lance jeu + éditeur côte à côte
 ├── roadmap.md          # Roadmap active v2.1
 ├── docs/               # GDD, profil joueur et charte graphique
 └── game/               # Projet Godot
@@ -63,8 +65,8 @@ Nécessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ou
 
 ## État actuel
 
-**v1.17.** `roadmap.md` détaillée pour implémentation directe (carte du code, schémas JSON cibles par phase) — scope et ordre des phases inchangés.
-Dette bloquante découverte : le jeu crashe actuellement (3 appels résiduels à l'autoload supprimé `Inventory`). À corriger avant de valider la Phase 0 en jeu. Prochaine étape : corriger cette dette, valider Phase 0, puis Phase 1 — matériaux typés.
+**v1.18.** Dette bloquante Phase 0 (3 appels `Inventory` résiduels) corrigée, ainsi qu'un bug additionnel (`preload()` sur PNG sans `.import`). Le jeu se lance et un run s'affiche sans crash ; validation complète (GUT, run manuel intégral) restant à faire.
+Sprite `player_idle` recalibré pour cohérence d'échelle. `game_art` : Phase 2.2 (infos frame, damier, play/pause, placeholder manquant) terminée. Prochaine étape : comparaison visuelle jeu/éditeur (`run_edit_game.py`), puis finir la validation Phase 0, puis Phase 1 — matériaux typés.
 
 ## Roadmap
 

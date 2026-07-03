@@ -34,7 +34,7 @@ Règle absolue maintenue : aucune valeur numérique gameplay hardcodée. Tout da
 - `player.gd` (361 l.) : configs chargées depuis `player.json`, `weapons.json`, `armor.json`, `consumables.json`. Signal `died`. `_apply_equipment()` (player.gd:307) recalcule stats depuis `RunState.items` — liste d'épées hardcodée `["epee_fer", "epee_cuivre", "epee_bois"]` (player.gd:315). `damage_reduction` = modèle d'insertion des modificateurs (pour les cicatrices).
 - `boss.gd` (258 l.) : machine à états `enum State {SLEEP, IDLE, CHARGE, VOLLEY, SLAM_RISE, SLAM_FALL, PAUSE}`, config JSON par clé `"Boss"` dans `boss.json` (`_load_config()`), signaux `health_changed`/`died`, `activate()`. Modèle pour Gardiens (Phase 5) et base de la modularisation R3.
 - `enemy_base.gd` + `enemy_ground.gd`/`enemy_flyer.gd` : config `enemies.json`, signal `died(enemy)`.
-- `ore_node.gd` : constantes hardcodées `ORE_SIZE/ORE_HP/ORE_DROP/ORE_TEXTURE` (ore_node.gd:3-6) — à data-driver en Phase 1.
+- `ore_node.gd` : constantes hardcodées `ORE_SIZE/ORE_HP/ORE_DROP` (ore_node.gd:3-5) — à data-driver en Phase 1. Texture chargée en runtime via `ORE_TEXTURE_PATH` (plus de `preload`, cf. dette bloquante).
 - `craft_menu.gd` (187 l.) : lit `recipes.json`, monnaie unique (`recipe["cost"]` vs `RunState.resources`), `_is_recipe_obsolete()` hardcodé épées (craft_menu.gd:181-187). UI programmatique en coordonnées viewport 480×270.
 - `hud.gd` : s'abonne à `RunState.resources_changed` / `coins_changed` (hud.gd:61-70).
 
@@ -46,7 +46,7 @@ GUT 9.7.0 dans `game/addons/gut/`. Tests dans `game/tests/` : `test_run_state.gd
 ```
 D:\tmp\godot45\Godot_v4.5-stable_win64.exe --headless --path game -s res://addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
 ```
-Lancement jeu : `python run.py` (sync game_art puis Godot).
+Lancement jeu : `python run_game.py` (sync game_art puis Godot).
 
 ### Conventions
 - Indentation tabs, GDScript typé (`:=`, signaux typés), UI programmatique (pas de layout dans les .tscn au-delà du nœud racine).
@@ -56,14 +56,17 @@ Lancement jeu : `python run.py` (sync game_art puis Godot).
 
 ---
 
-## ⚠ Dette bloquante Phase 0 (à corriger avant toute autre tâche)
+## ⚠ Dette bloquante Phase 0 (partiellement corrigée le 2026-07-03)
 
-La migration `Inventory` → `RunState` est incomplète : l'autoload `Inventory` a été retiré de `project.godot` mais **trois appels subsistent** et crashent à l'exécution (identifiant inconnu) :
-- `ore_node.gd:42` — `Inventory.add(ORE_DROP)` → `RunState.add(ORE_DROP)` (crash au premier minerai cassé).
-- `enemy_base.gd:107` — `Inventory.add_coins(coin_reward)` → `RunState.add_coins(...)` (crash à la première mort d'ennemi).
-- `boss.gd:255` — `Inventory.add_coins(coin_reward)` → `RunState.add_coins(...)` (crash à la mort du boss).
+La migration `Inventory` → `RunState` était incomplète : l'autoload `Inventory` avait été retiré de `project.godot` mais trois appels subsistaient et crashaient à l'exécution. **Corrigé** :
+- `ore_node.gd:42` — `Inventory.add(ORE_DROP)` → `RunState.add(ORE_DROP)`.
+- `enemy_base.gd:107` — `Inventory.add_coins(coin_reward)` → `RunState.add_coins(...)`.
+- `boss.gd:255` — `Inventory.add_coins(coin_reward)` → `RunState.add_coins(...)`.
+- Bonus (bloquait aussi le démarrage) : `ore_node.gd`/`workbench.gd` chargeaient leur texture via `const := preload(...)`, qui échoue sans `.import` généré. Remplacé par chargement runtime `Image.load_from_file` (même convention que `animation_driver.gd`).
 
-Corriger les trois, supprimer `game/scripts/inventory.gd` (copie morte de `run_state.gd`, plus aucun usage légitime), vérifier `grep -rn "Inventory" game/scripts` = zéro résultat, puis valider la Phase 0 : GUT vert + un run manuel complet (miner, crafter, tuer des ennemis, battre le boss, relancer le jeu → `MetaState` conservé). C'est le critère « fait quand » de la Phase 0 resté ouvert.
+`grep -rn "Inventory" game/scripts` = zéro résultat. Vérifié : le niveau se charge et un run s'affiche sans erreur console (screenshot manuel).
+
+**Reste à faire** : `game/scripts/inventory.gd` toujours présent (pas supprimé) ; 20 tests GUT non relancés ; run manuel complet (miner, crafter, tuer des ennemis, battre le boss, relancer → `MetaState` conservé) non exécuté intégralement — seul le chargement initial du niveau a été vérifié visuellement.
 
 ---
 

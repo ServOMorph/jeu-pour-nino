@@ -8,10 +8,10 @@ Jeu de plateforme/action pixel art fait pour Nino. Roguelite : exploration de bi
 - GDScript
 
 ## État actuel (réécrit intégralement à chaque /close)
-v1.17. `roadmap.md` et `game_art/roadmap_editeur.md` détaillées pour implémentation directe (Sonnet) : carte du code, schémas JSON cibles, choix d'implémentation tranchés — scope et ordre des phases inchangés.
-Découverte bloquante en analysant le code : le jeu crashe actuellement (3 appels résiduels à l'autoload supprimé `Inventory` dans `ore_node.gd`, `enemy_base.gd`, `boss.gd`). Nouvelle section « Dette bloquante » en tête de `roadmap.md`.
-Prochaine étape jeu : corriger la dette Inventory, valider Phase 0 en jeu (GUT + run complet), puis Phase 1 (matériaux typés).
-Zone game_art : bug de rendu gris de l'éditeur diagnostiqué (suspect n°1 : `class_name` non résolu en lancement `--path` sans indexation préalable) — correctif proposé dans `game_art/roadmap_editeur.md`, pas encore appliqué.
+v1.18. Dette bloquante Phase 0 (3 appels `Inventory` résiduels) corrigée, plus un bug additionnel découvert au passage (`preload()` sur PNG sans `.import` dans `ore_node.gd`/`workbench.gd`). Le niveau se charge et un run s'affiche sans crash, mais la validation complète (GUT, run manuel intégral, suppression `inventory.gd`) reste à faire.
+Zone game_art : Phase 2.1 (rendu gris) et 2.2 (infos frame, damier, play/pause, placeholder manquant) et 2.4 (sync.py assaini) terminées et validées visuellement. Reste 2.3 (comparaison jeu/éditeur côte à côte) — outillé via `run_edit_game.py` (racine), pas encore exécutée.
+Sprite `player_idle` recalibré (40x56 → 14x24) pour cohérence d'échelle avec `run`/`jump`.
+Prochaine étape jeu : Phase 2.3 game_art, puis finir la validation Phase 0, puis Phase 1 (matériaux typés).
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
 - 2026-06-27 : game_art/ = source de vérité sprites/animations ; sync.py → game/ ; zone jeu ne gère plus les sprites.
@@ -23,3 +23,4 @@ Zone game_art : bug de rendu gris de l'éditeur diagnostiqué (suspect n°1 : `c
 - 2026-07-02 : Objectif de couverture de tests 85 % sur la logique data-driven/état ; jalon de refacto R1.5 ajouté après Phase 4.
 - 2026-07-02 : Phase 5 — persistance de l'état du biome à la résurrection tranchée : scène biome conservée en mémoire (detach/reattach) plutôt que sérialisation complète, jugée plus simple et moins risquée.
 - 2026-07-02 : Dette bloquante identifiée — 3 appels résiduels à `Inventory` (autoload supprimé) font crasher le jeu ; correction requise avant validation Phase 0.
+- 2026-07-03 : Convention confirmée — aucun `.import` sous `game/assets/sprites/` ; toute texture PNG s'y charge en runtime (`Image.load_from_file`), jamais via `preload()` direct (sinon crash au lancement sans indexation éditeur préalable).

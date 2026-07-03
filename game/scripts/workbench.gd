@@ -4,7 +4,7 @@ signal interact_requested
 
 const SIZE := Vector2(20, 18)
 const ZONE_SIZE := Vector2(60, 50)
-const WORKBENCH_TEXTURE := preload("res://assets/sprites/objects/workbench.png")
+const WORKBENCH_TEXTURE_PATH := "res://assets/sprites/objects/workbench.png"
 
 var _in_range := false
 var _prompt: Label
@@ -20,7 +20,9 @@ func _ready() -> void:
 	add_child(shape)
 
 	var body_vis := Sprite2D.new()
-	body_vis.texture = WORKBENCH_TEXTURE
+	var image := Image.load_from_file(ProjectSettings.globalize_path(WORKBENCH_TEXTURE_PATH))
+	if image != null and not image.is_empty():
+		body_vis.texture = ImageTexture.create_from_image(image)
 	add_child(body_vis)
 
 	var zone := Area2D.new()

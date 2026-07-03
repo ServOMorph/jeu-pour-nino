@@ -3,7 +3,7 @@ extends StaticBody2D
 const ORE_SIZE := Vector2(14, 14)
 const ORE_HP := 3
 const ORE_DROP := 1
-const ORE_TEXTURE := preload("res://assets/sprites/objects/ore_copper.png")
+const ORE_TEXTURE_PATH := "res://assets/sprites/objects/ore_copper.png"
 
 var _hp := ORE_HP
 var _visual: Sprite2D
@@ -19,7 +19,9 @@ func _ready() -> void:
 	add_child(shape)
 
 	_visual = Sprite2D.new()
-	_visual.texture = ORE_TEXTURE
+	var image := Image.load_from_file(ProjectSettings.globalize_path(ORE_TEXTURE_PATH))
+	if image != null and not image.is_empty():
+		_visual.texture = ImageTexture.create_from_image(image)
 	add_child(_visual)
 
 	var hurtbox := Area2D.new()
@@ -39,7 +41,7 @@ func take_damage(amount: int, _knockback: Vector2) -> void:
 	_burst_particles(4, false)
 	AudioManager.play("mine")
 	if _hp <= 0:
-		Inventory.add(ORE_DROP)
+		RunState.add(ORE_DROP)
 		_burst_particles(10, true)
 		AudioManager.play("mine_break")
 		queue_free()

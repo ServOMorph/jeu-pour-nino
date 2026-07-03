@@ -252,7 +252,7 @@ func _die() -> void:
 	visual.modulate = Color(0.3, 0.2, 0.35)
 	_update_visual()
 	if coin_reward > 0:
-		Inventory.add_coins(coin_reward)
+		RunState.add_coins(coin_reward)
 	AudioManager.play("victory")
 	died.emit()
 	queue_free()

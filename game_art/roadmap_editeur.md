@@ -36,7 +36,7 @@ et détecter les sprites manquants ou orphelins. Pas d'édition pixel par pixel
 
 ### Fait
 - **Phase 0** ✅ : `project.godot` créé, assets migrés dans `game_art/assets/`,
-  `animations.json` dans `game_art/data/`, `sync.py` opérationnel et branché dans `run.py`,
+  `animations.json` dans `game_art/data/`, `sync.py` opérationnel et branché dans `run_game.py`,
   jeu validé identique après migration.
 - **Phase 1** ✅ : `game/scripts/animation_driver.gd` (jeu) supporte `sheet`/`frame_size`/
   indices via AtlasTexture, rétro-compatible liste de PNG. État `run` du player migré
@@ -161,18 +161,18 @@ au centre. Aucune erreur dans la console.
 
 Le gros de la galerie/preview existe déjà dans `main.gd`. Reste :
 
-- [ ] **Affichage des infos de frame** : Label sous la preview :
+- [x] **Affichage des infos de frame** : Label sous la preview :
       `frame courante / total — taille frame (px jeu) — fps — loop`.
       Taille : si `sheet`, lire `frame_size` du JSON ; sinon `texture.get_size()` de la
       frame courante. Mettre à jour via le signal `frame_changed` d'AnimatedSprite2D.
-- [ ] **Fond de preview** : ajouter derrière le sprite un damier de contraste
+- [x] **Fond de preview** : ajouter derrière le sprite un damier de contraste
       (TextureRect avec petite texture damier générée en code 2×2 px répétée, ou
       ColorRect sombre) pour juger les contours — le fond transparent actuel rend
       sur le gris fenêtre.
-- [ ] **État play/pause visible** : le bouton `II / >` doit refléter l'état (texte `II`
+- [x] **État play/pause visible** : le bouton `II / >` doit refléter l'état (texte `II`
       quand ça joue, `>` quand pausé). Reprendre la lecture après frame-par-frame remet
       `speed_scale = 1.0`.
-- [ ] **Gestion des textures manquantes** : si `_load_tex()` retourne null (PNG absent),
+- [x] **Gestion des textures manquantes** : si `_load_tex()` retourne null (PNG absent),
       afficher la frame en damier magenta (texture placeholder générée) au lieu de
       l'ignorer silencieusement, et logger `push_warning("sprite manquant: " + path)`.
       C'est la première brique de l'audit (Phase 4).
@@ -184,7 +184,7 @@ Le gros de la galerie/preview existe déjà dans `main.gd`. Reste :
 
 #### 2.3 Vérification visuelle contre le jeu
 
-- [ ] Lancer le jeu (`python run.py`) et l'éditeur côte à côte : `player.run` doit avoir
+- [ ] Lancer le jeu (`python run_game.py`) et l'éditeur côte à côte : `player.run` doit avoir
       le même timing (8 fps, 2 frames) et le même rendu pixel (nearest, pas de flou).
       Le zoom x1 éditeur = taille pixel jeu 1:1.
 
@@ -194,10 +194,10 @@ Le gros de la galerie/preview existe déjà dans `main.gd`. Reste :
 y compris `from_reference/`, `generated_raw/`, `sprite_contact_sheet.png` et les
 fichiers `.import` du projet éditeur (qui polluent le projet jeu).
 
-- [ ] Dans `sync.py`, exclure de la copie : dossiers `from_reference`, `generated_raw`,
+- [x] Dans `sync.py`, exclure de la copie : dossiers `from_reference`, `generated_raw`,
       tout fichier `*.import`, `sprite_contact_sheet.png` et
       `sprite_generation_manifest.json`. Utiliser `shutil.copytree(..., ignore=shutil.ignore_patterns(...))`.
-- [ ] Vérifier après sync que le jeu tourne toujours (`python run.py`) et que
+- [x] Vérifier après sync que le jeu tourne toujours (`python run_game.py`) et que
       `game/assets/sprites/` ne contient plus les dossiers de référence.
 
 #### Fait quand (Phase 2)
@@ -256,7 +256,7 @@ ne reflète pas les éditions non sauvées).
 #### 3.3 Tests manuels de bout en bout
 
 - [ ] Modifier `player.run` fps 8→4, sauver, relancer l'éditeur : la valeur persiste.
-- [ ] `python sync.py` puis `python run.py` : le jeu reflète le nouveau timing.
+- [ ] `python sync.py` puis `python run_game.py` : le jeu reflète le nouveau timing.
 - [ ] Vérifier que le format legacy (états à liste de chemins) survit intact à une
       sauvegarde (pas de conversion accidentelle).
 
@@ -352,7 +352,7 @@ dans l'éditeur → audit vert → sync → validation en jeu » est documenté 
 | --- | --- |
 | Lancer l'éditeur | `python run_editeur.py` (console visible pour les erreurs GDScript) |
 | Ouvrir le projet éditeur dans Godot | `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --path game_art --editor` |
-| Lancer le jeu (sync incluse) | `python run.py` |
+| Lancer le jeu (sync incluse) | `python run_game.py` |
 | Sync seule | `python sync.py` |
 
 ## Risques / angles morts

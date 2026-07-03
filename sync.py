@@ -12,11 +12,19 @@ DST_SPRITES = ROOT / "game" / "assets" / "sprites"
 SRC_ANIM    = ROOT / "game_art" / "data" / "animations.json"
 DST_ANIM    = ROOT / "game" / "data" / "animations.json"
 
+IGNORE = shutil.ignore_patterns(
+    "from_reference",
+    "generated_raw",
+    "*.import",
+    "sprite_contact_sheet.png",
+    "sprite_generation_manifest.json",
+)
+
 def sync():
     if SRC_SPRITES.exists():
         if DST_SPRITES.exists():
             shutil.rmtree(DST_SPRITES)
-        shutil.copytree(SRC_SPRITES, DST_SPRITES)
+        shutil.copytree(SRC_SPRITES, DST_SPRITES, ignore=IGNORE)
         print(f"[sync] {SRC_SPRITES} -> {DST_SPRITES}")
 
     if SRC_ANIM.exists():

@@ -17,6 +17,9 @@ func play_state(state: String) -> void:
 	_apply_offset(cfg)
 	play(state)
 
+func get_current_state_cfg() -> Dictionary:
+	return _state_configs.get(animation, {})
+
 func _build_sprite_frames() -> void:
 	var file := FileAccess.open(ANIMATION_CONFIG, FileAccess.READ)
 	if file == null:
@@ -45,18 +48,25 @@ func _build_sprite_frames() -> void:
 			var fw := int(fsz[0]) if fsz is Array and fsz.size() >= 2 else 16
 			var fh := int(fsz[1]) if fsz is Array and fsz.size() >= 2 else 16
 			var tex := _load_tex(_editor_path(sheet))
-			if tex is Texture2D and frames is Array:
-				var cols := tex.get_width() / fw
-				for idx in frames:
-					var atlas := AtlasTexture.new()
-					atlas.atlas = tex
-					atlas.region = Rect2(int(idx) % cols * fw, int(idx) / cols * fh, fw, fh)
-					sprite_frames.add_frame(state_name, atlas)
+			if frames is Array:
+				if tex is Texture2D:
+					var cols := tex.get_width() / fw
+					for idx in frames:
+						var atlas := AtlasTexture.new()
+						atlas.atlas = tex
+						atlas.region = Rect2(int(idx) % cols * fw, int(idx) / cols * fh, fw, fh)
+						sprite_frames.add_frame(state_name, atlas)
+				else:
+					var placeholder := _placeholder_tex(fw, fh)
+					for idx in frames:
+						sprite_frames.add_frame(state_name, placeholder)
 		elif frames is Array:
 			for fp in frames:
 				var tex := _load_tex(_editor_path(String(fp)))
 				if tex is Texture2D:
 					sprite_frames.add_frame(state_name, tex)
+				else:
+					sprite_frames.add_frame(state_name, _placeholder_tex(16, 16))
 
 func _editor_path(path: String) -> String:
 	return path.replace("res://assets/sprites/", "res://assets/")
@@ -69,5 +79,14 @@ func _apply_offset(cfg: Dictionary) -> void:
 func _load_tex(path: String) -> Texture2D:
 	var img := Image.load_from_file(ProjectSettings.globalize_path(path))
 	if img == null or img.is_empty():
+		push_warning("sprite manquant: " + path)
 		return null
+	return ImageTexture.create_from_image(img)
+
+func _placeholder_tex(w: int, h: int) -> Texture2D:
+	var img := Image.create(max(w, 1), max(h, 1), false, Image.FORMAT_RGB8)
+	for y in img.get_height():
+		for x in img.get_width():
+			var even := ((x / 4) + (y / 4)) % 2 == 0
+			img.set_pixel(x, y, Color.MAGENTA if even else Color.BLACK)
 	return ImageTexture.create_from_image(img)

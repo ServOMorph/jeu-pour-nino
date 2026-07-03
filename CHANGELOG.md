@@ -1,3 +1,21 @@
+## v1.19 — 2026-07-03
+
+### Ajouté
+- `run_edit_game.py` : lance jeu + éditeur côte à côte (gauche/droite, plein écran partagé) pour la comparaison visuelle Phase 2.3 de `game_art`.
+
+### Modifié
+- `run.py` renommé en `run_game.py` (clarifie le rôle face à `run_editeur.py`/`run_edit_game.py`). Toutes les références documentaires mises à jour.
+
+### Corrigé
+- Dette bloquante Phase 0 : 3 appels résiduels à l'autoload supprimé `Inventory` migrés vers `RunState` (`ore_node.gd`, `enemy_base.gd`, `boss.gd`). Validation complète (GUT, run manuel intégral) restant à faire.
+- `ore_node.gd`/`workbench.gd` : `preload()` sur PNG sans `.import` généré (crash au démarrage d'une partie) remplacé par chargement runtime `Image.load_from_file`.
+- `game_art` : sprite `player_idle_v2.png` redimensionné (40x56 → 14x24) pour cohérence d'échelle avec `run`/`jump` ; offsets associés corrigés.
+- `game/project.godot` : fenêtre en mode fenêtré (`window/size/mode=0`) au lieu de plein écran.
+- `sync.py` : exclusion de `from_reference`, `generated_raw`, `*.import`, `sprite_contact_sheet.png`, `sprite_generation_manifest.json` de la copie vers `game/`.
+
+### Modifié
+- `game_art/editeur/main.gd`, `game_art/editeur/animation_driver.gd` : infos de frame, fond damier, état play/pause visible, placeholder magenta pour texture manquante (Phase 2.2 de `game_art/roadmap_editeur.md`).
+
 ## v1.18 — 2026-07-03
 
 ### Corrigé

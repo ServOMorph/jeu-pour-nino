@@ -8,6 +8,8 @@ var _state_list: ItemList
 var _preview_container: SubViewportContainer
 var _viewport: SubViewport
 var _driver: AnimationDriverEditorScript
+var _frame_info_label: Label
+var _btn_pause: Button
 var _entities: Dictionary = {}
 var _current_entity := ""
 var _paused := false
@@ -55,10 +57,10 @@ func _build_toolbar(parent: Control) -> void:
 	btn_prev.pressed.connect(_prev_frame)
 	bar.add_child(btn_prev)
 
-	var btn_pause := Button.new()
-	btn_pause.text = "II / >"
-	btn_pause.pressed.connect(_toggle_pause)
-	bar.add_child(btn_pause)
+	_btn_pause = Button.new()
+	_btn_pause.text = "II"
+	_btn_pause.pressed.connect(_toggle_pause)
+	bar.add_child(_btn_pause)
 
 	var btn_next := Button.new()
 	btn_next.text = ">|"
@@ -108,11 +110,30 @@ func _build_preview_panel(parent: Control) -> void:
 	_viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
 	_preview_container.add_child(_viewport)
 
+	var checker := TextureRect.new()
+	checker.texture = _build_checker_texture()
+	checker.stretch_mode = TextureRect.STRETCH_TILE
+	checker.size = Vector2(200, 200)
+	_viewport.add_child(checker)
+
 	_driver = AnimationDriverEditorScript.new()
 	_driver.position = Vector2(100, 100)
 	_viewport.add_child(_driver)
+	_driver.frame_changed.connect(_update_frame_info)
+
+	_frame_info_label = Label.new()
+	_frame_info_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	panel.add_child(_frame_info_label)
 
 	_set_zoom(3.0)
+
+func _build_checker_texture() -> ImageTexture:
+	var img := Image.create(16, 16, false, Image.FORMAT_RGB8)
+	for y in 16:
+		for x in 16:
+			var even := ((x / 8) + (y / 8)) % 2 == 0
+			img.set_pixel(x, y, Color(0.3, 0.3, 0.3) if even else Color(0.4, 0.4, 0.4))
+	return ImageTexture.create_from_image(img)
 
 func _build_inspector_panel(parent: Control) -> void:
 	var panel := VBoxContainer.new()
@@ -157,6 +178,8 @@ func _on_state_selected(index: int) -> void:
 	_driver.play_state(state)
 	_paused = false
 	_driver.speed_scale = 1.0
+	_btn_pause.text = "II"
+	_update_frame_info()
 
 func _set_zoom(z: float) -> void:
 	_zoom = z
@@ -165,6 +188,7 @@ func _set_zoom(z: float) -> void:
 func _toggle_pause() -> void:
 	_paused = not _paused
 	_driver.speed_scale = 0.0 if _paused else 1.0
+	_btn_pause.text = ">" if _paused else "II"
 
 func _prev_frame() -> void:
 	if _driver.sprite_frames == null or _driver.animation == "":
@@ -173,6 +197,8 @@ func _prev_frame() -> void:
 	_driver.frame = (_driver.frame - 1 + count) % count
 	_driver.speed_scale = 0.0
 	_paused = true
+	_btn_pause.text = ">"
+	_update_frame_info()
 
 func _next_frame() -> void:
 	if _driver.sprite_frames == null or _driver.animation == "":
@@ -181,3 +207,26 @@ func _next_frame() -> void:
 	_driver.frame = (_driver.frame + 1) % count
 	_driver.speed_scale = 0.0
 	_paused = true
+	_btn_pause.text = ">"
+	_update_frame_info()
+
+func _update_frame_info() -> void:
+	if _driver.sprite_frames == null or _driver.animation == "":
+		_frame_info_label.text = ""
+		return
+	var anim := _driver.animation
+	var total := _driver.sprite_frames.get_frame_count(anim)
+	var cfg := _driver.get_current_state_cfg()
+	var fps := float(cfg.get("fps", 1.0))
+	var loop := bool(cfg.get("loop", true))
+	var size := Vector2i.ZERO
+	var fsz: Variant = cfg.get("frame_size", null)
+	if fsz is Array and fsz.size() >= 2:
+		size = Vector2i(int(fsz[0]), int(fsz[1]))
+	else:
+		var tex := _driver.sprite_frames.get_frame_texture(anim, _driver.frame)
+		if tex != null:
+			size = tex.get_size()
+	_frame_info_label.text = "%d / %d — %dx%d px — %.1f fps — %s" % [
+		_driver.frame + 1, total, size.x, size.y, fps, "loop" if loop else "once"
+	]

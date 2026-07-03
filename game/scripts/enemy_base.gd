@@ -104,7 +104,7 @@ func _process(delta: float) -> void:
 func _die() -> void:
 	_dead = true
 	if coin_reward > 0:
-		Inventory.add_coins(coin_reward)
+		RunState.add_coins(coin_reward)
 	_update_visual()
 	died.emit(self)
 	queue_free()
