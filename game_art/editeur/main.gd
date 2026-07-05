@@ -6,6 +6,8 @@ const InspectorScript := preload("res://editeur/inspector.gd")
 
 var _entity_list: ItemList
 var _state_list: ItemList
+var _gallery_panel: Control
+var _inspector_panel: Control
 var _preview_container: SubViewportContainer
 var _viewport: SubViewport
 var _driver: AnimationDriverEditorScript
@@ -19,11 +21,19 @@ var _zoom := 3.0
 var _dirty := false
 
 const WINDOW_TITLE := "Editeur game_art"
+const BASE_PREVIEW_SIZE := 200.0
+const MIN_SIDE_PANEL_WIDTH := 140.0
+const MIN_PREVIEW_SIZE := 120.0
 
 func _ready() -> void:
 	_build_ui()
 	_load_entities()
 	_update_title()
+	_update_preview_size()
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_RESIZED:
+		_update_preview_size()
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and event.ctrl_pressed and event.keycode == KEY_S:
@@ -87,8 +97,9 @@ func _build_toolbar(parent: Control) -> void:
 
 func _build_gallery_panel(parent: Control) -> void:
 	var panel := VBoxContainer.new()
-	panel.custom_minimum_size = Vector2(180, 0)
+	panel.custom_minimum_size = Vector2(MIN_SIDE_PANEL_WIDTH, 0)
 	parent.add_child(panel)
+	_gallery_panel = panel
 
 	var lbl_e := Label.new()
 	lbl_e.text = "Entite"
@@ -113,9 +124,17 @@ func _build_preview_panel(parent: Control) -> void:
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	parent.add_child(panel)
 
+	var preview_scroll := ScrollContainer.new()
+	preview_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	preview_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	preview_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	preview_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	panel.add_child(preview_scroll)
+
 	var center := CenterContainer.new()
+	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	center.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	panel.add_child(center)
+	preview_scroll.add_child(center)
 
 	_preview_container = SubViewportContainer.new()
 	_preview_container.stretch = true
@@ -155,13 +174,23 @@ func _build_checker_texture() -> ImageTexture:
 
 func _build_inspector_panel(parent: Control) -> void:
 	var panel := VBoxContainer.new()
-	panel.custom_minimum_size = Vector2(200, 0)
+	panel.custom_minimum_size = Vector2(MIN_SIDE_PANEL_WIDTH, 0)
+	panel.size_flags_horizontal = Control.SIZE_FILL
 	parent.add_child(panel)
+	_inspector_panel = panel
+
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	panel.add_child(scroll)
 
 	_inspector = InspectorScript.new()
+	_inspector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_inspector.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_inspector.state_edited.connect(_on_state_edited)
-	panel.add_child(_inspector)
+	scroll.add_child(_inspector)
 
 func _load_entities() -> void:
 	var file := FileAccess.open(ANIM_CONFIG, FileAccess.READ)
@@ -217,7 +246,10 @@ func _on_state_edited(entity: String, state: String, _cfg: Dictionary) -> void:
 	_update_frame_info()
 
 func _update_title() -> void:
-	get_window().title = WINDOW_TITLE + (" *" if _dirty else "")
+	var window := get_window()
+	if window == null:
+		return
+	window.title = WINDOW_TITLE + (" *" if _dirty else "")
 
 func _save() -> void:
 	var tmp_path := ANIM_CONFIG + ".tmp"
@@ -239,8 +271,21 @@ func _save() -> void:
 
 func _set_zoom(z: float) -> void:
 	_zoom = z
-	_preview_container.custom_minimum_size = Vector2(200.0 * z, 200.0 * z)
 	_preview_container.stretch_shrink = int(z)
+	_update_preview_size()
+
+func _update_preview_size() -> void:
+	if _preview_container == null:
+		return
+	var target_size: float = BASE_PREVIEW_SIZE * _zoom
+	var side_width: float = MIN_SIDE_PANEL_WIDTH * 2.0
+	if _gallery_panel != null:
+		side_width = max(side_width, _gallery_panel.custom_minimum_size.x + MIN_SIDE_PANEL_WIDTH)
+	if _inspector_panel != null:
+		side_width = max(side_width, MIN_SIDE_PANEL_WIDTH + _inspector_panel.custom_minimum_size.x)
+	var available_width: float = size.x - side_width - 24.0
+	var preview_size: float = clampf(available_width, MIN_PREVIEW_SIZE, target_size)
+	_preview_container.custom_minimum_size = Vector2(preview_size, preview_size)
 
 func _toggle_pause() -> void:
 	_paused = not _paused

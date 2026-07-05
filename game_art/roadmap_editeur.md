@@ -276,10 +276,13 @@ toolbar). `_dirty` est mis à `true` sur chaque `state_edited` reçu de l'inspec
 
 #### 3.3 Tests manuels de bout en bout
 
-- [ ] Modifier `player.run` fps 8→4, sauver, relancer l'éditeur : la valeur persiste.
-- [ ] `python sync.py` puis `python run_game.py` : le jeu reflète le nouveau timing.
-- [ ] Vérifier que le format legacy (états à liste de chemins) survit intact à une
+- [x] Modifier `player.run` fps 8→4, sauver, relancer l'éditeur : la valeur persiste.
+- [x] `python sync.py` puis `python run_game.py` : le jeu reflète le nouveau timing.
+- [x] Vérifier que le format legacy (états à liste de chemins) survit intact à une
       sauvegarde (pas de conversion accidentelle).
+
+Validé manuellement le 2026-07-05. Validation complémentaire headless : `player.idle`
+reste sans `sheet`, avec `frames` sous forme de liste de chemins texte après sauvegarde.
 
 #### Fait quand
 Éditer fps/loop/offset/frames dans l'inspecteur se voit immédiatement dans la preview,

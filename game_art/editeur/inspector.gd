@@ -14,6 +14,8 @@ var _offset_y: SpinBox
 var _frame_size_x: SpinBox
 var _frame_size_y: SpinBox
 
+const NARROW_SPIN_WIDTH := 58.0
+
 func setup(entity: String, state: String, cfg: Dictionary, driver_ref: AnimatedSprite2D) -> void:
 	_entity = entity
 	_state = state
@@ -22,6 +24,7 @@ func setup(entity: String, state: String, cfg: Dictionary, driver_ref: AnimatedS
 	_rebuild()
 
 func _rebuild() -> void:
+	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	for child in get_children():
 		child.queue_free()
 
@@ -41,11 +44,14 @@ func _rebuild() -> void:
 
 func _build_fps_row() -> void:
 	var row := HBoxContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	add_child(row)
 	var lbl := Label.new()
 	lbl.text = "FPS"
 	row.add_child(lbl)
 	var spin := SpinBox.new()
+	spin.custom_minimum_size = Vector2(NARROW_SPIN_WIDTH, 0)
+	spin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	spin.min_value = 0.1
 	spin.max_value = 60.0
 	spin.step = 0.5
@@ -69,17 +75,21 @@ func _on_loop_toggled(pressed: bool) -> void:
 	_emit_edited()
 
 func _build_offset_row() -> void:
-	var row := HBoxContainer.new()
-	add_child(row)
 	var lbl := Label.new()
 	lbl.text = "Offset"
-	row.add_child(lbl)
+	add_child(lbl)
+
+	var row := HBoxContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	add_child(row)
 
 	var offset: Variant = _cfg.get("offset", [0.0, 0.0])
 	var ox := float(offset[0]) if offset is Array and offset.size() >= 2 else 0.0
 	var oy := float(offset[1]) if offset is Array and offset.size() >= 2 else 0.0
 
 	_offset_x = SpinBox.new()
+	_offset_x.custom_minimum_size = Vector2(NARROW_SPIN_WIDTH, 0)
+	_offset_x.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_offset_x.min_value = -128
 	_offset_x.max_value = 128
 	_offset_x.step = 1.0
@@ -88,6 +98,8 @@ func _build_offset_row() -> void:
 	row.add_child(_offset_x)
 
 	_offset_y = SpinBox.new()
+	_offset_y.custom_minimum_size = Vector2(NARROW_SPIN_WIDTH, 0)
+	_offset_y.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_offset_y.min_value = -128
 	_offset_y.max_value = 128
 	_offset_y.step = 1.0
@@ -100,17 +112,21 @@ func _on_offset_changed(_value: float) -> void:
 	_emit_edited()
 
 func _build_frame_size_row() -> void:
-	var row := HBoxContainer.new()
-	add_child(row)
 	var lbl := Label.new()
 	lbl.text = "Taille frame"
-	row.add_child(lbl)
+	add_child(lbl)
+
+	var row := HBoxContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	add_child(row)
 
 	var fsz: Variant = _cfg.get("frame_size", [16, 16])
 	var fw := int(fsz[0]) if fsz is Array and fsz.size() >= 2 else 16
 	var fh := int(fsz[1]) if fsz is Array and fsz.size() >= 2 else 16
 
 	_frame_size_x = SpinBox.new()
+	_frame_size_x.custom_minimum_size = Vector2(NARROW_SPIN_WIDTH, 0)
+	_frame_size_x.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_frame_size_x.min_value = 1
 	_frame_size_x.max_value = 512
 	_frame_size_x.step = 1
@@ -119,6 +135,8 @@ func _build_frame_size_row() -> void:
 	row.add_child(_frame_size_x)
 
 	_frame_size_y = SpinBox.new()
+	_frame_size_y.custom_minimum_size = Vector2(NARROW_SPIN_WIDTH, 0)
+	_frame_size_y.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_frame_size_y.min_value = 1
 	_frame_size_y.max_value = 512
 	_frame_size_y.step = 1
@@ -137,37 +155,47 @@ func _build_frames_section(is_sheet: bool) -> void:
 	add_child(lbl)
 
 	_frames_list = ItemList.new()
+	_frames_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_frames_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	add_child(_frames_list)
 
 	var frames: Variant = _cfg.get("frames", [])
 	if frames is Array:
 		for f in frames:
-			_frames_list.add_item(str(f))
+			var value := str(f)
+			_frames_list.add_item(_format_frame_label(value))
+			_frames_list.set_item_tooltip(_frames_list.item_count - 1, value)
 
-	var btn_row := HBoxContainer.new()
-	add_child(btn_row)
+	var btn_col := VBoxContainer.new()
+	btn_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	add_child(btn_col)
 
 	var btn_up := Button.new()
 	btn_up.text = "Monter"
+	btn_up.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	btn_up.pressed.connect(_move_frame.bind(-1))
-	btn_row.add_child(btn_up)
+	btn_col.add_child(btn_up)
 
 	var btn_down := Button.new()
 	btn_down.text = "Descendre"
+	btn_down.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	btn_down.pressed.connect(_move_frame.bind(1))
-	btn_row.add_child(btn_down)
+	btn_col.add_child(btn_down)
 
 	var btn_remove := Button.new()
 	btn_remove.text = "Retirer"
+	btn_remove.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	btn_remove.pressed.connect(_remove_frame)
-	btn_row.add_child(btn_remove)
+	btn_col.add_child(btn_remove)
 
 	if is_sheet:
 		var add_row := HBoxContainer.new()
+		add_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		add_child(add_row)
 
 		_add_index_spin = SpinBox.new()
+		_add_index_spin.custom_minimum_size = Vector2(NARROW_SPIN_WIDTH, 0)
+		_add_index_spin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		_add_index_spin.min_value = 0
 		var bound := 0
 		if _driver_ref != null and _driver_ref.has_method("get_sheet_frame_count"):
@@ -178,8 +206,14 @@ func _build_frames_section(is_sheet: bool) -> void:
 
 		var btn_add := Button.new()
 		btn_add.text = "Ajouter"
+		btn_add.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		btn_add.pressed.connect(_add_frame)
 		add_row.add_child(btn_add)
+
+func _format_frame_label(value: String) -> String:
+	if value.begins_with("res://"):
+		return value.get_file()
+	return value
 
 func _move_frame(delta: int) -> void:
 	var selected := _frames_list.get_selected_items()

@@ -65,8 +65,8 @@ Nécessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ou
 
 ## État actuel
 
-**v1.18.** Dette bloquante Phase 0 (3 appels `Inventory` résiduels) corrigée, ainsi qu'un bug additionnel (`preload()` sur PNG sans `.import`). Le jeu se lance et un run s'affiche sans crash ; validation complète (GUT, run manuel intégral) restant à faire.
-Sprite `player_idle` recalibré pour cohérence d'échelle. `game_art` : Phase 2 terminée (visualisation), Phase 3 en cours — inspecteur d'édition (fps/loop/offset/frames) et sauvegarde atomique implémentés et testés en headless. Reste la validation manuelle en conditions réelles (Phase 3.3), puis finir la validation Phase 0, puis Phase 1 — matériaux typés.
+**v1.22.** `game_art` : Phases 0, 1, 2 et 3 terminées. L'éditeur d'animations permet de visualiser, éditer et sauvegarder les métadonnées (fps/loop/offset/frame_size/frames), avec validation manuelle complète de la Phase 3.3 : persistance éditeur, sync vers le jeu, rendu en jeu et format legacy intact après sauvegarde. Prochaine étape `game_art` : Phase 4, audit des sprites et animations.
+Jeu : dette bloquante Phase 0 corrigée ; validation complète (GUT, run manuel intégral) encore à faire côté zone jeu.
 
 ## Roadmap
 

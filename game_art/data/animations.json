@@ -14,7 +14,7 @@
         ]
       },
       "run": {
-        "fps": 8.0,
+        "fps": 8.1,
         "loop": true,
         "offset": [
           0.0,

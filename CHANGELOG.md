@@ -1,3 +1,14 @@
+## v1.22 — 2026-07-05
+
+### Modifié
+- `game_art/roadmap_editeur.md` : Phase 3.3 validée après tests manuels de bout en bout.
+- `game_art/data/animations.json` et `game/data/animations.json` : `player.run.fps` conservé à 8.1 après validation utilisateur.
+- `README.md` et contexte `game_art` : état actuel mis à jour vers Phase 4.
+
+### Corrigé
+- `game_art/editeur/main.gd` : layout preview/inspecteur responsive en demi-écran et `_update_title()` robuste en test headless.
+- `game_art/editeur/inspector.gd` : panneau droit compact, sans dépendance au scroll horizontal.
+
 ## v1.21 — 2026-07-05
 
 ### Ajouté

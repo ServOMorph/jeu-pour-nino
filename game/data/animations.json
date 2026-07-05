@@ -5,23 +5,38 @@
       "idle": {
         "fps": 1.0,
         "loop": true,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/player/player_idle_v2.png"
         ]
       },
       "run": {
-        "fps": 8.0,
+        "fps": 8.1,
         "loop": true,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "sheet": "res://assets/sprites/player/player_run_sheet.png",
-        "frame_size": [14, 24],
-        "frames": [0, 1]
+        "frame_size": [
+          14.0,
+          24.0
+        ],
+        "frames": [
+          0.0,
+          1.0
+        ]
       },
       "jump": {
         "fps": 1.0,
         "loop": false,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/player/player_jump.png"
         ]
@@ -29,7 +44,10 @@
       "fall": {
         "fps": 1.0,
         "loop": false,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/player/player_jump.png"
         ]
@@ -37,7 +55,10 @@
       "attack": {
         "fps": 12.0,
         "loop": false,
-        "offset": [0.0, 2.0],
+        "offset": [
+          0.0,
+          2.0
+        ],
         "frames": [
           "res://assets/sprites/player/player_attack.png"
         ]
@@ -45,7 +66,10 @@
       "hurt": {
         "fps": 1.0,
         "loop": false,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/player/player_idle_v2.png"
         ]
@@ -53,7 +77,10 @@
       "dead": {
         "fps": 1.0,
         "loop": false,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/player/player_idle_v2.png"
         ]
@@ -66,7 +93,10 @@
       "idle": {
         "fps": 1.0,
         "loop": true,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/enemies/enemy_ground.png"
         ]
@@ -74,7 +104,10 @@
       "walk": {
         "fps": 4.0,
         "loop": true,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/enemies/enemy_ground.png"
         ]
@@ -82,7 +115,10 @@
       "hurt": {
         "fps": 1.0,
         "loop": false,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/enemies/enemy_ground.png"
         ]
@@ -90,7 +126,10 @@
       "dead": {
         "fps": 1.0,
         "loop": false,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/enemies/enemy_ground.png"
         ]
@@ -103,7 +142,10 @@
       "idle": {
         "fps": 1.0,
         "loop": true,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/enemies/enemy_flyer.png"
         ]
@@ -111,7 +153,10 @@
       "fly": {
         "fps": 6.0,
         "loop": true,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/enemies/enemy_flyer.png"
         ]
@@ -119,7 +164,10 @@
       "hurt": {
         "fps": 1.0,
         "loop": false,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/enemies/enemy_flyer.png"
         ]
@@ -127,7 +175,10 @@
       "dead": {
         "fps": 1.0,
         "loop": false,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/enemies/enemy_flyer.png"
         ]
@@ -140,7 +191,10 @@
       "sleep": {
         "fps": 1.0,
         "loop": true,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/enemies/boss_guardian.png"
         ]
@@ -148,7 +202,10 @@
       "idle": {
         "fps": 1.0,
         "loop": true,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/enemies/boss_guardian.png"
         ]
@@ -156,7 +213,10 @@
       "charge": {
         "fps": 8.0,
         "loop": true,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/enemies/boss_guardian.png"
         ]
@@ -164,7 +224,10 @@
       "volley": {
         "fps": 6.0,
         "loop": true,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/enemies/boss_guardian.png"
         ]
@@ -172,7 +235,10 @@
       "slam_rise": {
         "fps": 6.0,
         "loop": true,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/enemies/boss_guardian.png"
         ]
@@ -180,7 +246,10 @@
       "slam_fall": {
         "fps": 6.0,
         "loop": true,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/enemies/boss_guardian.png"
         ]
@@ -188,7 +257,10 @@
       "pause": {
         "fps": 1.0,
         "loop": true,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/enemies/boss_guardian.png"
         ]
@@ -196,7 +268,10 @@
       "hurt": {
         "fps": 1.0,
         "loop": false,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/enemies/boss_guardian.png"
         ]
@@ -204,7 +279,10 @@
       "dead": {
         "fps": 1.0,
         "loop": false,
-        "offset": [0.0, 0.0],
+        "offset": [
+          0.0,
+          0.0
+        ],
         "frames": [
           "res://assets/sprites/enemies/boss_guardian.png"
         ]

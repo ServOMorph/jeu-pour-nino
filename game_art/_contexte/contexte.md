@@ -12,10 +12,10 @@ pour visualiser, animer et auditer les sprites. Cible graphique : qualité Terra
 - Synchro vers jeu : sync.py à la racine projet (géré par zone jeu)
 
 ## État actuel
-Phases 0, 1, 2 terminées. Phase 3 en cours : inspecteur (3.1) et sauvegarde
-atomique (3.2) implémentés et testés en headless. Reste 3.3 : vérification
-manuelle en conditions réelles (édition via l'inspecteur, sync, jeu) — non
-automatisable, nécessite une session interactive dans l'éditeur Godot.
+Phases 0, 1, 2 et 3 terminées. Phase 3.3 validée manuellement le 2026-07-05 :
+édition via l'inspecteur, sauvegarde/rechargement, sync vers le jeu, rendu en jeu
+et survie du format legacy après sauvegarde. Prochaine étape : Phase 4, audit
+des sprites et animations.
 
 ## Décisions structurantes
 - game_art/ = racine du projet Godot éditeur (res:// pointe ici)
@@ -35,3 +35,6 @@ automatisable, nécessite une session interactive dans l'éditeur Godot.
   qui appelle directement les fonctions de `main.gd`/`inspector.gd` plutôt que de
   piloter l'OS — plus fiable qu'une automatisation pixel, voir
   `game_art/editeur/test_save_roundtrip.gd`.
+- L'inspecteur doit rester utilisable en demi-écran : panneau droit compact,
+  contrôles empilés si nécessaire, pas de dépendance à un scroll horizontal.
+- `player.run.fps` est validé à 8.1 depuis la clôture Phase 3.3 du 2026-07-05.
