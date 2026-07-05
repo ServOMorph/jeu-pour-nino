@@ -2,9 +2,12 @@
 
 ## Actions ouvertes
 
-- [P1] Phase 4.1 : créer/valider le manifest d'audit.
-  fait quand: `game_art/data/manifest.json` existe avec entités/états attendus et tailles de frames validées.
-  réf: game_art/roadmap_editeur.md (section 4.1), game_art/data/animations.json, game_art/backlog_art.md.
+- [P1] Enrichir `game_art/audit_report.md`.
+  fait quand: le rapport exporté est regroupé par entité puis par état, avec résumé initial `error` / `warning` / `info`.
+  réf: game_art/roadmap_editeur.md (section 4.3), game_art/editeur/main.gd, game_art/audit_report.md.
+- [P2] Phase 5.1 : comparaison côte à côte sprite produit / référence.
+  fait quand: un second viewport affiche `assets/from_reference/` avec le même zoom que la preview principale.
+  réf: game_art/roadmap_editeur.md (phase 5), game_art/assets/from_reference/, game_art/editeur/main.gd.
 
 ## Blocages
 
@@ -13,22 +16,27 @@
 # Session du 2026-07-05
 
 ## Décisions prises
-- Phase 3.3 validée : persistance éditeur, sync + jeu, legacy intact.
-- `player.run.fps` conservé à 8.1 après validation utilisateur.
+- Le manifest d'audit passe en schéma par état pour supporter des tailles différentes comme `player.attack` en `48x56`.
+- La phase 4 s'appuie sur deux tests headless dédiés : `test_audit.gd` pour le moteur et `test_audit_ui.gd` pour la navigation/export.
+- La vue audit est intégrée dans l'éditeur via une boîte de dialogue dédiée, pas via un onglet structurel.
 
 ## Livrables produits ou modifiés
-- game_art/roadmap_editeur.md : Phase 3.3 cochée, Phase 4 prochaine.
-- game_art/editeur/main.gd : layout responsive, `_update_title()` headless-safe.
-- game_art/editeur/inspector.gd : panneau droit compact en demi-écran.
-- game_art/data/animations.json : `player.run.fps` à 8.1.
-- game/data/animations.json : copie synchronisée.
+- game_art/data/manifest.json : référentiel d'états attendus et tailles cibles par état.
+- game_art/editeur/audit.gd : moteur d'audit des sprites et animations.
+- game_art/editeur/main.gd : bouton Audit, vue cliquable, tri par sévérité, export `audit_report.md`.
+- game_art/editeur/test_audit.gd : validation headless des anomalies attendues.
+- game_art/editeur/test_audit_ui.gd : validation headless de la sélection depuis la vue audit et de l'export.
+- game_art/audit_report.md : premier export du rapport d'audit.
+- game_art/roadmap_editeur.md : phase 4 alignée sur l'état réel, raffinement d'export ajouté.
 
 ## Hypothèses validées / invalidées
-- VALIDÉ : `player.idle` reste legacy après sauvegarde (`frames` chemins texte, pas de `sheet`).
+- VALIDÉ : le moteur d'audit détecte bien état manquant, sprite manquant, sprite orphelin, indice hors grille et placeholders partagés.
+- VALIDÉ : la sélection d'une anomalie dans la vue audit repositionne bien l'éditeur sur l'entité/état ciblé.
+- EN ATTENTE : enrichissement du format de `audit_report.md` pour éviter un export trop plat.
 
 ## Prochaine étape exacte
-Phase 4.1 : créer/valider le manifest d'audit (`game_art/data/manifest.json`).
+Enrichir `game_art/audit_report.md` dans l'export de la vue audit :
+résumé initial par sévérité puis regroupement strict par entité et par état.
 
 ## Question bloquante pour la session suivante
-Valider les tailles cibles du manifest, notamment `player` 40x56 et les tailles
-attendues des ennemis/boss.
+Aucune

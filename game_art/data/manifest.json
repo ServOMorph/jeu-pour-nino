@@ -1,0 +1,162 @@
+{
+  "player": {
+    "states": {
+      "idle": {
+        "frame_size": [
+          40,
+          56
+        ]
+      },
+      "run": {
+        "frame_size": [
+          40,
+          56
+        ]
+      },
+      "jump": {
+        "frame_size": [
+          40,
+          56
+        ]
+      },
+      "fall": {
+        "frame_size": [
+          40,
+          56
+        ]
+      },
+      "attack": {
+        "frame_size": [
+          48,
+          56
+        ]
+      },
+      "hurt": {
+        "frame_size": [
+          40,
+          56
+        ]
+      },
+      "dead": {
+        "frame_size": [
+          40,
+          56
+        ]
+      }
+    }
+  },
+  "enemy_ground": {
+    "states": {
+      "idle": {
+        "frame_size": [
+          32,
+          32
+        ]
+      },
+      "walk": {
+        "frame_size": [
+          32,
+          32
+        ]
+      },
+      "hurt": {
+        "frame_size": [
+          32,
+          32
+        ]
+      },
+      "dead": {
+        "frame_size": [
+          32,
+          32
+        ]
+      }
+    }
+  },
+  "enemy_flyer": {
+    "states": {
+      "idle": {
+        "frame_size": [
+          32,
+          24
+        ]
+      },
+      "fly": {
+        "frame_size": [
+          32,
+          24
+        ]
+      },
+      "hurt": {
+        "frame_size": [
+          32,
+          24
+        ]
+      },
+      "dead": {
+        "frame_size": [
+          32,
+          24
+        ]
+      }
+    }
+  },
+  "boss": {
+    "states": {
+      "sleep": {
+        "frame_size": [
+          96,
+          128
+        ]
+      },
+      "idle": {
+        "frame_size": [
+          96,
+          128
+        ]
+      },
+      "charge": {
+        "frame_size": [
+          96,
+          128
+        ]
+      },
+      "volley": {
+        "frame_size": [
+          96,
+          128
+        ]
+      },
+      "slam_rise": {
+        "frame_size": [
+          96,
+          128
+        ]
+      },
+      "slam_fall": {
+        "frame_size": [
+          96,
+          128
+        ]
+      },
+      "pause": {
+        "frame_size": [
+          96,
+          128
+        ]
+      },
+      "hurt": {
+        "frame_size": [
+          96,
+          128
+        ]
+      },
+      "dead": {
+        "frame_size": [
+          96,
+          128
+        ]
+      }
+    }
+  }
+}

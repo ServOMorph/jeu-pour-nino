@@ -12,19 +12,12 @@ pour visualiser, animer et auditer les sprites. Cible graphique : qualité Terra
 - Synchro vers jeu : sync.py à la racine projet (géré par zone jeu)
 
 ## État actuel
-Phases 0, 1, 2 et 3 terminées. Phase 3.3 validée manuellement le 2026-07-05 :
-édition via l'inspecteur, sauvegarde/rechargement, sync vers le jeu, rendu en jeu
-et survie du format legacy après sauvegarde. Prochaine étape : Phase 4, audit
-des sprites et animations.
+Phases 0, 1, 2, 3 et 4 sont implémentées côté éditeur.
+Le manifest d'audit, le moteur d'audit et la vue audit cliquable avec export sont en place
+et validés en headless. Le rapport exporté est encore minimal sur sa structure.
+Prochaine étape : enrichir `audit_report.md`, puis attaquer les finitions de phase 5.
 
 ## Décisions structurantes
-- game_art/ = racine du projet Godot éditeur (res:// pointe ici)
-- game/assets/sprites/ et game/data/animations.json = copies générées (ne pas éditer manuellement)
-- Format sprites cible = spritesheets (grille de frames, découpe AtlasTexture)
-- Schéma animations.json étendu avec champs sheet/frame_size/frames (rétro-compatible)
-- Périmètre zone game_art : éditeur + sprites + animations. Contrôles et affichage = zone jeu.
-- Typage GDScript des scripts sans class_name : préférer `const X := preload("res://...")`
-  + `var v: X` plutôt que `class_name`, pour rester robuste sans cache `.godot/` généré.
 - UI multi-panneaux : ne jamais mettre plus de 2 enfants dans un `HSplitContainer`
   (comportement non défini / superposition) — imbriquer des splits si besoin d'un 3e panneau.
 - Sauvegarde `animations.json` : toujours appeler `JSON.stringify(data, indent, false)`
@@ -38,3 +31,9 @@ des sprites et animations.
 - L'inspecteur doit rester utilisable en demi-écran : panneau droit compact,
   contrôles empilés si nécessaire, pas de dépendance à un scroll horizontal.
 - `player.run.fps` est validé à 8.1 depuis la clôture Phase 3.3 du 2026-07-05.
+- Le manifest d'audit utilise un schéma par état, pas par entité, pour supporter
+  des tailles différentes comme `player.attack` en `48x56`.
+- Les régressions de la phase audit sont vérifiées en headless via
+  `test_audit.gd` et `test_audit_ui.gd`.
+- La vue audit est portée par une `AcceptDialog` avec `Tree` trié par sévérité,
+  cliquable et exportable, sans refonte de layout principal.

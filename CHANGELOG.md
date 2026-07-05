@@ -1,3 +1,15 @@
+## v1.23 — 2026-07-05
+
+### Ajouté
+- `game_art/data/manifest.json` : référentiel d'audit structuré par état avec tailles cibles validées.
+- `game_art/editeur/audit.gd` : moteur d'audit détectant états manquants, sprites manquants/orphelins, tailles incohérentes, indices hors grille et placeholders.
+- `game_art/editeur/test_audit.gd` et `game_art/editeur/test_audit_ui.gd` : validations headless du moteur d'audit, de la sélection UI et de l'export.
+- `game_art/audit_report.md` : premier rapport d'audit exporté depuis l'éditeur.
+
+### Modifié
+- `game_art/editeur/main.gd` : vue audit intégrée via dialogue, tri par sévérité, navigation cliquable vers entité/état et export Markdown.
+- `game_art/roadmap_editeur.md`, `game_art/_contexte/`, `README.md` : état Phase 4 aligné sur l'implémentation réelle et prochaine étape recentrée sur l'enrichissement de l'export.
+
 ## v1.22 — 2026-07-05
 
 ### Modifié

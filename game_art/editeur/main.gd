@@ -1,8 +1,11 @@
 extends VBoxContainer
 
 const ANIM_CONFIG := "res://data/animations.json"
+const MANIFEST_CONFIG := "res://data/manifest.json"
+const AUDIT_REPORT_PATH := "res://audit_report.md"
 const AnimationDriverEditorScript := preload("res://editeur/animation_driver.gd")
 const InspectorScript := preload("res://editeur/inspector.gd")
+const AuditScript := preload("res://editeur/audit.gd")
 
 var _entity_list: ItemList
 var _state_list: ItemList
@@ -14,11 +17,15 @@ var _driver: AnimationDriverEditorScript
 var _inspector: InspectorScript
 var _frame_info_label: Label
 var _btn_pause: Button
+var _audit_dialog: AcceptDialog
+var _audit_tree: Tree
+var _audit_status_label: Label
 var _entities: Dictionary = {}
 var _current_entity := ""
 var _paused := false
 var _zoom := 3.0
 var _dirty := false
+var _last_audit_results: Array[Dictionary] = []
 
 const WINDOW_TITLE := "Editeur game_art"
 const BASE_PREVIEW_SIZE := 200.0
@@ -42,6 +49,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 func _build_ui() -> void:
 	_build_toolbar(self)
+	_build_audit_dialog()
 
 	var hsplit_outer := HSplitContainer.new()
 	hsplit_outer.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -94,6 +102,11 @@ func _build_toolbar(parent: Control) -> void:
 	btn_save.text = "Sauvegarder"
 	btn_save.pressed.connect(_save)
 	bar.add_child(btn_save)
+
+	var btn_audit := Button.new()
+	btn_audit.text = "Audit"
+	btn_audit.pressed.connect(_open_audit_dialog)
+	bar.add_child(btn_audit)
 
 func _build_gallery_panel(parent: Control) -> void:
 	var panel := VBoxContainer.new()
@@ -192,6 +205,47 @@ func _build_inspector_panel(parent: Control) -> void:
 	_inspector.state_edited.connect(_on_state_edited)
 	scroll.add_child(_inspector)
 
+func _build_audit_dialog() -> void:
+	_audit_dialog = AcceptDialog.new()
+	_audit_dialog.title = "Audit sprites"
+	_audit_dialog.min_size = Vector2i(900, 560)
+	_audit_dialog.dialog_hide_on_ok = true
+	add_child(_audit_dialog)
+
+	var root := VBoxContainer.new()
+	root.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	root.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_audit_dialog.add_child(root)
+
+	var actions := HBoxContainer.new()
+	root.add_child(actions)
+
+	var btn_refresh := Button.new()
+	btn_refresh.text = "Rafraichir"
+	btn_refresh.pressed.connect(_refresh_audit)
+	actions.add_child(btn_refresh)
+
+	var btn_export := Button.new()
+	btn_export.text = "Exporter"
+	btn_export.pressed.connect(_export_audit_report)
+	actions.add_child(btn_export)
+
+	_audit_status_label = Label.new()
+	_audit_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	actions.add_child(_audit_status_label)
+
+	_audit_tree = Tree.new()
+	_audit_tree.columns = 4
+	_audit_tree.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_audit_tree.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_audit_tree.set_column_title(0, "Severite")
+	_audit_tree.set_column_title(1, "Entite")
+	_audit_tree.set_column_title(2, "Etat")
+	_audit_tree.set_column_title(3, "Message")
+	_audit_tree.set_column_titles_visible(true)
+	_audit_tree.item_activated.connect(_on_audit_item_activated)
+	root.add_child(_audit_tree)
+
 func _load_entities() -> void:
 	var file := FileAccess.open(ANIM_CONFIG, FileAccess.READ)
 	if file == null:
@@ -268,6 +322,151 @@ func _save() -> void:
 		return
 	_dirty = false
 	_update_title()
+
+func _open_audit_dialog() -> void:
+	_refresh_audit()
+	_audit_dialog.popup_centered()
+
+func _refresh_audit() -> void:
+	var manifest := _load_json_dict(MANIFEST_CONFIG)
+	if manifest.is_empty():
+		_last_audit_results = [{
+			"severity": "error",
+			"entity": "",
+			"state": "",
+			"message": "manifest introuvable ou invalide"
+		}]
+	else:
+		_last_audit_results = AuditScript.run_audit(manifest, _entities, "res://assets")
+	_sort_audit_results()
+	_rebuild_audit_tree()
+
+func _sort_audit_results() -> void:
+	_last_audit_results.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		var sa := _severity_rank(String(a.get("severity", "")))
+		var sb := _severity_rank(String(b.get("severity", "")))
+		if sa != sb:
+			return sa < sb
+		var ea := String(a.get("entity", ""))
+		var eb := String(b.get("entity", ""))
+		if ea != eb:
+			return ea < eb
+		var sta := String(a.get("state", ""))
+		var stb := String(b.get("state", ""))
+		if sta != stb:
+			return sta < stb
+		return String(a.get("message", "")) < String(b.get("message", ""))
+	)
+
+func _severity_rank(severity: String) -> int:
+	match severity:
+		"error":
+			return 0
+		"warning":
+			return 1
+		"info":
+			return 2
+		_:
+			return 3
+
+func _rebuild_audit_tree() -> void:
+	_audit_tree.clear()
+	var root := _audit_tree.create_item()
+	for anomaly in _last_audit_results:
+		var item := _audit_tree.create_item(root)
+		var severity := String(anomaly.get("severity", ""))
+		item.set_text(0, severity)
+		item.set_text(1, String(anomaly.get("entity", "")))
+		item.set_text(2, String(anomaly.get("state", "")))
+		item.set_text(3, String(anomaly.get("message", "")))
+		item.set_metadata(0, anomaly)
+		match severity:
+			"error":
+				item.set_custom_color(0, Color(0.95, 0.35, 0.35))
+			"warning":
+				item.set_custom_color(0, Color(0.95, 0.75, 0.3))
+			"info":
+				item.set_custom_color(0, Color(0.55, 0.75, 1.0))
+	if _last_audit_results.is_empty():
+		var ok_item := _audit_tree.create_item(root)
+		ok_item.set_text(0, "ok")
+		ok_item.set_text(3, "aucune anomalie")
+	_audit_status_label.text = "%d anomalie(s)" % _last_audit_results.size()
+
+func _on_audit_item_activated() -> void:
+	var item := _audit_tree.get_selected()
+	if item == null:
+		return
+	var meta: Variant = item.get_metadata(0)
+	if meta is not Dictionary:
+		return
+	var entity := String(meta.get("entity", ""))
+	var state := String(meta.get("state", ""))
+	if entity.is_empty():
+		return
+	_select_entity_and_state(entity, state)
+	if not state.is_empty():
+		_audit_dialog.hide()
+
+func _select_entity_and_state(entity: String, state: String) -> void:
+	var entity_idx := _find_item_index(_entity_list, entity)
+	if entity_idx < 0:
+		return
+	_entity_list.select(entity_idx)
+	_on_entity_selected(entity_idx)
+	if state.is_empty():
+		return
+	var state_idx := _find_item_index(_state_list, state)
+	if state_idx < 0:
+		return
+	_state_list.select(state_idx)
+	_on_state_selected(state_idx)
+
+func _find_item_index(list: ItemList, text: String) -> int:
+	for i in list.item_count:
+		if list.get_item_text(i) == text:
+			return i
+	return -1
+
+func _export_audit_report() -> void:
+	var lines := PackedStringArray()
+	lines.append("# Audit sprites")
+	lines.append("")
+	if _last_audit_results.is_empty():
+		lines.append("- [x] aucune anomalie")
+	else:
+		var current_entity := ""
+		for anomaly in _last_audit_results:
+			var entity := String(anomaly.get("entity", ""))
+			if entity != current_entity:
+				current_entity = entity
+				lines.append("## " + (entity if not entity.is_empty() else "global"))
+				lines.append("")
+			var state := String(anomaly.get("state", ""))
+			var severity := String(anomaly.get("severity", ""))
+			var message := String(anomaly.get("message", ""))
+			var prefix := "- [ ] %s" % severity
+			if not state.is_empty():
+				lines.append("%s %s: %s" % [prefix, state, message])
+			else:
+				lines.append("%s %s" % [prefix, message])
+	_write_text_file(AUDIT_REPORT_PATH, "\n".join(lines) + "\n")
+	_audit_status_label.text = "%d anomalie(s) - rapport exporte" % _last_audit_results.size()
+
+func _load_json_dict(path: String) -> Dictionary:
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return {}
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	return parsed if parsed is Dictionary else {}
+
+func _write_text_file(path: String, content: String) -> void:
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if file == null:
+		push_warning("echec ecriture: " + path)
+		return
+	file.store_string(content)
+	file.close()
 
 func _set_zoom(z: float) -> void:
 	_zoom = z

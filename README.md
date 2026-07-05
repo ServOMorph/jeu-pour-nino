@@ -65,7 +65,7 @@ Nécessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ou
 
 ## État actuel
 
-**v1.22.** `game_art` : Phases 0, 1, 2 et 3 terminées. L'éditeur d'animations permet de visualiser, éditer et sauvegarder les métadonnées (fps/loop/offset/frame_size/frames), avec validation manuelle complète de la Phase 3.3 : persistance éditeur, sync vers le jeu, rendu en jeu et format legacy intact après sauvegarde. Prochaine étape `game_art` : Phase 4, audit des sprites et animations.
+**v1.23.** `game_art` : Phases 0 à 4 implémentées. L'éditeur couvre maintenant visualisation, édition, sauvegarde et audit des sprites/animations : `manifest.json`, moteur d'audit, vue audit cliquable et export `audit_report.md`, validés en headless. Reste côté `game_art` : enrichir la structure du rapport exporté, puis attaquer les finitions de phase 5.
 Jeu : dette bloquante Phase 0 corrigée ; validation complète (GUT, run manuel intégral) encore à faire côté zone jeu.
 
 ## Roadmap

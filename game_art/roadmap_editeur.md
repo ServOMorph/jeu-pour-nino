@@ -114,7 +114,7 @@ Règles :
 
 ---
 
-### Phase 2 — Éditeur : visualisation (EN COURS)
+### Phase 2 — Éditeur : visualisation ✅
 
 #### 2.1 Débugger le rendu gris (bloquant, à faire en premier) ✅
 
@@ -294,12 +294,12 @@ Phase 2.
 
 ---
 
-### Phase 4 — Éditeur : détection (audit)
+### Phase 4 — Éditeur : détection (audit) ✅
 
 #### 4.1 `data/manifest.json` — référentiel des attendus
 
-- [ ] Créer le fichier : pour chaque entité, la liste des états attendus et la taille
-      de frame cible. Format :
+- [x] Créer le fichier : pour chaque entité, la liste des états attendus et la taille
+      de frame cible. Format initial prévu :
       ```json
       {
         "player": {
@@ -312,31 +312,37 @@ Phase 2.
       Contenu initial : reprendre les entités/états actuels de `animations.json` +
       les besoins listés dans `backlog_art.md` (player 40×56 cible Terraria-like).
       Les `frame_size` cibles sont à valider avec l'utilisateur avant remplissage.
+      Ajustement acté en implémentation : `manifest.json` est finalement structuré par état
+      (`states.<state>.frame_size`) pour supporter `player.attack` en `48x56`.
 
 #### 4.2 `audit.gd` — moteur de vérification
 
 Fonction pure `run_audit(manifest: Dictionary, animations: Dictionary, assets_root: String) -> Array[Dictionary]`
 retournant une liste d'anomalies `{severity, entity, state, message}` :
 
-- [ ] **État manquant** : présent dans manifest, absent de `animations.json`.
-- [ ] **Sprite manquant** : état déclaré dont le PNG (`sheet` ou chemin de frame)
+- [x] **État manquant** : présent dans manifest, absent de `animations.json`.
+- [x] **Sprite manquant** : état déclaré dont le PNG (`sheet` ou chemin de frame)
       n'existe pas sur disque (réutiliser `_editor_path()` pour la traduction).
-- [ ] **Sprite orphelin** : PNG sous `assets/` (hors `from_reference/`, `generated_raw/`)
+- [x] **Sprite orphelin** : PNG sous `assets/` (hors `from_reference/`, `generated_raw/`)
       référencé par aucun état. Parcours disque : `DirAccess` récursif.
-- [ ] **Taille incohérente** : frame réelle ≠ `frame_size` du manifest ; grille sheet
+- [x] **Taille incohérente** : frame réelle ≠ `frame_size` du manifest ; grille sheet
       non entière (`largeur_png % frame_size[0] != 0`, idem hauteur) ; indices de
       `frames` hors grille.
-- [ ] **Placeholder détecté** (info) : plusieurs états d'une entité pointant vers le
+- [x] **Placeholder détecté** (info) : plusieurs états d'une entité pointant vers le
       même PNG unique (signe d'un sprite pas encore produit).
 
 #### 4.3 Vue audit
 
-- [ ] Onglet ou panneau dédié (TabContainer englobant preview/audit, ou bouton toolbar
+- [x] Onglet ou panneau dédié (TabContainer englobant preview/audit, ou bouton toolbar
       ouvrant une AcceptDialog avec Tree) listant les anomalies triées par sévérité,
       cliquables → sélectionne l'entité/état correspondant dans la galerie.
-- [ ] Bouton « Exporter » : écrit `game_art/audit_report.md` (liste à cocher par entité)
+- [x] Bouton « Exporter » : écrit `game_art/audit_report.md` (liste à cocher par entité)
       pour piloter le travail de Codex. Fichier ignoré par git ou pas — à trancher au
-      moment venu (proposer : versionné, il sert de TODO art).
+      moment venu (proposer : versionné, il sert de TODO art). Décision de session :
+      le fichier est versionné.
+- [ ] Enrichir `game_art/audit_report.md` : regrouper strictement par entité puis par état,
+      inclure la sévérité dans un format lisible, et ajouter un court résumé initial
+      (nb `error` / `warning` / `info`) pour éviter un export trop plat.
 
 #### Fait quand
 L'audit repère un état retiré à la main du JSON, un PNG supprimé, un PNG ajouté non
