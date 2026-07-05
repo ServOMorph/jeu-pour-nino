@@ -8,7 +8,19 @@ var _state_configs: Dictionary = {}
 
 func load_entity(key: String) -> void:
 	entity_key = key
-	_build_sprite_frames()
+	var file := FileAccess.open(ANIMATION_CONFIG, FileAccess.READ)
+	if file == null:
+		return
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	if parsed is not Dictionary:
+		return
+	var entity_cfg: Variant = parsed.get(entity_key, null)
+	if entity_cfg is not Dictionary:
+		return
+	_build_sprite_frames(entity_cfg)
+
+func load_from_dict(entity_cfg: Dictionary) -> void:
+	_build_sprite_frames(entity_cfg)
 
 func play_state(state: String) -> void:
 	if not _state_configs.has(state):
@@ -20,16 +32,19 @@ func play_state(state: String) -> void:
 func get_current_state_cfg() -> Dictionary:
 	return _state_configs.get(animation, {})
 
-func _build_sprite_frames() -> void:
-	var file := FileAccess.open(ANIMATION_CONFIG, FileAccess.READ)
-	if file == null:
-		return
-	var parsed: Variant = JSON.parse_string(file.get_as_text())
-	if parsed is not Dictionary:
-		return
-	var entity_cfg: Variant = parsed.get(entity_key, null)
-	if entity_cfg is not Dictionary:
-		return
+func get_sheet_frame_count(sheet_path: String, frame_size: Array) -> int:
+	if frame_size.size() < 2:
+		return 0
+	var tex := _load_tex(_editor_path(sheet_path))
+	if tex == null:
+		return 0
+	var fw := int(frame_size[0])
+	var fh := int(frame_size[1])
+	if fw <= 0 or fh <= 0:
+		return 0
+	return (tex.get_width() / fw) * (tex.get_height() / fh)
+
+func _build_sprite_frames(entity_cfg: Dictionary) -> void:
 	_state_configs = entity_cfg.get("states", {})
 	sprite_frames = SpriteFrames.new()
 	for state_name in _state_configs:

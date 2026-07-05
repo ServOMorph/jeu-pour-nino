@@ -223,17 +223,25 @@ Phases 0, 1.
 
 Remplacer le placeholder du panneau droit. Pour l'état sélectionné, éditer :
 
-- [ ] `fps` : SpinBox (min 0.1, max 60, step 0.5, arrow keys OK).
-- [ ] `loop` : CheckBox.
-- [ ] `offset` : deux SpinBox X / Y (min -128, max 128, step 1.0).
-- [ ] `frames` (ordre et sélection) : ItemList listant les frames de l'état
-      (indice + miniature si sheet), boutons Monter / Descendre / Retirer / Ajouter.
+- [x] `fps` : SpinBox (min 0.1, max 60, step 0.5, arrow keys OK).
+- [x] `loop` : CheckBox.
+- [x] `offset` : deux SpinBox X / Y (min -128, max 128, step 1.0).
+- [x] `frames` (ordre et sélection) : ItemList listant les frames de l'état,
+      boutons Monter / Descendre / Retirer / Ajouter.
       « Ajouter » : pour un sheet, choisir un indice de la grille (SpinBox borné par
-      `cols * rows - 1`) ; pour le format legacy, hors périmètre (lecture seule de
-      la liste de chemins — la migration spritesheet rendra ce cas obsolète).
-- [ ] Pour un état spritesheet : `frame_size` éditable (deux SpinBox) avec re-découpe
+      `cols * rows - 1`) ; pour le format legacy, hors périmètre (pas de bouton
+      « Ajouter » affiché — la migration spritesheet rendra ce cas obsolète).
+      Miniature par frame non implémentée (hors périmètre demandé, uniquement indice/chemin en texte).
+- [x] Pour un état spritesheet : `frame_size` éditable (deux SpinBox) avec re-découpe
       immédiate de la preview.
-- [ ] Signal `state_edited(entity, state, cfg)` émis à chaque modification.
+- [x] Signal `state_edited(entity, state, cfg)` émis à chaque modification.
+
+Implémenté dans `editeur/inspector.gd` (nouveau fichier, script sans `class_name`,
+suivant la convention `preload()`). Le driver gagne `load_from_dict(entity_cfg)` et
+`get_sheet_frame_count(sheet_path, frame_size)` (`editeur/animation_driver.gd`).
+`main.gd` instancie l'inspecteur dans `_build_inspector_panel`, lui passe une
+référence directe au sous-dict de `_entities` (mutation en place, pas de copie),
+et reconstruit la preview via `load_from_dict` sur le signal `state_edited`.
 
 Architecture des données : `main.gd` reste propriétaire du Dictionary `_entities`
 (parse unique de `animations.json`). L'inspecteur reçoit une référence au sous-dict de
@@ -244,20 +252,22 @@ ne reflète pas les éditions non sauvées).
 
 #### 3.2 Sauvegarde sûre
 
-- [ ] Bouton « Sauvegarder » (+ raccourci Ctrl+S via `_unhandled_key_input`) et indicateur
+- [x] Bouton « Sauvegarder » (+ raccourci Ctrl+S via `_unhandled_key_input`) et indicateur
       de modifications non sauvées (astérisque dans le titre de fenêtre :
       `get_window().title`).
-- [ ] Écriture dans `res://data/animations.json` :
-      `JSON.stringify(_entities, "  ")` + newline final. Écrire d'abord dans
-      `animations.json.tmp`, puis remplacer le fichier (via `DirAccess.rename_absolute`)
-      — jamais d'écriture directe tronquante.
-- [ ] Contrainte de format : les Dictionary GDScript préservent l'ordre d'insertion,
-      donc relire-modifier-réécrire conserve l'ordre des clés. Vérifier au premier
-      aller-retour qu'un `git diff` sur une sauvegarde sans modification est vide
-      (ou limité à des différences de représentation float — si c'est le cas, le
-      constater et l'accepter en une fois : commit de normalisation).
-- [ ] Rechargement live : après sauvegarde ou édition, la preview repart sur l'état
-      courant à la frame 0.
+- [x] Écriture dans `res://data/animations.json` :
+      `JSON.stringify(_entities, "  ")` + newline final. Écriture d'abord dans
+      `animations.json.tmp`, puis remplacement (via `DirAccess.rename_absolute`).
+- [ ] Contrainte de format : vérifier au premier aller-retour réel qu'un `git diff` sur
+      une sauvegarde sans modification est vide (ou limité à des différences de
+      représentation float). **Non vérifié** — nécessite une interaction souris/clavier
+      dans l'éditeur Godot, non automatisable depuis ce terminal. À faire en Phase 3.3.
+- [x] Rechargement live : après édition, la preview repart sur l'état courant à la
+      frame 0 (`play_state` relance l'animation). Après sauvegarde, aucun rechargement
+      supplémentaire n'est nécessaire (les données en mémoire sont déjà à jour).
+
+Implémenté dans `main.gd` (`_save`, `_update_title`, `_unhandled_key_input`, bouton
+toolbar). `_dirty` est mis à `true` sur chaque `state_edited` reçu de l'inspecteur.
 
 #### 3.3 Tests manuels de bout en bout
 

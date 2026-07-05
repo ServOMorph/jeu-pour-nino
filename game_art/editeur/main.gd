@@ -2,22 +2,33 @@ extends VBoxContainer
 
 const ANIM_CONFIG := "res://data/animations.json"
 const AnimationDriverEditorScript := preload("res://editeur/animation_driver.gd")
+const InspectorScript := preload("res://editeur/inspector.gd")
 
 var _entity_list: ItemList
 var _state_list: ItemList
 var _preview_container: SubViewportContainer
 var _viewport: SubViewport
 var _driver: AnimationDriverEditorScript
+var _inspector: InspectorScript
 var _frame_info_label: Label
 var _btn_pause: Button
 var _entities: Dictionary = {}
 var _current_entity := ""
 var _paused := false
 var _zoom := 3.0
+var _dirty := false
+
+const WINDOW_TITLE := "Editeur game_art"
 
 func _ready() -> void:
 	_build_ui()
 	_load_entities()
+	_update_title()
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and event.ctrl_pressed and event.keycode == KEY_S:
+		_save()
+		get_viewport().set_input_as_handled()
 
 func _build_ui() -> void:
 	_build_toolbar(self)
@@ -66,6 +77,13 @@ func _build_toolbar(parent: Control) -> void:
 	btn_next.text = ">|"
 	btn_next.pressed.connect(_next_frame)
 	bar.add_child(btn_next)
+
+	bar.add_child(VSeparator.new())
+
+	var btn_save := Button.new()
+	btn_save.text = "Sauvegarder"
+	btn_save.pressed.connect(_save)
+	bar.add_child(btn_save)
 
 func _build_gallery_panel(parent: Control) -> void:
 	var panel := VBoxContainer.new()
@@ -137,12 +155,13 @@ func _build_checker_texture() -> ImageTexture:
 
 func _build_inspector_panel(parent: Control) -> void:
 	var panel := VBoxContainer.new()
-	panel.custom_minimum_size = Vector2(160, 0)
+	panel.custom_minimum_size = Vector2(200, 0)
 	parent.add_child(panel)
 
-	var lbl := Label.new()
-	lbl.text = "Inspecteur\n(Phase 3)"
-	panel.add_child(lbl)
+	_inspector = InspectorScript.new()
+	_inspector.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_inspector.state_edited.connect(_on_state_edited)
+	panel.add_child(_inspector)
 
 func _load_entities() -> void:
 	var file := FileAccess.open(ANIM_CONFIG, FileAccess.READ)
@@ -180,6 +199,43 @@ func _on_state_selected(index: int) -> void:
 	_driver.speed_scale = 1.0
 	_btn_pause.text = "II"
 	_update_frame_info()
+
+	var entity_cfg: Dictionary = _entities.get(_current_entity, {})
+	var states: Dictionary = entity_cfg.get("states", {})
+	if states.has(state):
+		_inspector.setup(_current_entity, state, states[state], _driver)
+
+func _on_state_edited(entity: String, state: String, _cfg: Dictionary) -> void:
+	_dirty = true
+	_update_title()
+	if entity != _current_entity:
+		return
+	var entity_cfg: Dictionary = _entities.get(entity, {})
+	_driver.load_from_dict(entity_cfg)
+	_driver.play_state(state)
+	_driver.speed_scale = 0.0 if _paused else 1.0
+	_update_frame_info()
+
+func _update_title() -> void:
+	get_window().title = WINDOW_TITLE + (" *" if _dirty else "")
+
+func _save() -> void:
+	var tmp_path := ANIM_CONFIG + ".tmp"
+	var file := FileAccess.open(tmp_path, FileAccess.WRITE)
+	if file == null:
+		push_warning("echec ouverture fichier temporaire: " + tmp_path)
+		return
+	file.store_string(JSON.stringify(_entities, "  ", false) + "\n")
+	file.close()
+	var err := DirAccess.rename_absolute(
+		ProjectSettings.globalize_path(tmp_path),
+		ProjectSettings.globalize_path(ANIM_CONFIG)
+	)
+	if err != OK:
+		push_warning("echec renommage animations.json: " + str(err))
+		return
+	_dirty = false
+	_update_title()
 
 func _set_zoom(z: float) -> void:
 	_zoom = z
