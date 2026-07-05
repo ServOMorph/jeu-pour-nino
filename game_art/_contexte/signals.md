@@ -2,39 +2,50 @@
 
 ## Actions ouvertes
 
-- [P2] Phase 2.2 : compléter la visualisation (infos frame, fond damier, état
-  play/pause visible, gestion textures manquantes).
-  fait quand: preview affiche frame/total + taille + fps + loop, fond damier visible,
-  bouton II/> reflète l'état, PNG manquant affiche damier magenta + warning console.
-  réf: game_art/editeur/main.gd, game_art/roadmap_editeur.md (section 2.2).
+- [P1] Phase 3.3 : tests manuels de bout en bout de la sauvegarde éditeur.
+  fait quand: fps modifié via l'inspecteur (ex. player.run 8→4) persiste après
+  relance de l'éditeur ; `python sync.py` + `python run_game.py` reflète le
+  nouveau timing en jeu ; un état legacy (liste de chemins, sans `sheet`)
+  survit intact à une sauvegarde.
+  réf: game_art/roadmap_editeur.md (section 3.3), game_art/editeur/main.gd (_save).
 
 ## Blocages
 
 ## Dernière session
 
-# Session du 2026-07-03
+# Session du 2026-07-05
 
 ## Décisions prises
-- Aucune décision structurante nouvelle (session de correction de bugs bloquants).
+- JSON.stringify appelé avec sort_keys=false dans _save() (le défaut true
+  cassait l'ordre des clés à chaque sauvegarde).
+- Vérification des changements GDScript via test headless Godot
+  (editeur/test_save_roundtrip.gd) plutôt que par pilotage OS souris/clavier,
+  trop fragile pour ce cas.
 
 ## Livrables produits ou modifiés
-- game_art/editeur/main.gd : `class_name AnimationDriverEditor` remplacé par
-  `preload()` + typage sur le script préchargé (robuste sans cache `.godot/`) ;
-  `HSplitContainer` unique (3 enfants, non supporté) remplacé par deux
-  `HSplitContainer` imbriqués (galerie | (preview | inspecteur)).
+- game_art/editeur/inspector.gd (nouveau) : panneau d'édition fps/loop/offset/
+  frame_size/frames, signal state_edited.
+- game_art/editeur/animation_driver.gd : + load_from_dict(), + get_sheet_frame_count().
+- game_art/editeur/main.gd : instanciation inspecteur, sauvegarde (bouton +
+  Ctrl+S, écriture atomique .tmp+rename, indicateur titre non-sauvé).
+- game_art/editeur/test_save_roundtrip.gd (nouveau) : script de test headless
+  (modes mutate/verify/normalize), pas destiné à la prod.
+- game_art/data/animations.json : normalisé (commit séparé), aucune valeur
+  métier changée.
+- game_art/roadmap_editeur.md : Phase 3.1 et 3.2 cochées.
 
 ## Hypothèses validées / invalidées
-- VALIDÉ : le rendu gris venait d'une erreur de parse GDScript (`class_name` non
-  résolu sans cache `.godot/` généré par l'éditeur Godot), pas d'un problème d'anchors.
-- VALIDÉ : `HSplitContainer` ne gère proprement que 2 enfants ; le 3e panneau
-  (inspecteur) se superposait au premier (galerie).
-- INVALIDE : hypothèse anchors du VBoxContainer racine — déjà correctement
-  configurés (anchor_right/bottom = 1.0) avant cette session.
+- VALIDÉ : Dictionary GDScript préserve l'ordre d'insertion — le
+  réordonnancement observé venait de JSON.stringify(sort_keys=true par défaut),
+  pas du Dictionary.
+- INVALIDE : hypothèse roadmap "diff minimal dès le premier aller-retour" ->
+  pivot : diff minimal après un commit de normalisation ponctuel (int→float
+  et arrays multi-lignes sont inhérents à JSON.stringify, non évitables).
 
 ## Prochaine étape exacte
-Phase 2.2 : ajouter le label d'infos de frame sous la preview, le fond damier,
-l'état play/pause visible sur le bouton, et le placeholder magenta pour textures
-manquantes (voir roadmap_editeur.md section 2.2).
+Phase 3.3 : test manuel en conditions réelles dans l'éditeur Godot (édition
+fps/offset via l'inspecteur, sync.py, run_game.py) — nécessite une session
+interactive, non automatisable en headless.
 
 ## Question bloquante pour la session suivante
 Aucune

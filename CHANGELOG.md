@@ -1,3 +1,16 @@
+## v1.21 — 2026-07-05
+
+### Ajouté
+- `game_art/editeur/inspector.gd` : panneau d'édition des états d'animation (fps, loop, offset, frame_size, frames) avec rechargement live de la preview (Phase 3.1 de `game_art/roadmap_editeur.md`).
+- Sauvegarde éditeur : bouton + Ctrl+S, écriture atomique (`.tmp` + rename), indicateur de modifications non sauvées dans le titre de fenêtre (Phase 3.2).
+- `game_art/editeur/test_save_roundtrip.gd` : script de vérification headless (Godot `--headless --script`) pour tester la sauvegarde sans interaction souris/clavier.
+
+### Corrigé
+- `game_art/editeur/main.gd` : `JSON.stringify` appelé sans `sort_keys=false` réordonnait alphabétiquement tout `animations.json` à chaque sauvegarde, rendant les diffs Git illisibles — corrigé.
+
+### Modifié
+- `game_art/data/animations.json` : normalisation ponctuelle du format (arrays courts multi-lignes, nombres en float) suite au fix ci-dessus ; aucune valeur métier changée.
+
 ## v1.20 — 2026-07-05
 
 ### Corrigé

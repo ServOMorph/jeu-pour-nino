@@ -12,10 +12,10 @@ pour visualiser, animer et auditer les sprites. Cible graphique : qualité Terra
 - Synchro vers jeu : sync.py à la racine projet (géré par zone jeu)
 
 ## État actuel
-Phase 0 et Phase 1 terminées. Phase 2.1 terminée : l'éditeur se lance sans erreur,
-affiche toolbar + galerie (entités/états) + preview animée dans 3 panneaux distincts.
-Prochaine étape : Phase 2.2 (infos frame, fond damier, état play/pause, textures
-manquantes).
+Phases 0, 1, 2 terminées. Phase 3 en cours : inspecteur (3.1) et sauvegarde
+atomique (3.2) implémentés et testés en headless. Reste 3.3 : vérification
+manuelle en conditions réelles (édition via l'inspecteur, sync, jeu) — non
+automatisable, nécessite une session interactive dans l'éditeur Godot.
 
 ## Décisions structurantes
 - game_art/ = racine du projet Godot éditeur (res:// pointe ici)
@@ -27,3 +27,11 @@ manquantes).
   + `var v: X` plutôt que `class_name`, pour rester robuste sans cache `.godot/` généré.
 - UI multi-panneaux : ne jamais mettre plus de 2 enfants dans un `HSplitContainer`
   (comportement non défini / superposition) — imbriquer des splits si besoin d'un 3e panneau.
+- Sauvegarde `animations.json` : toujours appeler `JSON.stringify(data, indent, false)`
+  (sort_keys=false explicite) — le défaut Godot (true) réordonne alphabétiquement
+  tout le fichier à chaque sauvegarde et rend les diffs Git illisibles.
+- Vérification des changements GDScript sans interaction souris/clavier : script de
+  test headless (`Godot --headless --script res://editeur/<script>.gd -- <mode>`)
+  qui appelle directement les fonctions de `main.gd`/`inspector.gd` plutôt que de
+  piloter l'OS — plus fiable qu'une automatisation pixel, voir
+  `game_art/editeur/test_save_roundtrip.gd`.

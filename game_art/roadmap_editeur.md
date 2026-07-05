@@ -258,10 +258,15 @@ ne reflète pas les éditions non sauvées).
 - [x] Écriture dans `res://data/animations.json` :
       `JSON.stringify(_entities, "  ")` + newline final. Écriture d'abord dans
       `animations.json.tmp`, puis remplacement (via `DirAccess.rename_absolute`).
-- [ ] Contrainte de format : vérifier au premier aller-retour réel qu'un `git diff` sur
-      une sauvegarde sans modification est vide (ou limité à des différences de
-      représentation float). **Non vérifié** — nécessite une interaction souris/clavier
-      dans l'éditeur Godot, non automatisable depuis ce terminal. À faire en Phase 3.3.
+- [x] Contrainte de format : vérifiée via test headless (`test_save_roundtrip.gd`,
+      mode `mutate`) plutôt qu'une interaction souris/clavier réelle. Diff initial
+      illisible (réordonnancement alphabétique complet) causé par
+      `JSON.stringify(..., sort_keys=true)` implicite — corrigé (`sort_keys=false`
+      explicite dans `_save()`). Reste un diff inhérent au premier aller-retour
+      (arrays courts multi-lignes, int→float, JSON ne distingue pas les deux) :
+      accepté et absorbé par un commit de normalisation dédié
+      (`game_art/data/animations.json`, session 2026-07-05). Diff minimal garanti
+      pour toute sauvegarde ultérieure.
 - [x] Rechargement live : après édition, la preview repart sur l'état courant à la
       frame 0 (`play_state` relance l'animation). Après sauvegarde, aucun rechargement
       supplémentaire n'est nécessaire (les données en mémoire sont déjà à jour).
