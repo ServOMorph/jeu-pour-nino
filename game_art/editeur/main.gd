@@ -184,6 +184,7 @@ func _on_state_selected(index: int) -> void:
 func _set_zoom(z: float) -> void:
 	_zoom = z
 	_preview_container.custom_minimum_size = Vector2(200.0 * z, 200.0 * z)
+	_preview_container.stretch_shrink = int(z)
 
 func _toggle_pause() -> void:
 	_paused = not _paused

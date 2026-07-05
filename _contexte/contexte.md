@@ -8,10 +8,9 @@ Jeu de plateforme/action pixel art fait pour Nino. Roguelite : exploration de bi
 - GDScript
 
 ## État actuel (réécrit intégralement à chaque /close)
-v1.18. Dette bloquante Phase 0 (3 appels `Inventory` résiduels) corrigée, plus un bug additionnel découvert au passage (`preload()` sur PNG sans `.import` dans `ore_node.gd`/`workbench.gd`). Le niveau se charge et un run s'affiche sans crash, mais la validation complète (GUT, run manuel intégral, suppression `inventory.gd`) reste à faire.
-Zone game_art : Phase 2.1 (rendu gris) et 2.2 (infos frame, damier, play/pause, placeholder manquant) et 2.4 (sync.py assaini) terminées et validées visuellement. Reste 2.3 (comparaison jeu/éditeur côte à côte) — outillé via `run_edit_game.py` (racine), pas encore exécutée.
-Sprite `player_idle` recalibré (40x56 → 14x24) pour cohérence d'échelle avec `run`/`jump`.
-Prochaine étape jeu : Phase 2.3 game_art, puis finir la validation Phase 0, puis Phase 1 (matériaux typés).
+v1.20. Zone game_art : Phase 2 (2.1 à 2.4) intégralement terminée et validée visuellement, y compris la comparaison jeu/éditeur (2.3) — un bug de zoom dans l'éditeur (`SubViewportContainer.stretch_shrink` non réglé) a été corrigé au passage.
+Dette bloquante Phase 0 (3 appels `Inventory` résiduels + `preload()` PNG sans `.import`) toujours corrigée mais non validée intégralement (GUT, run manuel complet, suppression `inventory.gd` restants).
+Prochaine étape jeu : finir la validation Phase 0, puis Phase 1 (matériaux typés).
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
 - 2026-06-27 : game_art/ = source de vérité sprites/animations ; sync.py → game/ ; zone jeu ne gère plus les sprites.
@@ -24,3 +23,4 @@ Prochaine étape jeu : Phase 2.3 game_art, puis finir la validation Phase 0, pui
 - 2026-07-02 : Phase 5 — persistance de l'état du biome à la résurrection tranchée : scène biome conservée en mémoire (detach/reattach) plutôt que sérialisation complète, jugée plus simple et moins risquée.
 - 2026-07-02 : Dette bloquante identifiée — 3 appels résiduels à `Inventory` (autoload supprimé) font crasher le jeu ; correction requise avant validation Phase 0.
 - 2026-07-03 : Convention confirmée — aucun `.import` sous `game/assets/sprites/` ; toute texture PNG s'y charge en runtime (`Image.load_from_file`), jamais via `preload()` direct (sinon crash au lancement sans indexation éditeur préalable).
+- 2026-07-05 : Phase 2 game_art (2.1 à 2.4) close — validation visuelle jeu/éditeur confirmée par l'utilisateur.

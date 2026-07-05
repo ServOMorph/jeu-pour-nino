@@ -1,3 +1,11 @@
+## v1.20 — 2026-07-05
+
+### Corrigé
+- `game_art/editeur/main.gd` : bug de zoom de l'éditeur d'animations — `SubViewportContainer.stretch = true` sans `stretch_shrink` réglé faisait que le `SubViewport` interne se redimensionnait à la taille du container au lieu de garder sa résolution native zoomée, rendant le sprite minuscule à l'écran. Fix : `stretch_shrink = int(z)` dans `_set_zoom`.
+
+### Validé
+- Phase 2.3 de `game_art/roadmap_editeur.md` (comparaison visuelle jeu/éditeur via `run_edit_game.py`) confirmée par l'utilisateur — Phase 2 game_art intégralement close.
+
 ## v1.19 — 2026-07-03
 
 ### Ajouté

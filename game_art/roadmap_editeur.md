@@ -184,9 +184,15 @@ Le gros de la galerie/preview existe déjà dans `main.gd`. Reste :
 
 #### 2.3 Vérification visuelle contre le jeu
 
-- [ ] Lancer le jeu (`python run_game.py`) et l'éditeur côte à côte : `player.run` doit avoir
+- [x] Lancer le jeu (`python run_game.py`) et l'éditeur côte à côte : `player.run` doit avoir
       le même timing (8 fps, 2 frames) et le même rendu pixel (nearest, pas de flou).
       Le zoom x1 éditeur = taille pixel jeu 1:1.
+      Validé le 2026-07-05, après correctif du zoom éditeur (voir ci-dessous).
+
+Bug corrigé au passage : `SubViewportContainer.stretch = true` sans `stretch_shrink` réglé
+faisait que Godot redimensionnait le `SubViewport` interne à la taille du container au lieu
+de garder un rendu 200x200 zoomé — le sprite paraissait minuscule dans un grand canvas.
+Fix : `_preview_container.stretch_shrink = int(z)` dans `_set_zoom` (`main.gd`).
 
 #### 2.4 Assainir la synchro (dette Phase 0 découverte)
 
