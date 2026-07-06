@@ -3,7 +3,6 @@
     "max_hp":         85,
     "contact_damage":  3,
     "attack_count":    3,
-    "coin_reward":    12,
     "physics": {
       "gravity":          800.0,
       "max_fall":         400.0,

@@ -32,7 +32,7 @@ func _ready() -> void:
 	_load_level_config()
 	RunState.reset()
 	if Dev.dev_resources > 0:
-		RunState.add(Dev.dev_resources)
+		RunState.grant_dev_materials(Dev.dev_resources)
 	_build_background()
 	_build_geometry()
 	var cfg := _resolve_spawn()
@@ -205,10 +205,11 @@ func _spawn_boss() -> void:
 	boss.died.connect(_on_boss_died)
 
 func _spawn_ores() -> void:
-	for pos_data in _level_cfg["ores"]:
+	for ore_cfg in _level_cfg["ores"]:
 		var ore := ORE_NODE.new()
+		ore.material_id = String(ore_cfg.get("material", "cuivre"))
 		add_child(ore)
-		ore.global_position = _vec2(pos_data)
+		ore.global_position = _vec2(ore_cfg["pos"])
 
 func _spawn_workbench() -> void:
 	_craft_menu = CRAFT_MENU_SCRIPT.new()
@@ -277,11 +278,10 @@ func _return_to_title() -> void:
 func _toggle_dev_resources() -> void:
 	if Dev.dev_resources > 0:
 		Dev.dev_resources = 0
-		RunState.resources = max(0, RunState.resources - 100)
-		RunState.resources_changed.emit(RunState.resources)
+		RunState.clear_dev_materials()
 	else:
 		Dev.dev_resources = 100
-		RunState.add(100)
+		RunState.grant_dev_materials(Dev.dev_resources)
 
 func _toggle_dev_hp() -> void:
 	Dev.infinite_hp = not Dev.infinite_hp

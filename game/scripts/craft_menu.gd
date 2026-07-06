@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 const RECIPE_FILE := "res://data/recipes.json"
+const LEGACY_RESOURCE_MATERIAL := "cuivre"
 const PX := 140.0
 const PY := 77.0
 const PW := 200.0
@@ -76,7 +77,7 @@ func _build_row(i: int) -> void:
 	add_child(bg)
 
 	var lbl := Label.new()
-	lbl.text = "%s — %d MIN" % [recipe["name"], int(recipe["cost"])]
+	lbl.text = "%s — %s" % [recipe["name"], _format_costs(_get_recipe_costs(recipe))]
 	lbl.position = Vector2(PX + 8, y + 2)
 	lbl.add_theme_font_size_override("font_size", 9)
 	add_child(lbl)
@@ -104,13 +105,14 @@ func _refresh() -> void:
 		if not row_visible:
 			continue
 		var recipe: Dictionary = _visible_recipes[i]
-		var cost := int(recipe["cost"])
+		var costs := _get_recipe_costs(recipe)
+		var cost_text := _format_costs(costs)
 		var id: String = recipe["id"]
 		var is_consumable: bool = recipe.get("consumable", false)
 		var done := false
 		if not is_consumable:
 			done = RunState.has_item(id)
-		var affordable := RunState.resources >= cost
+		var affordable := _can_afford(costs)
 
 		_row_bgs[i].color = Color(0.30, 0.26, 0.20) if i == _selected else Color(0.20, 0.18, 0.15)
 
@@ -118,10 +120,10 @@ func _refresh() -> void:
 			_row_labels[i].text = "%s [PRET]" % recipe["name"]
 			_row_labels[i].modulate = Color(0.45, 0.70, 0.45)
 		elif affordable:
-			_row_labels[i].text = "%s — %d MIN" % [recipe["name"], cost]
+			_row_labels[i].text = "%s — %s" % [recipe["name"], cost_text]
 			_row_labels[i].modulate = Color(1.0, 0.95, 0.8)
 		else:
-			_row_labels[i].text = "%s — %d MIN" % [recipe["name"], cost]
+			_row_labels[i].text = "%s — %s" % [recipe["name"], cost_text]
 			_row_labels[i].modulate = Color(0.45, 0.45, 0.45)
 
 func _process(_delta: float) -> void:
@@ -151,7 +153,7 @@ func _try_craft(i: int) -> void:
 	if not is_consumable:
 		if RunState.has_item(id):
 			return
-	if RunState.spend(int(recipe["cost"])):
+	if RunState.spend_materials(_get_recipe_costs(recipe)):
 		if is_consumable:
 			RunState.add_consumable(id)
 		else:
@@ -185,3 +187,27 @@ func _is_recipe_obsolete(recipe: Dictionary) -> bool:
 	if id == "epee_cuivre" and RunState.has_item("epee_fer"):
 		return true
 	return false
+
+func _get_recipe_costs(recipe: Dictionary) -> Dictionary:
+	var raw_costs: Variant = recipe.get("materials", {})
+	if raw_costs is Dictionary and not raw_costs.is_empty():
+		return raw_costs
+	if "cost" in recipe:
+		return {LEGACY_RESOURCE_MATERIAL: int(recipe["cost"])}
+	return {}
+
+func _can_afford(costs: Dictionary) -> bool:
+	for raw_id in costs.keys():
+		var id := String(raw_id)
+		var qty := int(costs[raw_id])
+		if RunState.get_material(id) < qty:
+			return false
+	return true
+
+func _format_costs(costs: Dictionary) -> String:
+	var parts: Array[String] = []
+	for raw_id in costs.keys():
+		var id := String(raw_id)
+		parts.append("%s x%d" % [RunState.get_material_name(id), int(costs[raw_id])])
+	parts.sort()
+	return ", ".join(parts)

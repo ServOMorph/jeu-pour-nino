@@ -3,12 +3,12 @@
 ## Question bloquante
 
 ## Actions ouvertes
-- [P1] Lancer le développement avec 2 agents séparés (jeu et game_art) en s'appuyant sur `questions.md` comme source d'arbitrage commune en cas de doute de conception.
+- [P2] Lancer le développement avec 2 agents séparés (jeu et game_art) en s'appuyant sur `questions.md` comme source d'arbitrage commune en cas de doute de conception.
   fait quand: les deux agents travaillent sans contradiction — `roadmap.md` (jeu) et `game_art/backlog_art.md` (game_art) sont cohérents entre eux et avec `questions.md`.
   réf: `questions.md` (racine), `roadmap.md`, `game_art/backlog_art.md`
-- [P1] Démarrer Phase 1 roadmap v3 : matériaux typés (materials: Dictionary dans RunState), avec la table définitive de 13 matériaux et le gating de minage par tier de pioche.
-  fait quand: miner ajoute le bon matériau ; minage gaté par tier ; coins supprimés de `RunState` ; HUD reflète les quantités par type ; tests verts ; couverture ≥ 85 % sur le périmètre livré.
-  réf: `roadmap.md` Phase 1, `questions.md` Q041/Q022/Q045, `game/scripts/run_state.gd`, `game/scripts/ore_node.gd`, `game/scripts/hud.gd`
+- [P1] Compléter la Phase 1 roadmap v3 : le socle matériaux typés est branché (`RunState`, HUD, craft transitoire, gisements, suppression des `coins`), mais le gating de minage repose encore sur `get_pickaxe_tier() = 1` et n'est donc pas fermé pour les tiers 2/3.
+  fait quand: un vrai tier de pioche issu des données gameplay est comparé au tier du matériau ; un run manuel complet valide minage/craft/HUD ; les tests restent verts avec couverture ≥ 85 % sur le périmètre livré.
+  réf: `roadmap.md` Phase 1, `questions.md` Q041/Q022/Q045, `game/data/materials.json`, `game/scripts/run_state.gd`, `game/scripts/ore_node.gd`, `game/scripts/craft_menu.gd`, `game/scripts/hud.gd`
 - [P2] Point de vigilance Phase 3 : déplacer `RunState.reset()` de `level.gd._ready()` vers `title.gd._start_game()` — un run est multi-biomes, le reset ne doit avoir lieu qu'au lancement d'un nouveau run, pas à chaque entrée en biome.
   fait quand: un aller-retour HUB↔biome en cours de run conserve matériaux/équipement/cicatrices ; test de non-régression dédié vert.
   réf: `roadmap.md` Phase 3, `questions.md` Q001
@@ -26,7 +26,6 @@
 - `questions.md` (racine) : 77+1 questions de conception v3 tranchées le 2026-07-06 — source de vérité pour tout arbitrage de design ambigu. Consulter avant de trancher soi-même un point non couvert par `roadmap.md`.
 - `roadmap.md` et les 4 docs `docs/v3/*.md` ont été mis à jour le 2026-07-06 pour intégrer ces décisions (section « Décisions verrouillées » en tête de roadmap, sections « Précisions v3.1 » en tête de chaque doc v3).
 - `game_art/backlog_art.md` mis à jour en cohérence le 2026-07-06 — c'est le point de jonction entre l'agent jeu et l'agent game_art ; toute nouvelle décision de conception affectant le visuel doit y être répercutée.
-- Convention sprite player tranchée le 2026-07-06 : conserver la taille actuelle validée en jeu pour la suite.
 - Ollama opérationnel sur cette machine — prêt pour délégation de tâches templated
 - Godot 4.5 disponible via `D:\tmp\godot45\Godot_v4.5-stable_win64.exe`
 - Source de vérité sprites/animations : `game_art/assets/` et `game_art/data/animations.json` — ne pas éditer `game/assets/sprites/` directement
@@ -42,27 +41,30 @@
 - `roadmap.md` détaillée : chaque phase ancrée dans le code réel (fichiers, lignes, schémas JSON cibles). Phase 5 : conserver la scène biome en mémoire pendant l'Arène (pas de sérialisation complète) ; Phase 6 : planchers durs obligatoires dans `scars.json` (Q026b).
 - Piège Godot découvert 2026-07-05 : `SubViewportContainer.stretch = true` sans `stretch_shrink` réglé fait que le `SubViewport` interne se redimensionne à la taille du container au lieu de garder sa résolution fixe zoomée — toujours régler `stretch_shrink` en complément de `stretch=true` pour un zoom pixel-perfect.
 - game_art Phase 2 (2.1 à 2.4) intégralement terminée et validée visuellement.
+- Phase 1 entamée le 2026-07-06 : `materials.json` ajouté, `RunState` migré vers `materials`, HUD/craft/gisements branchés, `coins` supprimés du code de jeu.
+- Vérifié le 2026-07-06 : GUT vert (`21/21`) et démarrage Godot headless OK ; la fermeture de Phase 1 reste bloquée par l'absence d'un vrai tier de pioche data-driven pour les minerais de tier 2/3.
 
-## Dernière session (2026-07-06 — Phase 0 validée, blocage taille levé)
+## Dernière session (2026-07-06 — Phase 1 entamée, coins supprimés)
 
 # Session du 2026-07-06
 
 ## Décisions prises
-- La taille actuelle des sprites player est conservée pour la suite.
-- La Phase 0 jeu est validée : `inventory.gd` supprimé, 20 tests GUT verts, run manuel complet validé.
+- La Phase 1 n'est pas close : le socle matériaux typés est branché, mais le tier de pioche reste provisoire (`get_pickaxe_tier() = 1`).
+- Les `coins` sont retirés du runtime jeu ; la progression de run passe désormais par `materials` côté `RunState`.
 
 ## Livrables produits ou modifiés
-- `roadmap.md` : dette bloquante Phase 0 marquée corrigée et validée ; tâches Phase 0 cochées.
-- `game/tests/test_run_state.gd`, `game/tests/test_meta_state.gd`, `game/tests/test_save_manager.gd` : typage/robustesse ajustés, exécution GUT verte.
-- `game/scripts/inventory.gd` : supprimé du dépôt.
-- `game_art/backlog_art.md`, `docs/process_generation_sprites.md` : convention de taille player réalignée sur la taille actuelle validée en jeu.
+- `game/data/materials.json` : table des 13 matériaux ajoutée.
+- `game/scripts/run_state.gd`, `game/scripts/ore_node.gd`, `game/scripts/hud.gd`, `game/scripts/craft_menu.gd`, `game/scripts/level.gd` : migration vers `materials`, gisements typés, HUD compact par matériau, craft transitoire mono-matériau, dev resources par matériau.
+- `game/scripts/enemy_base.gd`, `game/scripts/boss.gd`, `game/data/enemies.json`, `game/data/boss.json` : suppression des `coins`/`coin_reward`.
+- `game/tests/test_run_state.gd` : tests réécrits sur le nouveau contrat `materials`, legacy `resources` inclus.
 
 ## Hypothèses validées / invalidées
-- VALIDE : la taille actuelle des sprites player est conservée.
-- VALIDE : la Phase 0 est bien clôturable après suppression de `inventory.gd`, GUT vert et run complet.
+- VALIDE : la migration `RunState.resources` → `RunState.materials` tient sous GUT (`21/21`) et le projet démarre en headless.
+- INVALIDE : considérer la Phase 1 comme finie maintenant -> pivot vers une clôture différée après branchement d'un vrai tier de pioche et validation de run manuel.
 
 ## Prochaine étape exacte
-Lancer la Phase 1 : matériaux typés dans `RunState`, gating de minage par tier et suppression des `coins`.
+Brancher un tier de pioche réel depuis les données gameplay, puis valider manuellement un run Phase 1 (minage, craft, HUD, menu dev).
+Ensuite seulement, marquer la Phase 1 comme close dans la roadmap et les signaux.
 
 ## Question bloquante pour la session suivante
 Aucune

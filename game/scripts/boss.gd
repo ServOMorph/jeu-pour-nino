@@ -40,8 +40,6 @@ var dur_attack_pause   := 0.6
 
 var flash_duration     := 0.1
 var flash_modulate     := 2.5
-var coin_reward        := 12
-
 var hp := 0
 var state: int = State.SLEEP
 var _state_time := 0.0
@@ -66,7 +64,6 @@ func _load_config() -> void:
 	if "max_hp"         in cfg: max_hp         = int(cfg["max_hp"])
 	if "contact_damage" in cfg: contact_damage = int(cfg["contact_damage"])
 	if "attack_count"   in cfg: attack_count   = int(cfg["attack_count"])
-	if "coin_reward"    in cfg: coin_reward    = int(cfg["coin_reward"])
 	var phy: Variant = cfg.get("physics", {})
 	if phy is Dictionary:
 		if "gravity"         in phy: gravity         = float(phy["gravity"])
@@ -251,8 +248,6 @@ func _die() -> void:
 	set_physics_process(false)
 	visual.modulate = Color(0.3, 0.2, 0.35)
 	_update_visual()
-	if coin_reward > 0:
-		RunState.add_coins(coin_reward)
 	AudioManager.play("victory")
 	died.emit()
 	queue_free()

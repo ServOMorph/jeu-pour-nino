@@ -8,8 +8,6 @@ const ENEMY_CONFIG_FILE := "res://data/enemies.json"
 @export var max_hp := 5
 @export var contact_damage := 1
 @export var gravity := 800.0
-@export var coin_reward := 0
-
 var hp := 0
 var _flash := 0.0
 var _dead := false
@@ -40,9 +38,6 @@ func _load_config() -> void:
 		contact_damage = int(cfg["contact_damage"])
 	if "gravity" in cfg:
 		gravity = float(cfg["gravity"])
-	if "coin_reward" in cfg:
-		coin_reward = int(cfg["coin_reward"])
-
 func _get_enemy_config() -> Dictionary:
 	var f := FileAccess.open(ENEMY_CONFIG_FILE, FileAccess.READ)
 	if f == null:
@@ -103,8 +98,6 @@ func _process(delta: float) -> void:
 
 func _die() -> void:
 	_dead = true
-	if coin_reward > 0:
-		RunState.add_coins(coin_reward)
 	_update_visual()
 	died.emit(self)
 	queue_free()

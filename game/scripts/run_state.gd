@@ -1,39 +1,82 @@
 extends Node
 
-signal resources_changed(current: int)
-signal coins_changed(current: int)
+signal materials_changed(id: String, count: int)
 signal items_changed()
 signal consumable_changed(id: String)
 
-var resources := 0
-var coins := 0
+const MATERIALS_CONFIG := "res://data/materials.json"
+const LEGACY_RESOURCE_MATERIAL := "cuivre"
+
+var materials: Dictionary = {}
 var items: Array[String] = []
 var consumables: Dictionary = {}
 
+var _material_defs: Dictionary = {}
+
 func reset() -> void:
-	resources = 0
-	coins = 0
+	materials.clear()
 	items.clear()
 	consumables.clear()
-	resources_changed.emit(resources)
-	coins_changed.emit(coins)
+	_emit_all_materials()
 	items_changed.emit()
 	consumable_changed.emit("")
 
-func add(amount: int) -> void:
-	resources += amount
-	resources_changed.emit(resources)
+func add_material(id: String, qty: int) -> void:
+	if qty <= 0:
+		return
+	var current := get_material(id)
+	materials[id] = current + qty
+	materials_changed.emit(id, int(materials[id]))
 
-func add_coins(amount: int) -> void:
-	coins += amount
-	coins_changed.emit(coins)
+func get_material(id: String) -> int:
+	return int(materials.get(id, 0))
 
-func spend(amount: int) -> bool:
-	if resources < amount:
-		return false
-	resources -= amount
-	resources_changed.emit(resources)
+func spend_materials(costs: Dictionary) -> bool:
+	for raw_id in costs.keys():
+		var id := String(raw_id)
+		var qty := int(costs[raw_id])
+		if get_material(id) < qty:
+			return false
+	for raw_id in costs.keys():
+		var id := String(raw_id)
+		var qty := int(costs[raw_id])
+		materials[id] = get_material(id) - qty
+		materials_changed.emit(id, int(materials[id]))
 	return true
+
+func get_material_ids() -> Array[String]:
+	_ensure_material_defs()
+	var ids: Array[String] = []
+	for raw_id in _material_defs.keys():
+		ids.append(String(raw_id))
+	ids.sort()
+	return ids
+
+func get_material_config(id: String) -> Dictionary:
+	_ensure_material_defs()
+	var cfg: Variant = _material_defs.get(id, {})
+	return cfg if cfg is Dictionary else {}
+
+func get_material_name(id: String) -> String:
+	var cfg := get_material_config(id)
+	return String(cfg.get("name", id.capitalize()))
+
+func get_material_tier(id: String) -> int:
+	var cfg := get_material_config(id)
+	return int(cfg.get("tier", 1))
+
+func get_pickaxe_tier() -> int:
+	return 1
+
+func grant_dev_materials(qty: int) -> void:
+	for id in get_material_ids():
+		materials[id] = qty
+		materials_changed.emit(id, qty)
+
+func clear_dev_materials() -> void:
+	for id in get_material_ids():
+		materials[id] = 0
+		materials_changed.emit(id, 0)
 
 func add_item(id: String) -> void:
 	items.append(id)
@@ -64,18 +107,36 @@ func use_consumable() -> String:
 
 func serialize() -> Dictionary:
 	return {
-		"resources": resources,
-		"coins": coins,
+		"materials": materials.duplicate(),
 		"items": items.duplicate(),
 		"consumables": consumables.duplicate(),
 	}
 
 func deserialize(data: Dictionary) -> void:
-	resources = int(data.get("resources", 0))
-	coins = int(data.get("coins", 0))
+	materials.clear()
+	var has_materials := data.has("materials")
+	var raw_materials: Variant = data.get("materials", {})
+	if has_materials and raw_materials is Dictionary:
+		for raw_id in raw_materials.keys():
+			materials[String(raw_id)] = int(raw_materials[raw_id])
+	elif "resources" in data:
+		materials[LEGACY_RESOURCE_MATERIAL] = int(data.get("resources", 0))
 	items = Array(data.get("items", []), TYPE_STRING, "", null)
 	consumables = data.get("consumables", {}).duplicate()
-	resources_changed.emit(resources)
-	coins_changed.emit(coins)
+	_emit_all_materials()
 	items_changed.emit()
 	consumable_changed.emit("")
+
+func _ensure_material_defs() -> void:
+	if not _material_defs.is_empty():
+		return
+	var file := FileAccess.open(MATERIALS_CONFIG, FileAccess.READ)
+	if file == null:
+		return
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	if parsed is Dictionary:
+		_material_defs = parsed
+
+func _emit_all_materials() -> void:
+	for id in get_material_ids():
+		materials_changed.emit(id, get_material(id))

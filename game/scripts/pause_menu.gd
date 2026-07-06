@@ -14,7 +14,7 @@ const COLOR_IDLE := Color(0.45, 0.45, 0.45)
 const COLOR_ON := Color(0.4, 1.0, 0.4)
 
 const MAIN_ENTRIES := ["REPRENDRE", "RECOMMENCER", "QUITTER", "MODE DEV"]
-const DEV_ENTRIES := ["[ ] 100 MIN", "[ ] VIE INF", "ATELIER", "TEST BOSS", "RETOUR"]
+const DEV_ENTRIES := ["[ ] 100 MAT", "[ ] VIE INF", "ATELIER", "TEST BOSS", "RETOUR"]
 
 var _state := State.MAIN
 var _selected := 0
@@ -153,7 +153,7 @@ func _refresh() -> void:
 		_main_labels[i].add_theme_color_override("font_color", COLOR_SELECTED if i == _selected else COLOR_IDLE)
 	for i in _dev_labels.size():
 		if i == 0:
-			_dev_labels[i].text = "[X] 100 MIN" if Dev.dev_resources > 0 else "[ ] 100 MIN"
+			_dev_labels[i].text = "[X] 100 MAT" if Dev.dev_resources > 0 else "[ ] 100 MAT"
 			_dev_labels[i].add_theme_color_override("font_color", _toggle_color(i, Dev.dev_resources > 0))
 		elif i == 1:
 			_dev_labels[i].text = "[X] VIE INF" if Dev.infinite_hp else "[ ] VIE INF"

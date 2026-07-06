@@ -19,7 +19,7 @@ var _main_labels: Array[Label] = []
 var _dev_labels:  Array[Label] = []
 
 const MAIN_ENTRIES := ["JOUER", "MODE DEV"]
-const DEV_ENTRIES  := ["[ ] 100 MIN", "[ ] VIE INF", "JOUER", "ATELIER", "TEST BOSS", "RETOUR"]
+const DEV_ENTRIES  := ["[ ] 100 MAT", "[ ] VIE INF", "JOUER", "ATELIER", "TEST BOSS", "RETOUR"]
 
 func _ready() -> void:
 	var bg := ColorRect.new()
@@ -122,7 +122,7 @@ func _refresh() -> void:
 				var is_toggle := i <= 1
 				if is_toggle:
 					var enabled := _dev_res if i == 0 else _dev_hp
-					var label := "100 MIN" if i == 0 else "VIE INF"
+					var label := "100 MAT" if i == 0 else "VIE INF"
 					_dev_labels[i].text = ("[X] %s" if enabled else "[ ] %s") % label
 					var col: Color
 					if i == _selected:

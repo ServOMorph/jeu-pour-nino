@@ -1,0 +1,94 @@
+{
+  "bois": {
+    "name": "Bois",
+    "biome": "biome1",
+    "rarity": "common",
+    "tier": 1,
+    "ore": {"hp": 2, "drop": 1, "size": [14, 14], "sprite": "res://assets/sprites/objects/ore_copper.png"}
+  },
+  "pierre": {
+    "name": "Pierre",
+    "biome": "biome1",
+    "rarity": "common",
+    "tier": 1,
+    "ore": {"hp": 3, "drop": 1, "size": [14, 14], "sprite": "res://assets/sprites/objects/ore_copper.png"}
+  },
+  "cuivre": {
+    "name": "Cuivre",
+    "biome": "biome1",
+    "rarity": "common",
+    "tier": 1,
+    "ore": {"hp": 3, "drop": 1, "size": [14, 14], "sprite": "res://assets/sprites/objects/ore_copper.png"}
+  },
+  "cuir": {
+    "name": "Cuir",
+    "biome": "biome1",
+    "rarity": "common",
+    "tier": 1,
+    "source": "drop_ennemi"
+  },
+  "fer": {
+    "name": "Fer",
+    "biome": "biome2",
+    "rarity": "uncommon",
+    "tier": 2,
+    "ore": {"hp": 4, "drop": 1, "size": [14, 14], "sprite": "res://assets/sprites/objects/ore_copper.png"}
+  },
+  "charbon": {
+    "name": "Charbon",
+    "biome": "biome2",
+    "rarity": "uncommon",
+    "tier": 2,
+    "ore": {"hp": 3, "drop": 1, "size": [14, 14], "sprite": "res://assets/sprites/objects/ore_copper.png"}
+  },
+  "minerai_sombre": {
+    "name": "Minerai sombre",
+    "biome": "biome2",
+    "rarity": "rare",
+    "tier": 2,
+    "ore": {"hp": 5, "drop": 1, "size": [14, 14], "sprite": "res://assets/sprites/objects/ore_copper.png"}
+  },
+  "cristal": {
+    "name": "Cristal",
+    "biome": "biome3",
+    "rarity": "rare",
+    "tier": 2,
+    "ore": {"hp": 4, "drop": 1, "size": [14, 14], "sprite": "res://assets/sprites/objects/ore_copper.png"}
+  },
+  "minerai_celeste": {
+    "name": "Minerai céleste",
+    "biome": "biome3",
+    "rarity": "rare",
+    "tier": 2,
+    "ore": {"hp": 5, "drop": 1, "size": [14, 14], "sprite": "res://assets/sprites/objects/ore_copper.png"}
+  },
+  "essence_vent": {
+    "name": "Essence de vent",
+    "biome": "biome3",
+    "rarity": "rare",
+    "tier": 2,
+    "source": "drop_ennemi"
+  },
+  "fragment_noyau": {
+    "name": "Fragment du Noyau",
+    "biome": "biome4",
+    "rarity": "epic",
+    "tier": 3,
+    "source": "drop_boss",
+    "ore": {"hp": 6, "drop": 1, "size": [14, 14], "sprite": "res://assets/sprites/objects/ore_copper.png"}
+  },
+  "minerai_abyssal": {
+    "name": "Minerai abyssal",
+    "biome": "biome4",
+    "rarity": "epic",
+    "tier": 3,
+    "ore": {"hp": 6, "drop": 1, "size": [14, 14], "sprite": "res://assets/sprites/objects/ore_copper.png"}
+  },
+  "essence_voile": {
+    "name": "Essence du Voile",
+    "biome": "voile",
+    "rarity": "legendary",
+    "tier": 3,
+    "source": "drop_gardien"
+  }
+}

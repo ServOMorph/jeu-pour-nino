@@ -68,18 +68,18 @@
     "max_alive": 17
   },
   "ores": [
-    [180, 225],
-    [300, 185],
-    [460, 150],
-    [600, 225],
-    [760, 160],
-    [1050, 225],
-    [1260, 185],
-    [1590, 225],
-    [1770, 155],
-    [2000, 185],
-    [2250, 225],
-    [2460, 150]
+    {"pos": [180, 225], "material": "cuivre"},
+    {"pos": [300, 185], "material": "cuivre"},
+    {"pos": [460, 150], "material": "cuivre"},
+    {"pos": [600, 225], "material": "cuivre"},
+    {"pos": [760, 160], "material": "cuivre"},
+    {"pos": [1050, 225], "material": "cuivre"},
+    {"pos": [1260, 185], "material": "cuivre"},
+    {"pos": [1590, 225], "material": "cuivre"},
+    {"pos": [1770, 155], "material": "cuivre"},
+    {"pos": [2000, 185], "material": "cuivre"},
+    {"pos": [2250, 225], "material": "cuivre"},
+    {"pos": [2460, 150], "material": "cuivre"}
   ],
   "workbench": {
     "pos": [1100, 231]

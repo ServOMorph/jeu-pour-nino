@@ -1,25 +1,32 @@
 extends StaticBody2D
 
-const ORE_SIZE := Vector2(14, 14)
-const ORE_HP := 3
-const ORE_DROP := 1
-const ORE_TEXTURE_PATH := "res://assets/sprites/objects/ore_copper.png"
+const DEFAULT_SIZE := Vector2(14, 14)
+const DEFAULT_HP := 3
+const DEFAULT_DROP := 1
+const DEFAULT_TEXTURE_PATH := "res://assets/sprites/objects/ore_copper.png"
 
-var _hp := ORE_HP
+var material_id := "cuivre"
+
+var _hp := DEFAULT_HP
+var _drop := DEFAULT_DROP
+var _size := DEFAULT_SIZE
+var _required_tier := 1
+var _texture_path := DEFAULT_TEXTURE_PATH
 var _visual: Sprite2D
 
 func _ready() -> void:
+	_load_material_config()
 	collision_layer = 1
 	collision_mask = 0
 
 	var shape := CollisionShape2D.new()
 	var rs := RectangleShape2D.new()
-	rs.size = ORE_SIZE
+	rs.size = _size
 	shape.shape = rs
 	add_child(shape)
 
 	_visual = Sprite2D.new()
-	var image := Image.load_from_file(ProjectSettings.globalize_path(ORE_TEXTURE_PATH))
+	var image := Image.load_from_file(ProjectSettings.globalize_path(_texture_path))
 	if image != null and not image.is_empty():
 		_visual.texture = ImageTexture.create_from_image(image)
 	add_child(_visual)
@@ -30,21 +37,37 @@ func _ready() -> void:
 	hurtbox.collision_mask = 8
 	var hb_shape := CollisionShape2D.new()
 	var hb_rs := RectangleShape2D.new()
-	hb_rs.size = ORE_SIZE
+	hb_rs.size = _size
 	hb_shape.shape = hb_rs
 	hurtbox.add_child(hb_shape)
 	add_child(hurtbox)
 
 func take_damage(amount: int, _knockback: Vector2) -> void:
+	if RunState.get_pickaxe_tier() < _required_tier:
+		AudioManager.play("cant_craft")
+		return
 	_hp -= amount
 	_flash()
 	_burst_particles(4, false)
 	AudioManager.play("mine")
 	if _hp <= 0:
-		RunState.add(ORE_DROP)
+		RunState.add_material(material_id, _drop)
 		_burst_particles(10, true)
 		AudioManager.play("mine_break")
 		queue_free()
+
+func _load_material_config() -> void:
+	var cfg := RunState.get_material_config(material_id)
+	_required_tier = int(cfg.get("tier", 1))
+	var ore_cfg: Variant = cfg.get("ore", {})
+	if ore_cfg is not Dictionary:
+		return
+	_hp = int(ore_cfg.get("hp", DEFAULT_HP))
+	_drop = int(ore_cfg.get("drop", DEFAULT_DROP))
+	var size_data: Variant = ore_cfg.get("size", [DEFAULT_SIZE.x, DEFAULT_SIZE.y])
+	if size_data is Array and size_data.size() >= 2:
+		_size = Vector2(float(size_data[0]), float(size_data[1]))
+	_texture_path = String(ore_cfg.get("sprite", DEFAULT_TEXTURE_PATH))
 
 func _flash() -> void:
 	var t := create_tween()

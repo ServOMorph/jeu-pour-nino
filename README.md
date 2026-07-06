@@ -65,10 +65,10 @@ Necessite Godot 4.5 disponible dans le PATH, ou via `D:\tmp\godot45\Godot_v4.5-s
 
 ## Etat actuel
 
-**v1.27.** Jeu : Phase 0 validee. `inventory.gd` est supprime, 20 tests GUT passent et un run manuel complet est valide. La roadmap est alignee sur cet etat.
-La taille actuelle des sprites player est conservee pour la suite.
+**v1.28.** Jeu : Phase 1 entamee. `RunState` utilise des `materials`, `materials.json` est ajoute, le HUD/le craft transitoire/les gisements sont migres et les `coins` sont retires du runtime.
+GUT est vert (`21/21`) et le projet demarre en headless sans erreur immediate.
+La Phase 1 n'est pas close : le gating de minage repose encore sur un tier de pioche provisoire (`get_pickaxe_tier() = 1`) et doit etre branche sur une vraie donnee gameplay avant validation manuelle complete.
 `game_art` reste aligne sur `questions.md` via `backlog_art.md`, avec developpement prevu en 2 agents separes (jeu et game_art).
-Prochaine etape : Phase 1 v3, materiaux types, gating de minage par tier et suppression des `coins`.
 
 ## Roadmap
 

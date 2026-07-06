@@ -3,8 +3,7 @@ extends CanvasLayer
 var _hp_fill: ColorRect
 var _boss_bar_root: Control
 var _boss_fill: ColorRect
-var _res_label: Label
-var _coin_label: Label
+var _materials_label: Label
 var _consumable_label: Label
 
 func setup(player: Node, boss: Node) -> void:
@@ -53,34 +52,41 @@ func _build_boss_bar(boss: Node) -> void:
 	boss.health_changed.connect(_on_boss_health_changed)
 
 func _build_resource_counter() -> void:
-	_res_label = Label.new()
-	_res_label.position = Vector2(8, 24)
-	_res_label.add_theme_font_size_override("font_size", 10)
-	_res_label.modulate = Color(0.6, 0.85, 1.0)
-	add_child(_res_label)
-	RunState.resources_changed.connect(_on_resources_changed)
-	_on_resources_changed(RunState.resources)
-
-	_coin_label = Label.new()
-	_coin_label.position = Vector2(8, 36)
-	_coin_label.add_theme_font_size_override("font_size", 10)
-	_coin_label.modulate = Color(1.0, 0.82, 0.25)
-	add_child(_coin_label)
-	RunState.coins_changed.connect(_on_coins_changed)
-	_on_coins_changed(RunState.coins)
+	_materials_label = Label.new()
+	_materials_label.position = Vector2(8, 24)
+	_materials_label.size = Vector2(220, 42)
+	_materials_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_materials_label.add_theme_font_size_override("font_size", 10)
+	_materials_label.modulate = Color(0.6, 0.85, 1.0)
+	add_child(_materials_label)
+	RunState.materials_changed.connect(_on_materials_changed)
+	_refresh_materials()
 
 	_consumable_label = Label.new()
-	_consumable_label.position = Vector2(8, 48)
+	_consumable_label.position = Vector2(8, 68)
 	_consumable_label.add_theme_font_size_override("font_size", 10)
 	add_child(_consumable_label)
 	RunState.consumable_changed.connect(_on_consumable_changed)
 	_on_consumable_changed("")
 
-func _on_resources_changed(current: int) -> void:
-	_res_label.text = "MIN %d" % current
+func _on_materials_changed(_id: String, _count: int) -> void:
+	_refresh_materials()
 
-func _on_coins_changed(current: int) -> void:
-	_coin_label.text = "OR %d" % current
+func _refresh_materials() -> void:
+	var parts: Array[String] = []
+	for id in RunState.get_material_ids():
+		var count := RunState.get_material(id)
+		if count <= 0:
+			continue
+		parts.append("%s %d" % [_material_short_label(id), count])
+	if parts.is_empty():
+		_materials_label.text = "MAT —"
+	else:
+		_materials_label.text = "MAT " + " | ".join(parts)
+
+func _material_short_label(id: String) -> String:
+	var name := RunState.get_material_name(id).to_upper()
+	return name.left(3)
 
 func _on_consumable_changed(id: String) -> void:
 	var count := RunState.get_consumable_count("potion")

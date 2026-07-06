@@ -6,8 +6,7 @@
     "speed": 48.0,
     "patrol_range": 70.0,
     "max_fall": 380.0,
-    "hit_stun_decel": 460.0,
-    "coin_reward": 1
+    "hit_stun_decel": 460.0
   },
   "EnemyFlyer":  {
     "max_hp": 4,
@@ -16,7 +15,6 @@
     "detect_range": 200.0,
     "hover_amplitude": 14.0,
     "hover_speed": 2.2,
-    "hit_stun_decel": 650.0,
-    "coin_reward": 2
+    "hit_stun_decel": 650.0
   }
 }

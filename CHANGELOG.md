@@ -1,3 +1,14 @@
+## v1.28 - 2026-07-06
+
+### Modifie
+- `game/data/materials.json`, `game/data/level.json` : table des 13 materiaux ajoutee et gisements passes au format type `{pos, material}`.
+- `game/scripts/run_state.gd`, `game/scripts/ore_node.gd`, `game/scripts/hud.gd`, `game/scripts/craft_menu.gd`, `game/scripts/level.gd` : migration vers `materials`, gisements types, HUD par materiau, craft transitoire mono-materiau et dev resources par materiau.
+- `_contexte/signals.md`, `_contexte/contexte.md`, `README.md`, `roadmap.md` : etat courant aligne sur une Phase 1 entamee mais non close.
+
+### Corrige
+- `game/scripts/enemy_base.gd`, `game/scripts/boss.gd`, `game/data/enemies.json`, `game/data/boss.json` : suppression des `coins`/`coin_reward` du runtime jeu.
+- `game/tests/test_run_state.gd` : contrat de tests migre vers `materials`, avec couverture du fallback legacy `resources`.
+
 ## v1.27 - 2026-07-06
 
 ### Modifie

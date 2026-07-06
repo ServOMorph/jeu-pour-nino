@@ -48,7 +48,7 @@ Règle absolue maintenue : aucune valeur numérique gameplay hardcodée. Tout da
 | `JoyMap` | `scripts/joymap.gd` | Mapping manette PowerA + `setup_input()` centralisé. Toute nouvelle action input passe par lui (pas de bindings clavier sur les nouvelles actions). |
 | `AudioManager` | `scripts/audio.gd` | Sons placeholder générés en code. `AudioManager.play("id")`. |
 | `Dev` | `scripts/dev.gd` | Flags dev : `spawn`, `dev_resources`, `infinite_hp`. |
-| `RunState` | `scripts/run_state.gd` | État de run éphémère : `resources: int`, `coins`, `items`, `consumables` + signaux typés. `reset()` appelé par `level.gd._ready()`. |
+| `RunState` | `scripts/run_state.gd` | État de run éphémère : `materials: Dictionary`, `items`, `consumables` + signaux typés. `reset()` est encore appelé par `level.gd._ready()` (à déplacer en Phase 3). |
 | `MetaState` | `scripts/meta_state.gd` | Persistant : `skill_points`, `grimoire` (id → {discovered, mastered}). API : `discover_recipe`, `master_recipe`, `is_mastered`, `spend_skill_points`. |
 | `SaveManager` | `scripts/save_manager.gd` | `user://meta_state.json`, `save_meta()`/`load_meta()` (load au `_ready`). |
 
@@ -58,12 +58,12 @@ Règle absolue maintenue : aucune valeur numérique gameplay hardcodée. Tout da
 - `player.gd` (361 l.) : configs chargées depuis `player.json`, `weapons.json`, `armor.json`, `consumables.json`. Signal `died`. `_apply_equipment()` (player.gd:307) recalcule stats depuis `RunState.items` — liste d'épées hardcodée `["epee_fer", "epee_cuivre", "epee_bois"]` (player.gd:315). `damage_reduction` = modèle d'insertion des modificateurs (pour les cicatrices).
 - `boss.gd` (258 l.) : machine à états `enum State {SLEEP, IDLE, CHARGE, VOLLEY, SLAM_RISE, SLAM_FALL, PAUSE}`, config JSON par clé `"Boss"` dans `boss.json` (`_load_config()`), signaux `health_changed`/`died`, `activate()`. Modèle pour Gardiens (Phase 5) et base de la modularisation R3.
 - `enemy_base.gd` + `enemy_ground.gd`/`enemy_flyer.gd` : config `enemies.json`, signal `died(enemy)`.
-- `ore_node.gd` : constantes hardcodées `ORE_SIZE/ORE_HP/ORE_DROP` (ore_node.gd:3-5) — à data-driver en Phase 1. Texture chargée en runtime via `ORE_TEXTURE_PATH` (plus de `preload`, cf. dette bloquante).
-- `craft_menu.gd` (187 l.) : lit `recipes.json`, monnaie unique (`recipe["cost"]` vs `RunState.resources`), `_is_recipe_obsolete()` hardcodé épées (craft_menu.gd:181-187). UI programmatique en coordonnées viewport 480×270.
-- `hud.gd` : s'abonne à `RunState.resources_changed` / `coins_changed` (hud.gd:61-70).
+- `ore_node.gd` : gisement data-driven par `material_id`, lit taille/HP/drop/texture dans `materials.json`, compare le tier du matériau au tier de pioche courant. Le tier de pioche réel reste à brancher pour fermer la Phase 1.
+- `craft_menu.gd` : lit `recipes.json`, convertit encore les anciennes recettes `{cost}` en coût mono-matériau (`cuivre`) via `spend_materials` — transition minimale Phase 1 avant la refonte complète Phase 2.
+- `hud.gd` : s'abonne à `RunState.materials_changed` et affiche une liste compacte des matériaux non nuls.
 
 ### Données (`game/data/`)
-`player.json`, `weapons.json`, `armor.json`, `consumables.json`, `enemies.json`, `boss.json`, `level.json` (niveau fixe actuel), `recipes.json` (format actuel minimal : `[{"id", "name", "cost", "consumable"?}]`), `animations.json` (généré par sync depuis game_art — ne pas éditer ici).
+`player.json`, `weapons.json`, `armor.json`, `consumables.json`, `materials.json`, `enemies.json`, `boss.json`, `level.json` (niveau fixe actuel, gisements typés), `recipes.json` (format actuel minimal : `[{"id", "name", "cost", "consumable"?}]`), `animations.json` (généré par sync depuis game_art — ne pas éditer ici).
 
 ### Tests
 GUT 9.7.0 dans `game/addons/gut/`. Tests dans `game/tests/` : `test_run_state.gd`, `test_meta_state.gd`, `test_save_manager.gd`. Lancement headless :
@@ -152,7 +152,7 @@ Rien.
 Le craft v3 consomme des matériaux distincts (bois, pierre, cuivre, fer, cristaux, fragments du Noyau...). Aujourd'hui `RunState.resources` est un seul entier.
 
 ### Tâches
-- [ ] `game/data/materials.json` — nouveau fichier. Table définitive (questions.md Q041), avec champ `tier` par matériau pour le gating de minage (Q022) :
+- [x] `game/data/materials.json` — table définitive des 13 matériaux en place, avec champs `tier` et sections `ore`. **Reste à fermer** : brancher un vrai tier de pioche data-driven au lieu du placeholder `get_pickaxe_tier() = 1`.
   ```json
   {
     "bois":            {"name": "Bois",             "biome": "biome1", "rarity": "common",   "tier": 1},
@@ -171,21 +171,23 @@ Le craft v3 consomme des matériaux distincts (bois, pierre, cuivre, fer, crista
   }
   ```
   Le minage est **gaté par tier** (Q022) : une pioche de tier insuffisant ne peut pas miner un gisement de tier supérieur. Le champ `tier` de la pioche équipée (`weapons.json` ou config dédiée) est comparé au `tier` du matériau avant d'autoriser le minage dans `ore_node.gd`.
-- [ ] `RunState` : remplacer `resources: int` par `materials: Dictionary` (id → int). Nouvelle API :
+- [x] `RunState` : `resources: int` remplacé par `materials: Dictionary` (id → int). Nouvelle API :
   - `add_material(id: String, qty: int) -> void`
   - `get_material(id: String) -> int`
   - `spend_materials(costs: Dictionary) -> bool` — atomique : vérifie TOUT avant de débiter quoi que ce soit.
   - Signal `materials_changed(id: String, count: int)` remplace `resources_changed(current: int)`.
   - Adapter `serialize()`/`deserialize()` et `reset()`.
-- [ ] Migrer les consommateurs de l'ancien champ (les repérer par `grep -n "resources" game/scripts/*.gd`) :
+- [x] Migrer les consommateurs de l'ancien champ (les repérer par `grep -n "resources" game/scripts/*.gd`) :
   - `hud.gd:61-82` : abonnement `resources_changed` → `materials_changed`, affichage par type (liste compacte `icône/id: qté`).
   - `craft_menu.gd:113` (`RunState.resources >= cost`) et `:154` (`RunState.spend`) : basculer sur `spend_materials` — transition minimale en Phase 1 (recette à coût mono-matériau), refonte complète en Phase 2.
   - `level.gd:34-35` et `:277-284` (`_toggle_dev_resources`) : voir risque « 100 MIN » ci-dessous.
-- [ ] `ore_node.gd` : supprimer les constantes hardcodées (ore_node.gd:3-6). Le gisement reçoit un `material_id` et lit taille/HP/drop/texture depuis `materials.json` (section `ore` par matériau : `{"hp": 3, "drop": 1, "size": [14,14], "sprite": "res://assets/sprites/objects/ore_copper.png"}`). Drop → `RunState.add_material(material_id, drop)`.
-- [ ] `level.json` : les entrées `ores` passent de `[x, y]` à `{"pos": [x, y], "material": "cuivre"}`. Adapter `level.gd._spawn_ores()` (level.gd:207-211).
-- [ ] Tests (`test_run_state.gd` étendu) : add/get/spend atomique (échec si un seul matériau manque → aucun débit), serialize/deserialize, reset.
+- [x] `ore_node.gd` : constantes hardcodées supprimées. Le gisement reçoit un `material_id` et lit taille/HP/drop/texture depuis `materials.json`. Drop → `RunState.add_material(material_id, drop)`.
+- [x] `level.json` : les entrées `ores` passent de `[x, y]` à `{"pos": [x, y], "material": "cuivre"}`. `level.gd._spawn_ores()` adapté.
+- [x] Tests (`test_run_state.gd` étendu) : add/get/spend atomique, serialize/deserialize, reset, fallback legacy `resources`.
 - [ ] Recenser dans `game_art/backlog_art.md` : sprites distincts par type de gisement/minerai. **[game_art]**
-- [ ] **Suppression des coins (Q045)** : les PC remplacent totalement l'or. Retirer `coins`/`add_coins`/`coins_changed` de `RunState`, `hud.gd:61-70`, `enemy_base.gd:107`, `boss.gd:255`.
+- [x] **Suppression des coins (Q045)** : les PC remplacent totalement l'or. `coins`/`add_coins`/`coins_changed` retirés de `RunState`, `hud.gd`, `enemy_base.gd`, `boss.gd`.
+
+**Statut session 2026-07-06** : le socle technique de la Phase 1 est livré et testé (`21/21` GUT verts, démarrage headless OK), mais la phase reste **ouverte** tant qu'un vrai tier de pioche n'est pas fourni par les données gameplay et validé dans un run complet.
 
 ### Fait quand
 Miner un gisement ajoute le bon matériau, gaté par tier de pioche. Le HUD reflète les quantités par type. Aucune référence aux coins ne subsiste. Tests verts.
@@ -571,7 +573,7 @@ Tests : livrés à chaque phase, maintenus verts (non-régression), cible 85 % s
 
 ## Risques transverses majeurs
 
-1. **Dette Phase 0 non purgée** — les 3 appels `Inventory` résiduels crashent le jeu au premier minerai/ennemi. À corriger avant tout.
+1. **Fermeture prématurée de la Phase 1** — le socle `materials` est en place, mais le gating de minage repose encore sur `get_pickaxe_tier() = 1`. Sans tier de pioche data-driven, les minerais de tiers 2/3 ne sont pas réellement validés.
 2. **Persistance de l'état de biome à la résurrection (Phase 5)** — ne pas régénérer le biome au retour de l'Arène ; scène conservée en mémoire (option retenue), timers/références pendantes à surveiller, test dédié obligatoire.
 3. **Gardien du Voile unique construit avant R2** — dette assumée (Le Veilleur des Cendres seul sur un `guardian.gd` paramétré, jamais de copier-coller de `boss.gd`) ; R2 ajoute les 7 autres du pool sur cette même base factorisée.
 4. **Volume d'art** — neutralisé par la règle placeholders + `game_art/backlog_art.md`.
