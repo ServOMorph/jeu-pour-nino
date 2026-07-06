@@ -71,3 +71,14 @@ func test_serialize_deserialize_roundtrip() -> void:
 func test_deserialize_legacy_resources_maps_to_cuivre() -> void:
 	rs.deserialize({"resources": 12})
 	assert_eq(rs.get_material("cuivre"), 12)
+
+func test_pickaxe_tier_defaults_to_one() -> void:
+	assert_eq(rs.get_pickaxe_tier(), 1)
+
+func test_pickaxe_tier_follows_best_owned_weapon() -> void:
+	rs.add_item("epee_bois")
+	assert_eq(rs.get_pickaxe_tier(), 1)
+	rs.add_item("epee_cuivre")
+	assert_eq(rs.get_pickaxe_tier(), 2)
+	rs.add_item("epee_fer")
+	assert_eq(rs.get_pickaxe_tier(), 3)

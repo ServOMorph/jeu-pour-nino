@@ -1,3 +1,13 @@
+## v1.29 - 2026-07-06
+
+### Modifie
+- `game/data/weapons.json`, `game/scripts/run_state.gd`, `game/tests/test_run_state.gd` : gating de minage Phase 1 branche en data-driven via `pickaxe_tier`, avec couverture GUT portee a `23/23`.
+- `game/data/level.json` : minerais de test `fer` et `minerai_abyssal` ajoutes autour de l'atelier pour permettre la validation manuelle des tiers 2/3.
+- `roadmap.md`, `_contexte/signals.md`, `_contexte/contexte.md`, `README.md` : etat Phase 1 aligne sur le gating ferme et la validation manuelle restante.
+
+### Ajoute
+- `game_art/backlog_art.md` : entree backlog pour le sprite manquant `minerai_abyssal`.
+
 ## v1.28 - 2026-07-06
 
 ### Modifie

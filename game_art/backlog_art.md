@@ -59,6 +59,13 @@ Backlog des assets à produire pour la zone jeu. Alimenté par les phases de `ro
 - priorite: moyenne
 - statut: a_faire
 
+### Sprite manquant — minerai abyssal
+- phase: 1 — Matériaux typés
+- placeholder: `minerai_abyssal` utilise encore le sprite générique cuivre en jeu ; aucun sprite distinct tier 3 disponible actuellement dans `game/assets/sprites/objects/`
+- specs: produire un sprite dédié lisible en jeu pour `minerai_abyssal`, cohérent avec un matériau tier 3 / biome 4, clairement distinct visuellement de `ore_copper.png` et `ore_iron.png`
+- priorite: haute
+- statut: a_faire
+
 ### Icônes d'équipement — 4 slots
 - phase: 2 — Grimoire/PC/Craft
 - placeholder: aucun (auto-équipement sans UI dédiée)

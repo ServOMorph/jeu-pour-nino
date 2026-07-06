@@ -5,6 +5,7 @@ signal items_changed()
 signal consumable_changed(id: String)
 
 const MATERIALS_CONFIG := "res://data/materials.json"
+const WEAPONS_CONFIG := "res://data/weapons.json"
 const LEGACY_RESOURCE_MATERIAL := "cuivre"
 
 var materials: Dictionary = {}
@@ -12,6 +13,7 @@ var items: Array[String] = []
 var consumables: Dictionary = {}
 
 var _material_defs: Dictionary = {}
+var _weapon_defs: Dictionary = {}
 
 func reset() -> void:
 	materials.clear()
@@ -66,7 +68,13 @@ func get_material_tier(id: String) -> int:
 	return int(cfg.get("tier", 1))
 
 func get_pickaxe_tier() -> int:
-	return 1
+	_ensure_weapon_defs()
+	var best_tier := 1
+	for item_id in items:
+		var cfg: Variant = _weapon_defs.get(item_id, {})
+		if cfg is Dictionary:
+			best_tier = max(best_tier, int(cfg.get("pickaxe_tier", 1)))
+	return best_tier
 
 func grant_dev_materials(qty: int) -> void:
 	for id in get_material_ids():
@@ -136,6 +144,16 @@ func _ensure_material_defs() -> void:
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
 	if parsed is Dictionary:
 		_material_defs = parsed
+
+func _ensure_weapon_defs() -> void:
+	if not _weapon_defs.is_empty():
+		return
+	var file := FileAccess.open(WEAPONS_CONFIG, FileAccess.READ)
+	if file == null:
+		return
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	if parsed is Dictionary:
+		_weapon_defs = parsed
 
 func _emit_all_materials() -> void:
 	for id in get_material_ids():

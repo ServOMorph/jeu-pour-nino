@@ -74,6 +74,8 @@
     {"pos": [600, 225], "material": "cuivre"},
     {"pos": [760, 160], "material": "cuivre"},
     {"pos": [1050, 225], "material": "cuivre"},
+    {"pos": [1140, 225], "material": "fer"},
+    {"pos": [1180, 225], "material": "minerai_abyssal"},
     {"pos": [1260, 185], "material": "cuivre"},
     {"pos": [1590, 225], "material": "cuivre"},
     {"pos": [1770, 155], "material": "cuivre"},

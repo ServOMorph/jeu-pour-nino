@@ -6,12 +6,15 @@
 - [P2] Lancer le développement avec 2 agents séparés (jeu et game_art) en s'appuyant sur `questions.md` comme source d'arbitrage commune en cas de doute de conception.
   fait quand: les deux agents travaillent sans contradiction — `roadmap.md` (jeu) et `game_art/backlog_art.md` (game_art) sont cohérents entre eux et avec `questions.md`.
   réf: `questions.md` (racine), `roadmap.md`, `game_art/backlog_art.md`
-- [P1] Compléter la Phase 1 roadmap v3 : le socle matériaux typés est branché (`RunState`, HUD, craft transitoire, gisements, suppression des `coins`), mais le gating de minage repose encore sur `get_pickaxe_tier() = 1` et n'est donc pas fermé pour les tiers 2/3.
-  fait quand: un vrai tier de pioche issu des données gameplay est comparé au tier du matériau ; un run manuel complet valide minage/craft/HUD ; les tests restent verts avec couverture ≥ 85 % sur le périmètre livré.
-  réf: `roadmap.md` Phase 1, `questions.md` Q041/Q022/Q045, `game/data/materials.json`, `game/scripts/run_state.gd`, `game/scripts/ore_node.gd`, `game/scripts/craft_menu.gd`, `game/scripts/hud.gd`
+- [P1] Clore proprement la Phase 1 roadmap v3 : le socle matériaux typés est branché et le gating de minage est désormais data-driven, mais il manque encore la validation manuelle complète du flux minage/craft/HUD/menu dev.
+  fait quand: un run manuel complet valide minage/craft/HUD/menu dev ; les tests restent verts avec couverture ≥ 85 % sur le périmètre livré.
+  réf: `roadmap.md` Phase 1, `questions.md` Q041/Q022/Q045, `game/data/materials.json`, `game/data/level.json`, `game/scripts/run_state.gd`, `game/scripts/ore_node.gd`, `game/scripts/craft_menu.gd`, `game/scripts/hud.gd`
 - [P2] Point de vigilance Phase 3 : déplacer `RunState.reset()` de `level.gd._ready()` vers `title.gd._start_game()` — un run est multi-biomes, le reset ne doit avoir lieu qu'au lancement d'un nouveau run, pas à chaque entrée en biome.
   fait quand: un aller-retour HUB↔biome en cours de run conserve matériaux/équipement/cicatrices ; test de non-régression dédié vert.
   réf: `roadmap.md` Phase 3, `questions.md` Q001
+- [P3] Produire un sprite distinct pour `minerai_abyssal` afin de rendre le test manuel tier 3 lisible.
+  fait quand: `minerai_abyssal` n'utilise plus le placeholder cuivre et dispose d'un sprite dédié visible en jeu.
+  réf: `game_art/backlog_art.md`, `game/data/materials.json`, `game/assets/sprites/objects/`
 - [P3] Refaire toutes les frames du player dans le nouveau standard visuel Terraria-like (hors `idle`, corrigé précédemment). (zone game_art)
   fait quand: run1, run2, jump et attack utilisent tous des sprites cohérents avec la taille actuelle validée en jeu.
   réf: `docs/process_generation_sprites.md`, `game_art/data/animations.json`, `game_art/assets/player/`, `game_art/backlog_art.md`
@@ -42,29 +45,31 @@
 - Piège Godot découvert 2026-07-05 : `SubViewportContainer.stretch = true` sans `stretch_shrink` réglé fait que le `SubViewport` interne se redimensionne à la taille du container au lieu de garder sa résolution fixe zoomée — toujours régler `stretch_shrink` en complément de `stretch=true` pour un zoom pixel-perfect.
 - game_art Phase 2 (2.1 à 2.4) intégralement terminée et validée visuellement.
 - Phase 1 entamée le 2026-07-06 : `materials.json` ajouté, `RunState` migré vers `materials`, HUD/craft/gisements branchés, `coins` supprimés du code de jeu.
-- Vérifié le 2026-07-06 : GUT vert (`21/21`) et démarrage Godot headless OK ; la fermeture de Phase 1 reste bloquée par l'absence d'un vrai tier de pioche data-driven pour les minerais de tier 2/3.
+- Vérifié le 2026-07-06 : GUT vert (`23/23`) et démarrage Godot headless OK ; la fermeture de Phase 1 reste bloquée par l'absence d'un run manuel complet de validation.
+- Setup de test Phase 1 ajouté le 2026-07-06 : un minerai tier 2 (`fer`) et un tier 3 (`minerai_abyssal`) sont placés autour de l'atelier dans `level.json`.
+- Visuel manquant identifié le 2026-07-06 : `minerai_abyssal` n'a pas encore de sprite dédié ; entrée ajoutée dans `game_art/backlog_art.md`.
 
-## Dernière session (2026-07-06 — Phase 1 entamée, coins supprimés)
+## Dernière session (2026-07-06 — gating minage fermé, setup de test atelier)
 
 # Session du 2026-07-06
 
 ## Décisions prises
-- La Phase 1 n'est pas close : le socle matériaux typés est branché, mais le tier de pioche reste provisoire (`get_pickaxe_tier() = 1`).
-- Les `coins` sont retirés du runtime jeu ; la progression de run passe désormais par `materials` côté `RunState`.
+- Le gating de minage Phase 1 est branché en data-driven via `weapons.json` et `RunState.get_pickaxe_tier()`.
+- La Phase 1 n'est pas close : un setup de test atelier a été ajouté, mais la validation manuelle complète reste à faire.
 
 ## Livrables produits ou modifiés
-- `game/data/materials.json` : table des 13 matériaux ajoutée.
-- `game/scripts/run_state.gd`, `game/scripts/ore_node.gd`, `game/scripts/hud.gd`, `game/scripts/craft_menu.gd`, `game/scripts/level.gd` : migration vers `materials`, gisements typés, HUD compact par matériau, craft transitoire mono-matériau, dev resources par matériau.
-- `game/scripts/enemy_base.gd`, `game/scripts/boss.gd`, `game/data/enemies.json`, `game/data/boss.json` : suppression des `coins`/`coin_reward`.
-- `game/tests/test_run_state.gd` : tests réécrits sur le nouveau contrat `materials`, legacy `resources` inclus.
+- `game/data/weapons.json`, `game/scripts/run_state.gd`, `game/tests/test_run_state.gd` : tier de pioche data-driven branché et testé (`23/23` GUT).
+- `game/data/level.json` : minerais `fer` et `minerai_abyssal` ajoutés autour de l'atelier pour test manuel Phase 1.
+- `roadmap.md`, `_contexte/signals.md` : état Phase 1 mis à jour après fermeture du placeholder `get_pickaxe_tier() = 1`.
+- `game_art/backlog_art.md` : sprite manquant `minerai_abyssal` ajouté au backlog art.
 
 ## Hypothèses validées / invalidées
-- VALIDE : la migration `RunState.resources` → `RunState.materials` tient sous GUT (`21/21`) et le projet démarre en headless.
-- INVALIDE : considérer la Phase 1 comme finie maintenant -> pivot vers une clôture différée après branchement d'un vrai tier de pioche et validation de run manuel.
+- VALIDE : le tier de pioche est bien lu depuis les données gameplay ; GUT (`23/23`) et démarrage headless du jeu/niveau passent.
+- EN ATTENTE : validation manuelle complète de la Phase 1, désormais testable côté gameplay mais encore limitée visuellement pour le tier 3.
 
 ## Prochaine étape exacte
-Brancher un tier de pioche réel depuis les données gameplay, puis valider manuellement un run Phase 1 (minage, craft, HUD, menu dev).
-Ensuite seulement, marquer la Phase 1 comme close dans la roadmap et les signaux.
+Tester manuellement le flux Phase 1 depuis l'atelier : minage tier 2/tier 3, craft, HUD et menu dev.
+Si le manque de lisibilité du tier 3 gêne encore, produire le sprite `minerai_abyssal` côté game_art avant clôture de Phase 1.
 
 ## Question bloquante pour la session suivante
 Aucune

@@ -58,7 +58,7 @@ Règle absolue maintenue : aucune valeur numérique gameplay hardcodée. Tout da
 - `player.gd` (361 l.) : configs chargées depuis `player.json`, `weapons.json`, `armor.json`, `consumables.json`. Signal `died`. `_apply_equipment()` (player.gd:307) recalcule stats depuis `RunState.items` — liste d'épées hardcodée `["epee_fer", "epee_cuivre", "epee_bois"]` (player.gd:315). `damage_reduction` = modèle d'insertion des modificateurs (pour les cicatrices).
 - `boss.gd` (258 l.) : machine à états `enum State {SLEEP, IDLE, CHARGE, VOLLEY, SLAM_RISE, SLAM_FALL, PAUSE}`, config JSON par clé `"Boss"` dans `boss.json` (`_load_config()`), signaux `health_changed`/`died`, `activate()`. Modèle pour Gardiens (Phase 5) et base de la modularisation R3.
 - `enemy_base.gd` + `enemy_ground.gd`/`enemy_flyer.gd` : config `enemies.json`, signal `died(enemy)`.
-- `ore_node.gd` : gisement data-driven par `material_id`, lit taille/HP/drop/texture dans `materials.json`, compare le tier du matériau au tier de pioche courant. Le tier de pioche réel reste à brancher pour fermer la Phase 1.
+- `ore_node.gd` : gisement data-driven par `material_id`, lit taille/HP/drop/texture dans `materials.json`, compare le tier du matériau au tier de pioche courant issu de `RunState.get_pickaxe_tier()` et de `weapons.json`.
 - `craft_menu.gd` : lit `recipes.json`, convertit encore les anciennes recettes `{cost}` en coût mono-matériau (`cuivre`) via `spend_materials` — transition minimale Phase 1 avant la refonte complète Phase 2.
 - `hud.gd` : s'abonne à `RunState.materials_changed` et affiche une liste compacte des matériaux non nuls.
 
@@ -152,7 +152,7 @@ Rien.
 Le craft v3 consomme des matériaux distincts (bois, pierre, cuivre, fer, cristaux, fragments du Noyau...). Aujourd'hui `RunState.resources` est un seul entier.
 
 ### Tâches
-- [x] `game/data/materials.json` — table définitive des 13 matériaux en place, avec champs `tier` et sections `ore`. **Reste à fermer** : brancher un vrai tier de pioche data-driven au lieu du placeholder `get_pickaxe_tier() = 1`.
+- [x] `game/data/materials.json` — table définitive des 13 matériaux en place, avec champs `tier` et sections `ore`.
   ```json
   {
     "bois":            {"name": "Bois",             "biome": "biome1", "rarity": "common",   "tier": 1},
@@ -187,7 +187,7 @@ Le craft v3 consomme des matériaux distincts (bois, pierre, cuivre, fer, crista
 - [ ] Recenser dans `game_art/backlog_art.md` : sprites distincts par type de gisement/minerai. **[game_art]**
 - [x] **Suppression des coins (Q045)** : les PC remplacent totalement l'or. `coins`/`add_coins`/`coins_changed` retirés de `RunState`, `hud.gd`, `enemy_base.gd`, `boss.gd`.
 
-**Statut session 2026-07-06** : le socle technique de la Phase 1 est livré et testé (`21/21` GUT verts, démarrage headless OK), mais la phase reste **ouverte** tant qu'un vrai tier de pioche n'est pas fourni par les données gameplay et validé dans un run complet.
+**Statut session 2026-07-06** : le socle technique de la Phase 1 est livré et testé (`23/23` GUT verts, démarrage headless OK), avec tier de pioche désormais fourni par les données gameplay. La phase reste **ouverte** tant qu'un run manuel complet n'a pas validé minage/craft/HUD/menu dev en conditions réelles.
 
 ### Fait quand
 Miner un gisement ajoute le bon matériau, gaté par tier de pioche. Le HUD reflète les quantités par type. Aucune référence aux coins ne subsiste. Tests verts.
@@ -573,7 +573,7 @@ Tests : livrés à chaque phase, maintenus verts (non-régression), cible 85 % s
 
 ## Risques transverses majeurs
 
-1. **Fermeture prématurée de la Phase 1** — le socle `materials` est en place, mais le gating de minage repose encore sur `get_pickaxe_tier() = 1`. Sans tier de pioche data-driven, les minerais de tiers 2/3 ne sont pas réellement validés.
+1. **Fermeture prématurée de la Phase 1** — le socle `materials` et le gating de minage data-driven sont en place, mais la phase ne doit pas être close sans run manuel complet validant minage/craft/HUD/menu dev en conditions réelles.
 2. **Persistance de l'état de biome à la résurrection (Phase 5)** — ne pas régénérer le biome au retour de l'Arène ; scène conservée en mémoire (option retenue), timers/références pendantes à surveiller, test dédié obligatoire.
 3. **Gardien du Voile unique construit avant R2** — dette assumée (Le Veilleur des Cendres seul sur un `guardian.gd` paramétré, jamais de copier-coller de `boss.gd`) ; R2 ajoute les 7 autres du pool sur cette même base factorisée.
 4. **Volume d'art** — neutralisé par la règle placeholders + `game_art/backlog_art.md`.
