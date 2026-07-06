@@ -1,5 +1,24 @@
 # CoreDive Challenge — Le Noyau et le Boss Final Adaptatif
 
+## Précisions v3.1 (questions.md, 2026-07-06)
+
+**Scope v3 arrêté à 2 paramètres** (roadmap.md, confirmé questions.md) : seuls le **Paramètre 1 (Biomes Explorés)** et le **Paramètre 3 (Cicatrices)** ci-dessous sont implémentés en v3. Le **Paramètre 2 (Boss Vaincus)** et le **Paramètre 4 (Style de Jeu)** décrits plus bas sont **coupés du scope v3** et partent au backlog post-v3 — conservés dans ce document pour ne pas perdre l'intention de conception, mais à ne pas implémenter sans décision explicite de réouverture du scope.
+
+- **Accès et victoire (questions.md Q003/Q004/Q009)** : vaincre le Gardien du Noyau (Biome 4) seul suffit à ouvrir l'accès au Miroir, sans prérequis d'avoir visité les biomes 1-3. Le bonus PC « réussite d'un run » n'est accordé qu'à la victoire contre le **Miroir**, pas seulement contre le Gardien du Noyau. Après la victoire, écran de récapitulatif puis retour au HUB pour enchaîner un nouveau run (pas de New Game+).
+- **Première version de `mirror.json` (Q052)** — correspondance concrète biome → modules / cicatrice → mutations, à reprendre telle quelle dans `game/data/mirror.json` :
+  - Galeries Verdoyantes → `racines`, `immobilisation`, `invocation_vegetale`
+  - Mines Obscures → `armure_renforcee`, `charge`, `explosion`
+  - Îles Célestes → `deplacement_aerien`, `eclairs`, `cristaux`
+  - Descente vers le Noyau → `energie_noyau`, `corruption`, `zone_majeure`
+  - Cicatrice du Sang → `attaque_saignement`, `vitesse_attaque_accrue`
+  - Cicatrice de l'Os → `resistance_accrue`
+  - Cicatrice de l'Âme → `attaques_drainantes`
+  - Cicatrice de la Peur → `poursuite_renforcee`
+  - Cicatrice du Noyau → `degats_tres_eleves`, `corruption`
+- Un Miroir généré avec un seul biome exploré et aucune cicatrice doit rester un combat valide et cohérent (cas testé, pas juste un boss vide).
+
+Référence complète : `questions.md` à la racine du projet.
+
 ## Vision
 
 Dans la majorité des roguelites et jeux d'action, le boss final est toujours le même.
@@ -107,6 +126,8 @@ Plus le joueur a exploré un biome, plus son influence est importante.
 
 ---
 
+> **Coupé du scope v3 — backlog post-v3.** Ne pas implémenter sans décision explicite de réouverture du scope.
+
 # Paramètre 2 — Les Boss Vaincus
 
 Chaque boss battu transmet une partie de son pouvoir au Miroir du Noyau.
@@ -173,6 +194,8 @@ Chaque Cicatrice peut ajouter une mutation au boss.
 Plus le joueur est revenu d'entre les morts, plus l'épreuve devient difficile.
 
 ---
+
+> **Coupé du scope v3 — backlog post-v3.** Ne pas implémenter sans décision explicite de réouverture du scope.
 
 # Paramètre 4 — Le Style de Jeu
 

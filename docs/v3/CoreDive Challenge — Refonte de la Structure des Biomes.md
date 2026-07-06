@@ -1,5 +1,18 @@
 # CoreDive Challenge — Refonte de la Structure des Biomes
 
+## Précisions v3.1 (questions.md, 2026-07-06)
+
+- **Le run est multi-biomes** : le HUB fait partie du run, pas une étape entre deux runs séparés. Le joueur conserve matériaux/équipement/cicatrices en circulant entre biomes.
+- **Régénération à chaque entrée (Q002)** : quitter un biome (via le HUB) puis y revenir déclenche une nouvelle génération complète — l'état précédent n'est pas conservé. Un seul biome vivant en mémoire à la fois (l'Arène du Voile est la seule exception, pendant une résurrection).
+- **Sortie volontaire (Q006)** : le joueur peut quitter un biome en cours d'exploration via un objet/portail de retour, sans mourir ni battre le boss, en conservant sa récolte.
+- **Boss de biome vaincu (Q007)** : le biome reste explorable/re-générable, mais ce boss précis ne redéclenche pas avant un nouveau run.
+- **Format de salle à 4 directions (Q032)** : le générateur doit supporter des connexions `left/right/top/bottom` dès la Phase 4 de la roadmap (même si seul le Biome 1, horizontal, est peuplé au départ) — indispensable pour le Biome 3 (vers le haut) et le Biome 4 (vers le bas) décrits ci-dessous.
+- **Structure en embranchements légers (Q036)** : chemin principal + culs-de-sac courts (trésor, salle secrète), pas un couloir strictement linéaire.
+- **Tailles cibles et volume de templates (Q034/Q035)** : B1 5-7 salles, B2 6-8, B3 7-9, B4 8-10 ; 8-10 templates de salles par biome.
+- **Salles secrètes (Q033)** : signalées par un indice visuel discret (fissure, luminosité différente), pas un mur à traverser en aveugle.
+
+Référence complète : `questions.md` à la racine du projet.
+
 ## Vision
 
 Afin d'augmenter la liberté d'exploration, la rejouabilité et l'aspect découverte, CoreDive Challenge abandonne une progression strictement linéaire des biomes.

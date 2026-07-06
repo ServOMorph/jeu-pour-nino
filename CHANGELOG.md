@@ -1,3 +1,13 @@
+## v1.25 - 2026-07-06
+
+### Ajoute
+- `questions.md` (racine) : 77+1 questions de conception v3 tranchees — structure du run (multi-biomes, HUB inclus), mecaniques joueur (4 slots equipement, armes a distance, mobilite), cicatrices (5 definitives + planchers durs), generation de biomes, craft/economie (27 recettes definitives, bareme PC, tiers etablis), ennemis/boss (archetypes, fiches d'attaques, mirror.json), UI/UX, narration, audio, technique et processus. Nouvelle source de verite pour tout arbitrage de conception.
+
+### Modifie
+- `roadmap.md` : section "Decisions verrouillees" ajoutee, mise a jour ciblee des phases 0 a 10 et des risques transverses pour refleter les decisions de `questions.md` (notamment : timing de `RunState.reset()` corrige, planchers de cicatrices obligatoires, un seul Gardien du Voile au lancement).
+- `docs/v3/CoreDive Challenge — Design Document v3.md`, `docs/v3/CoreDive Challenge — Système de Progression, Craft, Mort et Résurrection.md`, `docs/v3/CoreDive Challenge — Refonte de la Structure des Biomes.md`, `docs/v3/CoreDive Challenge — Le Noyau et le Boss Final Adaptatif.md` : sections "Precisions v3.1" ajoutees, contradictions historiques corrigees (rarete/biomes, scope du Miroir, escalade des Gardiens).
+- `game_art/backlog_art.md` : aligne sur `questions.md` — correction critique (2-3 Gardiens du Voile -> 1 seul au lancement), entrees enrichies et nouvelles entrees ajoutees (equipement, armes a distance, mobilite, overlay d'obscurite, UI de fin de projet).
+
 ## v1.24 - 2026-07-06
 
 ### Ajoute

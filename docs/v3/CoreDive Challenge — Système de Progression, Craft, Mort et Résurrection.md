@@ -1,5 +1,15 @@
 # CoreDive Challenge — Système de Progression, Craft, Mort et Résurrection
 
+## Précisions v3.1 (questions.md, 2026-07-06)
+
+- **Le run est multi-biomes** : le HUB fait partie du run (pas une étape entre deux runs séparés). Le joueur garde matériaux, équipement et cicatrices en circulant entre HUB et biomes ; un « nouveau run » (reset complet) n'a lieu qu'au lancement depuis le titre.
+- **Pas de plafond de résurrections.** L'escalade des Gardiens plafonne à ×2.5 à partir de la 5ᵉ mort. Des planchers durs par stat (`scars.json`) empêchent un cumul de cicatrices de rendre le personnage inerte.
+- **Un seul Gardien du Voile implémenté au lancement** (Le Veilleur des Cendres) ; les 7 autres sont ajoutés progressivement.
+- Sections « Biome 2 — Profondeurs Cristallines » et « Biome 3 — Approches du Noyau » ci-dessous utilisent d'anciens noms de biomes, conservés tels quels dans ce document historique mais **remplacés par Mines Obscures (B2) et Îles Célestes (B3)** dans toute implémentation — voir le Design Document v3 et `docs/v3/CoreDive Challenge — Refonte de la Structure des Biomes.md` pour les noms définitifs.
+- Table de rareté réalignée : cristaux → Biome 3 (Îles Célestes), imagerie volcanique → Biome 4 (Descente vers le Noyau).
+
+Référence complète : `questions.md` à la racine du projet.
+
 ## Vision Générale
 
 CoreDive Challenge repose sur une boucle de progression où l'exploration, la découverte, la fabrication et la survie sont intimement liées.
@@ -271,27 +281,39 @@ Peut laisser tomber :
 
 # Rareté des Recettes
 
+**Table réalignée (questions.md Q042)** — corrige la version précédente qui plaçait la Lance Cristalline au second biome et l'imagerie volcanique au troisième.
+
 ## Commune
 
-Objets du premier biome.
+Objets du premier biome (Galeries Verdoyantes).
 
 Exemples :
 
 * Épée de Cuivre
 * Armure de Cuivre
 
-## Rare
+## Peu commune / Rare
 
-Objets du second biome.
+Objets du second biome (Mines Obscures).
+
+Exemples :
+
+* Épée de Fer
+* Armure Renforcée
+* Bombe Instable
+
+## Épique
+
+Objets du troisième biome (Îles Célestes) — les cristaux restent liés à ce biome.
 
 Exemples :
 
 * Lance Cristalline
 * Armure de Cristal
 
-## Épique
+## Épique / Légendaire
 
-Objets du troisième biome.
+Objets du quatrième biome (Descente vers le Noyau) — l'imagerie volcanique (« roche en fusion ») est réattribuée ici plutôt qu'aux Îles Célestes.
 
 Exemples :
 
@@ -307,6 +329,8 @@ Exemples :
 * Lame du Noyau
 * Couronne Spectrale
 * Armure des Revenants
+
+Grimoire complet : 27 recettes définitives, table exhaustive dans `questions.md` Q043.
 
 ---
 
@@ -399,15 +423,15 @@ Ces recettes ne peuvent être obtenues qu'après avoir affronté les Gardiens du
 
 ### Lame Spectrale
 
-Inflige davantage de dégâts aux créatures du Voile.
+Inflige davantage de dégâts aux créatures du Voile (Gardiens du Voile, Miroir du Noyau).
 
 ### Anneau des Revenants
 
-Améliore certains effets de Cicatrices.
+**Effet précisé (questions.md Q049)** : atténue l'impact des malus de Cicatrices actives (ex. -50 % sur les valeurs des modificateurs négatifs), appliqué avant clamp aux planchers durs.
 
 ### Élixir de Résurgence
 
-Accorde un bonus temporaire après une résurrection.
+**Effet précisé (questions.md Q049)** : soin complet + bref buff de dégâts après une résurrection réussie.
 
 ---
 
@@ -535,7 +559,9 @@ Le joueur doit pouvoir :
 * Le Gardien des Os
 * L'Écho du Noyau
 
-Les rencontres sont choisies aléatoirement.
+Les rencontres sont choisies aléatoirement. **Implémentation progressive (questions.md Q029)** : seul Le Veilleur des Cendres est construit au lancement du développement ; les 7 autres sont ajoutés lors de la refacto R2 de la roadmap, sur la même base factorisée (`guardian.gd` paramétré, jamais de copier-coller de `boss.gd`).
+
+Le joueur entre dans l'Arène avec ses **PV restaurés à plein** et son consommable équipé utilisable (questions.md Q030) — le combat n'est jamais entamé à PV critiques.
 
 ---
 
@@ -543,13 +569,15 @@ Les rencontres sont choisies aléatoirement.
 
 Chaque résurrection augmente la puissance des futurs Gardiens.
 
-* Première mort : combat simple.
-* Deuxième mort : plus agressif.
-* Troisième mort : nouveaux patterns.
-* Quatrième mort : combat difficile.
-* Cinquième mort : niveau proche des boss principaux.
+* Première mort : combat simple (×1.0).
+* Deuxième mort : plus agressif (×1.3).
+* Troisième mort : nouveaux patterns (×1.6).
+* Quatrième mort : combat difficile (×2.0).
+* Cinquième mort et plus : niveau proche des boss principaux (×2.5, plafond — n'augmente plus au-delà).
 
-L'objectif est d'empêcher les résurrections infinies tout en laissant plusieurs chances au joueur.
+Multiplicateurs provisoires, questions.md Q031 — équilibrage définitif en Phase 10.
+
+**Précision (questions.md Q005) : pas de plafond de résurrections.** Le joueur peut mourir et ressusciter indéfiniment tant qu'il bat le Gardien. L'escalade ci-dessus ne « empêche » jamais une résurrection — elle la rend seulement de plus en plus difficile jusqu'à son plafond (×2.5), combinée aux planchers durs de cicatrices qui évitent qu'un personnage cumulant de nombreuses résurrections ne devienne totalement inerte.
 
 ---
 
@@ -578,27 +606,33 @@ Les Cicatrices doivent :
 
 # Cicatrices de Gameplay
 
+Liste définitive (questions.md Q026), avec clé de modificateur associée dans `scars.json` :
+
 ## Cicatrice du Sang
 
--10 % de vie maximale.
+-10 % de vie maximale. (`max_hp_mult: 0.9`)
 
 ## Cicatrice de l'Os
 
-Déplacement légèrement ralenti.
+Déplacement légèrement ralenti. (`speed_mult`)
 
 ## Cicatrice de l'Âme
 
-Les soins sont moins efficaces.
+Les soins sont moins efficaces. (`heal_mult` — nouvelle clé)
 
 ## Cicatrice de la Peur
 
-Les ennemis détectent plus rapidement le joueur.
+Les ennemis détectent plus rapidement le joueur. (`detection_mult` — nouvelle clé, nécessite un rayon de détection paramétrable sur les ennemis, `enemies.json`/`enemy_base.gd`)
 
 ## Cicatrice du Noyau
 
-+20 % dégâts.
++20 % dégâts. (`attack_damage_mult: 1.2`)
 
--20 % vie maximale.
+-20 % vie maximale. (`max_hp_mult: 0.8`)
+
+## Planchers durs (questions.md Q026b)
+
+Aucune résurrection n'étant plafonnée, un cumul de cicatrices identiques (doublons autorisés une fois les 5 types possédés) doit être borné par des planchers par stat, définis dans `scars.json` : ex. `speed_mult` jamais sous 0.5, `max_hp` jamais sous 2, `heal_mult` jamais sous 0.3. Sans ce garde-fou, un joueur mourant de nombreuses fois se retrouverait avec un personnage totalement inerte bien avant que l'escalade des Gardiens (plafonnée à ×2.5) ne devienne le facteur limitant.
 
 ---
 

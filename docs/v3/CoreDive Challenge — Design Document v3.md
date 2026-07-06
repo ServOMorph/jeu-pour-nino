@@ -2,6 +2,20 @@
 
 ---
 
+## Précisions v3.1 (questions.md, 2026-07-06)
+
+77 questions de conception (+ Q026b) ont été tranchées avant le lancement du développement. Ce document reste la référence de vision, mais les précisions suivantes corrigent ou complètent son contenu — voir `questions.md` à la racine du projet pour le détail exhaustif et les justifications.
+
+- **Le run est multi-biomes** : le HUB fait partie du run (pas une gare entre deux runs séparés). Le joueur garde matériaux, équipement et cicatrices en circulant entre le HUB et les biomes. Un biome quitté est régénéré à la prochaine entrée.
+- **Victoire du run = vaincre le Miroir du Noyau**, pas seulement le Gardien du Noyau. Le Gardien du Noyau (B4) seul suffit néanmoins à *ouvrir l'accès* au Miroir, sans prérequis d'avoir visité les autres biomes.
+- **Pas de plafond de résurrections** ; l'escalade des Gardiens du Voile plafonne à ×2.5 à partir de la 5ᵉ mort. Des **planchers durs par stat** sont obligatoires dans `scars.json` pour éviter qu'un cumul de cicatrices sur de nombreuses résurrections ne rende le personnage inerte.
+- **Mobilité du joueur** : déplacement, saut, double saut, corde/grappin (pas de dash). **Armes à distance ajoutées** en plus du mêlée, usage illimité sans munitions. **4 slots d'équipement** : arme (mêlée ou distance), armure, accessoire, outil.
+- **Un seul Gardien du Voile implémenté au lancement** (Le Veilleur des Cendres) ; les 7 autres du pool de 8 sont ajoutés progressivement (refacto R2 de la roadmap).
+- **Solo strict**, pas d'anticipation d'une coop future.
+- Table de rareté des recettes réalignée : les cristaux restent liés au Biome 3, l'imagerie volcanique (Marteau Magmatique, Armure Volcanique) est réattribuée au Biome 4 (cohérent avec « roche en fusion »).
+
+---
+
 ## Vision Générale
 
 CoreDive Challenge est un jeu de plateforme/action roguelite en pixel art.
@@ -158,24 +172,31 @@ Ces quatre ennemis rares ne sont pas présents dans tous les biomes — leur app
 
 ### Rareté des Recettes
 
+**Table réalignée (questions.md Q042)** — les cristaux restent liés au Biome 3, l'imagerie volcanique est réattribuée au Biome 4 :
+
 | Rareté    | Biome source    | Exemples                          |
 | --------- | --------------- | --------------------------------- |
 | Commune   | Biome 1         | Épée de Cuivre, Armure de Cuivre  |
-| Rare      | Biome 2         | Lance Cristalline, Armure Cristal |
-| Épique    | Biome 3         | Marteau Magmatique, Armure Volcanique |
-| Légendaire| Noyau / Voile   | Lame du Noyau, Armure des Revenants |
+| Peu commune / Rare | Biome 2 | Épée de Fer, Armure Renforcée, Bombe Instable |
+| Épique    | Biome 3         | Lance Cristalline, Armure de Cristal |
+| Épique/Légendaire | Biome 4 | Marteau Magmatique, Armure Volcanique |
+| Légendaire| Noyau / Voile   | Lame du Noyau, Couronne Spectrale, Armure des Revenants |
+
+Grimoire complet : 27 recettes définitives — table exhaustive (id, matériaux, coût PC, tier d'établi, source de découverte) dans `questions.md` Q043.
 
 ### Recettes du Voile
 
 Obtenues uniquement après avoir affronté des Gardiens du Voile. Exploitent l'énergie des Cicatrices.
 
-- **Lame Spectrale** — dégâts accrus contre créatures du Voile
-- **Anneau des Revenants** — améliore certains effets de Cicatrices
-- **Élixir de Résurgence** — bonus temporaire après résurrection
+- **Lame Spectrale** — dégâts accrus contre créatures du Voile (Gardiens du Voile, Miroir du Noyau)
+- **Anneau des Revenants** — atténue l'impact des malus de Cicatrices actives (ex. -50 % sur les modificateurs négatifs)
+- **Élixir de Résurgence** — soin complet + bref buff de dégâts après une résurrection réussie
+
+Effets précisés dans questions.md Q049.
 
 ### Établis
 
-La fabrication nécessite un établi trouvé dans les biomes, construit via recette, ou placé dans une salle spéciale. Les objets légendaires exigent des établis avancés.
+**3 tiers définitifs (questions.md Q046)** : tier 1 = Établi Portable (starter, repositionnable à volonté), recettes starters + Biome 1. Tier 2 = établi trouvé en Biome 2/3, débloque les recettes peu communes/rares de ces biomes. Tier 3 = établi trouvé en Biome 4/Voile, débloque les recettes épiques/légendaires et toutes les recettes du Voile/Noyau.
 
 ### Synergies Cross-Biomes
 
@@ -211,19 +232,19 @@ Les combats sont rapides, lisibles, exigeants, basés sur l'apprentissage.
 
 **Pool de Gardiens :** Le Veilleur des Cendres, Le Roi Sans Visage, Le Collecteur d'Âmes, La Veuve du Vide, Le Dévoreur de Souvenirs, Le Porte-Flamme, Le Gardien des Os, L'Écho du Noyau
 
-Chaque mort pioche aléatoirement dans ce pool — la rencontre reste imprévisible.
+**Implémentation progressive (questions.md Q029)** : seul **Le Veilleur des Cendres** est construit au lancement du développement (charge, projectile de cendres, zone d'explosion retardée, pause vulnérable) ; les 7 autres sont ajoutés lors de la refacto R2, sur la même base factorisée. Tant que R2 n'est pas passé, chaque mort pioche donc le même Gardien — la variabilité du pool est un objectif de moyen terme, pas un prérequis du premier jalon jouable.
 
 ### Difficulté Croissante
 
-| Mort | Niveau du Gardien       |
-| ---- | ----------------------- |
-| 1    | Simple                  |
-| 2    | Plus agressif           |
-| 3    | Nouveaux patterns       |
-| 4    | Difficile               |
-| 5+   | Niveau boss principaux  |
+| Mort | Niveau du Gardien       | Multiplicateur provisoire (Q031) |
+| ---- | ----------------------- | --- |
+| 1    | Simple                  | ×1.0 |
+| 2    | Plus agressif           | ×1.3 |
+| 3    | Nouveaux patterns       | ×1.6 |
+| 4    | Difficile               | ×2.0 |
+| 5+   | Niveau boss principaux  | ×2.5 (plafond, n'augmente plus au-delà) |
 
-Objectif : empêcher les résurrections infinies tout en laissant plusieurs chances.
+**Pas de plafond de résurrections (questions.md Q005)** : le joueur peut mourir et ressusciter indéfiniment tant qu'il bat le Gardien. L'escalade ci-dessus rend chaque résurrection supplémentaire plus difficile jusqu'au palier 5+, où elle plafonne — c'est la difficulté croissante, combinée aux planchers de cicatrices (ci-dessus), qui borne naturellement le nombre de résurrections viables, pas une règle d'interdiction.
 
 ---
 
@@ -235,13 +256,17 @@ Chaque résurrection laisse une Cicatrice permanente pour la durée du run. Prix
 
 ### Cicatrices de Gameplay
 
-| Cicatrice          | Effet                                      |
-| ------------------ | ------------------------------------------ |
-| Cicatrice du Sang  | -10 % vie maximale                         |
-| Cicatrice de l'Os  | Déplacement légèrement ralenti             |
-| Cicatrice de l'Âme | Soins moins efficaces                      |
-| Cicatrice de la Peur | Ennemis détectent plus rapidement        |
-| Cicatrice du Noyau | +20 % dégâts / -20 % vie maximale          |
+Liste définitive (questions.md Q026), avec clé de modificateur associée :
+
+| Cicatrice          | Effet                                      | Clé de modificateur |
+| ------------------ | ------------------------------------------ | --- |
+| Cicatrice du Sang  | -10 % vie maximale                         | `max_hp_mult` |
+| Cicatrice de l'Os  | Déplacement légèrement ralenti             | `speed_mult` |
+| Cicatrice de l'Âme | Soins moins efficaces                      | `heal_mult` |
+| Cicatrice de la Peur | Ennemis détectent plus rapidement        | `detection_mult` (nécessite un rayon de détection paramétrable sur les ennemis) |
+| Cicatrice du Noyau | +20 % dégâts / -20 % vie maximale          | `attack_damage_mult` + `max_hp_mult` |
+
+**Planchers durs obligatoires (questions.md Q026b)** : aucune résurrection n'étant plafonnée, un cumul de cicatrices identiques (au-delà des 5 types, doublons autorisés) doit être borné par des planchers par stat (ex. vitesse jamais sous 50 % de la base, PV max jamais sous 2, soin jamais sous 30 %), définis dans `scars.json`. Sans ce garde-fou, un joueur mourant de nombreuses fois se retrouverait avec un personnage totalement inerte bien avant que l'escalade des Gardiens (plafonnée à ×2.5) ne devienne le facteur limitant.
 
 ### Cicatrices Visuelles
 
@@ -262,6 +287,8 @@ Les effets visuels sont implémentés via **shaders et overlays de particules** 
 ### Concept
 
 Le boss final n'est pas prédéfini. Le Noyau observe le joueur tout au long du run et génère une épreuve unique au moment de la confrontation.
+
+**Condition de victoire du run (questions.md Q003/Q004/Q009)** : le bonus PC « réussite d'un run » n'est accordé qu'à la victoire contre le **Miroir**, pas seulement contre le Gardien du Noyau. Vaincre le Gardien du Noyau (B4) seul suffit à ouvrir l'accès au Miroir, sans prérequis d'avoir visité les biomes 1-3 — un Miroir généré avec un seul biome exploré et aucune cicatrice reste un combat valide. Après la victoire, écran de récapitulatif puis retour au HUB pour enchaîner un nouveau run (pas de New Game+, pas de fin définitive).
 
 Le Miroir du Noyau est construit à partir de **2 paramètres principaux** :
 
@@ -331,3 +358,8 @@ Le joueur n'affronte pas un gardien. Il affronte le reflet de son propre run.
 - Boss adaptatif (Miroir du Noyau) : architecture modulaire validée avant production des assets.
 - Ressources garanties par biome : la génération procédurale ne peut pas bloquer l'accès aux matériaux clés.
 - Porteurs de recettes (Archiviste, Golem, Mineur, Forgeron) : présence conditionnelle par biome, pas systématique.
+- **Planchers durs par stat obligatoires dans `scars.json`** (questions.md Q026b) : le cumul de cicatrices sur des résurrections illimitées ne doit jamais rendre le personnage inerte.
+- **4 slots d'équipement** (arme mêlée/distance, armure, accessoire, outil) — pas d'auto-équipement automatique, choix manuel du joueur.
+- **Armes à distance à usage illimité**, pas de système de munitions.
+- **Solo strict** : aucune architecture ne doit anticiper une coop future.
+- Développement solo : voir `questions.md` à la racine du projet pour l'ensemble des décisions de cadrage (77 questions + Q026b, tranchées le 2026-07-06) avant tout arbitrage de contenu supplémentaire.

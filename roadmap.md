@@ -14,6 +14,30 @@ Règle absolue maintenue : aucune valeur numérique gameplay hardcodée. Tout da
 
 ---
 
+## Décisions verrouillées (questions.md, 2026-07-06)
+
+77 questions de conception ont été tranchées avant le lancement du développement (voir `questions.md` à la racine pour le détail complet et les justifications). Résumé des décisions qui modifient ou précisent cette roadmap, par thème :
+
+**Structure du run** — Un run = toute la descente (HUB inclus), pas un seul biome. `RunState.reset()` a lieu au lancement d'un **nouveau run** depuis le titre, jamais à l'entrée d'un biome depuis le HUB. Un biome quitté puis revisité est **régénéré** (nouvel agencement) ; un seul biome vivant en mémoire à la fois (l'Arène du Voile reste l'unique exception, détachée pendant une résurrection). Le joueur peut quitter un biome volontairement via un objet/portail de retour, en conservant sa récolte. Un boss de biome vaincu ne réapparaît pas dans le run mais le biome reste explorable. Le Gardien du Noyau (B4) seul suffit à ouvrir le Miroir, sans prérequis d'autres biomes. Victoire du run = vaincre le **Miroir du Noyau** (pas seulement le Gardien du Noyau) ; après victoire, écran de fin puis retour HUB (pas de New Game+). Pas de plafond dur de résurrections (l'escalade des Gardiens borne naturellement). Durée cible d'un run : ~30-45 min ; pas de sauvegarde mi-run (seul `MetaState` persiste).
+
+**Fondations techniques** — Solo strict (pas d'anticipation coop). Windows uniquement, PC de Nino. Pas de versioning des sauvegardes (reset accepté en dev). Un seul profil de sauvegarde. `calibration.tscn` accessible depuis le menu options du jeu final. Réglages (volumes, plein écran/fenêtré, calibration) dans `user://settings.json`, séparé de `meta_state.json`. `SaveManager.save_meta()` appelé à **chaque événement méta** (découverte, maîtrise, PC gagnés), pas seulement en fin de run. Cible 60 FPS, plein écran par défaut, écran de transition accepté entre HUB et biome.
+
+**Joueur et combat** — Mobilité : déplacement, saut, **double saut**, **corde/grappin** (pas de dash, pas de wall jump). Combat mêlée à attaque simple (pas de combo/charge). **Armes à distance ajoutées** (nouveau bouton manette à réserver dans `joymap.gd`), usage illimité sans munitions. **4 slots d'équipement** : Arme (mêlée ou distance, un seul slot), Armure, Accessoire, Outil. Écran d'équipement manuel accessible depuis la pause (l'auto-équipement « meilleure arme » est abandonné). 1 slot consommable actif, bouton dédié. Inventaire de matériaux illimité. Minage gaté par tier de pioche (`tier` dans `materials.json`/pioche). Pas d'arbre de stats : progression uniquement via équipement crafté. Soins : potions + régénération complète au HUB uniquement (pas de soin post-boss, pas de régénération passive). Torche : équipable (slot Outil), effet gameplay réel — sans elle, le Biome 2 est trop sombre pour bien jouer (overlay pénalisant la visibilité, pas de vrai Light2D dynamique). Corde fusionnée avec le grappin (pas un objet distinct). Établi Portable repositionnable à volonté, limité au tier 1.
+
+**Cicatrices et Arène du Voile** — Liste définitive des 5 cicatrices (Sang, Os, Âme, Peur, Noyau) avec clés de modificateurs `max_hp_mult`, `speed_mult`, `heal_mult` (nouvelle), `detection_mult` (nouvelle, nécessite `detection_radius` dans `enemies.json`/`enemy_base.gd`), `attack_damage_mult`. **Planchers durs par stat obligatoires** dans `scars.json` (ex. `speed_mult` ≥ 0.5, `max_hp` ≥ 2, `heal_mult` ≥ 0.3) pour éviter un état dégénéré en cas de cumul de cicatrices sur de nombreuses résurrections (pas de plafond de résurrections, cf. ci-dessus). Tirage de cicatrice aléatoire imposé (pas de choix), annoncé via un écran dédié. Un seul Gardien du Voile implémenté en Phase 5 (Le Veilleur des Cendres — charge, projectile de cendres, zone d'explosion retardée, pause vulnérable ; réutilise directement la machine à états de `boss.gd`) ; les 7 autres du pool sont ajoutés en R2/Phase 7. PV restaurés à l'entrée de l'Arène, consommables utilisables. Table d'escalade provisoire : ×1.0/×1.3/×1.6/×2.0/×2.5+ (paliers 1 à 5+).
+
+**Génération des biomes** — Format de salle et `biome_generator.gd` supportent les **4 directions de connexion** (left/right/top/bottom) dès la Phase 4, même si seul le biome 1 (horizontal) est généré à ce stade — nécessaire pour B3 (vers le haut) et B4 (vers le bas) en Phase 7. Structure interne : chemin principal + **embranchements légers** menant à des culs-de-sac (trésor, salle secrète, gisement bonus). Salles secrètes signalées par un indice visuel discret (fissure, luminosité différente), pas un mur à traverser en aveugle. Tailles cibles : B1 5-7 salles, B2 6-8, B3 7-9, B4 8-10. **8-10 templates par biome**. Écran fixe par salle (480×270, pas de scroll interne). Élite = variante boostée d'un ennemi normal sur spawn normal (pas de salle dédiée) ; porteur de recette = salle spécifiquement taggée. Pas d'environnement destructible/interactif (pas de plateformes cassables, pièges, leviers). Une salle nettoyée ne respawn pas ses ennemis tant que le biome n'est pas régénéré. HUB reste minimal (4 sorties, Grimoire, établi) — pas d'extension en v3.
+
+**Craft et économie** — Table définitive des matériaux, recettes (27), barème PC et tiers d'établis : voir `questions.md` Q041-Q049 pour le détail exhaustif (ids, coûts, matériaux, tiers, sources de découverte). Points clés : les **coins sont supprimés** de `RunState` (les PC remplacent totalement l'or) ; 3 tiers d'établi (1 = starter/B1, 2 = B2/B3, 3 = B4/Voile) ; découverte de recette uniquement via porteurs + Gardiens du Voile + starters (pas de coffres/salles secrètes) ; un drop de recette déjà connue ne donne rien ; rareté réalignée sur les biomes réels (cristaux → B3, imagerie volcanique → B4, corrigeant la contradiction du design doc v3).
+
+**Ennemis et boss** — 4 nouveaux archétypes ennemis à coder en plus de `ground`/`flyer` : `rooted` (stationnaire, zone périodique), `jumper` (bondit), `turret` (stationnaire, tir), `teleporter` (téléportation courte). Le boss actuel (charge/volley/slam) devient **Le Gardien des Racines (B1)**, simplement re-thématisé. Fiches d'attaques pour les 3 autres boss de biome (Foreur Maudit, Orage Éternel, Gardien du Noyau) et première version de `mirror.json` (biome → modules, cicatrice → mutations) : voir `questions.md` Q050-Q052. Les ennemis dropent des matériaux thématiques en plus des recettes des porteurs.
+
+**Interface, narration, audio, art** — Écran d'équipement manuel (pause), barres de vie au-dessus des ennemis (pas de chiffres de dégâts flottants, pas de minimap), Grimoire accessible au HUB uniquement. Narration par textes courts aux moments clés (pas de dialogues), personnage anonyme (pas nommé Nino), textes scénarisés en fondu simple. **Audio définitif reporté à la toute fin du développement** (Phase 10) — garder les placeholders sonores actifs via `AudioManager` pendant tout le développement, ne reporter que le remplacement par des assets soignés. Liste fermée de bruitages indispensables, aucune voix. Grille de tiles 16×16, 2-3 couches de parallax, 5 paliers de shaders de cicatrices, priorité de remplacement des placeholders : joueur > ennemis > boss > tilesets > UI.
+
+**Processus** — Les retours de playtest de Nino aux jalons J1-J7 peuvent amender l'équilibrage (valeurs JSON) mais jamais l'architecture ou les formats de données tranchés ci-dessus. Le jeu est considéré terminé à J7 + Phase 10 close, sans critère de qualité formel supplémentaire.
+
+---
+
 ## Carte du code (référence d'implémentation)
 
 À lire avant toute phase. Racine projet Godot : `game/` (`res://` = `game/`).
@@ -130,14 +154,25 @@ Rien.
 Le craft v3 consomme des matériaux distincts (bois, pierre, cuivre, fer, cristaux, fragments du Noyau...). Aujourd'hui `RunState.resources` est un seul entier.
 
 ### Tâches
-- [ ] `game/data/materials.json` — nouveau fichier :
+- [ ] `game/data/materials.json` — nouveau fichier. Table définitive (questions.md Q041), avec champ `tier` par matériau pour le gating de minage (Q022) :
   ```json
   {
-    "bois":   {"name": "Bois",   "biome": "biome1", "rarity": "common"},
-    "cuivre": {"name": "Cuivre", "biome": "biome1", "rarity": "common"},
-    "fer":    {"name": "Fer",    "biome": "biome2", "rarity": "uncommon"}
+    "bois":            {"name": "Bois",             "biome": "biome1", "rarity": "common",   "tier": 1},
+    "pierre":          {"name": "Pierre",            "biome": "biome1", "rarity": "common",   "tier": 1},
+    "cuivre":          {"name": "Cuivre",            "biome": "biome1", "rarity": "common",   "tier": 1},
+    "cuir":            {"name": "Cuir",              "biome": "biome1", "rarity": "common",   "tier": 1, "source": "drop_ennemi"},
+    "fer":             {"name": "Fer",               "biome": "biome2", "rarity": "uncommon", "tier": 2},
+    "charbon":         {"name": "Charbon",           "biome": "biome2", "rarity": "uncommon", "tier": 2},
+    "minerai_sombre":  {"name": "Minerai sombre",    "biome": "biome2", "rarity": "rare",      "tier": 2},
+    "cristal":         {"name": "Cristal",           "biome": "biome3", "rarity": "rare",      "tier": 2},
+    "minerai_celeste": {"name": "Minerai céleste",   "biome": "biome3", "rarity": "rare",      "tier": 2},
+    "essence_vent":    {"name": "Essence de vent",   "biome": "biome3", "rarity": "rare",      "tier": 2, "source": "drop_ennemi"},
+    "fragment_noyau":  {"name": "Fragment du Noyau", "biome": "biome4", "rarity": "epic",      "tier": 3, "source": "drop_boss"},
+    "minerai_abyssal": {"name": "Minerai abyssal",   "biome": "biome4", "rarity": "epic",      "tier": 3},
+    "essence_voile":   {"name": "Essence du Voile",  "biome": "voile",  "rarity": "legendary", "tier": 3, "source": "drop_gardien"}
   }
   ```
+  Le minage est **gaté par tier** (Q022) : une pioche de tier insuffisant ne peut pas miner un gisement de tier supérieur. Le champ `tier` de la pioche équipée (`weapons.json` ou config dédiée) est comparé au `tier` du matériau avant d'autoriser le minage dans `ore_node.gd`.
 - [ ] `RunState` : remplacer `resources: int` par `materials: Dictionary` (id → int). Nouvelle API :
   - `add_material(id: String, qty: int) -> void`
   - `get_material(id: String) -> int`
@@ -152,9 +187,10 @@ Le craft v3 consomme des matériaux distincts (bois, pierre, cuivre, fer, crista
 - [ ] `level.json` : les entrées `ores` passent de `[x, y]` à `{"pos": [x, y], "material": "cuivre"}`. Adapter `level.gd._spawn_ores()` (level.gd:207-211).
 - [ ] Tests (`test_run_state.gd` étendu) : add/get/spend atomique (échec si un seul matériau manque → aucun débit), serialize/deserialize, reset.
 - [ ] Recenser dans `game_art/backlog_art.md` : sprites distincts par type de gisement/minerai. **[game_art]**
+- [ ] **Suppression des coins (Q045)** : les PC remplacent totalement l'or. Retirer `coins`/`add_coins`/`coins_changed` de `RunState`, `hud.gd:61-70`, `enemy_base.gd:107`, `boss.gd:255`.
 
 ### Fait quand
-Miner un gisement ajoute le bon matériau. Le HUD reflète les quantités par type. Tests verts.
+Miner un gisement ajoute le bon matériau, gaté par tier de pioche. Le HUD reflète les quantités par type. Aucune référence aux coins ne subsiste. Tests verts.
 
 ### Dépend de
 Phase 0.
@@ -176,13 +212,18 @@ Le mode dev « 100 MIN » (`title.gd:176-177`, `Dev.dev_resources`, `level.gd:34
     "biome": "biome1",
     "skill_cost": 2,
     "materials": {"bois": 1, "cuivre": 3},
+    "slot": "weapon",
     "consumable": false,
     "workbench_tier": 1,
     "starter": false
   }
   ```
-  `discovered`/`mastered` ne vivent PAS dans ce fichier (état méta → `MetaState.grimoire`). `starter: true` = maîtrisée d'office.
-- [ ] Recettes de départ (`starter: true`) : épée bois, armure bois, pioche, petite potion, torche, corde, établi portable. Au premier lancement (grimoire vide), `MetaState` enregistre les starters comme découvertes+maîtrisées (méthode `ensure_starters(ids: Array)` appelée après `load_meta`).
+  `discovered`/`mastered` ne vivent PAS dans ce fichier (état méta → `MetaState.grimoire`). `starter: true` = maîtrisée d'office. Champ `slot` ∈ `{weapon, armor, accessory, tool, consumable, utility}` — voir 4 slots d'équipement ci-dessous.
+- [ ] **Grimoire complet — 27 recettes définitives (questions.md Q043)**, table exhaustive id/nom/rareté/tier/coût PC/matériaux/découverte à reprendre telle quelle depuis `questions.md` section 6. Ne pas réinventer de recettes supplémentaires sans repasser par une décision explicite.
+- [ ] Recettes de départ (`starter: true`, tier 1, coût PC 0) : `epee_bois`, `armure_bois`, `pioche_renforcee`, `potion_petite`, `torche`, `corde` (= grappin, cf. Phase joueur ci-dessous), `etabli_portable`. Au premier lancement (grimoire vide), `MetaState` enregistre les starters comme découvertes+maîtrisées (méthode `ensure_starters(ids: Array)` appelée après `load_meta`).
+- [ ] **4 slots d'équipement (Q017)** : `weapon` (mêlée OU distance, un seul slot actif), `armor`, `accessory`, `tool`. `RunState`/`MetaState` équipement et `_apply_equipment()` étendus pour gérer 4 emplacements au lieu de 2. Pas d'auto-équipement « meilleure arme possédée » — le choix est manuel (écran dédié, Phase 3/10, cf. Q055).
+- [ ] **Armes à distance (Q016)** : nouveau type dans `weapons.json` (portée, vitesse de projectile), scène de projectile, nouveau bouton manette dans `joymap.gd`. Usage illimité, pas de munitions — fonctionne comme le mêlée (cooldown/dégâts/portée différencient les armes).
+- [ ] **Barème PC (Q044)**, `game/data/progression.json` : biome visité 1 PC, salle secrète 1 PC, élite vaincu 1 PC, boss de biome vaincu 2 PC, résurrection réussie 1 PC, victoire finale (Miroir) +3 PC bonus, run raté ×0.5 sur le total. Pas de PC par salle normale explorée.
 - [ ] `MetaState` : la base existe (`discover_recipe`, `master_recipe`, `is_mastered`). Ajouter la dépense de PC à la maîtrise : `master_recipe(id, cost: int) -> bool` (échec si `skill_points < cost` ou non découverte). Le coût vient de `recipes.json` (`skill_cost`), passé par l'appelant — `MetaState` ne lit pas les fichiers de données.
 - [ ] Refondre `craft_menu.gd` :
   - Charger `recipes.json` au nouveau schéma.
@@ -221,22 +262,27 @@ Aucune référence à l'ancien `Inventory`. Tests d'état exhaustifs et verts. C
 
 ## Phase 3 — HUB et sélection de biome → **Jalon J1**
 
+**Rappel critique (questions.md Q001)** : un run est **multi-biomes**. Le HUB est une étape *à l'intérieur* du run, pas une gare entre deux runs séparés. `RunState.reset()` ne doit **plus** avoir lieu à chaque `level.gd._ready()` (comportement actuel, level.gd:33) — il doit avoir lieu une seule fois, au lancement d'un **nouveau run** depuis le titre (`title.gd._start_game()`). Un aller-retour HUB↔biome en cours de run conserve matériaux, équipement et cicatrices.
+
 ### Tâches
-- [ ] Créer `scenes/levels/hub.tscn` + `scripts/hub.gd` : point central, 4 directions (placeholder « en construction » pour les non-implémentées), déplacement du player (réutiliser la scène player sans ennemis), zones d'interaction sur le modèle de `workbench.gd` (`interact_requested`). Config `game/data/hub.json` (positions, directions actives). Recenser décor du HUB dans `game_art/backlog_art.md`. **[game_art]**
-- [ ] `title.gd._start_game()` (title.gd:181-188) : `change_scene_to_file` vers `hub.tscn` au lieu de `biome1.tscn`. Conserver les flags Dev (spawn/ressources/HP) — le mode dev peut garder un raccourci « biome direct ».
+- [ ] Créer `scenes/levels/hub.tscn` + `scripts/hub.gd` : point central, 4 directions (placeholder « en construction » pour les non-implémentées), déplacement du player (réutiliser la scène player sans ennemis), zones d'interaction sur le modèle de `workbench.gd` (`interact_requested`). Config `game/data/hub.json` (positions, directions actives). Le HUB reste minimal (4 sorties, Grimoire, établi) — pas de contenu additionnel en v3 (Q039). Recenser décor du HUB dans `game_art/backlog_art.md`. **[game_art]**
+- [ ] `title.gd._start_game()` (title.gd:181-188) : `change_scene_to_file` vers `hub.tscn` au lieu de `biome1.tscn`. **`RunState.reset()` déplacé ici** (nouveau run = un seul reset), retiré de `level.gd._ready()`. Conserver les flags Dev (spawn/ressources/HP) — le mode dev peut garder un raccourci « biome direct ».
 - [ ] Paramétrer le chargement de niveau : remplacer la const `LEVEL_CONFIG` (level.gd:12) par un `biome_id` fourni au chargement — pattern : autoload léger `GameFlow` (ou champ dans `Dev`) portant `next_biome_id`, lu par `level.gd._ready()` qui charge `res://data/biomes/<id>.json`. Déplacer `level.json` → `data/biomes/biome1.json`.
-- [ ] Retour au HUB : remplacer `_show_end_screen`/`get_tree().quit()` (level.gd:273-275, 301-321) par un écran de fin bref puis `change_scene_to_file(hub.tscn)`. `RunState.reset()` se fait au lancement d'un run (déjà dans `level.gd._ready()`, level.gd:33) — vérifier qu'un aller-retour HUB↔biome ne double-reset pas.
-- [ ] Accès depuis le HUB : Grimoire/écran de déblocage PC (livré Phase 2) et établi.
-- [ ] Tests (`test_game_flow.gd`) : sélection de biome → bon fichier chargé, compteurs de fin de run alimentent bien les PC au retour HUB.
+- [ ] Retour au HUB : remplacer `_show_end_screen`/`get_tree().quit()` (level.gd:273-275, 301-321) par un écran de fin bref puis `change_scene_to_file(hub.tscn)`. Le biome quitté est détruit (`queue_free`), pas conservé — une nouvelle entrée régénère un agencement différent (Q002). Un seul biome vivant en mémoire à la fois (Q073), sauf exception Arène du Voile en Phase 5.
+- [ ] **Sortie volontaire (Q006)** : objet/portail de retour au HUB accessible en cours d'exploration (sans mourir ni battre le boss), conservant la récolte du joueur.
+- [ ] **Soin au HUB (Q024)** : entrer dans le HUB restaure intégralement les PV du joueur.
+- [ ] Boss de biome vaincu : le biome reste explorable/re-générable dans le run, mais ce boss précis ne redéclenche pas avant un nouveau run (Q007) — un flag par biome dans `RunState` (`bosses_vaincus: Array`).
+- [ ] Accès depuis le HUB : Grimoire/écran de déblocage PC (livré Phase 2, accessible **HUB uniquement**, Q056) et établi (tier 1, cf. Phase 2).
+- [ ] Tests (`test_game_flow.gd`) : sélection de biome → bon fichier chargé, `RunState.reset()` appelé une seule fois par run (pas à chaque entrée en biome), compteurs de fin de run alimentent bien les PC au retour HUB.
 
 ### Fait quand
-Depuis le HUB, choisir une direction lance le biome correspondant. Mourir/finir ramène au HUB. Le mode dev reste fonctionnel. **J1 : Nino peut jouer un run complet HUB → biome → retour HUB.**
+Depuis le HUB, choisir une direction lance le biome correspondant (régénéré). Un aller-retour HUB↔biome conserve matériaux/équipement/cicatrices. Mourir définitivement ou battre le Miroir ramène à un nouveau run. Le mode dev reste fonctionnel. **J1 : Nino peut jouer un run complet HUB → biome → retour HUB → autre biome, sans perte de progression de run.**
 
 ### Dépend de
 Phases 0, 2.
 
 ### Risques
-`level.gd` suppose des dimensions fixes et un boss déclenché par `arena_x` (level.gd:74-76). Le paramétrage par biome doit abstraire ça proprement (préparer la Phase 4 : le trigger boss devient une donnée du JSON de biome, pas une position hardcodée dans le code).
+`level.gd` suppose des dimensions fixes et un boss déclenché par `arena_x` (level.gd:74-76). Le paramétrage par biome doit abstraire ça proprement (préparer la Phase 4 : le trigger boss devient une donnée du JSON de biome, pas une position hardcodée dans le code). Vigilance particulière sur le déplacement du `RunState.reset()` : un test de non-régression doit vérifier qu'aucun autre point du code n'appelle `reset()` implicitement à l'entrée d'un biome.
 
 ---
 
@@ -257,18 +303,24 @@ Le générateur ne remplace pas `level.gd` : il **produit la même structure de 
     "spawn_points": {"enemies": [{"pos": [200, 230], "type": "ground"}],
                      "ores": [{"pos": [300, 235], "material": "cuivre"}],
                      "workbench": [90, 235]},
-    "connections": {"left": [0, 230], "right": [480, 230]},
+    "connections": {"left": [0, 230], "right": [480, 230], "top": null, "bottom": null},
     "tags": ["standard"]
   }
   ```
-  Coordonnées locales à la salle ; le générateur translate lors de l'assemblage.
-- [ ] `game/scripts/biome_generator.gd` : `static func generate(biome_cfg: Dictionary, rooms: Array, rng_seed: int) -> Dictionary` — enchaîne N salles (longueur depuis la config biome), aligne les connexions, translate plateformes/spawns en coordonnées monde, retourne le Dictionary format `level.json`. Déterministe à seed égal (utiliser `RandomNumberGenerator` seedé, jamais `randi()` global).
-- [ ] Config biome (`data/biomes/biome1.json` étendu) : `{"rooms_pool": [...], "length": [5, 7], "guaranteed_materials": {"cuivre": 4, "bois": 3}, "boss": {...}}`.
+  Coordonnées locales à la salle ; le générateur translate lors de l'assemblage. **Format étendu aux 4 directions (Q032)** : `connections` porte `left/right/top/bottom` dès cette phase, même si seul le biome 1 (horizontal) est peuplé maintenant — nécessaire pour éviter de casser le format quand B3 (vers le haut) et B4 (vers le bas) seront développés en Phase 7. Une connexion `null` = pas de sortie dans cette direction pour cette salle.
+- [ ] **Salles secrètes (Q033)** : tag `"secret"` sur certaines salles, connectées par un embranchement optionnel (voir structure ci-dessous), signalées visuellement par un détail discret (fissure, luminosité différente) — pas un mur à traverser en aveugle.
+- [ ] **Structure en embranchements légers (Q036)** : chemin principal linéaire + quelques embranchements courts menant à des culs-de-sac (trésor, salle secrète, gisement bonus). Une salle du chemin principal peut exposer une connexion supplémentaire vers une salle annexe non traversante.
+- [ ] `game/scripts/biome_generator.gd` : `static func generate(biome_cfg: Dictionary, rooms: Array, rng_seed: int) -> Dictionary` — enchaîne N salles (longueur depuis la config biome), aligne les connexions (4 directions), translate plateformes/spawns en coordonnées monde, retourne le Dictionary format `level.json`. Déterministe à seed égal (utiliser `RandomNumberGenerator` seedé, jamais `randi()` global).
+- [ ] Config biome (`data/biomes/biome1.json` étendu) : `{"rooms_pool": [...], "length": [5, 7], "guaranteed_materials": {"cuivre": 4, "bois": 3}, "boss": {...}}`. Tailles cibles par biome (Q034, à répercuter en Phase 7) : B1 5-7 salles, B2 6-8, B3 7-9, B4 8-10.
+- [ ] **8-10 templates de salles pour le biome 1** (Q035 — volume cible par biome, à reproduire en Phase 7 pour B2/B3/B4).
 - [ ] Garantie de ressources : après assemblage, si un matériau clé est sous le minimum, injecter des gisements sur les spawn points d'ore inutilisés (ou rejeter/regénérer — au choix, mais borné et testé).
 - [ ] Placement boss en fin de parcours (dernière salle taggée `boss` ou arène ajoutée en bout) ; le trigger `arena_x` devient une sortie du générateur.
-- [ ] `level.gd` : consommer le Dictionary généré (seed tirée au lancement du run, conservée dans `RunState` — nécessaire à la Phase 5).
-- [ ] `tests/test_biome_generator.gd` : sur 100 générations seedées — chemin start→boss connexe (parcours des connexions), minima de matériaux respectés, aucune salle disjointe, déterminisme (même seed → même sortie).
-- [ ] Recenser tileset/décors biome 1 dans `game_art/backlog_art.md`. **[game_art]**
+- [ ] Élites (Q037) : variante boostée (HP/dégâts majorés + teinte distinctive) d'un ennemi normal, tirée aléatoirement sur un spawn point normal — pas de salle dédiée. Porteurs de recettes (Phase 8) : salles spécifiquement taggées.
+- [ ] `level.gd` : consommer le Dictionary généré (seed tirée au lancement du run, conservée dans `RunState` — nécessaire à la Phase 5). Écran fixe par salle (480×270, pas de scroll interne, Q038) — confirmé, pas de caméra dynamique à gérer.
+- [ ] **Régénération à chaque entrée (Q002)** : quitter puis revenir dans ce biome (via le HUB) déclenche une nouvelle génération complète, pas une reprise de l'état précédent.
+- [ ] Pas de plateformes cassables, pièges ni leviers en v3 (Q040) — décor statique hors gisements/ennemis/porteurs.
+- [ ] `tests/test_biome_generator.gd` : sur 100 générations seedées — chemin start→boss connexe (parcours des connexions dans les 4 directions), minima de matériaux respectés, aucune salle disjointe, déterminisme (même seed → même sortie).
+- [ ] Recenser tileset/décors biome 1 dans `game_art/backlog_art.md` — grille de tiles **16×16** (Q068), 2-3 couches de parallax (Q069). **[game_art]**
 
 ### Fait quand
 Lancer le biome 1 deux fois produit deux agencements différents, tous deux complétables, avec les ressources clés présentes. Tests de complétabilité et de garantie ressources verts sur N générations. **J2.**
@@ -277,7 +329,7 @@ Lancer le biome 1 deux fois produit deux agencements différents, tous deux comp
 Phase 3.
 
 ### Risques
-Garantie de complétabilité (le joueur ne doit jamais être bloqué). Couverte par tests automatisés sur la connectivité. Attention au respawn d'ennemis existant (`level.gd:178-199`, positions issues de la config) : les positions de respawn doivent venir des données générées, pas de l'ancien fichier.
+Garantie de complétabilité (le joueur ne doit jamais être bloqué). Couverte par tests automatisés sur la connectivité. Aucun respawn d'ennemi dans une salle nettoyée tant que le biome n'est pas régénéré (Q053) — supprimer le respawn existant (`level.gd:178-199`) ou le conditionner explicitement à une régénération complète du biome.
 
 ---
 
@@ -301,54 +353,60 @@ Boucle identitaire du jeu (P0) — implémentée tôt, avec le seul biome 1, pou
 Deux options existent : (a) **conserver la scène biome en mémoire** — `remove_child(biome)` sans `queue_free`, garder la référence, charger l'Arène, puis ré-attacher le biome au retour ; (b) sérialiser/désérialiser tout l'état du biome. **Recommandation : (a)**, ordres de grandeur plus simple et moins bugogène ; aucune exigence de sauvegarde mi-run ne justifie (b). Points de vigilance de (a) : mettre en pause les timers du biome retirés de l'arbre (les `create_timer` de respawn sont liés à `get_tree()` — les désactiver pendant l'Arène via un flag), et restaurer position/vitesse/PV du player explicitement. Le test dédié reste requis quel que soit le choix.
 
 ### Tâches
-- [ ] Interception de la mort : `level.gd._on_player_died` (level.gd:301) — si des tentatives de résurrection restent, transition vers l'Arène au lieu de la fin de run. Compteur `RunState.resurrection_count`.
+- [ ] Interception de la mort : `level.gd._on_player_died` (level.gd:301) — transition systématique vers l'Arène (**pas de plafond de résurrections, Q005** : l'escalade de difficulté des Gardiens borne naturellement les tentatives, ne jamais bloquer une résurrection par un compteur artificiel). Compteur `RunState.resurrection_count` conservé pour l'escalade et le tirage de cicatrice.
 - [ ] `player.gd._die()` (player.gd:288) : prévoir la réanimation (`revive(hp)` qui remet `_dead = false`, restaure PV, réémet `health_changed`) — actuellement `_dead` est définitif.
-- [ ] Scène Arène du Voile (unique) `scenes/levels/veil_arena.tscn`, décor placeholder. Recenser décor « tribunal cosmique » dans `game_art/backlog_art.md`. **[game_art]**
-- [ ] Gardiens du Voile : **2-3 Gardiens simples**, construits sur le modèle `boss.gd` (machine à états + `_load_config` défensif), configs dans `game/data/guardians.json` (une clé par Gardien, structure calquée sur `boss.json`). Tirage aléatoire à chaque passage.
-- [ ] Difficulté croissante : multiplicateurs (HP, dégâts, vitesse) par `resurrection_count`, table dans `guardians.json` (`"escalation": [{"hp_mult": 1.0}, {"hp_mult": 1.3}, ...]`). Fonction pure `apply_escalation(base_cfg, count) -> Dictionary`, testée.
+- [ ] Scène Arène du Voile (unique) `scenes/levels/veil_arena.tscn`, décor placeholder. Le joueur entre avec **PV pleins** et son **consommable équipé utilisable** (Q030) — pas de PV à zéro à l'entrée. Recenser décor « tribunal cosmique » dans `game_art/backlog_art.md`. **[game_art]**
+- [ ] Gardiens du Voile : **un seul Gardien en Phase 5 — Le Veilleur des Cendres** (Q029), construit sur le modèle `boss.gd` (machine à états + `_load_config` défensif, réutilise directement les états charge/volley/slam existants), config dans `game/data/guardians.json`. Fiche de gameplay : charge au sol, projectile de cendres, zone d'explosion retardée, phase de pause vulnérable entre les attaques. Un seul tirage possible tant que R2/Phase 7 n'ajoutent pas les 7 autres du pool (Roi Sans Visage, Collecteur d'Âmes, Veuve du Vide, Dévoreur de Souvenirs, Porte-Flamme, Gardien des Os, Écho du Noyau).
+- [ ] Difficulté croissante : multiplicateurs (HP, dégâts) par `resurrection_count`, table provisoire (Q031) dans `guardians.json` : `"escalation": [{"mult": 1.0}, {"mult": 1.3}, {"mult": 1.6, "new_pattern": true}, {"mult": 2.0}, {"mult": 2.5}]` (palier 5+ reste à 2.5, pas d'escalade infinie au-delà). Fonction pure `apply_escalation(base_cfg, count) -> Dictionary`, testée.
 - [ ] Victoire → retour au biome **dans l'état exact quitté** (option (a) ci-dessus), résurrection à l'endroit de la mort, PV restaurés, cicatrice appliquée (stub tant que Phase 6 non faite). Défaite → fin de run définitive (PC de fin de run quand même), retour HUB.
-- [ ] Recenser sprites/patterns visuels des Gardiens dans `game_art/backlog_art.md`. **[game_art]**
-- [ ] Tests (`test_veil.gd`) : escalade des Gardiens (fonction pure), état biome conservé autour de l'aller-retour (au minimum : seed inchangée, ores minés absents, ennemis morts non ressuscités — test d'intégration léger sur les structures de données si la scène n'est pas testable directement).
+- [ ] Recenser sprites/patterns visuels du Veilleur des Cendres dans `game_art/backlog_art.md`. **[game_art]**
+- [ ] Tests (`test_veil.gd`) : escalade des Gardiens (fonction pure, y compris le plafond à ×2.5 au-delà du palier 5), état biome conservé autour de l'aller-retour (au minimum : seed inchangée, ores minés absents, ennemis morts non ressuscités — test d'intégration léger sur les structures de données si la scène n'est pas testable directement), PV pleins + consommable utilisable à l'entrée de l'Arène.
 
 ### Fait quand
-Mourir envoie à l'Arène. Vaincre le Gardien ressuscite le joueur dans le biome, **dans l'état exact où il l'avait quitté**. Perdre termine le run. Tests d'état biome verts.
+Mourir envoie à l'Arène, sans jamais bloquer la tentative par un compteur. Vaincre le Gardien ressuscite le joueur dans le biome, **dans l'état exact où il l'avait quitté**. Perdre termine le run. Tests d'état biome verts.
 
 ### Dépend de
 Phase 4, R1.5.
 
 ### Risques (À SURVEILLER — point critique)
 - **Le biome ne doit surtout pas être régénéré au retour de l'Arène.** Avec l'option (a), le risque se déplace vers les timers/références pendantes de la scène détachée — vérifier respawn, tweens, `get_tree()` null. Couvrir par test + validation manuelle systématique.
-- Les Gardiens sont construits sur le modèle `boss.gd` non consolidé (R2 pas encore passé). Coût assumé : R2 inclura les Gardiens dans la factorisation. Limiter à 2-3 Gardiens simples. Ne PAS copier-coller `boss.gd` trois fois : un seul `guardian.gd` paramétré par sa config JSON.
+- Le Gardien unique est construit sur le modèle `boss.gd` non consolidé (R2 pas encore passé). Coût assumé : R2 ajoutera les 7 autres Gardiens du pool sur cette même base, factorisée. Ne PAS copier-coller `boss.gd` : un seul `guardian.gd` paramétré par sa config JSON, réutilisable pour les futurs Gardiens.
+- Sans plafond de résurrections, le cumul de cicatrices (Phase 6) peut devenir dégénéré sur de nombreuses morts — voir planchers durs obligatoires en Phase 6 (Q026b).
 
 ---
 
 ## Phase 6 — Cicatrices → **Jalon J3**
 
 ### Tâches
-- [ ] `game/data/scars.json` :
+- [ ] `game/data/scars.json` — **liste définitive des 5 cicatrices (Q026)**, remplace les exemples précédents `membre_raidi`/`vision_voilee` :
   ```json
   {
-    "membre_raidi": {"name": "Membre raidi", "modifiers": {"speed_mult": 0.9}},
-    "vision_voilee": {"name": "Vision voilee", "modifiers": {"max_hp_add": -1}}
+    "sang":  {"name": "Cicatrice du Sang",  "modifiers": {"max_hp_mult": 0.9}},
+    "os":    {"name": "Cicatrice de l'Os",  "modifiers": {"speed_mult": 0.85}},
+    "ame":   {"name": "Cicatrice de l'Ame", "modifiers": {"heal_mult": 0.7}},
+    "peur":  {"name": "Cicatrice de la Peur", "modifiers": {"detection_mult": 1.5}},
+    "noyau": {"name": "Cicatrice du Noyau", "modifiers": {"attack_damage_mult": 1.2, "max_hp_mult": 0.8}},
+    "_floors": {"speed_mult": 0.5, "max_hp": 2, "heal_mult": 0.3, "attack_damage_mult": 0.1}
   }
   ```
-  Clés de modificateurs supportées au départ : `speed_mult`, `jump_mult`, `max_hp_add`, `attack_damage_add`, `damage_reduction_add`. Extension = nouvelle clé + son application, rien d'autre.
-- [ ] Application dans `player.gd` : étendre `_apply_equipment()` (player.gd:307, déjà le point unique de recalcul des stats) — après équipement, appliquer les modificateurs des cicatrices actives. Renommer en `_recompute_stats()` à cette occasion.
+  Clés de modificateurs : `max_hp_mult`, `speed_mult`, `heal_mult` (**nouvelle**), `detection_mult` (**nouvelle**), `attack_damage_mult`. **`_floors` est obligatoire (Q026b)** : planchers durs par stat, appliqués en clamp après cumul de tous les modificateurs actifs. Sans ce plancher, un cumul de cicatrices identiques sur de nombreuses résurrections (pas de plafond, Q005) ferait tendre une stat vers zéro et rendrait le personnage injouable.
+- [ ] **`detection_mult` (Q027)** : ajouter un champ `detection_radius` dans `enemies.json` et `enemy_base.gd` (rayon de détection paramétrable, actuellement absent) — multiplié par `detection_mult` quand la Cicatrice de la Peur est active.
+- [ ] Application dans `player.gd` : étendre `_apply_equipment()` (player.gd:307, déjà le point unique de recalcul des stats) — après équipement, appliquer les modificateurs cumulés des cicatrices actives, **puis clamp aux planchers `_floors`**. Renommer en `_recompute_stats()` à cette occasion.
 - [ ] `RunState.scars: Array[String]` + `add_scar(id)` + signal `scars_changed` + serialize/reset.
-- [ ] Tirage de la cicatrice à chaque résurrection (dans le flux de retour d'Arène, Phase 5) : aléatoire uniforme parmi les non-possédées ; si toutes possédées, doublon autorisé (cumul).
-- [ ] Recettes du Voile : `biome: "voile"` dans `recipes.json` (Lame Spectrale, Anneau des Revenants, Élixir de Résurgence) — découverte droppée à la victoire en Arène (`MetaState.discover_recipe`).
+- [ ] Tirage de la cicatrice à chaque résurrection (dans le flux de retour d'Arène, Phase 5) : **aléatoire imposé** (pas de choix, Q028), affiché via un écran dédié à la résurrection ; uniforme parmi les non-possédées ; si les 5 possédées, doublon autorisé (cumul, plafonné par les planchers).
+- [ ] Recettes du Voile : `biome: "voile"` dans `recipes.json` (Lame Spectrale, Anneau des Revenants, Élixir de Résurgence — voir table complète questions.md Q043) — découverte droppée à la victoire en Arène (`MetaState.discover_recipe`). Effets (Q049) : Anneau des Revenants atténue l'impact des malus de cicatrices actives (ex. -50 % sur les modificateurs négatifs, appliqué avant clamp aux planchers) ; Lame Spectrale = dégâts accrus contre créatures du Voile (Gardiens, Miroir) ; Élixir de Résurgence = soin complet + bref buff de dégâts après résurrection.
 - [ ] Affichage HUD : rangée d'icônes placeholder des cicatrices actives.
-- [ ] Recenser effets visuels par palier (1 à 5+) via shaders + overlays de particules dans `game_art/backlog_art.md` — PAS de refonte de spritesheet. **[game_art]**
-- [ ] Tests (`test_scars.gd`) : application des modificateurs (stats recalculées correctes), cumul (deux cicatrices = effets combinés), drop des recettes du Voile, serialize.
+- [ ] Recenser les **5 paliers d'effets visuels réalisables (Q070)** via shaders + overlays de particules dans `game_art/backlog_art.md` — PAS de refonte de spritesheet : palier 1 overlay lumineux + particules discrètes, palier 2 shader veines lumineuses + halo, palier 3 shader transparence partielle, palier 4 overlay fragments flottants + teinte cristalline, palier 5+ combinaison à intensité maximale + particules denses. **[game_art]**
+- [ ] Tests (`test_scars.gd`) : application des modificateurs (stats recalculées correctes), cumul (deux cicatrices = effets combinés), **planchers respectés sur un stack extrême (ex. 50 cicatrices du même type, Q026b)**, drop des recettes du Voile, effet Anneau des Revenants, serialize.
 
 ### Fait quand
-Chaque résurrection applique une cicatrice qui modifie réellement le gameplay, persistante jusqu'à la fin du run. Vaincre un Gardien peut faire découvrir une recette du Voile. **J3 : la boucle identitaire complète est jouable.**
+Chaque résurrection applique une cicatrice (parmi les 5 définitives) qui modifie réellement le gameplay, persistante jusqu'à la fin du run, jamais en dessous des planchers définis. Vaincre un Gardien peut faire découvrir une recette du Voile. **J3 : la boucle identitaire complète est jouable.**
 
 ### Dépend de
 Phase 5.
 
 ### Risques
-Cumul de cicatrices : éviter les combinaisons injouables (borne plancher sur les stats finales : `speed >= 0.5 * base`, `max_hp >= 2` — bornes dans `scars.json`, pas dans le code). Équilibrage provisoire jusqu'à la Phase 10.
+Cumul de cicatrices sans plafond de résurrections (Q005) : les **planchers durs (`_floors`) sont une exigence de conception, pas une option** — sans eux, un joueur mourant plusieurs dizaines de fois rendrait son personnage totalement inerte (PV/vitesse/soin tendant vers zéro) bien avant que la difficulté des Gardiens (plafonnée à ×2.5, Phase 5) ne devienne le facteur limitant. Équilibrage fin des valeurs provisoire jusqu'à la Phase 10.
 
 ---
 
@@ -357,12 +415,17 @@ Cumul de cicatrices : éviter les combinaisons injouables (borne plancher sur le
 Étalée strictement biome par biome : 7a = Mines Obscures (J4), 7b = Îles Célestes (J5), 7c = Descente vers le Noyau (J6). Un biome est terminé avant d'attaquer le suivant.
 
 ### Tâches (répétées par biome)
-- [ ] `data/biomes/<id>.json` + salles `data/rooms/<id>/` (réutilise le générateur Phase 4 tel quel).
-- [ ] Ennemis spécifiques : étendre `enemies.json` + sous-classes de `enemy_base.gd` uniquement si le comportement l'exige (préférer le paramétrage JSON à la sous-classe).
-- [ ] Ressources spécifiques : entrées `materials.json` (déjà typées Phase 1), gisements dans les salles.
-- [ ] Boss de biome : Foreur Maudit (7a), Orage Éternel (7b), Gardien du Noyau (7c) — nouvelles clés dans `boss.json` sur le modèle existant ; nouveaux états/attaques ajoutés à la machine de `boss.gd` si nécessaire (en notant la duplication pour R2/R3).
-- [ ] Établis avancés : activation du `workbench_tier` (Phase 2) — `workbench.gd` porte un tier, `craft_menu` filtre les recettes au tier de l'établi utilisé.
-- [ ] Recenser par biome dans `game_art/backlog_art.md` : sprites ennemis, boss, décors, tileset. **[game_art]**
+- [ ] `data/biomes/<id>.json` + salles `data/rooms/<id>/` (réutilise le générateur Phase 4 tel quel, connexions 4 directions déjà supportées — B3 vers le haut, B4 vers le bas). Tailles cibles (Q034) : B2 6-8 salles, B3 7-9, B4 8-10 ; 8-10 templates par biome (Q035).
+- [ ] **4 nouveaux archétypes ennemis (Q050)**, en plus de `ground`/`flyer` existants : `rooted` (stationnaire, attaque de zone périodique), `jumper` (bondit vers le joueur), `turret` (stationnaire, tir de projectile), `teleporter` (téléportation courte). Table complète ennemi → archétype par biome dans questions.md Q050 (ex. Araignée géante B2 = `jumper`, Machine abandonnée B2 = `turret`, Manifestation du Voile B4 = `teleporter`). Étendre `enemies.json` + sous-classes de `enemy_base.gd` uniquement si le comportement l'exige.
+- [ ] Ressources spécifiques : entrées `materials.json` (déjà typées Phase 1), gisements dans les salles, gatées par tier de pioche (Q022).
+- [ ] **Drop de matériaux par ennemi (Q054)** : table de loot simple dans `enemies.json` en plus des recettes des porteurs (ex. créatures B1 → cuir, élémentaires du vent B3 → essence de vent).
+- [ ] Boss de biome — **fiches d'attaques définitives (Q051)** :
+  - **Foreur Maudit (7a)** : arène « atelier de forage ». Attaques : charge frontale, tir de boulons, mine posée (explosion différée). Phase : rage à bas HP (vitesse accrue).
+  - **Orage Éternel (7b)** : arène « plateforme aérienne ». Attaques : éclair ciblé (zone télégraphiée), déplacement rapide/téléportation courte, tempête de cristaux (projectiles multiples).
+  - **Gardien du Noyau (7c)** : arène « sanctuaire du Noyau ». Attaques : charge lourde, onde de corruption (zone), invocation de revenants. Phase : phase 2 à mi-HP (nouvelle attaque de zone majeure).
+  Nouvelles clés dans `boss.json` sur le modèle existant ; nouveaux états/attaques ajoutés à la machine de `boss.gd` si nécessaire (en notant la duplication pour R2/R3).
+- [ ] Établis avancés : activation du `workbench_tier` (Phase 2, 3 tiers définitifs Q046 : 1=starter/B1, 2=B2/B3, 3=B4/Voile) — `workbench.gd` porte un tier, `craft_menu` filtre les recettes au tier de l'établi utilisé.
+- [ ] Recenser par biome dans `game_art/backlog_art.md` : sprites ennemis, boss, décors, tileset (grille 16×16, Q068). **[game_art]**
 
 ### Fait quand
 Chaque biome livré est jouable de bout en bout avec ses ennemis, ressources et boss (placeholders acceptés). Les 4 biomes jouables = fin de phase.
@@ -381,7 +444,7 @@ Gros volume de contenu. Ne jamais paralléliser deux biomes. Difficulté croissa
 - [ ] Extraire les patterns communs des biomes (chargement config, génération, spawn) dans une base partagée.
 - [ ] Factoriser les comportements d'ennemis récurrents dans `enemy_base.gd`.
 - [ ] Unifier la structure boss de biome / Gardiens du Voile (même base de machine à états, prépare R3).
-- [ ] Étendre le pool de Gardiens sur la base unifiée (cible : 8 — sinon reliquat au backlog post-v3).
+- [ ] Étendre le pool de Gardiens sur la base unifiée : 7 Gardiens supplémentaires en plus du Veilleur des Cendres (Phase 5) — Roi Sans Visage, Collecteur d'Âmes, Veuve du Vide, Dévoreur de Souvenirs, Porte-Flamme, Gardien des Os, Écho du Noyau (cible : 8 au total — sinon reliquat au backlog post-v3).
 - [ ] Audit anti-hardcode : toute donnée gameplay externalisée.
 - [ ] Auditer la couverture de tests biomes/ennemis/boss/Gardiens, compléter jusqu'à 85 %.
 
@@ -393,13 +456,15 @@ Aucune duplication structurelle majeure entre biomes/boss/Gardiens. Tests de non
 ## Phase 8 — Porteurs de recettes
 
 ### Tâches
-- [ ] Ennemis rares (Archiviste, Golem Artisan, Mineur Spectral, Forgeron Maudit) — apparition conditionnelle par biome (probabilité dans la config biome, tirage à la génération).
-- [ ] Drop = découverte de recette : `MetaState.discover_recipe(id)` à la mort du porteur, catégories de drop cohérentes par porteur (table dans `enemies.json` ou `recipes.json`).
+- [ ] Ennemis rares (Archiviste, Golem Artisan, Mineur Spectral, Forgeron Maudit) — apparition conditionnelle sur des **salles spécifiquement taggées** (Q037), probabilité dans la config biome, tirage à la génération.
+- [ ] Drop = découverte de recette : `MetaState.discover_recipe(id)` à la mort du porteur. Sources par recette légendaire définies dans la table Q043 (ex. Armure du Noyau et Lame du Noyau → Forgeron Maudit ; Couronne Spectrale → Archiviste Perdu).
+- [ ] **Doublon (Q048)** : si le porteur droppe une recette déjà découverte/maîtrisée, rien ne se passe (pas de compensation) — la récompense principale reste d'avoir vaincu le porteur.
+- [ ] Découverte de recette limitée aux porteurs + Gardiens du Voile + starters (Q047) — pas de coffres, pas de bonus de première extraction de matériau.
 - [ ] Feedback visuel/sonore de découverte (toast HUD « Recette découverte »).
 - [ ] Recenser sprites des 4 porteurs dans `game_art/backlog_art.md`. **[game_art]**
 
 ### Fait quand
-Vaincre un porteur ajoute une recette « Découverte » au Grimoire.
+Vaincre un porteur ajoute une recette « Découverte » au Grimoire (sauf doublon, sans effet).
 
 ### Dépend de
 Phases 2, 7.
@@ -427,34 +492,57 @@ Les boss existants fonctionnent via l'architecture modulaire. L'assemblage est t
 
 **Scope arrêté : 2 paramètres** — biomes explorés + cicatrices accumulées. Le design doc en décrit 4 ; « boss vaincus » et « style de jeu » sont coupés de v3 → backlog post-v3.
 
+**Accès (Q009)** : vaincre le Gardien du Noyau (B4) seul suffit à ouvrir l'accès au Miroir, sans prérequis d'avoir visité les biomes 1-3 ni d'un nombre minimal de cicatrices — cohérent avec la liberté totale du run. **Victoire du run (Q003/Q004)** : le bonus PC « réussite d'un run » n'est accordé qu'à la victoire contre le **Miroir**, pas seulement contre le Gardien du Noyau. Après la victoire, écran de récapitulatif puis retour au HUB (pas de New Game+, pas de fin définitive) — le joueur peut enchaîner un nouveau run.
+
 ### Tâches
 - [ ] Fonction pure `build_mirror_description(biomes_visited: Array, scars: Array, cfg: Dictionary) -> Dictionary` : produit une description de boss (format R3) à partir des 2 paramètres (tracés dans `RunState`) et d'une table de correspondance `game/data/mirror.json` (biome → modules, cicatrice → mutations). Déterministe.
+- [ ] **Première version de `mirror.json` (Q052)** :
+  ```json
+  {
+    "biome_modules": {
+      "biome1": ["racines", "immobilisation", "invocation_vegetale"],
+      "biome2": ["armure_renforcee", "charge", "explosion"],
+      "biome3": ["deplacement_aerien", "eclairs", "cristaux"],
+      "biome4": ["energie_noyau", "corruption", "zone_majeure"]
+    },
+    "scar_mutations": {
+      "sang":  ["attaque_saignement", "vitesse_attaque_accrue"],
+      "os":    ["resistance_accrue"],
+      "ame":   ["attaques_drainantes"],
+      "peur":  ["poursuite_renforcee"],
+      "noyau": ["degats_tres_eleves", "corruption"]
+    }
+  }
+  ```
 - [ ] Instanciation via l'assemblage R3, déclenchement après le Gardien du Noyau (Biome 4).
+- [ ] Écran de victoire + retour HUB à la défaite du Miroir (pas de New Game+).
 - [ ] Recenser modules visuels combinables dans `game_art/backlog_art.md`. **[game_art]**
-- [ ] `tests/test_mirror.gd` : déterminisme (mêmes paramètres → même description), cas extrêmes (tous biomes + toutes cicatrices ; aucun biome, aucune cicatrice), chaque entrée de `mirror.json` référence des modules existants.
+- [ ] `tests/test_mirror.gd` : déterminisme (mêmes paramètres → même description), cas extrêmes (tous biomes + toutes cicatrices ; aucun biome, aucune cicatrice — un Miroir généré avec 1 seul biome exploré doit rester un combat valide), chaque entrée de `mirror.json` référence des modules existants.
 
 ### Fait quand
-Atteindre le Noyau génère un boss reflétant le parcours du run. Deux runs différents produisent deux boss différents. Tests verts. **J7.**
+Atteindre le Noyau génère un boss reflétant le parcours du run, accessible dès le Gardien du Noyau battu quel que soit le nombre de biomes visités auparavant. Deux runs différents produisent deux boss différents. Le vaincre déclenche le bonus PC de réussite et ramène au HUB. Tests verts. **J7.**
 
 ### Dépend de
 Phases 6, 7, R3.
 
 ### Risques
-Combinatoire de modules = risque de bugs/équilibrage. Limiter le nombre de modules au départ, étendre ensuite. Tester les combinaisons extrêmes.
+Combinatoire de modules = risque de bugs/équilibrage. Limiter le nombre de modules au départ, étendre ensuite. Tester les combinaisons extrêmes, notamment le cas minimal (1 biome, 0 cicatrice) qui doit rester un combat cohérent et pas juste un boss vide.
 
 ---
 
 ## Phase 10 — Intégration, équilibrage, polish
 
 ### Tâches
-- [ ] Équilibrage global (PC, coûts de maîtrise, difficulté biomes, escalade Gardiens, cicatrices) — passe définitive, uniquement dans les JSON.
+- [ ] Équilibrage global (PC, coûts de maîtrise, difficulté biomes, escalade Gardiens, cicatrices) — passe définitive, uniquement dans les JSON. Les retours de playtest de Nino aux jalons J1-J7 peuvent amender ces valeurs, jamais l'architecture (Q076).
 - [ ] Boucle méta complète testée sur plusieurs runs.
-- [ ] Passes audio/feedback.
-- [ ] Remplacement des placeholders restants (piloté par `game_art/backlog_art.md`), cohérence visuelle globale. **[game_art]**
+- [ ] **Audio définitif (Q064/Q065/Q066/Q067)** : remplacement des placeholders sonores `AudioManager` par des assets définitifs (banque libre de droits ou équivalent), dernière étape avant mise en production. Liste fermée de bruitages (saut, attaque mêlée/distance, coup reçu, minage, craft, découverte/maîtrise de recette, mort, résurrection, victoire boss/Gardien, ouverture menu/Grimoire). Ambition musicale (nombre de pistes, dynamique ou boucle simple) tranchée à ce stade, avec une vision complète du jeu terminé. Aucune voix.
+- [ ] **UI/UX finales** : écran d'équipement manuel par slot (Q055), barres de vie ennemis (Q057), menu options (volumes, plein écran/fenêtré, recalibration manette — persistés dans `user://settings.json`, Q058), écran de rappel des contrôles (Q059), confirmation d'effacement à « Nouvelle partie » (Q060).
+- [ ] Remplacement des placeholders visuels restants, priorité : joueur > ennemis > boss > tilesets > UI (Q071), piloté par `game_art/backlog_art.md`, cohérence visuelle globale. **[game_art]**
+- [ ] Vérification cible perf 60 FPS / plein écran par défaut (Q072).
 - [ ] Audit final de couverture (≥ 85 %).
 
 ### Fait quand
-Un joueur peut enchaîner plusieurs runs, progresser via le Grimoire/PC, mourir et ressusciter, et atteindre le Miroir du Noyau dans une expérience cohérente.
+Un joueur peut enchaîner plusieurs runs, progresser via le Grimoire/PC, mourir et ressusciter, et atteindre le Miroir du Noyau dans une expérience cohérente. **Terminé = J7 + cette phase close (Q077)**, sans critère de qualité formel supplémentaire.
 
 ### Dépend de
 Toutes.
@@ -487,11 +575,13 @@ Tests : livrés à chaque phase, maintenus verts (non-régression), cible 85 % s
 
 1. **Dette Phase 0 non purgée** — les 3 appels `Inventory` résiduels crashent le jeu au premier minerai/ennemi. À corriger avant tout.
 2. **Persistance de l'état de biome à la résurrection (Phase 5)** — ne pas régénérer le biome au retour de l'Arène ; scène conservée en mémoire (option retenue), timers/références pendantes à surveiller, test dédié obligatoire.
-3. **Gardiens du Voile construits avant R2** — dette assumée (2-3 Gardiens sur un seul `guardian.gd` paramétré, jamais de copier-coller de `boss.gd`) ; R2 inclut leur factorisation.
+3. **Gardien du Voile unique construit avant R2** — dette assumée (Le Veilleur des Cendres seul sur un `guardian.gd` paramétré, jamais de copier-coller de `boss.gd`) ; R2 ajoute les 7 autres du pool sur cette même base factorisée.
 4. **Volume d'art** — neutralisé par la règle placeholders + `game_art/backlog_art.md`.
 5. **Équilibrage de la boucle méta (Phase 10)** — nécessite des runs complets répétés ; équilibrage des cicatrices provisoire jusque-là.
 6. **Dette inter-phases** — neutralisée par R1/R1.5/R2/R3 ; ne pas les sauter sous pression de contenu.
 7. **Couverture de tests** — vérifiée à chaque jalon de refacto ; ne pas la laisser dériver.
+8. **Pas de plafond de résurrections + cumul de cicatrices (Phase 6)** — sans les planchers durs (`_floors` dans `scars.json`, Q026b), un joueur mourant de nombreuses fois rendrait son personnage totalement inerte. Les planchers sont une exigence de conception, pas une option d'équilibrage.
+9. **Déplacement de `RunState.reset()` (Phase 3)** — le passage d'un reset par entrée de biome à un reset unique par nouveau run (Q001) est un changement de comportement sur du code existant ; vérifier qu'aucun autre point n'appelle `reset()` implicitement.
 
 ## Backlog post-v3
 
@@ -499,5 +589,10 @@ Coupes assumées, à ne pas perdre :
 
 - Miroir du Noyau — paramètre « boss vaincus » (héritage des pouvoirs des boss battus).
 - Miroir du Noyau — paramètre « style de jeu » (tracking d'usage des armes → adaptation du boss).
-- Pool complet de 8 Gardiens du Voile si non atteint en R2 (reliquat).
+- Pool complet de 8 Gardiens du Voile si non atteint en R2 (reliquat) — 1 seul en Phase 5, cible 8 en R2.
 - Alignement du design doc sur le scope 2 paramètres du Miroir.
+- Coop (écartée explicitement pour v3, Q010).
+- HUB évolutif (décorations débloquables, PNJ, coffre persistant, Q039).
+- Retrait de cicatrice en cours de run au-delà des effets de l'Anneau des Revenants (non tranché explicitement, cf. questions.md Q028).
+
+Référence complète des décisions : voir `questions.md` à la racine du projet (77 questions + Q026b, toutes tranchées le 2026-07-06).

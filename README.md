@@ -65,9 +65,11 @@ Necessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ouv
 
 ## Etat actuel
 
-**v1.24.** `game_art` : phases 0 a 4 closes, phase 5 avancee. L'editeur couvre maintenant visualisation, edition, sauvegarde, audit exporte structure, comparaison produit/reference, export `specs/<entity>.md` et documentation d'usage, valides en headless. Reste cote `game_art` : produire de vrais spritesheets pour remplacer les etats legacy, puis retirer le fallback legacy.
-Jeu : dette bloquante Phase 0 corrigee ; validation complete (GUT, run manuel integral) encore a faire cote zone jeu.
+**v1.25.** `questions.md` (racine) : 77+1 questions de conception v3 tranchees (structure du run, cicatrices, craft, ennemis/boss, UI, audio, technique) — source de verite pour tout arbitrage de design. `roadmap.md` et les docs `docs/v3/*.md` mis a jour en consequence.
+`game_art` : phases 0 a 4 closes, phase 5 avancee, alignee sur `questions.md` via `backlog_art.md`.
+Jeu : dette bloquante Phase 0 corrigee ; validation complete (GUT, run manuel integral) encore a faire, puis Phase 1 (materiaux typés).
+Developpement prevu avec 2 agents separes (jeu et game_art), `questions.md` en arbitrage commun.
 
 ## Roadmap
 
-Voir [roadmap.md](roadmap.md) - roadmap v3 complete, jalons jouables J1-J7. Design document : [`docs/v3/CoreDive Challenge - Design Document v3.md`](docs/v3/CoreDive%20Challenge%20%E2%80%94%20Design%20Document%20v3.md). Besoins d'assets : [`game_art/backlog_art.md`](game_art/backlog_art.md).
+Voir [roadmap.md](roadmap.md) - roadmap v3 complete, jalons jouables J1-J7, decisions de conception verrouillees via [`questions.md`](questions.md). Design document : [`docs/v3/CoreDive Challenge - Design Document v3.md`](docs/v3/CoreDive%20Challenge%20%E2%80%94%20Design%20Document%20v3.md). Besoins d'assets : [`game_art/backlog_art.md`](game_art/backlog_art.md).
