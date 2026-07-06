@@ -7,7 +7,7 @@ Pour les sprites du jeu, ne pas découper une planche globale générée.
 La méthode retenue est de générer les sprites **un par un**, avec une specification stable par asset, puis de les intégrer individuellement dans Godot.
 
 Pour les personnages, la cible visuelle de référence devient un rendu **proche de la lisibilité de Terraria** :
-- frame de player autour de `40x56` pixels ;
+- conserver la taille actuellement validée en jeu ;
 - silhouette nette ;
 - peu de bruit ;
 - détails lisibles à taille de jeu ;
@@ -66,11 +66,11 @@ Demander :
 
 | Asset | Taille cible |
 |---|---:|
-| Joueur idle | 40x56 |
-| Joueur course 1 | 40x56 |
-| Joueur course 2 | 40x56 |
-| Joueur saut | 40x56 |
-| Joueur attaque | 48x56 |
+| Joueur idle | 14x24 |
+| Joueur course 1 | 14x24 |
+| Joueur course 2 | 14x24 |
+| Joueur saut | 14x24 |
+| Joueur attaque | 22x20 |
 | Mob au sol | 32x32 |
 | Mob volant | 32x24 |
 | Boss gardien | 96x128 |

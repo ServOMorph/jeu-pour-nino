@@ -40,11 +40,10 @@ Backlog des assets à produire pour la zone jeu. Alimenté par les phases de `ro
 ### Sprites player — standard Terraria-like
 - phase: antérieure (P3 signals)
 - placeholder: sprites actuels hors standard
-- specs: idle, run1, run2, jump, attack en 40x56 / 48x56, réf `docs/process_generation_sprites.md`
+- specs: conserver la taille actuelle validée en jeu — idle/run1/run2/jump en 14x24, attack en 22x20 ; ne pas repartir sur l'ancienne cible 40x56 / 48x56
 - priorite: haute
 - statut: en_cours
 - note: cette entrée est aussi le support du « Fait quand » de la Phase 5 de `roadmap_editeur.md` (premier cycle complet sheet → éditeur → audit → sync → validation en jeu)
-- ⚠ à trancher : contradiction de taille avec `_contexte/signals.md` P3 (« idle réglé à 14x24 ») vs les 40x56/48x56 ci-dessus — clarifier la convention (canvas de production vs taille rendue en jeu) avant de produire les frames restantes
 
 ### Animations mobilité — double saut, corde/grappin
 - phase: 2 — Grimoire/PC/Craft (mobilité définie questions.md Q015)

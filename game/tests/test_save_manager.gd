@@ -16,11 +16,16 @@ func after_each() -> void:
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE_PATH))
 
 func _write_and_read(meta: Node) -> Node:
-	var data := meta.serialize()
+	var data: Dictionary = meta.serialize()
 	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	assert_not_null(f)
 	f.store_string(JSON.stringify(data))
+	f.flush()
+	f = null
 	var f2 := FileAccess.open(SAVE_PATH, FileAccess.READ)
+	assert_not_null(f2)
 	var parsed: Variant = JSON.parse_string(f2.get_as_text())
+	f2 = null
 	var ms2: Node = load("res://scripts/meta_state.gd").new()
 	add_child_autofree(ms2)
 	if parsed is Dictionary:

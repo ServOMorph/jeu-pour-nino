@@ -2,7 +2,6 @@
 # This file is auto-generated as part of the release process.  GUT maintainers
 # should not change this file manually.
 static var class_ref = [
-	AccessibilityServer,
 	AudioServer,
 	CameraServer,
 	ClassDB,
@@ -23,9 +22,7 @@ static var class_ref = [
 	NativeMenu,
 	NavigationMeshGenerator,
 	NavigationServer2D,
-	NavigationServer2DManager,
 	NavigationServer3D,
-	NavigationServer3DManager,
 	OS,
 	Performance,
 	PhysicsServer2D,

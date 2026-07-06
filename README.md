@@ -8,7 +8,7 @@ Jeu de plateforme/action pixel art fait pour Nino. Un run court dans le biome 1,
 python run_game.py
 ```
 
-Necessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ouvrir `game/project.godot` dans l'editeur et appuyer sur **F5**.
+Necessite Godot 4.5 disponible dans le PATH, ou via `D:\tmp\godot45\Godot_v4.5-stable_win64.exe`. Ou ouvrir `game/project.godot` dans l'editeur et appuyer sur **F5**.
 
 ## Controles
 
@@ -44,7 +44,7 @@ Necessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ouv
 |-- run_game.py         # Lance le jeu directement
 |-- run_editeur.py      # Lance l'editeur game_art
 |-- run_edit_game.py    # Lance jeu + editeur cote a cote
-|-- roadmap.md          # Roadmap active v2.1
+|-- roadmap.md          # Roadmap active v3
 |-- docs/               # GDD, profil joueur et charte graphique
 `-- game/               # Projet Godot
     |-- assets/         # Sprites pixel art
@@ -65,11 +65,10 @@ Necessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ouv
 
 ## Etat actuel
 
-**v1.26.** Coherence entre `roadmap.md` (jeu) et `game_art/roadmap_editeur.md` analysee et corrigee : perimetre de l'editeur restreint aux sprites/animations d'entites (tilesets, parallax, shaders de cicatrices et icones UI valides directement en jeu), regle de synchronisation manifest/backlog ajoutee, editeur en maintenance apres la Phase 5.
-`game_art` : phases 0 a 4 closes, phase 5 avancee, alignee sur `questions.md` via `backlog_art.md`.
-Jeu : dette bloquante Phase 0 corrigee ; validation complete (GUT, run manuel integral) encore a faire, puis Phase 1 (materiaux typés).
-Question ouverte : convention de taille des sprites player (40x56/48x56 vs 14x24) a trancher avant de produire les frames restantes.
-Developpement prevu avec 2 agents separes (jeu et game_art), `questions.md` en arbitrage commun.
+**v1.27.** Jeu : Phase 0 validee. `inventory.gd` est supprime, 20 tests GUT passent et un run manuel complet est valide. La roadmap est alignee sur cet etat.
+La taille actuelle des sprites player est conservee pour la suite.
+`game_art` reste aligne sur `questions.md` via `backlog_art.md`, avec developpement prevu en 2 agents separes (jeu et game_art).
+Prochaine etape : Phase 1 v3, materiaux types, gating de minage par tier et suppression des `coins`.
 
 ## Roadmap
 

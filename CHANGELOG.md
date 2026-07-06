@@ -1,3 +1,15 @@
+## v1.27 - 2026-07-06
+
+### Modifie
+- `roadmap.md` : dette bloquante Phase 0 marquee corrigee et validee ; taches Phase 0 cochees ; resume des dependances nettoye.
+- `_contexte/signals.md`, `_contexte/contexte.md`, `README.md` : etat courant aligne sur la validation complete de la Phase 0 et sur la conservation de la taille actuelle des sprites player.
+- `game_art/backlog_art.md`, `docs/process_generation_sprites.md` : convention de taille player realignee sur la taille actuelle validee en jeu.
+
+### Corrige
+- `game/scripts/inventory.gd` : retire du depot apres migration vers `RunState`.
+- `game/tests/test_run_state.gd`, `game/tests/test_meta_state.gd`, `game/tests/test_save_manager.gd` : typage/robustesse ajustes pour execution GUT verte sous Godot 4.5.
+- `game/addons/gut/godot_singletons.gd`, `game/addons/gut/stub_params.gd`, `game/addons/gut/warnings_manager.gd` : compatibilite/robustesse ajustee pour l'execution des tests sur l'environnement courant.
+
 ## v1.26 - 2026-07-06
 
 ### Modifie

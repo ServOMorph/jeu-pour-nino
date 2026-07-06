@@ -80,7 +80,7 @@ Lancement jeu : `python run_game.py` (sync game_art puis Godot).
 
 ---
 
-## ⚠ Dette bloquante Phase 0 (partiellement corrigée le 2026-07-03)
+## ⚠ Dette bloquante Phase 0 (corrigée et validée le 2026-07-06)
 
 La migration `Inventory` → `RunState` était incomplète : l'autoload `Inventory` avait été retiré de `project.godot` mais trois appels subsistaient et crashaient à l'exécution. **Corrigé** :
 - `ore_node.gd:42` — `Inventory.add(ORE_DROP)` → `RunState.add(ORE_DROP)`.
@@ -88,9 +88,7 @@ La migration `Inventory` → `RunState` était incomplète : l'autoload `Invento
 - `boss.gd:255` — `Inventory.add_coins(coin_reward)` → `RunState.add_coins(...)`.
 - Bonus (bloquait aussi le démarrage) : `ore_node.gd`/`workbench.gd` chargeaient leur texture via `const := preload(...)`, qui échoue sans `.import` généré. Remplacé par chargement runtime `Image.load_from_file` (même convention que `animation_driver.gd`).
 
-`grep -rn "Inventory" game/scripts` = zéro résultat. Vérifié : le niveau se charge et un run s'affiche sans erreur console (screenshot manuel).
-
-**Reste à faire** : `game/scripts/inventory.gd` toujours présent (pas supprimé) ; 20 tests GUT non relancés ; run manuel complet (miner, crafter, tuer des ennemis, battre le boss, relancer → `MetaState` conservé) non exécuté intégralement — seul le chargement initial du niveau a été vérifié visuellement.
+`grep -rn "Inventory" game/scripts` = zéro résultat. Vérifié : `game/scripts/inventory.gd` est supprimé ; 20 tests GUT passent ; un run manuel complet (miner, crafter, tuer des ennemis, battre le boss, relancer) est validé.
 
 ---
 
@@ -138,8 +136,8 @@ Quatre points de consolidation placés là où la dette s'accumule naturellement
 - [x] Migration des usages `Inventory` → `RunState` dans `player.gd`, `craft_menu.gd`, `level.gd`, `hud.gd`.
 - [x] Chargement/sauvegarde `MetaState` au démarrage et en fin de run.
 - [x] GUT installé, 20 tests écrits (`tests/`).
-- [ ] **Corriger la dette bloquante ci-dessus** (3 appels `Inventory` résiduels + suppression `inventory.gd`).
-- [ ] **Validation en jeu** : GUT vert + run manuel complet + persistance `MetaState` après relance.
+- [x] **Corriger la dette bloquante ci-dessus** (3 appels `Inventory` résiduels + suppression `inventory.gd`).
+- [x] **Validation en jeu** : GUT vert + run manuel complet + persistance `MetaState` après relance.
 
 ### Fait quand
 Un run modifie `RunState` sans toucher `MetaState`. Fermer/relancer le jeu conserve `MetaState`. Le jeu actuel reste jouable de bout en bout après migration (miner, crafter, boss). Tests verts.
@@ -552,7 +550,7 @@ Toutes.
 ## Ordre de dépendances (résumé)
 
 ```
-0 Fondations (+ dette Inventory à purger, validation en jeu)
+0 Fondations
 └─ 1 Matériaux typés
    └─ 2 Grimoire/PC/Craft
       └─ R1 Consolidation état
