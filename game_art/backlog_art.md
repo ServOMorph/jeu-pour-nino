@@ -72,7 +72,7 @@ Backlog des assets à produire pour la zone jeu. Alimenté par les phases de `ro
 - placeholder: le jeu utilise encore le sprite générique cuivre pour `minerai_abyssal`
 - specs: sprite dédié pour `minerai_abyssal`, cohérent avec un matériau tier 3 / biome 4, clairement distinct visuellement de `ore_copper.png` et `ore_iron.png`
 - priorite: haute
-- statut: livre
+- statut: integre
 - debloque: clôture Phase 1 roadmap.md — lisibilité du test manuel tier 3
 - livraison: `game_art/assets/objects/ore_abyssal.png`
 

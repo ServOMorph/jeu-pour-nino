@@ -65,10 +65,10 @@ Necessite Godot 4.5 disponible dans le PATH, ou via `D:\tmp\godot45\Godot_v4.5-s
 
 ## Etat actuel
 
-**v1.29.** Jeu : Phase 1 toujours ouverte, mais le gating de minage est maintenant data-driven via `weapons.json` et `RunState`.
+**v1.31.** Phase 1 (Materiaux types) close : gating de minage data-driven via `weapons.json`/`RunState`, run manuel complet valide (minage, craft, HUD, menu dev).
 GUT est vert (`23/23`) et le projet demarre en headless, y compris `biome1`.
-Un setup de test a ete ajoute autour de l'atelier avec un minerai tier 2 (`fer`) et un tier 3 (`minerai_abyssal`) pour la validation manuelle.
-Le sprite dedie de `minerai_abyssal` manque encore et est suivi dans `game_art/backlog_art.md`.
+Sprites `minerai_abyssal` et `fer` integres avec leur visuel dedie.
+Prochaine etape : Phase 2 - Grimoire, Points de Competence, Craft v3.
 
 ## Roadmap
 

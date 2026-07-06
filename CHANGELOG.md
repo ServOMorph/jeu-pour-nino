@@ -1,3 +1,12 @@
+## v1.31 - 2026-07-06
+
+### Corrige
+- `game/data/materials.json` : `minerai_abyssal` rebranche sur son sprite dedie `ore_abyssal.png` ; `fer` corrige vers `ore_iron.png` (utilisait encore le placeholder cuivre).
+
+### Modifie
+- `roadmap.md`, `_contexte/signals.md`, `_contexte/contexte.md`, `README.md` : Phase 1 (Materiaux types) declaree close apres validation du run manuel complet (minage tiers 2/3, craft, HUD, menu dev).
+- `game_art/backlog_art.md` : entree « Sprite manquant - minerai abyssal » passee au statut `integre`.
+
 ## v1.30 - 2026-07-06
 
 ### Modifie

@@ -186,8 +186,10 @@ Le craft v3 consomme des matériaux distincts (bois, pierre, cuivre, fer, crista
 - [x] Tests (`test_run_state.gd` étendu) : add/get/spend atomique, serialize/deserialize, reset, fallback legacy `resources`.
 - [ ] Recenser dans `game_art/backlog_art.md` : sprites distincts par type de gisement/minerai. **[game_art]**
 - [x] **Suppression des coins (Q045)** : les PC remplacent totalement l'or. `coins`/`add_coins`/`coins_changed` retirés de `RunState`, `hud.gd`, `enemy_base.gd`, `boss.gd`.
+- [x] Sprite `minerai_abyssal` intégré (`game/data/materials.json`), sprite `fer` rebranché sur `ore_iron.png` (utilisait encore le placeholder cuivre).
+- [x] **Validation en jeu** : run manuel complet (miner tiers 2/3, crafter, HUD, menu dev) validé le 2026-07-06.
 
-**Statut session 2026-07-06** : le socle technique de la Phase 1 est livré et testé (`23/23` GUT verts, démarrage headless OK), avec tier de pioche désormais fourni par les données gameplay. La phase reste **ouverte** tant qu'un run manuel complet n'a pas validé minage/craft/HUD/menu dev en conditions réelles.
+**Phase close le 2026-07-06.** Socle technique livré et testé (`23/23` GUT verts, démarrage headless OK), tier de pioche fourni par les données gameplay, run manuel complet validé. Seule tâche restante : recensement des sprites de gisements **[game_art]**, sans effet sur la clôture côté jeu (règle placeholders).
 
 ### Fait quand
 Miner un gisement ajoute le bon matériau, gaté par tier de pioche. Le HUD reflète les quantités par type. Aucune référence aux coins ne subsiste. Tests verts.

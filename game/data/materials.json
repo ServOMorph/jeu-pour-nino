@@ -32,7 +32,7 @@
     "biome": "biome2",
     "rarity": "uncommon",
     "tier": 2,
-    "ore": {"hp": 4, "drop": 1, "size": [14, 14], "sprite": "res://assets/sprites/objects/ore_copper.png"}
+    "ore": {"hp": 4, "drop": 1, "size": [14, 14], "sprite": "res://assets/sprites/objects/ore_iron.png"}
   },
   "charbon": {
     "name": "Charbon",
@@ -82,7 +82,7 @@
     "biome": "biome4",
     "rarity": "epic",
     "tier": 3,
-    "ore": {"hp": 6, "drop": 1, "size": [14, 14], "sprite": "res://assets/sprites/objects/ore_copper.png"}
+    "ore": {"hp": 6, "drop": 1, "size": [14, 14], "sprite": "res://assets/sprites/objects/ore_abyssal.png"}
   },
   "essence_voile": {
     "name": "Essence du Voile",
