@@ -17,6 +17,21 @@ func _initialize() -> void:
 		push_error("rapport non exporte")
 		quit(1)
 		return
+	var report := FileAccess.get_file_as_string("res://audit_report.md")
+	var expected_snippets := [
+		"- error: ",
+		"- warning: ",
+		"- info: ",
+		"## global",
+		"## player",
+		"### run",
+		"- [ ] warning: frame_size animation != manifest"
+	]
+	for snippet in expected_snippets:
+		if not report.contains(snippet):
+			push_error("rapport incomplet: " + snippet)
+			quit(1)
+			return
 
 	var entity_item := _find_tree_item(main._audit_tree, "player", "jump")
 	if entity_item == null:

@@ -3,6 +3,8 @@ extends VBoxContainer
 const ANIM_CONFIG := "res://data/animations.json"
 const MANIFEST_CONFIG := "res://data/manifest.json"
 const AUDIT_REPORT_PATH := "res://audit_report.md"
+const REFERENCE_ROOT := "res://assets/from_reference/"
+const SPECS_DIR := "res://specs"
 const AnimationDriverEditorScript := preload("res://editeur/animation_driver.gd")
 const InspectorScript := preload("res://editeur/inspector.gd")
 const AuditScript := preload("res://editeur/audit.gd")
@@ -11,8 +13,12 @@ var _entity_list: ItemList
 var _state_list: ItemList
 var _gallery_panel: Control
 var _inspector_panel: Control
+var _preview_row: HBoxContainer
 var _preview_container: SubViewportContainer
 var _viewport: SubViewport
+var _reference_preview_container: SubViewportContainer
+var _reference_viewport: SubViewport
+var _reference_texture_rect: TextureRect
 var _driver: AnimationDriverEditorScript
 var _inspector: InspectorScript
 var _frame_info_label: Label
@@ -108,6 +114,11 @@ func _build_toolbar(parent: Control) -> void:
 	btn_audit.pressed.connect(_open_audit_dialog)
 	bar.add_child(btn_audit)
 
+	var btn_specs := Button.new()
+	btn_specs.text = "Specs"
+	btn_specs.pressed.connect(_export_entity_specs)
+	bar.add_child(btn_specs)
+
 func _build_gallery_panel(parent: Control) -> void:
 	var panel := VBoxContainer.new()
 	panel.custom_minimum_size = Vector2(MIN_SIDE_PANEL_WIDTH, 0)
@@ -149,10 +160,22 @@ func _build_preview_panel(parent: Control) -> void:
 	center.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	preview_scroll.add_child(center)
 
+	_preview_row = HBoxContainer.new()
+	_preview_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	center.add_child(_preview_row)
+
+	var produced_column := VBoxContainer.new()
+	_preview_row.add_child(produced_column)
+
+	var produced_label := Label.new()
+	produced_label.text = "Produit"
+	produced_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	produced_column.add_child(produced_label)
+
 	_preview_container = SubViewportContainer.new()
 	_preview_container.stretch = true
 	_preview_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	center.add_child(_preview_container)
+	produced_column.add_child(_preview_container)
 
 	_viewport = SubViewport.new()
 	_viewport.size = Vector2i(200, 200)
@@ -167,9 +190,37 @@ func _build_preview_panel(parent: Control) -> void:
 	_viewport.add_child(checker)
 
 	_driver = AnimationDriverEditorScript.new()
-	_driver.position = Vector2(100, 100)
 	_viewport.add_child(_driver)
 	_driver.frame_changed.connect(_update_frame_info)
+
+	var reference_column := VBoxContainer.new()
+	_preview_row.add_child(reference_column)
+
+	var reference_label := Label.new()
+	reference_label.text = "Reference"
+	reference_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	reference_column.add_child(reference_label)
+
+	_reference_preview_container = SubViewportContainer.new()
+	_reference_preview_container.stretch = true
+	_reference_preview_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	reference_column.add_child(_reference_preview_container)
+
+	_reference_viewport = SubViewport.new()
+	_reference_viewport.size = Vector2i(200, 200)
+	_reference_viewport.transparent_bg = true
+	_reference_viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
+	_reference_preview_container.add_child(_reference_viewport)
+
+	var reference_checker := TextureRect.new()
+	reference_checker.texture = _build_checker_texture()
+	reference_checker.stretch_mode = TextureRect.STRETCH_TILE
+	reference_checker.size = Vector2(200, 200)
+	_reference_viewport.add_child(reference_checker)
+
+	_reference_texture_rect = TextureRect.new()
+	_reference_texture_rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_reference_viewport.add_child(_reference_texture_rect)
 
 	_frame_info_label = Label.new()
 	_frame_info_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -278,6 +329,7 @@ func _on_state_selected(index: int) -> void:
 	var state := _state_list.get_item_text(index)
 	_driver.load_entity(_current_entity)
 	_driver.play_state(state)
+	_update_reference_preview(_current_entity, state)
 	_paused = false
 	_driver.speed_scale = 1.0
 	_btn_pause.text = "II"
@@ -296,6 +348,7 @@ func _on_state_edited(entity: String, state: String, _cfg: Dictionary) -> void:
 	var entity_cfg: Dictionary = _entities.get(entity, {})
 	_driver.load_from_dict(entity_cfg)
 	_driver.play_state(state)
+	_update_reference_preview(entity, state)
 	_driver.speed_scale = 0.0 if _paused else 1.0
 	_update_frame_info()
 
@@ -435,23 +488,142 @@ func _export_audit_report() -> void:
 	if _last_audit_results.is_empty():
 		lines.append("- [x] aucune anomalie")
 	else:
-		var current_entity := ""
+		var severity_counts := {
+			"error": 0,
+			"warning": 0,
+			"info": 0
+		}
+		var grouped: Dictionary = {}
 		for anomaly in _last_audit_results:
+			var severity := String(anomaly.get("severity", ""))
+			if severity_counts.has(severity):
+				severity_counts[severity] += 1
 			var entity := String(anomaly.get("entity", ""))
-			if entity != current_entity:
-				current_entity = entity
-				lines.append("## " + (entity if not entity.is_empty() else "global"))
+			var state := String(anomaly.get("state", ""))
+			if not grouped.has(entity):
+				grouped[entity] = {}
+			var entity_group: Dictionary = grouped[entity]
+			if not entity_group.has(state):
+				entity_group[state] = []
+			var state_group: Array = entity_group[state]
+			state_group.append(anomaly)
+			entity_group[state] = state_group
+			grouped[entity] = entity_group
+
+		lines.append("- error: %d" % int(severity_counts["error"]))
+		lines.append("- warning: %d" % int(severity_counts["warning"]))
+		lines.append("- info: %d" % int(severity_counts["info"]))
+		lines.append("")
+
+		var entities: PackedStringArray = []
+		for entity in grouped.keys():
+			entities.append(String(entity))
+		entities.sort()
+		for entity in entities:
+			lines.append("## " + (entity if not entity.is_empty() else "global"))
+			lines.append("")
+			var entity_group: Dictionary = grouped[entity]
+			var states: PackedStringArray = []
+			for state in entity_group.keys():
+				states.append(String(state))
+			states.sort()
+			for state in states:
+				if not state.is_empty():
+					lines.append("### " + state)
+					lines.append("")
+				var anomalies: Array = entity_group[state]
+				for anomaly in anomalies:
+					var severity := String(anomaly.get("severity", ""))
+					var message := String(anomaly.get("message", ""))
+					lines.append("- [ ] %s: %s" % [severity, message])
 				lines.append("")
+	_write_text_file(AUDIT_REPORT_PATH, "\n".join(lines) + "\n")
+	_audit_status_label.text = "%d anomalie(s) - rapport exporte" % _last_audit_results.size()
+
+func _export_entity_specs() -> void:
+	var manifest := _load_json_dict(MANIFEST_CONFIG)
+	var audit_results := AuditScript.run_audit(manifest, _entities, "res://assets")
+	_ensure_specs_dir()
+	for entity in _entities.keys():
+		var entity_name := String(entity)
+		var content := _build_entity_spec(entity_name, manifest, audit_results)
+		_write_text_file("%s/%s.md" % [SPECS_DIR, entity_name], content)
+	if _audit_status_label != null:
+		_audit_status_label.text = "specs exportees"
+
+func _build_entity_spec(entity: String, manifest: Dictionary, audit_results: Array[Dictionary]) -> String:
+	var entity_cfg: Dictionary = _entities.get(entity, {})
+	var states: Dictionary = entity_cfg.get("states", {})
+	var manifest_entity: Dictionary = manifest.get(entity, {})
+	var manifest_states: Dictionary = manifest_entity.get("states", {})
+	var lines := PackedStringArray()
+	lines.append("# " + entity)
+	lines.append("")
+	lines.append("- default_state: %s" % String(entity_cfg.get("default_state", "")))
+	lines.append("- nb_states: %d" % states.size())
+	lines.append("")
+	lines.append("## Etats")
+	lines.append("")
+	var state_names: PackedStringArray = []
+	for state in states.keys():
+		state_names.append(String(state))
+	state_names.sort()
+	for state in state_names:
+		var cfg: Dictionary = states.get(state, {})
+		var frames: Array = cfg.get("frames", [])
+		var frame_count := frames.size()
+		var manifest_state: Dictionary = manifest_states.get(state, {})
+		var target_frame_size := _format_frame_size(manifest_state.get("frame_size", []))
+		lines.append("### " + state)
+		lines.append("")
+		lines.append("- target_frame_size: %s" % target_frame_size)
+		lines.append("- fps: %.1f" % float(cfg.get("fps", 1.0)))
+		lines.append("- loop: %s" % ("true" if bool(cfg.get("loop", true)) else "false"))
+		lines.append("- frame_count: %d" % frame_count)
+		if cfg.has("sheet"):
+			lines.append("- sheet: %s" % String(cfg.get("sheet", "")))
+			lines.append("- frame_size: %s" % _format_frame_size(cfg.get("frame_size", [])))
+		else:
+			lines.append("- sheet: legacy")
+			lines.append("- frame_size: n/a")
+		lines.append("- offset: %s" % _format_offset(cfg.get("offset", [])))
+		lines.append("")
+	var entity_anomalies := _filter_entity_anomalies(entity, audit_results)
+	lines.append("## Anomalies ouvertes")
+	lines.append("")
+	if entity_anomalies.is_empty():
+		lines.append("- aucune")
+	else:
+		for anomaly in entity_anomalies:
 			var state := String(anomaly.get("state", ""))
 			var severity := String(anomaly.get("severity", ""))
 			var message := String(anomaly.get("message", ""))
-			var prefix := "- [ ] %s" % severity
-			if not state.is_empty():
-				lines.append("%s %s: %s" % [prefix, state, message])
+			if state.is_empty():
+				lines.append("- %s: %s" % [severity, message])
 			else:
-				lines.append("%s %s" % [prefix, message])
-	_write_text_file(AUDIT_REPORT_PATH, "\n".join(lines) + "\n")
-	_audit_status_label.text = "%d anomalie(s) - rapport exporte" % _last_audit_results.size()
+				lines.append("- %s / %s: %s" % [state, severity, message])
+	lines.append("")
+	return "\n".join(lines) + "\n"
+
+func _filter_entity_anomalies(entity: String, audit_results: Array[Dictionary]) -> Array[Dictionary]:
+	var filtered: Array[Dictionary] = []
+	for anomaly in audit_results:
+		if String(anomaly.get("entity", "")) == entity:
+			filtered.append(anomaly)
+	return filtered
+
+func _format_frame_size(value: Variant) -> String:
+	if value is Array and value.size() >= 2:
+		return "%dx%d" % [int(value[0]), int(value[1])]
+	return "n/a"
+
+func _format_offset(value: Variant) -> String:
+	if value is Array and value.size() >= 2:
+		return "[%.1f, %.1f]" % [float(value[0]), float(value[1])]
+	return "[0.0, 0.0]"
+
+func _ensure_specs_dir() -> void:
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(SPECS_DIR))
 
 func _load_json_dict(path: String) -> Dictionary:
 	var file := FileAccess.open(path, FileAccess.READ)
@@ -471,10 +643,11 @@ func _write_text_file(path: String, content: String) -> void:
 func _set_zoom(z: float) -> void:
 	_zoom = z
 	_preview_container.stretch_shrink = int(z)
+	_reference_preview_container.stretch_shrink = int(z)
 	_update_preview_size()
 
 func _update_preview_size() -> void:
-	if _preview_container == null:
+	if _preview_container == null or _reference_preview_container == null or _preview_row == null:
 		return
 	var target_size: float = BASE_PREVIEW_SIZE * _zoom
 	var side_width: float = MIN_SIDE_PANEL_WIDTH * 2.0
@@ -482,9 +655,15 @@ func _update_preview_size() -> void:
 		side_width = max(side_width, _gallery_panel.custom_minimum_size.x + MIN_SIDE_PANEL_WIDTH)
 	if _inspector_panel != null:
 		side_width = max(side_width, MIN_SIDE_PANEL_WIDTH + _inspector_panel.custom_minimum_size.x)
-	var available_width: float = size.x - side_width - 24.0
-	var preview_size: float = clampf(available_width, MIN_PREVIEW_SIZE, target_size)
-	_preview_container.custom_minimum_size = Vector2(preview_size, preview_size)
+	var available_width: float = size.x - side_width - 48.0
+	var total_preview_size: float = clampf(available_width, MIN_PREVIEW_SIZE * 2.0 + 12.0, target_size * 2.0 + 12.0)
+	var single_preview_size: float = clampf((total_preview_size - 12.0) / 2.0, MIN_PREVIEW_SIZE, target_size)
+	_preview_row.add_theme_constant_override("separation", 12)
+	_preview_row.custom_minimum_size = Vector2(single_preview_size * 2.0 + 12.0, single_preview_size)
+	_preview_container.custom_minimum_size = Vector2(single_preview_size, single_preview_size)
+	_reference_preview_container.custom_minimum_size = Vector2(single_preview_size, single_preview_size)
+	_center_preview_driver()
+	_center_reference_texture()
 
 func _toggle_pause() -> void:
 	_paused = not _paused
@@ -528,6 +707,72 @@ func _update_frame_info() -> void:
 		var tex := _driver.sprite_frames.get_frame_texture(anim, _driver.frame)
 		if tex != null:
 			size = tex.get_size()
-	_frame_info_label.text = "%d / %d — %dx%d px — %.1f fps — %s" % [
+	_frame_info_label.text = "%d / %d - %dx%d px - %.1f fps - %s" % [
 		_driver.frame + 1, total, size.x, size.y, fps, "loop" if loop else "once"
 	]
+
+func _update_reference_preview(entity: String, state: String) -> void:
+	var reference_path := _resolve_reference_path(entity, state)
+	if reference_path.is_empty():
+		_reference_texture_rect.texture = null
+		_center_reference_texture()
+		return
+	_reference_texture_rect.texture = _load_texture(reference_path)
+	_center_reference_texture()
+
+func _resolve_reference_path(entity: String, state: String) -> String:
+	var entity_cfg: Dictionary = _entities.get(entity, {})
+	var states: Dictionary = entity_cfg.get("states", {})
+	var state_cfg: Dictionary = states.get(state, {})
+	var candidates: PackedStringArray = []
+	var state_name := "%s_%s" % [entity, state]
+	candidates.append(REFERENCE_ROOT + entity + "/" + state_name + "_ref.png")
+	candidates.append(REFERENCE_ROOT + entity + "/" + _normalize_reference_name(state_name) + "_ref.png")
+	var sheet_path := String(state_cfg.get("sheet", ""))
+	if not sheet_path.is_empty():
+		var sheet_name := sheet_path.get_file().get_basename()
+		candidates.append(REFERENCE_ROOT + entity + "/" + sheet_name + "_ref.png")
+		candidates.append(REFERENCE_ROOT + entity + "/" + _normalize_reference_name(sheet_name) + "_ref.png")
+	var frames: Variant = state_cfg.get("frames", [])
+	if frames is Array and not frames.is_empty():
+		var first_frame := frames[0]
+		if first_frame is String:
+			var frame_name := String(first_frame).get_file().get_basename()
+			candidates.append(REFERENCE_ROOT + entity + "/" + frame_name + "_ref.png")
+			candidates.append(REFERENCE_ROOT + entity + "/" + _normalize_reference_name(frame_name) + "_ref.png")
+	for candidate in candidates:
+		if FileAccess.file_exists(candidate):
+			return candidate
+	return ""
+
+func _normalize_reference_name(name: String) -> String:
+	var normalized := name
+	if normalized.ends_with("_sheet"):
+		normalized = normalized.trim_suffix("_sheet")
+	for suffix in ["_v2", "_v3", "_v4"]:
+		if normalized.ends_with(suffix):
+			normalized = normalized.trim_suffix(suffix)
+	return normalized
+
+func _load_texture(path: String) -> Texture2D:
+	var image := Image.load_from_file(ProjectSettings.globalize_path(path))
+	if image == null or image.is_empty():
+		return null
+	return ImageTexture.create_from_image(image)
+
+func _center_preview_driver() -> void:
+	if _driver == null or _viewport == null:
+		return
+	_driver.position = Vector2(_viewport.size) * 0.5
+
+func _center_reference_texture() -> void:
+	if _reference_texture_rect == null or _reference_viewport == null:
+		return
+	var texture := _reference_texture_rect.texture
+	if texture == null:
+		_reference_texture_rect.position = Vector2(_reference_viewport.size) * 0.5
+		_reference_texture_rect.size = Vector2.ZERO
+		return
+	var tex_size := texture.get_size()
+	_reference_texture_rect.size = tex_size
+	_reference_texture_rect.position = (Vector2(_reference_viewport.size) - tex_size) * 0.5
