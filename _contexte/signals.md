@@ -12,12 +12,9 @@
 - [P2] Point de vigilance Phase 3 : déplacer `RunState.reset()` de `level.gd._ready()` vers `title.gd._start_game()` — un run est multi-biomes, le reset ne doit avoir lieu qu'au lancement d'un nouveau run, pas à chaque entrée en biome.
   fait quand: un aller-retour HUB↔biome en cours de run conserve matériaux/équipement/cicatrices ; test de non-régression dédié vert.
   réf: `roadmap.md` Phase 3, `questions.md` Q001
-- [P3] Produire un sprite distinct pour `minerai_abyssal` afin de rendre le test manuel tier 3 lisible.
-  fait quand: `minerai_abyssal` n'utilise plus le placeholder cuivre et dispose d'un sprite dédié visible en jeu.
-  réf: `game_art/backlog_art.md`, `game/data/materials.json`, `game/assets/sprites/objects/`
-- [P3] Refaire toutes les frames du player dans le nouveau standard visuel Terraria-like (hors `idle`, corrigé précédemment). (zone game_art)
-  fait quand: run1, run2, jump et attack utilisent tous des sprites cohérents avec la taille actuelle validée en jeu.
-  réf: `docs/process_generation_sprites.md`, `game_art/data/animations.json`, `game_art/assets/player/`, `game_art/backlog_art.md`
+- [P3] Suivre l'avancement des assets art via `game_art/backlog_art.md` (canal unique de handoff) : voir entrées « Sprite manquant — minerai abyssal » (statut `livre`, à intégrer) et « Sprites player — standard Terraria-like » (statut `en_cours`).
+  fait quand: n/a — le statut et la priorité de ces items vivent uniquement dans `backlog_art.md`, pas ici.
+  réf: `game_art/backlog_art.md`
 
 ## Questions ouvertes
 
@@ -48,28 +45,29 @@
 - Vérifié le 2026-07-06 : GUT vert (`23/23`) et démarrage Godot headless OK ; la fermeture de Phase 1 reste bloquée par l'absence d'un run manuel complet de validation.
 - Setup de test Phase 1 ajouté le 2026-07-06 : un minerai tier 2 (`fer`) et un tier 3 (`minerai_abyssal`) sont placés autour de l'atelier dans `level.json`.
 - Visuel manquant identifié le 2026-07-06 : `minerai_abyssal` n'a pas encore de sprite dédié ; entrée ajoutée dans `game_art/backlog_art.md`.
+- Protocole de communication jeu ↔ game_art revu le 2026-07-06 : `game_art/backlog_art.md` est désormais l'unique canal de handoff (statuts `a_faire`/`en_cours`/`livre`/`integre`, champs `debloque:`/`livraison:`) ; `/start jeu` charge le backlog et remonte les entrées `livre` ; plus aucune écriture croisée dans le `_contexte/` de l'autre zone (voir `.claude/zones.md` pour la matrice de propriété des fichiers).
 
-## Dernière session (2026-07-06 — gating minage fermé, setup de test atelier)
+## Dernière session (2026-07-06 — protocole de communication jeu/game_art fiabilisé)
 
 # Session du 2026-07-06
 
 ## Décisions prises
-- Le gating de minage Phase 1 est branché en data-driven via `weapons.json` et `RunState.get_pickaxe_tier()`.
-- La Phase 1 n'est pas close : un setup de test atelier a été ajouté, mais la validation manuelle complète reste à faire.
+- `game_art/backlog_art.md` devient l'unique canal de handoff entre les deux agents ; les deux `_contexte/signals.md` ne se référencent plus de statuts art dupliqués.
+- `/start jeu` charge désormais systématiquement le backlog art et remonte les assets `livre` prêts à intégrer.
+- README/CHANGELOG : README réservé à `/close jeu` ; garde-fou ajouté contre un bump CHANGELOG en parallèle des deux zones.
 
 ## Livrables produits ou modifiés
-- `game/data/weapons.json`, `game/scripts/run_state.gd`, `game/tests/test_run_state.gd` : tier de pioche data-driven branché et testé (`23/23` GUT).
-- `game/data/level.json` : minerais `fer` et `minerai_abyssal` ajoutés autour de l'atelier pour test manuel Phase 1.
-- `roadmap.md`, `_contexte/signals.md` : état Phase 1 mis à jour après fermeture du placeholder `get_pickaxe_tier() = 1`.
-- `game_art/backlog_art.md` : sprite manquant `minerai_abyssal` ajouté au backlog art.
+- `.claude/commands/start.md` : étape 4bis (zone `jeu` lit `backlog_art.md`, bloc `Assets à intégrer`).
+- `.claude/commands/close.md` : étape 6bis simplifiée (game_art n'écrit plus dans le signals.md racine), étape 6ter ajoutée (zone jeu met à jour le backlog), étape 7 restreinte à la zone jeu.
+- `.claude/zones.md` : matrice de propriété des fichiers partagés ajoutée.
+- `game_art/backlog_art.md` : 4 statuts, champs `debloque:`/`livraison:` ; entrée `minerai_abyssal` corrigée en statut `livre`.
+- `_contexte/signals.md` : entrées art dupliquées remplacées par une référence unique vers `backlog_art.md`.
 
 ## Hypothèses validées / invalidées
-- VALIDE : le tier de pioche est bien lu depuis les données gameplay ; GUT (`23/23`) et démarrage headless du jeu/niveau passent.
-- EN ATTENTE : validation manuelle complète de la Phase 1, désormais testable côté gameplay mais encore limitée visuellement pour le tier 3.
+- VALIDE : le sprite `minerai_abyssal` (`game_art/assets/objects/ore_abyssal.png`) existe déjà côté disque mais n'est pas encore commité ni intégré côté jeu — signalé comme dette à part, hors périmètre de cette session.
 
 ## Prochaine étape exacte
-Tester manuellement le flux Phase 1 depuis l'atelier : minage tier 2/tier 3, craft, HUD et menu dev.
-Si le manque de lisibilité du tier 3 gêne encore, produire le sprite `minerai_abyssal` côté game_art avant clôture de Phase 1.
+Au prochain `/start jeu` : intégrer le sprite `ore_abyssal.png` (statut `livre` dans le backlog) pour débloquer la clôture de la Phase 1, puis passer son statut à `integre`.
 
 ## Question bloquante pour la session suivante
 Aucune

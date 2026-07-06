@@ -1,3 +1,9 @@
+## v1.30 - 2026-07-06
+
+### Modifie
+- `.claude/commands/start.md`, `.claude/commands/close.md`, `.claude/zones.md` : protocole de communication jeu/game_art fiabilise, `game_art/backlog_art.md` devient l'unique canal de handoff (statuts `a_faire`/`en_cours`/`livre`/`integre`, champs `debloque:`/`livraison:`).
+- `game_art/backlog_art.md`, `_contexte/signals.md` : entree `minerai_abyssal` corrigee en statut `livre` ; references art dupliquees retirees du signals.md racine.
+
 ## v1.29 - 2026-07-06
 
 ### Modifie

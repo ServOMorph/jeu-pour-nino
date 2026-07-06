@@ -68,12 +68,29 @@ Lire `.claude/zones.md` pour obtenir la table des alias → dossiers réels.
    session (statuts des tâches et phases). Mettre à jour si périmée.
    Invariant : ce que lira le prochain `/start` doit être vrai.
 
-7. Mettre à jour `README.md` à la racine du projet :
+6bis. Si la zone est `game_art` :
+   - Pour chaque asset produit ou avancé pendant la session : mettre à jour son entrée dans
+     `game_art/backlog_art.md` (statut `a_faire` → `en_cours` → `livre`, champ `livraison:` rempli
+     au passage à `livre`).
+   - Ne jamais écrire dans `_contexte/signals.md` de la zone `jeu` : `backlog_art.md` est l'unique
+     canal de handoff, lu systématiquement par `/start jeu`.
+
+6ter. Si la zone est `jeu` :
+   - Si la session a posé un nouveau placeholder visuel : créer l'entrée correspondante dans
+     `game_art/backlog_art.md` avec le champ `debloque:` rempli (tâche/phase dev qui en dépend).
+   - Si la session a intégré un asset au statut `livre` : passer son statut à `integre` dans
+     `game_art/backlog_art.md`.
+   - Ne modifier que les champs `statut`, `debloque` et les entrées créées par le dev — jamais
+     `livraison:` ni les specs, qui appartiennent à game_art.
+
+7. Mettre à jour `README.md` à la racine du projet (uniquement pour la zone `jeu` — un `/close game_art`
+   ne touche jamais le README) :
    - Refléter l'état actuel du projet (section "État actuel" de `contexte.md`).
    - Ne pas modifier les sections stables (objectif, stack, structure) sauf changement explicite.
    - Si le README n'existe pas encore : ne pas le créer sans demander.
 
-8. Bumper la version dans `CHANGELOG.md` :
+8. Bumper la version dans `CHANGELOG.md` (les deux zones y ajoutent une entrée, mais jamais en parallèle —
+   si une session `/close` est en cours sur l'autre zone, attendre qu'elle se termine avant de bumper) :
    - Lire la dernière entrée de `CHANGELOG.md` pour extraire la version actuelle (ex: `v2.2`).
    - Déterminer le type de bump à partir de la synthèse de l'étape 3 :
      - **major** si : structure de `_contexte/` modifiée, placeholder renommé ou supprimé, commande supprimée

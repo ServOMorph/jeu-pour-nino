@@ -20,7 +20,13 @@ Backlog des assets à produire pour la zone jeu. Alimenté par les phases de `ro
 - Livraison : produire dans `game_art/assets/` + `game_art/data/animations.json`, puis sync.py → `game/`. Ne jamais éditer `game/assets/sprites/` directement.
 - Manifest d'audit : toute entrée impliquant une entité animée (nouvel archétype ennemi, boss, Gardien, porteur, module du Miroir) ajoute son entité au manifest de l'éditeur AVANT production des sheets — sinon l'audit « sprites manquants » ne la verra jamais (cf. `roadmap_editeur.md`, règle de synchronisation du manifest).
 - Standard visuel : Terraria-like, réf `docs/process_generation_sprites.md`.
-- Statuts : `a_faire` / `en_cours` / `livre`.
+- Statuts et propriété des transitions :
+  - `a_faire` → `en_cours` → `livre` : possédé par l'agent game_art.
+  - `livre` → `integre` : possédé par l'agent jeu, une fois l'asset branché côté `game/`.
+  - Ce fichier est l'unique canal de handoff entre les deux agents. Aucun autre fichier (`_contexte/signals.md` d'une zone ou de l'autre) ne doit porter le statut ou la priorité d'un item art — au besoin, y référencer l'entrée par son nom.
+- Champs de handoff (voir format d'entrée) :
+  - `debloque:` — rempli par l'agent jeu à la création de l'entrée : quelle tâche/phase dev ce visuel débloque.
+  - `livraison:` — rempli par l'agent game_art au passage à `livre` : chemin exact des fichiers produits (assets + entrée `animations.json` le cas échéant).
 
 ## Format d'entrée
 
@@ -31,6 +37,8 @@ Backlog des assets à produire pour la zone jeu. Alimenté par les phases de `ro
 - specs: <dimensions, format, contraintes>
 - priorite: <haute | moyenne | basse>
 - statut: a_faire
+- debloque: <tâche/phase dev bloquée tant que cet asset n'est pas integre>
+- livraison: <chemin des fichiers produits — rempli au passage a "livre">
 ```
 
 ---
@@ -61,10 +69,12 @@ Backlog des assets à produire pour la zone jeu. Alimenté par les phases de `ro
 
 ### Sprite manquant — minerai abyssal
 - phase: 1 — Matériaux typés
-- placeholder: `minerai_abyssal` utilise encore le sprite générique cuivre en jeu ; aucun sprite distinct tier 3 disponible actuellement dans `game/assets/sprites/objects/`
-- specs: produire un sprite dédié lisible en jeu pour `minerai_abyssal`, cohérent avec un matériau tier 3 / biome 4, clairement distinct visuellement de `ore_copper.png` et `ore_iron.png`
+- placeholder: le jeu utilise encore le sprite générique cuivre pour `minerai_abyssal`
+- specs: sprite dédié pour `minerai_abyssal`, cohérent avec un matériau tier 3 / biome 4, clairement distinct visuellement de `ore_copper.png` et `ore_iron.png`
 - priorite: haute
-- statut: a_faire
+- statut: livre
+- debloque: clôture Phase 1 roadmap.md — lisibilité du test manuel tier 3
+- livraison: `game_art/assets/objects/ore_abyssal.png`
 
 ### Icônes d'équipement — 4 slots
 - phase: 2 — Grimoire/PC/Craft
