@@ -1,3 +1,9 @@
+## v1.26 - 2026-07-06
+
+### Modifie
+- `game_art/roadmap_editeur.md` : sections "Articulation avec la zone jeu", "Perimetre" (hors perimetre explicite : tilesets, parallax, shaders cicatrices, icones UI), "Regle de synchronisation du manifest" et "Apres Phase 5 : maintenance" ajoutees ; "Fait quand" de la Phase 5 ancre sur l'entree "Sprites player".
+- `game_art/backlog_art.md` : regle de synchronisation manifest/backlog ajoutee aux Regles ; entree "Sprites player" enrichie (lien avec la Phase 5 editeur, contradiction de taille 40x56/48x56 vs 14x24 signalee comme a trancher).
+
 ## v1.25 - 2026-07-06
 
 ### Ajoute

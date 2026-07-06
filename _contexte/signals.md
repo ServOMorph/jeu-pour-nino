@@ -1,5 +1,10 @@
 # Signals — jeu   (MAJ 2026-07-06)
 
+## Question bloquante
+- [P2] Contradiction de taille sprite player non tranchée : `roadmap_editeur.md`/`backlog_art.md` indiquent 40x56/48x56 (canvas de production), `_contexte/signals.md` (P3, ancien) indique idle réglé à 14x24 (taille rendue en jeu). Clarifier et écrire la convention avant de produire les frames run/jump/attack restantes.
+  fait quand: convention documentée dans `backlog_art.md` (canvas vs taille jeu), marqueur ⚠ retiré de l'entrée « Sprites player ».
+  réf: `game_art/backlog_art.md` entrée « Sprites player — standard Terraria-like »
+
 ## Actions ouvertes
 - [P1] Finir la dette bloquante Phase 0 : les 3 appels `Inventory` sont corrigés (migrés vers `RunState`) et le niveau se charge sans crash, mais la validation complète n'est pas faite.
   fait quand: `inventory.gd` supprimé ; 20 tests GUT verts ; run manuel complet (miner, crafter, tuer ennemis, battre boss, relancer) sans erreur console, `MetaState` conservé après relance.
@@ -44,31 +49,24 @@
 - Piège Godot découvert 2026-07-05 : `SubViewportContainer.stretch = true` sans `stretch_shrink` réglé fait que le `SubViewport` interne se redimensionne à la taille du container au lieu de garder sa résolution fixe zoomée — toujours régler `stretch_shrink` en complément de `stretch=true` pour un zoom pixel-perfect.
 - game_art Phase 2 (2.1 à 2.4) intégralement terminée et validée visuellement.
 
-## Dernière session (2026-07-06 — questions.md créé, roadmap.md et docs v3 alignés, backlog_art.md synchronisé)
+## Dernière session (2026-07-06 — cohérence roadmap.md / roadmap_editeur.md analysée et corrigée)
 
 # Session du 2026-07-06
 
 ## Décisions prises
-- Run multi-biomes (le HUB fait partie du run) ; `RunState.reset()` uniquement à un nouveau run, pas par biome.
-- 5 cicatrices définitives + planchers durs obligatoires par stat ; pas de plafond de résurrections.
-- 4 slots d'équipement (arme/armure/accessoire/outil), armes à distance ajoutées, mobilité = double saut + grappin.
-- Un seul Gardien du Voile au lancement (Le Veilleur des Cendres), les 7 autres en refacto R2.
-- Rareté des recettes réalignée (cristaux → B3, imagerie volcanique → B4) ; Grimoire définitif de 27 recettes.
-- Solo strict, Windows uniquement, audio définitif reporté en fin de projet (Phase 10).
+- Périmètre de l'éditeur game_art restreint explicitement aux sprites/animations d'entités ; tilesets, parallax, shaders de cicatrices, icônes UI validés directement en jeu, hors outillage éditeur.
+- Règle de synchronisation manifest/backlog ajoutée : toute entité animée du backlog rejoint le manifest d'audit avant production.
+- L'éditeur passe en maintenance après clôture de la Phase 5 (pas d'évolution d'outillage hors besoin concret du backlog).
 
 ## Livrables produits ou modifiés
-- `questions.md` (racine) : créé, 77+1 questions de conception tranchées — nouvelle source de vérité du cadrage v3.
-- `roadmap.md` : section « Décisions verrouillées » ajoutée + mise à jour ciblée de toutes les phases (0 à 10) et des risques transverses.
-- `docs/v3/*.md` (4 fichiers) : sections « Précisions v3.1 » ajoutées, contradictions historiques corrigées (rareté/biomes, scope Miroir, escalade Gardiens).
-- `game_art/backlog_art.md` : aligné sur `questions.md` — correction critique (2-3 Gardiens → 1 seul), entrées enrichies et nouvelles entrées ajoutées.
+- `game_art/roadmap_editeur.md` : sections « Articulation avec la zone jeu », « Perimetre », « Regle de synchronisation du manifest » et « Apres Phase 5 : maintenance » ajoutées ; « Fait quand » Phase 5 ancré sur l'entrée « Sprites player ».
+- `game_art/backlog_art.md` : règle de synchronisation manifest ajoutée aux Règles ; entrée « Sprites player » enrichie (lien vers le Fait quand Phase 5 éditeur, marqueur de contradiction de taille à trancher).
 
 ## Hypothèses validées / invalidées
-- VALIDE : équilibrage JSON amendable par les playtests de Nino, architecture gelée (Q076).
-- INVALIDE : hypothèse roadmap initiale « reset à chaque entrée en biome » → pivot vers reset unique au lancement d'un nouveau run (Q001).
-- INVALIDE : « 2-3 Gardiens du Voile dès la Phase 5 » (roadmap et backlog_art.md) → pivot vers un seul Gardien (Le Veilleur des Cendres), les autres en R2.
+- EN ATTENTE : convention de taille des sprites player (canvas de production 40x56/48x56 vs taille rendue en jeu 14x24) — nécessite arbitrage utilisateur.
 
 ## Prochaine étape exacte
-Lancer 2 agents séparés (jeu sur `roadmap.md`, game_art sur `backlog_art.md`), `questions.md` en arbitrage commun. Côté jeu : finir la validation Phase 0, puis Phase 1 (matériaux typés, table à 13 entrées + gating pioche).
+Trancher la convention de taille sprite player, puis reprendre la validation Phase 0 jeu (GUT, run manuel complet) avant Phase 1 (matériaux typés).
 
 ## Question bloquante pour la session suivante
-Aucune
+Convention de taille sprite player (cf. section « Question bloquante » en tête de fichier).

@@ -65,9 +65,10 @@ Necessite Godot 4.5 disponible dans le PATH, ou via `D:\Godot\godot.exe`. Ou ouv
 
 ## Etat actuel
 
-**v1.25.** `questions.md` (racine) : 77+1 questions de conception v3 tranchees (structure du run, cicatrices, craft, ennemis/boss, UI, audio, technique) — source de verite pour tout arbitrage de design. `roadmap.md` et les docs `docs/v3/*.md` mis a jour en consequence.
+**v1.26.** Coherence entre `roadmap.md` (jeu) et `game_art/roadmap_editeur.md` analysee et corrigee : perimetre de l'editeur restreint aux sprites/animations d'entites (tilesets, parallax, shaders de cicatrices et icones UI valides directement en jeu), regle de synchronisation manifest/backlog ajoutee, editeur en maintenance apres la Phase 5.
 `game_art` : phases 0 a 4 closes, phase 5 avancee, alignee sur `questions.md` via `backlog_art.md`.
 Jeu : dette bloquante Phase 0 corrigee ; validation complete (GUT, run manuel integral) encore a faire, puis Phase 1 (materiaux typés).
+Question ouverte : convention de taille des sprites player (40x56/48x56 vs 14x24) a trancher avant de produire les frames restantes.
 Developpement prevu avec 2 agents separes (jeu et game_art), `questions.md` en arbitrage commun.
 
 ## Roadmap

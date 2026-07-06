@@ -8,7 +8,7 @@ Jeu de plateforme/action pixel art fait pour Nino. Roguelite : exploration de bi
 - GDScript
 
 ## État actuel (réécrit intégralement à chaque /close)
-v1.25. `questions.md` créé à la racine : 77+1 questions de conception v3 tranchées (structure du run, cicatrices, craft, ennemis/boss, UI, audio, technique). `roadmap.md` et les 4 docs `docs/v3/*.md` mis à jour en conséquence. `game_art/backlog_art.md` synchronisé (correction critique : 1 seul Gardien du Voile au lancement, pas 2-3).
+v1.26. Cohérence `roadmap.md` (jeu) / `game_art/roadmap_editeur.md` analysée : périmètre de l'éditeur clarifié (hors périmètre = tilesets, parallax, shaders cicatrices, icônes UI), règle de synchronisation manifest/backlog ajoutée, articulation explicite avec `backlog_art.md`/`questions.md`, statut « maintenance » de l'éditeur après Phase 5. Une contradiction de taille sprite player (40x56/48x56 vs 14x24) reste à trancher par l'utilisateur.
 Dette bloquante Phase 0 (3 appels `Inventory` résiduels + `preload()` PNG sans `.import`) toujours corrigée mais non validée intégralement (GUT, run manuel complet, suppression `inventory.gd` restants).
 Prochaine étape jeu : finir la validation Phase 0, puis Phase 1 (matériaux typés, table définitive de 13 matériaux). Développement prévu avec 2 agents séparés (jeu / game_art), `questions.md` en arbitrage commun.
 
@@ -22,3 +22,4 @@ Prochaine étape jeu : finir la validation Phase 0, puis Phase 1 (matériaux typ
 - 2026-07-05 : Phase 2 game_art (2.1 à 2.4) close — validation visuelle jeu/éditeur confirmée par l'utilisateur.
 - 2026-07-06 : 77+1 questions de conception v3 tranchées (`questions.md`) — run multi-biomes, planchers durs de cicatrices, 4 slots d'équipement, armes à distance, 1 seul Gardien du Voile au lancement, rareté réalignée, solo strict, audio reporté en fin de projet.
 - 2026-07-06 : `roadmap.md`, `docs/v3/*.md` et `game_art/backlog_art.md` mis à jour en cohérence avec `questions.md` ; développement prévu via 2 agents séparés (jeu et game_art).
+- 2026-07-06 : Périmètre de `game_art/roadmap_editeur.md` clarifié — l'éditeur couvre sprites/animations d'entités uniquement, pas tilesets/parallax/shaders/icônes UI ; passe en maintenance après Phase 5.

@@ -18,6 +18,7 @@ Backlog des assets à produire pour la zone jeu. Alimenté par les phases de `ro
 - Une phase jeu n'est « faite » que si ses placeholders sont recensés ici.
 - Priorité héritée des jalons jouables : ce qui est visible dans le jalon courant passe devant.
 - Livraison : produire dans `game_art/assets/` + `game_art/data/animations.json`, puis sync.py → `game/`. Ne jamais éditer `game/assets/sprites/` directement.
+- Manifest d'audit : toute entrée impliquant une entité animée (nouvel archétype ennemi, boss, Gardien, porteur, module du Miroir) ajoute son entité au manifest de l'éditeur AVANT production des sheets — sinon l'audit « sprites manquants » ne la verra jamais (cf. `roadmap_editeur.md`, règle de synchronisation du manifest).
 - Standard visuel : Terraria-like, réf `docs/process_generation_sprites.md`.
 - Statuts : `a_faire` / `en_cours` / `livre`.
 
@@ -42,6 +43,8 @@ Backlog des assets à produire pour la zone jeu. Alimenté par les phases de `ro
 - specs: idle, run1, run2, jump, attack en 40x56 / 48x56, réf `docs/process_generation_sprites.md`
 - priorite: haute
 - statut: en_cours
+- note: cette entrée est aussi le support du « Fait quand » de la Phase 5 de `roadmap_editeur.md` (premier cycle complet sheet → éditeur → audit → sync → validation en jeu)
+- ⚠ à trancher : contradiction de taille avec `_contexte/signals.md` P3 (« idle réglé à 14x24 ») vs les 40x56/48x56 ci-dessus — clarifier la convention (canvas de production vs taille rendue en jeu) avant de produire les frames restantes
 
 ### Animations mobilité — double saut, corde/grappin
 - phase: 2 — Grimoire/PC/Craft (mobilité définie questions.md Q015)

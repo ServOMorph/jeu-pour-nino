@@ -6,6 +6,28 @@ Outil Godot autonome permettant de visualiser tous les sprites du jeu en taille 
 et detecter les sprites manquants ou orphelins. Pas d'edition pixel par pixel
 (les graphismes sont produits par Codex/ChatGPT).
 
+## Articulation avec la zone jeu
+- `game_art/backlog_art.md` est l'entree de production : les assets a produire viennent
+  des phases de `roadmap.md` (racine), jamais de cette roadmap-ci.
+- `questions.md` (racine) est la source d'arbitrage commune en cas de doute de conception.
+- L'editeur est l'outillage de la chaine `production -> reglage/audit -> sync.py -> validation en jeu`.
+  Il ne conditionne aucune phase jeu (regle placeholders de `roadmap.md`).
+
+## Perimetre
+Couvert : sprites et animations d'entites (player, ennemis, boss, Gardiens, porteurs)
+via `animations.json` + manifest d'audit.
+Hors perimetre (valides directement en jeu, pas dans l'editeur) : tilesets 16x16 et
+parallax (phases jeu 4/7), shaders et overlays des cicatrices (phase 6), icones UI
+(Grimoire, slots d'equipement, cicatrices), sprites de gisements, projectiles.
+Si un besoin de previsualisation apparait pour ces types, ouvrir une phase 6
+« Extensions v3 » tiree par la phase jeu concernee — ne pas l'anticiper.
+
+## Regle de synchronisation du manifest
+Toute entree de `backlog_art.md` impliquant une entite animee (nouveaux archetypes
+ennemis, boss de biome, Gardiens, porteurs, modules du Miroir) ajoute son entite au
+manifest d'audit AVANT production des sheets. L'audit « sprites manquants » ne detecte
+que ce que le manifest connait : un manifest non tenu a jour rend l'audit vert menteur.
+
 ## Etat de progression
 
 - Phase 0 : close
@@ -29,6 +51,15 @@ et detecter les sprites manquants ou orphelins. Pas d'edition pixel par pixel
 #### Fait quand
 Un cycle complet `sheet produit -> depot assets -> visualisation/reglage dans l'editeur
 -> audit vert -> sync -> validation en jeu` est execute une fois.
+Support concret retenu : les sprites player standard Terraria-like (entree `en_cours`
+de `backlog_art.md`, signal P3 de `_contexte/signals.md`) — premier remplacement de
+placeholder reel, priorite 1 de la regle Q071 (joueur > ennemis > boss > tilesets > UI).
+
+## Apres Phase 5 : maintenance
+
+Une fois la Phase 5 close, l'editeur passe en maintenance : plus d'evolution d'outillage
+sauf besoin concret tire par une entree de `backlog_art.md` (cf. Perimetre ci-dessus).
+Le temps de la zone game_art va a la production d'assets, pas au polissage de l'outil.
 
 ## Commandes de reference
 
