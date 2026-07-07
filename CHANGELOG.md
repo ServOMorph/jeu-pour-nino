@@ -1,3 +1,10 @@
+## v1.36 - 2026-07-07
+
+### Modifie
+- `game_art/assets/player/` et `game/assets/sprites/player/` : set d'attaque player etendu en 5 directions (`droite`, `haut-droite`, `bas-droite`, `haut`, `bas`) avec frames de transition et impacts prolonges.
+- `game_art/data/animations.json`, `game/data/animations.json` et `game/scripts/player.gd` : selection d'etat d'attaque selon le stick droit, rotation de hitbox associee, et ordre des frames ajuste pour tenir l'impact final plus longtemps.
+- `game_art/_contexte/`, `game_art/backlog_art.md`, `game_art/roadmap_editeur.md`, `game_art/specs/player.md` : contexte de phase 5 aligne sur un set d'attaque multi-direction encore legacy mais deja reglable dans l'editeur.
+
 ## v1.35 - 2026-07-07
 
 ### Modifie

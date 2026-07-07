@@ -1,7 +1,7 @@
 # player
 
 - default_state: idle
-- nb_states: 7
+- nb_states: 11
 
 ## Etats
 
@@ -10,7 +10,47 @@
 - target_frame_size: 129x150
 - fps: 12.0
 - loop: false
-- frame_count: 1
+- frame_count: 5
+- sheet: legacy
+- frame_size: n/a
+- offset: [0.0, 0.0]
+
+### attack_down
+
+- target_frame_size: 129x150
+- fps: 12.0
+- loop: false
+- frame_count: 5
+- sheet: legacy
+- frame_size: n/a
+- offset: [0.0, 0.0]
+
+### attack_down_diag
+
+- target_frame_size: 129x150
+- fps: 12.0
+- loop: false
+- frame_count: 5
+- sheet: legacy
+- frame_size: n/a
+- offset: [0.0, 0.0]
+
+### attack_up
+
+- target_frame_size: 129x150
+- fps: 12.0
+- loop: false
+- frame_count: 5
+- sheet: legacy
+- frame_size: n/a
+- offset: [0.0, 0.0]
+
+### attack_up_diag
+
+- target_frame_size: 129x150
+- fps: 12.0
+- loop: false
+- frame_count: 5
 - sheet: legacy
 - frame_size: n/a
 - offset: [0.0, 0.0]
@@ -79,4 +119,3 @@
 
 - info: placeholder detecte: res://assets/player/player_idle_v2.png partage par [idle, hurt, dead]
 - info: placeholder detecte: res://assets/player/player_jump.png partage par [jump, fall]
-

@@ -51,7 +51,8 @@ var _invuln          := 0.0
 var _hurt_stun       := 0.0
 var _dead            := false
 var _air_sprint      := false
-
+var _attack_state    := "attack"
+var _attack_facing   := 1
 var _player_cfg:      Dictionary = {}
 var _weapon_cfg:      Dictionary = {}
 var _armor_cfg:       Dictionary = {}
@@ -204,6 +205,11 @@ func _update_facing() -> void:
 	visual.set_facing(facing)
 
 func _update_facing_from_input(move_dir: float, aim: Vector2) -> void:
+	if _attack_timer > 0.0:
+		if facing != _attack_facing:
+			facing = _attack_facing
+			_update_facing()
+		return
 	var next_facing := facing
 	if absf(move_dir) > 0.0:
 		next_facing = 1 if move_dir > 0.0 else -1
@@ -222,7 +228,7 @@ func _get_visual_state() -> String:
 	if _hurt_stun > 0.0:
 		return "hurt"
 	if _attack_timer > 0.0:
-		return "attack"
+		return _attack_state
 	if not is_on_floor():
 		return "jump" if velocity.y < 0.0 else "fall"
 	if abs(velocity.x) > 5.0:
@@ -237,10 +243,20 @@ func _get_visual_speed() -> float:
 func _start_attack() -> void:
 	_attack_timer = attack_duration
 	_attack_cooldown = attack_cooldown
-	var aim := _get_aim_dir()
+	var attack_cfg := _resolve_attack_direction(_get_aim_dir())
+	var aim: Vector2 = attack_cfg["dir"]
+	_attack_state = String(attack_cfg["state"])
+	_attack_facing = int(attack_cfg["facing"])
+	if facing != _attack_facing:
+		facing = _attack_facing
+		_update_facing()
+	attack_hitbox.rotation = aim.angle()
 	attack_hitbox.position = aim * attack_range
+	var attack_shape := attack_hitbox.get_node("AttackShape") as CollisionShape2D
+	if attack_shape and attack_shape.shape is RectangleShape2D:
+		var rect := attack_shape.shape as RectangleShape2D
+		rect.size = Vector2(112, 136) if _attack_state in ["attack_up", "attack_down"] else Vector2(132, 120)
 	attack_hitbox.monitoring = true
-	attack_visual.visible = true
 	await get_tree().physics_frame
 	if not attack_hitbox.monitoring:
 		return
@@ -257,6 +273,7 @@ func _start_attack() -> void:
 
 func _end_attack() -> void:
 	attack_hitbox.monitoring = false
+	attack_hitbox.rotation = 0.0
 	attack_visual.visible = false
 
 func _on_hurtbox_area_entered(area: Area2D) -> void:
@@ -303,6 +320,28 @@ func _get_aim_dir() -> Vector2:
 	if to_mouse.length_squared() > 0.0:
 		return to_mouse.normalized()
 	return Vector2(float(facing), 0.0)
+
+func _resolve_attack_direction(aim: Vector2) -> Dictionary:
+	var abs_x := absf(aim.x)
+	var abs_y := absf(aim.y)
+	var threshold := 2.41421356
+	var facing_dir := facing
+	if abs_x > 0.0:
+		facing_dir = 1 if aim.x > 0.0 else -1
+	if abs_x >= abs_y * threshold:
+		return {"dir": Vector2(float(facing_dir), 0.0), "state": "attack", "facing": facing_dir}
+	if abs_y >= abs_x * threshold:
+		return {
+			"dir": Vector2(0.0, -1.0 if aim.y < 0.0 else 1.0),
+			"state": "attack_up" if aim.y < 0.0 else "attack_down",
+			"facing": facing_dir
+		}
+	var dir := Vector2(float(facing_dir), -1.0 if aim.y < 0.0 else 1.0).normalized()
+	return {
+		"dir": dir,
+		"state": "attack_up_diag" if aim.y < 0.0 else "attack_down_diag",
+		"facing": facing_dir
+	}
 
 func _apply_equipment() -> void:
 	var old_max := max_hp

@@ -13,16 +13,14 @@ pour visualiser, animer et auditer les sprites. Cible player actuelle :
 
 ## Etat actuel
 Phases 0, 1, 2, 3 et 4 sont closes cote editeur.
-La phase 5 reste ouverte sur la migration du player vers un vrai format spritesheet complet.
-Le set joueur HD (`idle`, `run`, `jump`, `fall`, `attack`, `hurt`, `dead`) est maintenant valide en jeu.
-Boss, mobs de base et objets gameplay critiques (cuivre, fer, abyssal, etabli) ont ete refaits en HD et synchronises vers `game/`.
-Reste a verifier ces nouveaux assets en jeu et a completer la couverture des sprites de materiaux dedies.
+La phase 5 reste ouverte : les attaques du player existent maintenant en 5 directions,
+mais restent en format legacy `frames = liste de PNG`.
+Le set joueur HD reste valide en jeu, avec timings d'attaque maintenant reglables dans
+l'editeur via `animations.json`.
+Boss, mobs de base et objets gameplay critiques restent livres ; validation visuelle en
+jeu encore a faire sur ces assets et sur le nouveau set d'attaques.
 
 ## Decisions structurantes
-- La vue audit est portee par une `AcceptDialog` avec `Tree` trie par severite,
-  cliquable et exportable, sans refonte de layout principal.
-- La preview de reference resout les PNG de `assets/from_reference/` par convention de
-  nommage et applique exactement le meme zoom que la preview principale.
 - Les fiches `specs/<entity>.md` sont generees depuis `animations.json`, `manifest.json`
   et l'audit courant pour servir de brief art directement exploitable.
 - Workflow valide pour les sprites personnage depuis le test `player idle` :
@@ -38,3 +36,7 @@ Reste a verifier ces nouveaux assets en jeu et a completer la couverture des spr
 - Pour les mobs, boss et objets gameplay, le workflow valide est : generation HD sur fond chroma-key, detourage local, puis resize exact a la taille runtime.
 - Le manifest d'audit des ennemis doit refleter les dimensions runtime reelles des assets pour rester coherent avec l'integration jeu.
 - La scene `boss.tscn` aligne desormais visuel et collisions sur un gabarit `389x500`.
+- Les attaques multi-direction du player sont pour l'instant livrees en etats legacy
+  distincts (`attack`, `attack_up`, `attack_down`, `attack_up_diag`, `attack_down_diag`).
+- Tant que ces attaques restent en legacy, l'editeur permet d'ajuster fps, offsets et
+  ordre des frames, mais pas d'ajouter de nouveaux chemins PNG depuis l'inspecteur.

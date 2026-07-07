@@ -23,3 +23,7 @@
 - Pour les petits sprites gameplay, le process valide etait : reference visuelle,
   production directe a la taille finale sur grille, palette limitee, preview x8,
   puis validation. Une reduction d'image IA ne devait pas etre livree comme asset final.
+- La vue audit est portee par une `AcceptDialog` avec `Tree` trie par severite,
+  cliquable et exportable, sans refonte de layout principal.
+- La preview de reference resout les PNG de `assets/from_reference/` par convention de
+  nommage et applique exactement le meme zoom que la preview principale.

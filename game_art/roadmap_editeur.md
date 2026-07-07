@@ -47,7 +47,9 @@ que ce que le manifest connait : un manifest non tenu a jour rend l'audit vert m
 - [x] Fiche de specs par entite : export Markdown `game_art/specs/<entity>.md`
       avec tailles, etats, timings, sheets et anomalies ouvertes.
 - [ ] Migration spritesheet complete : convertir les etats legacy restants
-      quand de vrais nouveaux sheets multi-frames seront disponibles.
+      quand de vrais nouveaux sheets multi-frames seront disponibles. Les attaques
+      multi-direction du player existent maintenant en legacy PNG, mais ne comptent
+      pas encore comme cloture de cette tache.
 - [x] Documentation d'usage : `game_art/README.md` pour lancer l'editeur, editer,
       sauver, auditer, synchroniser et suivre les conventions de nommage.
 
