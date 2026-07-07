@@ -66,11 +66,11 @@ Demander :
 
 | Asset | Taille cible |
 |---|---:|
-| Joueur idle | 14x24 |
-| Joueur course 1 | 14x24 |
-| Joueur course 2 | 14x24 |
-| Joueur saut | 14x24 |
-| Joueur attaque | 22x20 |
+| Joueur idle | 87x150 |
+| Joueur course 1 | 87x150 |
+| Joueur course 2 | 87x150 |
+| Joueur saut | 87x150 |
+| Joueur attaque | 129x150 |
 | Mob au sol | 32x32 |
 | Mob volant | 32x24 |
 | Boss gardien | 96x128 |
@@ -181,3 +181,11 @@ Commandes de validation :
 À chaque nouvelle demande de sprites, appliquer ce process avant toute génération.
 
 Ne pas repartir sur une planche complète, sauf demande explicite pour une image de référence non intégrée au jeu.
+
+## Regle active 2026-07-07
+
+- Pour les sprites personnage, utiliser par defaut le workflow :
+  `generation image_gen HD -> fond chroma-key -> suppression locale du fond -> resize exact a la taille cible -> integration`.
+- Pour une animation, partir d'une frame maitre et deriver les autres frames.
+- Cette regle prime sur les anciens essais documentes plus bas tant qu'elle n'est
+  pas remplacee par une decision explicite.

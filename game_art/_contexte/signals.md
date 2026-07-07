@@ -2,43 +2,43 @@
 
 ## Actions ouvertes
 
-- [P1] Migration spritesheet complete des etats legacy restants.
-  fait quand: tous les etats de `animations.json` sont en format `sheet` + `frame_size` + indices, sans fallback legacy dans les drivers.
-  ref: game_art/roadmap_editeur.md (phase 5), game_art/data/animations.json, game_art/editeur/animation_driver.gd, game/scripts/animation_driver.gd.
-- [P2] Executer une validation complete du cycle art une fois de nouveaux sheets produits.
-  fait quand: un cycle complet `sheet produit -> depot assets -> reglages editeur -> audit -> sync -> validation jeu` est execute une fois.
-  ref: game_art/README.md, game_art/specs/, game_art/audit_report.md, game_art/roadmap_editeur.md.
+- [P1] Valider en jeu le set joueur produit.
+  fait quand: `idle`, `run`, `jump`, `fall`, `attack`, `hurt` et `dead` sont verifies en jeu sans probleme visible d'echelle, d'ancrage sol ou d'orientation.
+  ref: game/assets/sprites/player/, game/data/animations.json, game_art/data/animations.json.
+- [P2] Migrer le player vers un vrai set spritesheet complet.
+  fait quand: les etats legacy du player quittent les PNG unitaires pour un format `sheet` + `frame_size` + indices, sans fallback legacy cote jeu/editeur.
+  ref: game_art/roadmap_editeur.md (phase 5), game_art/data/animations.json, game/scripts/animation_driver.gd, game_art/backlog_art.md.
 
 ## Blocages
 
-- Nouveaux assets spritesheet multi-frames absents pour les etats encore en legacy.
-
 ## Derniere session
-
-# Session du 2026-07-06
+# Session du 2026-07-07
 
 ## Decisions prises
-- La phase 4.3 est close avec export d'audit structure par severite, entite puis etat.
-- La comparaison produit/reference se fait directement dans la preview via un second viewport synchronise en zoom.
-- Les fiches `specs/<entity>.md` deviennent le format de brief genere par l'editeur pour la suite du travail art.
+- Le workflow valide pour les sprites personnage est : generation `image_gen` HD,
+  fond chroma-key, suppression locale du fond, resize exact a la taille cible,
+  puis integration.
+- Le set joueur source doit etre oriente vers la droite ; le flip en jeu reste
+  le comportement standard du driver.
+- L'attaque ne doit pas etre compensee par un offset vertical artificiel :
+  `player.attack.offset` est remis a `[0, 0]`.
 
 ## Livrables produits ou modifies
-- game_art/editeur/main.gd : export audit enrichi, preview de reference cote a cote et export des specs par entite.
-- game_art/editeur/test_audit_ui.gd : validation du nouveau format d'export `audit_report.md`.
-- game_art/editeur/test_reference_preview.gd : validation headless de la preview de reference et du zoom synchronise.
-- game_art/editeur/test_specs_export.gd : validation headless de l'export `specs/<entity>.md`.
-- game_art/audit_report.md : rapport exporte au nouveau format.
-- game_art/README.md : documentation d'usage de l'editeur et du flux de travail.
-- game_art/roadmap_editeur.md : phases 4.3, 5.1, export specs et documentation coches.
+- game_art/assets/player/player_idle_v2.png, player_run1.png, player_run2.png, player_run_sheet.png, player_jump.png, player_attack.png : set joueur HD redimensionne, oriente a droite et synchronise vers `game/`.
+- game_art/assets/generated_raw/player_run1_raw.png, player_run2_raw.png, player_jump_raw.png, player_attack_raw.png : sources brutes conservees pour iteration.
+- game_art/data/animations.json : `player.run.frame_size` passe en `87x150` et `player.attack.offset` revient a `0`.
+- docs/workflow_image_gen_fable5.md, docs/process_generation_sprites.md, game_art/backlog_art.md : workflow et handoff alignes sur le pipeline retenu.
+- game_art/editeur/test_audit_ui.gd et game_art/editeur/test_specs_export.gd : attentes alignees sur l'etat reel du player.
 
 ## Hypotheses validees / invalidees
-- VALIDE : l'export `audit_report.md` couvre bien resume par severite et regroupement entite/etat.
-- VALIDE : la preview de reference charge les assets existants et garde le meme zoom que la preview principale.
-- EN ATTENTE : migration spritesheet complete, bloquee tant que les nouveaux sheets n'existent pas.
+- VALIDE : une image source HD + detourage + resize exact peut produire un rendu
+  joueur accepte visuellement.
+- VALIDE : `hurt` et `dead` restent coherents en reutilisant `idle`, et `fall` en reutilisant `jump`.
+- EN ATTENTE : validation visuelle complete en jeu du set joueur apres sync.
 
 ## Prochaine etape exacte
-Produire de nouveaux spritesheets pour remplacer les etats encore en legacy, puis
-basculer `animations.json` et retirer le fallback legacy des drivers jeu/editeur dans le meme commit.
+Verifier en jeu l'ensemble des etats du player produits cette session.
+Si le rendu est valide, lancer ensuite la migration vers un vrai set spritesheet.
 
 ## Question bloquante pour la session suivante
-Quels etats sont produits en premier en vrai spritesheet multi-frame ?
+Aucune

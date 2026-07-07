@@ -52,7 +52,7 @@ que ce que le manifest connait : un manifest non tenu a jour rend l'audit vert m
 #### Fait quand
 Un cycle complet `sheet produit -> depot assets -> visualisation/reglage dans l'editeur
 -> audit vert -> sync -> validation en jeu` est execute une fois.
-Support concret retenu : les sprites player standard Terraria-like (entree `en_cours`
+Support concret retenu : les sprites player standard Terraria-like (entree `livre`
 de `backlog_art.md`, signal P3 de `_contexte/signals.md`) — premier remplacement de
 placeholder reel, priorite 1 de la regle Q071 (joueur > ennemis > boss > tilesets > UI).
 

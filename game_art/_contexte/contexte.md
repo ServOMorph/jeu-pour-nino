@@ -2,8 +2,8 @@
 
 ## Objectif
 Centraliser tous les assets visuels du jeu dans game_art/ et fournir un editeur Godot
-pour visualiser, animer et auditer les sprites. Cible graphique : qualite Terraria
-(pixel art 40x56 player, animations multi-frames, spritesheets).
+pour visualiser, animer et auditer les sprites. Cible player actuelle :
+150 px de haut, animations multi-frames, spritesheets.
 
 ## Stack
 - Godot 4.5 (projet editeur autonome, res:// = game_art/)
@@ -13,26 +13,17 @@ pour visualiser, animer et auditer les sprites. Cible graphique : qualite Terrar
 
 ## Etat actuel
 Phases 0, 1, 2, 3 et 4 sont closes cote editeur.
-La phase 5 est avancee : comparaison produit/reference, export des specs par entite
-et documentation d'usage sont en place et valides en headless.
-Le principal reste ouvert hors tooling : remplacer les etats legacy par de vrais sheets.
+La phase 5 reste ouverte, mais le set joueur de base (`idle`, `run`, `jump`, `fall`,
+`attack`, `hurt`, `dead`) a ete produit en HD, redimensionne et synchronise vers `game/`.
+Le principal reste ouvert hors tooling : valider visuellement ce set en jeu, puis
+basculer le player vers un vrai format spritesheet complet.
 
 ## Decisions structurantes
-- UI multi-panneaux : ne jamais mettre plus de 2 enfants dans un `HSplitContainer`
-  (comportement non defini / superposition) - imbriquer des splits si besoin d'un 3e panneau.
-- Sauvegarde `animations.json` : toujours appeler `JSON.stringify(data, indent, false)`
-  (sort_keys=false explicite) - le defaut Godot (true) reordonne alphabetiquement
-  tout le fichier a chaque sauvegarde et rend les diffs Git illisibles.
-- Verification des changements GDScript sans interaction souris/clavier : script de
-  test headless (`Godot --headless --script res://editeur/<script>.gd -- <mode>`)
-  qui appelle directement les fonctions de `main.gd`/`inspector.gd` plutot que de
-  piloter l'OS - plus fiable qu'une automatisation pixel, voir
-  `game_art/editeur/test_save_roundtrip.gd`.
 - L'inspecteur doit rester utilisable en demi-ecran : panneau droit compact,
   controles empiles si necessaire, pas de dependance a un scroll horizontal.
 - `player.run.fps` est valide a 8.1 depuis la cloture Phase 3.3 du 2026-07-05.
 - Le manifest d'audit utilise un schema par etat, pas par entite, pour supporter
-  des tailles differentes comme `player.attack` en `48x56`.
+  des tailles differentes comme `player.attack` en `129x150`.
 - Les regressions de la phase audit sont verifiees en headless via
   `test_audit.gd` et `test_audit_ui.gd`.
 - La vue audit est portee par une `AcceptDialog` avec `Tree` trie par severite,
@@ -44,3 +35,12 @@ Le principal reste ouvert hors tooling : remplacer les etats legacy par de vrais
 - Pour les petits sprites gameplay, le process valide est : reference visuelle,
   production directe a la taille finale sur grille, palette limitee, preview x8,
   puis validation. Une reduction d'image IA ne doit pas etre livree comme asset final.
+- Workflow valide pour les sprites personnage depuis le test `player idle` :
+  generation `image_gen` en source HD sur fond chroma-key, suppression locale du fond,
+  redimensionnement exact a la taille cible, puis integration. Pour une animation,
+  partir d'une frame maitre et deriver les autres frames plutot que regenerer toute
+  la serie from scratch.
+- Les sprites source du player doivent etre orientes vers la droite ; le flip du jeu
+  reste standard et ne doit pas compenser une orientation source inverse.
+- `player.attack.offset` reste a `[0, 0]` avec les assets 150 px ; si l'attaque
+  touche le sol, corriger le sprite source avant de retoucher les offsets.

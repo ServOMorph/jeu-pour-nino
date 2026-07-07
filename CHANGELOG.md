@@ -1,3 +1,14 @@
+## v1.34 - 2026-07-07
+
+### Modifie
+- `game_art/assets/player/` et `game/assets/sprites/player/` : set joueur remplace par de nouveaux sprites HD redimensionnes (`idle`, `run`, `jump`, `attack`), orientes vers la droite et synchronises vers le jeu.
+- `game_art/data/animations.json` et `game/data/animations.json` : `player.run.frame_size` passe a `87x150` et `player.attack.offset` revient a `0`.
+- `docs/workflow_image_gen_fable5.md`, `docs/process_generation_sprites.md`, `game_art/_contexte/`, `game_art/backlog_art.md`, `game_art/roadmap_editeur.md` : workflow actif de generation/rescale et etat reel de la phase 5 alignes sur la production du set joueur.
+- `game_art/editeur/test_audit_ui.gd` et `game_art/editeur/test_specs_export.gd` : attentes mises a jour pour le nouvel etat du player.
+
+### Corrige
+- Sprites player : orientation source uniformisee vers la droite, echelle `run`/`jump` rapprochee de `idle`, et attaque reancree avec un sprite compact sans offset vertical artificiel.
+
 ## v1.33 - 2026-07-07
 
 ### Ajoute

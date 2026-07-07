@@ -24,8 +24,7 @@ func _initialize() -> void:
 		"- info: ",
 		"## global",
 		"## player",
-		"### run",
-		"- [ ] warning: frame_size animation != manifest"
+		"- [ ] info: placeholder detecte: res://assets/player/player_jump.png partage par [jump, fall]"
 	]
 	for snippet in expected_snippets:
 		if not report.contains(snippet):
@@ -33,15 +32,15 @@ func _initialize() -> void:
 			quit(1)
 			return
 
-	var entity_item := _find_tree_item(main._audit_tree, "player", "jump")
+	var entity_item := _find_tree_item(main._audit_tree, "player", "")
 	if entity_item == null:
-		push_error("anomalie player/jump introuvable")
+		push_error("anomalie player introuvable")
 		quit(1)
 		return
 	main._audit_tree.set_selected(entity_item, 0)
 	main._on_audit_item_activated()
 
-	var ok: bool = main._current_entity == "player" and main._driver.animation == "jump"
+	var ok: bool = main._current_entity == "player"
 	print("audit_ui_select=", ok)
 	quit(0 if ok else 1)
 

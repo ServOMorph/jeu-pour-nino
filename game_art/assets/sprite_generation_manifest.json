@@ -8,8 +8,8 @@
       "id": "player_idle",
       "path": "game/assets/sprites/player/player_idle.png",
       "size": [
-        14,
-        24
+        87,
+        150
       ],
       "pose": "idle"
     },
@@ -17,8 +17,8 @@
       "id": "player_run1",
       "path": "game/assets/sprites/player/player_run1.png",
       "size": [
-        14,
-        24
+        87,
+        150
       ],
       "pose": "run frame 1"
     },
@@ -26,8 +26,8 @@
       "id": "player_run2",
       "path": "game/assets/sprites/player/player_run2.png",
       "size": [
-        14,
-        24
+        87,
+        150
       ],
       "pose": "run frame 2"
     },
@@ -35,8 +35,8 @@
       "id": "player_jump",
       "path": "game/assets/sprites/player/player_jump.png",
       "size": [
-        14,
-        24
+        87,
+        150
       ],
       "pose": "jump"
     },
@@ -44,8 +44,8 @@
       "id": "player_attack",
       "path": "game/assets/sprites/player/player_attack.png",
       "size": [
-        22,
-        20
+        129,
+        150
       ],
       "pose": "attack"
     },

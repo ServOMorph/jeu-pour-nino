@@ -3,44 +3,44 @@
     "states": {
       "idle": {
         "frame_size": [
-          40,
-          56
+          87,
+          150
         ]
       },
       "run": {
         "frame_size": [
-          40,
-          56
+          87,
+          150
         ]
       },
       "jump": {
         "frame_size": [
-          40,
-          56
+          87,
+          150
         ]
       },
       "fall": {
         "frame_size": [
-          40,
-          56
+          87,
+          150
         ]
       },
       "attack": {
         "frame_size": [
-          48,
-          56
+          129,
+          150
         ]
       },
       "hurt": {
         "frame_size": [
-          40,
-          56
+          87,
+          150
         ]
       },
       "dead": {
         "frame_size": [
-          40,
-          56
+          87,
+          150
         ]
       }
     }

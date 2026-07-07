@@ -61,9 +61,10 @@ Conséquences pour cette zone (à traiter côté game_art, hors périmètre jeu)
 ### Sprites player — standard Terraria-like
 - phase: antérieure (P3 signals)
 - placeholder: sprites actuels hors standard
-- specs: conserver la taille actuelle validée en jeu — idle/run1/run2/jump en 14x24, attack en 22x20 ; ne pas repartir sur l'ancienne cible 40x56 / 48x56
+- specs: nouvelle cible definitive joueur = 150 px de haut ; idle/run1/run2/jump/fall/hurt/dead en 87x150, attack en 129x150
 - priorite: haute
-- statut: en_cours
+- statut: livre
+- livraison: `game_art/assets/player/player_idle_v2.png`, `game_art/assets/player/player_run1.png`, `game_art/assets/player/player_run2.png`, `game_art/assets/player/player_run_sheet.png`, `game_art/assets/player/player_jump.png`, `game_art/assets/player/player_attack.png`, `game_art/data/animations.json`
 - note: cette entrée est aussi le support du « Fait quand » de la Phase 5 de `roadmap_editeur.md` (premier cycle complet sheet → éditeur → audit → sync → validation en jeu)
 
 ### Animations mobilité — double saut, corde/grappin

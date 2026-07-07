@@ -1,4 +1,17 @@
-# Workflow image_gen pour sprites pixel art
+# Workflow image_gen pour sprites
+
+## Regle active 2026-07-07
+
+Decision utilisateur validee sur le test `player idle` :
+
+- le workflow par defaut pour les sprites personnage est :
+  `generation image_gen HD -> fond chroma-key -> suppression locale du fond -> resize exact a la taille cible -> integration`
+- ce workflow doit etre reutilise pour les prochaines generations de sprites
+  tant qu'aucune autre decision explicite ne le remplace
+- pour une animation, ne pas regenerer toute la serie from scratch : partir
+  d'une frame maitre et deriver les autres frames
+
+Le reste de ce document contient l'historique des essais precedents.
 
 Ce document resume le workflow teste dans cette session et les limites constatees.
 Il sert de base de travail pour Fable 5 afin de trouver une solution fiable pour
@@ -61,11 +74,11 @@ On a ensuite applique le meme principe au joueur.
 
 Constat :
 - Le joueur ne doit pas etre traite comme un minerai.
-- La bonne taille de travail est `40x56`, pas `14x24`.
+- La bonne taille de travail est `87x150`, pas `14x24`.
 - Les essais construits trop vite en blocs ou par reduction de l'image ne donnent
   pas un rendu assez qualitatif.
-- La reference visuelle `player_idle_40x56_px_v1` est meilleure comme base que
-  les essais trop generes ou trop simplifies.
+- L'ancienne reference visuelle `player_idle_40x56_px_v1` etait meilleure comme base
+  que les essais trop generes ou trop simplifies, mais elle n'est plus a la bonne taille cible.
 
 Fichiers de travail :
 - `game_art/assets/player/player_idle_40x56_px_v1.png`
@@ -133,7 +146,7 @@ Le workflow valide pendant la session est le suivant :
 
 Forme recommandee :
 - petit objet simple : `reference -> sprite final -> preview x8 -> validation`
-- personnage : `reference -> silhouette 40x56 -> pixel art manuel -> preview x4/x8 -> validation`
+- personnage : `reference -> silhouette 87x150 -> pixel art manuel -> preview x4/x8 -> validation`
 
 Version compatible avec la methode utilisateur :
 - `image_gen` produit une reference transparente ;
@@ -205,8 +218,8 @@ Analyse des fichiers existants :
 
 | Fichier | Taille | Couleurs opaques | Semi-transparents |
 |---|---|---:|---:|
-| `player_idle_40x56_px_v1.png` (meilleure base) | 40x56 | 17 | 0 |
-| `player_idle.png` (en jeu, reduction lissee) | 40x56 | 353 | 582 |
+| `player_idle_40x56_px_v1.png` (ancienne base de travail) | 40x56 | 17 | 0 |
+| `player_idle.png` (ancien asset en jeu) | 40x56 | 353 | 582 |
 | `ore_abyssal.png` (en jeu) | 14x14 | 87 | 0 |
 | `ore_copper_handmade_v2.png` (dessin manuel IA) | 14x14 | 8 | 0 |
 
@@ -266,7 +279,7 @@ meilleur que l'asset actuellement en jeu.
 |---|---|---:|
 | Petit objet (minerai, icone) | 14x14 a 28x28 | 6-8 |
 | Objet moyen (etabli, porte) | ~58x40 | 10-12 |
-| Personnage / ennemi | 40x56 | 14-20 |
+| Personnage / ennemi | 87x150 | 14-20 |
 | Boss | 96x128 | 20-24 |
 
 ### Repartition des roles

@@ -18,11 +18,11 @@ func _initialize() -> void:
 		"# player",
 		"## Etats",
 		"### run",
-		"- target_frame_size: 40x56",
+		"- target_frame_size: 87x150",
 		"- fps: 8.1",
 		"- sheet: res://assets/sprites/player/player_run_sheet.png",
 		"## Anomalies ouvertes",
-		"- run / warning: frame_size animation != manifest"
+		"- info: placeholder detecte: res://assets/player/player_idle_v2.png partage par [idle, hurt, dead]"
 	]
 	for snippet in expected_snippets:
 		if not content.contains(snippet):
