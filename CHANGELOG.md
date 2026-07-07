@@ -1,3 +1,8 @@
+## v1.32 - 2026-07-07
+
+### Ajoute
+- `plan_resolution_1920x1080.md` (racine) : plan de migration du viewport de jeu vers 1920x1080 natif (facteur d'echelle monde x4), player idle cible a 150 px (~x6.25). Couvre project.godot, tous les JSON gameplay (px, vitesses, gravite), scenes (collisions), scripts UI programmatiques, sprites (upscale transitoire x6 + production native cote game_art), calibration gameplay post-migration, et validation. Non execute a ce stade.
+
 ## v1.31 - 2026-07-06
 
 ### Corrige

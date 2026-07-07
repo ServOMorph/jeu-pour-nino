@@ -1,9 +1,13 @@
-# Signals — jeu   (MAJ 2026-07-06)
+# Signals — jeu   (MAJ 2026-07-07)
 
 ## Question bloquante
+Confirmer le facteur d'échelle du sprite player avant la phase E du plan résolution : upscale ×6 transitoire (144 px, pixels propres) ou attente d'un sprite natif ~150 px produit par game_art ? Conditionne le déclenchement de la phase sprites.
 
 ## Actions ouvertes
-- [P1] Démarrer la Phase 2 — Grimoire, Points de Compétence, Craft v3 (roadmap.md Phase 2), maintenant que la Phase 1 est close.
+- [P1] Exécuter le plan de migration résolution 1920×1080 (`plan_resolution_1920x1080.md`, racine) — phases A+B (project.godot + JSON ×4) à livrer ensemble en premier.
+  fait quand: viewport natif 1920×1080, toutes les valeurs px des JSON/scènes/scripts ×4 appliquées, sprites transitoires upscalés, GUT vert, run manuel complet validé (voir phase G du plan).
+  réf: `plan_resolution_1920x1080.md`
+- [P2] Démarrer la Phase 2 — Grimoire, Points de Compétence, Craft v3 (roadmap.md Phase 2), maintenant que la Phase 1 est close. Reste en attente tant que la migration résolution n'est pas close (évite de produire des UI/écrans à la mauvaise échelle).
   fait quand: `recipes.json` étendu au schéma cible, écran d'équipement manuel (4 slots), Grimoire accessible au HUB ; tests verts.
   réf: `roadmap.md` Phase 2, `questions.md` Q043/Q055/Q056
 - [P2] Lancer le développement avec 2 agents séparés (jeu et game_art) en s'appuyant sur `questions.md` comme source d'arbitrage commune en cas de doute de conception.
@@ -43,25 +47,24 @@
 - game_art Phase 2 (2.1 à 2.4) intégralement terminée et validée visuellement.
 - Protocole de communication jeu ↔ game_art revu le 2026-07-06 : `game_art/backlog_art.md` est désormais l'unique canal de handoff (statuts `a_faire`/`en_cours`/`livre`/`integre`, champs `debloque:`/`livraison:`) ; `/start jeu` charge le backlog et remonte les entrées `livre` ; plus aucune écriture croisée dans le `_contexte/` de l'autre zone (voir `.claude/zones.md` pour la matrice de propriété des fichiers).
 - **Phase 1 close le 2026-07-06** : run manuel complet validé (minage tiers 2/3, craft, HUD, menu dev), GUT vert (`23/23`). `minerai_abyssal` utilise son sprite dédié `ore_abyssal.png`, `fer` rebranché sur `ore_iron.png` (utilisait encore le placeholder cuivre par erreur).
+- **Demande utilisateur 2026-07-07** : passer le viewport de jeu en 1920×1080 natif (au lieu de 480×270 upscalé ×4), player idle ciblé à 150 px de haut. Plan complet écrit avant toute exécution (`plan_resolution_1920x1080.md`) pour ne rien casser — migration transversale (project.godot, tous les JSON gameplay, scènes, scripts UI, sprites), avec alternative moins coûteuse documentée (rester en 480×270, sprite ~38 px) si la migration s'avère trop lourde en cours de route.
+- Fichiers `game/data/materials.json` et `game/scripts/ore_node.gd` modifiés en working tree (sprites `ore_copper_handmade_v2`) sans lien avec cette session — probablement issus d'un `sync.py` ou d'une session game_art en parallèle, non commités. À vérifier/clarifier avant prochain commit large.
 
-## Dernière session (2026-07-06 — Phase 1 close, sprites minerais intégrés)
+## Dernière session (2026-07-07 — Plan de migration résolution 1920×1080)
 
-# Session du 2026-07-06
+# Session du 2026-07-07
 
 ## Décisions prises
-- Phase 1 (Matériaux typés) déclarée close : le run manuel de validation (minage/craft/HUD/menu dev) a été effectué et confirmé OK par l'utilisateur.
+- Migration vers un viewport natif 1920×1080 retenue (plutôt que garder 480×270 avec un sprite player agrandi) : facteur d'échelle monde ×4, player à 150 px visé (~×6.25).
 
 ## Livrables produits ou modifiés
-- `game/data/materials.json` : `minerai_abyssal` pointe vers `ore_abyssal.png` ; `fer` corrigé vers `ore_iron.png` (utilisait encore `ore_copper.png` par erreur).
-- `game_art/backlog_art.md` : entrée « Sprite manquant — minerai abyssal » passée au statut `integre`.
-- `roadmap.md` : Phase 1 marquée close, checklist mise à jour.
-- `sync.py` exécuté pour propager `game_art/assets/objects/ore_abyssal.png` vers `game/assets/sprites/`.
+- `plan_resolution_1920x1080.md` (racine) : plan complet en 10 sections (constat, phases A à G projet/JSON/scènes/scripts/sprites/calibration/validation, points de vigilance, ordre d'exécution).
 
 ## Hypothèses validées / invalidées
-- VALIDE : le run manuel complet (miner tiers 2/3, crafter, HUD, menu dev) fonctionne sans régression.
+- EN ATTENTE : choix définitif entre upscale ×6 transitoire (144 px, pixels propres) et sprite natif 150 px produit par game_art — à trancher avant la phase E du plan.
 
 ## Prochaine étape exacte
-Démarrer la Phase 2 — Grimoire, Points de Compétence, Craft v3 (`roadmap.md` Phase 2).
+Exécuter les phases A (project.godot) et B (JSON ×4) du plan ensemble, sur une branche dédiée, puis valider GUT + lancement headless avant de poursuivre.
 
 ## Question bloquante pour la session suivante
-Aucune
+Confirmer le facteur d'échelle du sprite player (×6 transitoire vs attente sprite natif game_art) avant la phase E.
