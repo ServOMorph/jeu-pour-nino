@@ -57,23 +57,23 @@ func _build_ui() -> void:
 
 	var panel := ColorRect.new()
 	panel.color = Color(0.10, 0.08, 0.10)
-	panel.position = Vector2(130, 48)
-	panel.size = Vector2(220, 176)
+	panel.position = Vector2(520, 192)
+	panel.size = Vector2(880, 704)
 	add_child(panel)
 
 	var title := Label.new()
 	title.text = "PAUSE"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 18)
+	title.add_theme_font_size_override("font_size", 72)
 	title.add_theme_color_override("font_color", Color(0.8, 0.65, 0.35))
-	title.position = Vector2(130, 62)
-	title.size = Vector2(220, 24)
+	title.position = Vector2(520, 248)
+	title.size = Vector2(880, 96)
 	add_child(title)
 
 	_main_root = Control.new()
 	add_child(_main_root)
 	for i in MAIN_ENTRIES.size():
-		var lbl := _make_label(MAIN_ENTRIES[i], 102 + i * 24)
+		var lbl := _make_label(MAIN_ENTRIES[i], 408 + i * 96)
 		_main_root.add_child(lbl)
 		_main_labels.append(lbl)
 
@@ -82,13 +82,13 @@ func _build_ui() -> void:
 	var dev_title := Label.new()
 	dev_title.text = "MODE DEV"
 	dev_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	dev_title.add_theme_font_size_override("font_size", 10)
+	dev_title.add_theme_font_size_override("font_size", 40)
 	dev_title.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
-	dev_title.position = Vector2(130, 88)
-	dev_title.size = Vector2(220, 18)
+	dev_title.position = Vector2(520, 352)
+	dev_title.size = Vector2(880, 72)
 	_dev_root.add_child(dev_title)
 	for i in DEV_ENTRIES.size():
-		var lbl := _make_label(DEV_ENTRIES[i], 108 + i * 22)
+		var lbl := _make_label(DEV_ENTRIES[i], 432 + i * 88)
 		_dev_root.add_child(lbl)
 		_dev_labels.append(lbl)
 
@@ -96,9 +96,9 @@ func _make_label(text: String, y: float) -> Label:
 	var lbl := Label.new()
 	lbl.text = text
 	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	lbl.add_theme_font_size_override("font_size", 13)
-	lbl.position = Vector2(130, y)
-	lbl.size = Vector2(220, 20)
+	lbl.add_theme_font_size_override("font_size", 52)
+	lbl.position = Vector2(520, y)
+	lbl.size = Vector2(880, 80)
 	return lbl
 
 func _process(_delta: float) -> void:

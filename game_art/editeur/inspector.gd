@@ -23,6 +23,14 @@ func setup(entity: String, state: String, cfg: Dictionary, driver_ref: AnimatedS
 	_driver_ref = driver_ref
 	_rebuild()
 
+func clear() -> void:
+	_entity = ""
+	_state = ""
+	_cfg = {}
+	_driver_ref = null
+	for child in get_children():
+		child.queue_free()
+
 func _rebuild() -> void:
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	for child in get_children():

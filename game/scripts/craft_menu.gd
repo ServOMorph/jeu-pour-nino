@@ -2,12 +2,12 @@ extends CanvasLayer
 
 const RECIPE_FILE := "res://data/recipes.json"
 const LEGACY_RESOURCE_MATERIAL := "cuivre"
-const PX := 140.0
-const PY := 77.0
-const PW := 200.0
-const ROW_H := 22.0
+const PX := 560.0
+const PY := 308.0
+const PW := 800.0
+const ROW_H := 88.0
 
-var PH := 115.0
+var PH := 460.0
 
 var _recipes: Array = []
 var _visible_recipes: Array = []
@@ -29,12 +29,12 @@ func _load_recipes() -> void:
 	var parsed: Variant = JSON.parse_string(f.get_as_text())
 	if parsed is Array:
 		_recipes = parsed
-	PH = 26.0 + _recipes.size() * ROW_H + 20.0
+	PH = 104.0 + _recipes.size() * ROW_H + 80.0
 
 func _build_ui() -> void:
 	var dim := ColorRect.new()
 	dim.color = Color(0, 0, 0, 0.5)
-	dim.size = Vector2(480, 270)
+	dim.size = Vector2(1920, 1080)
 	add_child(dim)
 
 	var panel := ColorRect.new()
@@ -45,15 +45,15 @@ func _build_ui() -> void:
 
 	var title := Label.new()
 	title.text = "ETABLI"
-	title.position = Vector2(PX + 8, PY + 6)
-	title.add_theme_font_size_override("font_size", 10)
+	title.position = Vector2(PX + 32, PY + 24)
+	title.add_theme_font_size_override("font_size", 40)
 	title.modulate = Color(0.9, 0.75, 0.4)
 	add_child(title)
 
 	var sep := ColorRect.new()
 	sep.color = Color(0.4, 0.3, 0.15)
-	sep.position = Vector2(PX + 4, PY + 22)
-	sep.size = Vector2(PW - 8, 1)
+	sep.position = Vector2(PX + 16, PY + 88)
+	sep.size = Vector2(PW - 32, 4)
 	add_child(sep)
 
 	for i in _recipes.size():
@@ -61,25 +61,25 @@ func _build_ui() -> void:
 
 	var hint := Label.new()
 	hint.text = "A: craft   B: fermer"
-	hint.position = Vector2(PX + 4, PY + PH - 14)
-	hint.add_theme_font_size_override("font_size", 7)
+	hint.position = Vector2(PX + 16, PY + PH - 56)
+	hint.add_theme_font_size_override("font_size", 28)
 	hint.modulate = Color(0.45, 0.45, 0.45)
 	add_child(hint)
 
 func _build_row(i: int) -> void:
 	var recipe: Dictionary = _recipes[i]
-	var y := PY + 26.0 + i * ROW_H
+	var y := PY + 104.0 + i * ROW_H
 
 	var bg := ColorRect.new()
-	bg.position = Vector2(PX + 4, y)
-	bg.size = Vector2(PW - 8, ROW_H - 4)
+	bg.position = Vector2(PX + 16, y)
+	bg.size = Vector2(PW - 32, ROW_H - 16)
 	bg.color = Color(0.20, 0.18, 0.15)
 	add_child(bg)
 
 	var lbl := Label.new()
 	lbl.text = "%s — %s" % [recipe["name"], _format_costs(_get_recipe_costs(recipe))]
-	lbl.position = Vector2(PX + 8, y + 2)
-	lbl.add_theme_font_size_override("font_size", 9)
+	lbl.position = Vector2(PX + 32, y + 8)
+	lbl.add_theme_font_size_override("font_size", 36)
 	add_child(lbl)
 
 	_row_bgs.append(bg)

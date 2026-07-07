@@ -28,7 +28,7 @@ ou `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --path <dossier game>`
 
 ```
 game/
-  project.godot          # config, input map, autoload audio, 480x270 integer scale
+  project.godot          # config, input map, autoload audio, 1920x1080 natif
   icon.svg
   scenes/
     player/player.tscn

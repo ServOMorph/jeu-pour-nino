@@ -1,13 +1,16 @@
 # Signals — jeu   (MAJ 2026-07-07)
 
 ## Question bloquante
-Confirmer le facteur d'échelle du sprite player avant la phase E du plan résolution : upscale ×6 transitoire (144 px, pixels propres) ou attente d'un sprite natif ~150 px produit par game_art ? Conditionne le déclenchement de la phase sprites.
+Aucune côté jeu — le pivot 2D standard est signalé à game_art via `game_art/backlog_art.md` (entrée « Pivot 2026-07-07 »), en attente de sa prise en charge.
 
 ## Actions ouvertes
-- [P1] Exécuter le plan de migration résolution 1920×1080 (`plan_resolution_1920x1080.md`, racine) — phases A+B (project.godot + JSON ×4) à livrer ensemble en premier.
-  fait quand: viewport natif 1920×1080, toutes les valeurs px des JSON/scènes/scripts ×4 appliquées, sprites transitoires upscalés, GUT vert, run manuel complet validé (voir phase G du plan).
-  réf: `plan_resolution_1920x1080.md`
-- [P2] Démarrer la Phase 2 — Grimoire, Points de Compétence, Craft v3 (roadmap.md Phase 2), maintenant que la Phase 1 est close. Reste en attente tant que la migration résolution n'est pas close (évite de produire des UI/écrans à la mauvaise échelle).
+- [P1] Valider la migration résolution 1920×1080 déjà exécutée (JSON/scènes/scripts/sprites transitoires en place, confirmé par relecture directe — pas encore par test).
+  fait quand: GUT vert (23/23), lancement headless OK, run manuel complet validé (title → biome → craft → boss → menus).
+  réf: `plan_resolution_1920x1080.md` phase G
+- [P1] Traiter le pivot pixel art → 2D standard côté game_art : éditeur dépixélisé (filtre linéaire, retrait preview x8/audit grille), `ref_to_sprite.py` remplacé par un script de rescale, charte graphique et workflow réécrits, `backlog_art.md` révisé entrée par entrée.
+  fait quand: plus aucune mention pixel art/grille/palette limitée dans la doc et l'outillage game_art ; premier asset produit via le pipeline Codex + rescale.
+  réf: `plan_graphismes_standard_2d.md`, `game_art/backlog_art.md` (entrée « Pivot 2026-07-07 »)
+- [P2] Démarrer la Phase 2 — Grimoire, Points de Compétence, Craft v3 (roadmap.md Phase 2), maintenant que la Phase 1 est close. Reste en attente tant que la migration résolution n'est pas validée (GUT + run manuel).
   fait quand: `recipes.json` étendu au schéma cible, écran d'équipement manuel (4 slots), Grimoire accessible au HUB ; tests verts.
   réf: `roadmap.md` Phase 2, `questions.md` Q043/Q055/Q056
 - [P2] Lancer le développement avec 2 agents séparés (jeu et game_art) en s'appuyant sur `questions.md` comme source d'arbitrage commune en cas de doute de conception.
@@ -16,7 +19,7 @@ Confirmer le facteur d'échelle du sprite player avant la phase E du plan résol
 - [P2] Point de vigilance Phase 3 : déplacer `RunState.reset()` de `level.gd._ready()` vers `title.gd._start_game()` — un run est multi-biomes, le reset ne doit avoir lieu qu'au lancement d'un nouveau run, pas à chaque entrée en biome.
   fait quand: un aller-retour HUB↔biome en cours de run conserve matériaux/équipement/cicatrices ; test de non-régression dédié vert.
   réf: `roadmap.md` Phase 3, `questions.md` Q001
-- [P3] Suivre l'avancement des assets art via `game_art/backlog_art.md` (canal unique de handoff) : voir entrée « Sprites player — standard Terraria-like » (statut `en_cours`).
+- [P3] Suivre l'avancement du pivot art via `game_art/backlog_art.md` (canal unique de handoff).
   fait quand: n/a — le statut et la priorité de ces items vivent uniquement dans `backlog_art.md`, pas ici.
   réf: `game_art/backlog_art.md`
 
@@ -47,24 +50,33 @@ Confirmer le facteur d'échelle du sprite player avant la phase E du plan résol
 - game_art Phase 2 (2.1 à 2.4) intégralement terminée et validée visuellement.
 - Protocole de communication jeu ↔ game_art revu le 2026-07-06 : `game_art/backlog_art.md` est désormais l'unique canal de handoff (statuts `a_faire`/`en_cours`/`livre`/`integre`, champs `debloque:`/`livraison:`) ; `/start jeu` charge le backlog et remonte les entrées `livre` ; plus aucune écriture croisée dans le `_contexte/` de l'autre zone (voir `.claude/zones.md` pour la matrice de propriété des fichiers).
 - **Phase 1 close le 2026-07-06** : run manuel complet validé (minage tiers 2/3, craft, HUD, menu dev), GUT vert (`23/23`). `minerai_abyssal` utilise son sprite dédié `ore_abyssal.png`, `fer` rebranché sur `ore_iron.png` (utilisait encore le placeholder cuivre par erreur).
-- **Demande utilisateur 2026-07-07** : passer le viewport de jeu en 1920×1080 natif (au lieu de 480×270 upscalé ×4), player idle ciblé à 150 px de haut. Plan complet écrit avant toute exécution (`plan_resolution_1920x1080.md`) pour ne rien casser — migration transversale (project.godot, tous les JSON gameplay, scènes, scripts UI, sprites), avec alternative moins coûteuse documentée (rester en 480×270, sprite ~38 px) si la migration s'avère trop lourde en cours de route.
-- Fichiers `game/data/materials.json` et `game/scripts/ore_node.gd` modifiés en working tree (sprites `ore_copper_handmade_v2`) sans lien avec cette session — probablement issus d'un `sync.py` ou d'une session game_art en parallèle, non commités. À vérifier/clarifier avant prochain commit large.
+- **Migration résolution 1920×1080 exécutée** (project.godot, JSON gameplay ×4, scènes, scripts UI, sprites upscalés ×6 transitoires) — confirmée par relecture directe des fichiers, mais GUT et run manuel restent à (re)lancer pour valider formellement (phase G du plan non cochée).
+- **Pivot 2026-07-07 : abandon du pixel art, passage à des graphismes 2D standard.** Décision utilisateur. Plan écrit (`plan_graphismes_standard_2d.md`) avant exécution. Pipeline de production retenu : génération d'image via le module Codex, puis rescale à la taille de rendu cible — pas de dessin manuel, pas de vectoriel, pas d'asset packs. Point de vigilance : dérive de cadrage/échelle possible entre frames d'une même animation générées séparément par l'IA, à contrôler avant intégration. La résolution native 1920×1080 est conservée (plus pertinente pour du 2D lissé que pour du pixel art).
+- Phase A du pivot 2D standard appliquée côté jeu : `game/project.godot` en filtre linéaire (`default_texture_filter=1`) et `stretch/mode="canvas_items"` (au lieu de nearest/viewport, adaptés au pixel art).
+- Pivot signalé à game_art via `game_art/backlog_art.md` (entrée « Pivot 2026-07-07 ») : éditeur, `ref_to_sprite.py`, charte graphique et workflow à refondre — propriété exclusive de l'agent game_art, non traité côté jeu.
 
-## Dernière session (2026-07-07 — Plan de migration résolution 1920×1080)
+## Dernière session (2026-07-07 — Pivot graphismes 2D standard)
 
 # Session du 2026-07-07
 
 ## Décisions prises
-- Migration vers un viewport natif 1920×1080 retenue (plutôt que garder 480×270 avec un sprite player agrandi) : facteur d'échelle monde ×4, player à 150 px visé (~×6.25).
+- Abandon du pixel art, passage à des graphismes 2D standard (résolution native lissée, plus de grille/palette). Résolution 1920×1080 conservée.
+- Pipeline de production des assets : génération Codex + rescale à la taille cible.
 
 ## Livrables produits ou modifiés
-- `plan_resolution_1920x1080.md` (racine) : plan complet en 10 sections (constat, phases A à G projet/JSON/scènes/scripts/sprites/calibration/validation, points de vigilance, ordre d'exécution).
+- `plan_graphismes_standard_2d.md` (racine) : plan complet (impact, rendu, production, refonte game_art, doc, validation).
+- `game/project.godot` : rendu passé en filtre linéaire + `stretch/mode="canvas_items"`.
+- `roadmap.md`, `questions.md`, `game/README.md` : mentions 480×270/pixel art/grille 16×16 corrigées vers 1920×1080/2D standard.
+- `game_art/backlog_art.md` : entrée de handoff « Pivot 2026-07-07 » créée pour la zone game_art.
+- Migration résolution 1920×1080 (`plan_resolution_1920x1080.md`, phases A-E transitoire) confirmée appliquée dans le working tree (project.godot, JSON, scènes, scripts, sprites upscalés).
 
 ## Hypothèses validées / invalidées
-- EN ATTENTE : choix définitif entre upscale ×6 transitoire (144 px, pixels propres) et sprite natif 150 px produit par game_art — à trancher avant la phase E du plan.
+- VALIDE : la migration résolution est cohérente sur relecture directe (dimensions JSON, sprites upscalés, animations.json).
+- INVALIDE : direction pixel art — pivot acté vers 2D standard.
+- EN ATTENTE : GUT + run manuel non (re)lancés depuis la migration résolution ; refonte game_art (éditeur, charte, workflow, script de rescale) non commencée.
 
 ## Prochaine étape exacte
-Exécuter les phases A (project.godot) et B (JSON ×4) du plan ensemble, sur une branche dédiée, puis valider GUT + lancement headless avant de poursuivre.
+Lancer GUT + run manuel pour valider formellement la migration résolution, puis ouvrir une session game_art pour traiter le pivot signalé dans `backlog_art.md`.
 
 ## Question bloquante pour la session suivante
-Confirmer le facteur d'échelle du sprite player (×6 transitoire vs attente sprite natif game_art) avant la phase E.
+Aucune côté jeu.

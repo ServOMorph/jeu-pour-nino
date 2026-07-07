@@ -1,6 +1,6 @@
 # CoreDive Challenge
 
-Jeu de plateforme/action pixel art fait pour Nino. Un run court dans le biome 1, des ennemis, un boss. Fait en Godot 4.5.
+Jeu de plateforme/action fait pour Nino. Un run court dans le biome 1, des ennemis, un boss. Fait en Godot 4.5. Direction visuelle en transition : abandon du pixel art vers des graphismes 2D standard (voir `plan_graphismes_standard_2d.md`).
 
 ## Lancer le jeu
 
@@ -47,7 +47,7 @@ Necessite Godot 4.5 disponible dans le PATH, ou via `D:\tmp\godot45\Godot_v4.5-s
 |-- roadmap.md          # Roadmap active v3
 |-- docs/               # GDD, profil joueur et charte graphique
 `-- game/               # Projet Godot
-    |-- assets/         # Sprites pixel art
+    |-- assets/         # Sprites (transition pixel art -> 2D standard)
     |-- project.godot
     |-- scenes/
     |   |-- player/
@@ -65,10 +65,9 @@ Necessite Godot 4.5 disponible dans le PATH, ou via `D:\tmp\godot45\Godot_v4.5-s
 
 ## Etat actuel
 
-**v1.31.** Phase 1 (Materiaux types) close : gating de minage data-driven via `weapons.json`/`RunState`, run manuel complet valide (minage, craft, HUD, menu dev).
-GUT est vert (`23/23`) et le projet demarre en headless, y compris `biome1`.
-Sprites `minerai_abyssal` et `fer` integres avec leur visuel dedie.
-Prochaine etape : Phase 2 - Grimoire, Points de Competence, Craft v3.
+**v1.33.** Migration resolution 1920x1080 executee (project.godot, JSON, scenes, scripts, sprites) ; validation GUT/run manuel a refaire.
+Pivot acte : abandon du pixel art, graphismes 2D standard (pipeline Codex + rescale, `plan_graphismes_standard_2d.md`). Refonte game_art signalee, non commencee.
+Prochaine etape : valider GUT + run manuel de la migration resolution, puis session game_art sur le pivot.
 
 ## Roadmap
 

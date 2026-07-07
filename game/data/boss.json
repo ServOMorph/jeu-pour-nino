@@ -4,21 +4,21 @@
     "contact_damage":  3,
     "attack_count":    3,
     "physics": {
-      "gravity":          800.0,
-      "max_fall":         400.0,
-      "idle_decel":       300.0,
-      "slam_rise_decel":  200.0,
-      "pause_decel":      300.0
+      "gravity":          3200.0,
+      "max_fall":         1600.0,
+      "idle_decel":       1200.0,
+      "slam_rise_decel":  800.0,
+      "pause_decel":      1200.0
     },
     "charge": {
-      "speed":    180.0,
-      "min_dist":  60.0,
+      "speed":    720.0,
+      "min_dist":  240.0,
       "duration":   1.2
     },
     "slam": {
-      "jump_velocity": -285.0,
-      "fall_velocity":  760.0,
-      "hit_range":       82.0,
+      "jump_velocity": -1140.0,
+      "fall_velocity":  3040.0,
+      "hit_range":       328.0,
       "trauma":           6.0,
       "rise_duration":    0.5,
       "pause_duration":   0.8
@@ -39,7 +39,7 @@
     }
   },
   "BossProjectile": {
-    "speed":    135.0,
+    "speed":    540.0,
     "lifetime":   4.0,
     "damage":     2
   }

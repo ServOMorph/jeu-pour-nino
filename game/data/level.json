@@ -1,9 +1,9 @@
 {
   "dimensions": {
-    "width": 3200.0,
-    "height": 270.0,
-    "floor_top": 240.0,
-    "arena_x": 2600.0
+    "width": 12800.0,
+    "height": 1080.0,
+    "floor_top": 960.0,
+    "arena_x": 10400.0
   },
   "background": {
     "color": [0.12, 0.10, 0.08],
@@ -14,83 +14,83 @@
   "platforms": {
     "color": [0.22, 0.20, 0.18],
     "rects": [
-      [0, 240, 3200, 30],
-      [-8, 0, 8, 270],
-      [3200, 0, 8, 270],
-      [250, 200, 90, 12],
-      [410, 165, 80, 12],
-      [560, 130, 80, 12],
-      [720, 175, 90, 12],
-      [560, 180, 16, 60],
-      [900, 195, 100, 12],
-      [1040, 155, 80, 12],
-      [1200, 200, 90, 12],
-      [1380, 160, 80, 12],
-      [1540, 125, 80, 12],
-      [1700, 170, 90, 12],
-      [1700, 180, 16, 60],
-      [1900, 200, 100, 12],
-      [2060, 155, 80, 12],
-      [2220, 195, 90, 12],
-      [2400, 165, 80, 12],
-      [2520, 200, 120, 12]
+      [0, 960, 12800, 120],
+      [-32, 0, 32, 1080],
+      [12800, 0, 32, 1080],
+      [1000, 800, 360, 48],
+      [1640, 660, 320, 48],
+      [2240, 520, 320, 48],
+      [2880, 700, 360, 48],
+      [2240, 720, 64, 240],
+      [3600, 780, 400, 48],
+      [4160, 620, 320, 48],
+      [4800, 800, 360, 48],
+      [5520, 640, 320, 48],
+      [6160, 500, 320, 48],
+      [6800, 680, 360, 48],
+      [6800, 720, 64, 240],
+      [7600, 800, 400, 48],
+      [8240, 620, 320, 48],
+      [8880, 780, 360, 48],
+      [9600, 660, 320, 48],
+      [10080, 800, 480, 48]
     ]
   },
   "spawns": {
-    "start": {"pos": [60, 224], "enemies": true, "boss_active": false},
-    "atelier": {"pos": [1040, 224], "enemies": true, "boss_active": false},
-    "boss": {"pos": [2660, 224], "enemies": false, "boss_active": true}
+    "start": {"pos": [240, 881], "enemies": true, "boss_active": false},
+    "atelier": {"pos": [4160, 881], "enemies": true, "boss_active": false},
+    "boss": {"pos": [10640, 881], "enemies": false, "boss_active": true}
   },
   "enemies": [
-    {"type": "ground", "pos": [320, 232]},
-    {"type": "ground", "pos": [520, 232]},
-    {"type": "ground", "pos": [680, 232]},
-    {"type": "flyer", "pos": [470, 145]},
-    {"type": "flyer", "pos": [810, 140]},
-    {"type": "ground", "pos": [960, 232]},
-    {"type": "ground", "pos": [1150, 232]},
-    {"type": "flyer", "pos": [1120, 135]},
-    {"type": "ground", "pos": [1280, 232]},
-    {"type": "ground", "pos": [1500, 232]},
-    {"type": "flyer", "pos": [1510, 145]},
-    {"type": "ground", "pos": [1860, 232]},
-    {"type": "ground", "pos": [2020, 232]},
-    {"type": "ground", "pos": [2200, 232]},
-    {"type": "flyer", "pos": [2310, 135]},
-    {"type": "ground", "pos": [2450, 232]},
-    {"type": "ground", "pos": [2520, 232]}
+    {"type": "ground", "pos": [1280, 928]},
+    {"type": "ground", "pos": [2080, 928]},
+    {"type": "ground", "pos": [2720, 928]},
+    {"type": "flyer", "pos": [1880, 580]},
+    {"type": "flyer", "pos": [3240, 560]},
+    {"type": "ground", "pos": [3840, 928]},
+    {"type": "ground", "pos": [4600, 928]},
+    {"type": "flyer", "pos": [4480, 540]},
+    {"type": "ground", "pos": [5120, 928]},
+    {"type": "ground", "pos": [6000, 928]},
+    {"type": "flyer", "pos": [6040, 580]},
+    {"type": "ground", "pos": [7440, 928]},
+    {"type": "ground", "pos": [8080, 928]},
+    {"type": "ground", "pos": [8800, 928]},
+    {"type": "flyer", "pos": [9240, 540]},
+    {"type": "ground", "pos": [9800, 928]},
+    {"type": "ground", "pos": [10080, 928]}
   ],
   "respawn": {
     "enabled": true,
     "delay": 18.0,
     "retry_delay": 5.0,
-    "min_player_distance": 220.0,
+    "min_player_distance": 880.0,
     "max_alive": 17
   },
   "ores": [
-    {"pos": [180, 225], "material": "cuivre"},
-    {"pos": [300, 185], "material": "cuivre"},
-    {"pos": [460, 150], "material": "cuivre"},
-    {"pos": [600, 225], "material": "cuivre"},
-    {"pos": [760, 160], "material": "cuivre"},
-    {"pos": [1050, 225], "material": "cuivre"},
-    {"pos": [1140, 225], "material": "fer"},
-    {"pos": [1180, 225], "material": "minerai_abyssal"},
-    {"pos": [1260, 185], "material": "cuivre"},
-    {"pos": [1590, 225], "material": "cuivre"},
-    {"pos": [1770, 155], "material": "cuivre"},
-    {"pos": [2000, 185], "material": "cuivre"},
-    {"pos": [2250, 225], "material": "cuivre"},
-    {"pos": [2460, 150], "material": "cuivre"}
+    {"pos": [720, 900], "material": "cuivre"},
+    {"pos": [1200, 740], "material": "cuivre"},
+    {"pos": [1840, 600], "material": "cuivre"},
+    {"pos": [2400, 900], "material": "cuivre"},
+    {"pos": [3040, 640], "material": "cuivre"},
+    {"pos": [4200, 900], "material": "cuivre"},
+    {"pos": [4560, 900], "material": "fer"},
+    {"pos": [4720, 900], "material": "minerai_abyssal"},
+    {"pos": [5040, 740], "material": "cuivre"},
+    {"pos": [6360, 900], "material": "cuivre"},
+    {"pos": [7080, 620], "material": "cuivre"},
+    {"pos": [8000, 740], "material": "cuivre"},
+    {"pos": [9000, 900], "material": "cuivre"},
+    {"pos": [9840, 600], "material": "cuivre"}
   ],
   "workbench": {
-    "pos": [1100, 231]
+    "pos": [4400, 924]
   },
   "boss": {
-    "pos": [2860, 222]
+    "pos": [11440, 888]
   },
   "boss_door": {
-    "rect": [2592, 100, 16, 140],
+    "rect": [10368, 400, 64, 560],
     "color": [0.4, 0.15, 0.35]
   }
 }

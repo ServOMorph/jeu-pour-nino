@@ -4,6 +4,7 @@ const ANIM_CONFIG := "res://data/animations.json"
 const MANIFEST_CONFIG := "res://data/manifest.json"
 const AUDIT_REPORT_PATH := "res://audit_report.md"
 const REFERENCE_ROOT := "res://assets/from_reference/"
+const STATIC_ROOT := "res://assets/objects/"
 const SPECS_DIR := "res://specs"
 const AnimationDriverEditorScript := preload("res://editeur/animation_driver.gd")
 const InspectorScript := preload("res://editeur/inspector.gd")
@@ -11,6 +12,8 @@ const AuditScript := preload("res://editeur/audit.gd")
 
 var _entity_list: ItemList
 var _state_list: ItemList
+var _static_list: ItemList
+var _static_texture_rect: TextureRect
 var _gallery_panel: Control
 var _inspector_panel: Control
 var _preview_row: HBoxContainer
@@ -41,6 +44,7 @@ const MIN_PREVIEW_SIZE := 120.0
 func _ready() -> void:
 	_build_ui()
 	_load_entities()
+	_load_static_sprites()
 	_update_title()
 	_update_preview_size()
 
@@ -143,6 +147,15 @@ func _build_gallery_panel(parent: Control) -> void:
 	_state_list.item_selected.connect(_on_state_selected)
 	panel.add_child(_state_list)
 
+	var lbl_g := Label.new()
+	lbl_g.text = "Sprites statiques (gisements)"
+	panel.add_child(lbl_g)
+
+	_static_list = ItemList.new()
+	_static_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_static_list.item_selected.connect(_on_static_selected)
+	panel.add_child(_static_list)
+
 func _build_preview_panel(parent: Control) -> void:
 	var panel := VBoxContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -192,6 +205,11 @@ func _build_preview_panel(parent: Control) -> void:
 	_driver = AnimationDriverEditorScript.new()
 	_viewport.add_child(_driver)
 	_driver.frame_changed.connect(_update_frame_info)
+
+	_static_texture_rect = TextureRect.new()
+	_static_texture_rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_static_texture_rect.visible = false
+	_viewport.add_child(_static_texture_rect)
 
 	var reference_column := VBoxContainer.new()
 	_preview_row.add_child(reference_column)
@@ -312,7 +330,43 @@ func _load_entities() -> void:
 		_entity_list.select(0)
 		_on_entity_selected(0)
 
+func _load_static_sprites() -> void:
+	_static_list.clear()
+	var dir := DirAccess.open(STATIC_ROOT)
+	if dir == null:
+		return
+	var names := PackedStringArray()
+	dir.list_dir_begin()
+	var file_name := dir.get_next()
+	while file_name != "":
+		if not dir.current_is_dir() and file_name.get_extension().to_lower() == "png":
+			names.append(file_name)
+		file_name = dir.get_next()
+	dir.list_dir_end()
+	names.sort()
+	for name in names:
+		_static_list.add_item(name)
+
+func _on_static_selected(index: int) -> void:
+	_entity_list.deselect_all()
+	_state_list.deselect_all()
+	_state_list.clear()
+	_inspector.clear()
+	_driver.stop()
+	_driver.hide()
+	var file_name := _static_list.get_item_text(index)
+	var texture := _load_texture(STATIC_ROOT + file_name)
+	_static_texture_rect.texture = texture
+	_static_texture_rect.visible = true
+	_center_static_texture()
+	_reference_texture_rect.texture = null
+	_center_reference_texture()
+	_update_static_frame_info(file_name, texture)
+
 func _on_entity_selected(index: int) -> void:
+	_static_list.deselect_all()
+	_static_texture_rect.visible = false
+	_driver.show()
 	_current_entity = _entity_list.get_item_text(index)
 	_state_list.clear()
 	var entity_cfg: Variant = _entities.get(_current_entity, null)
@@ -663,6 +717,7 @@ func _update_preview_size() -> void:
 	_preview_container.custom_minimum_size = Vector2(single_preview_size, single_preview_size)
 	_reference_preview_container.custom_minimum_size = Vector2(single_preview_size, single_preview_size)
 	_center_preview_driver()
+	_center_static_texture()
 	_center_reference_texture()
 
 func _toggle_pause() -> void:
@@ -735,7 +790,7 @@ func _resolve_reference_path(entity: String, state: String) -> String:
 		candidates.append(REFERENCE_ROOT + entity + "/" + _normalize_reference_name(sheet_name) + "_ref.png")
 	var frames: Variant = state_cfg.get("frames", [])
 	if frames is Array and not frames.is_empty():
-		var first_frame := frames[0]
+		var first_frame: Variant = frames[0]
 		if first_frame is String:
 			var frame_name := String(first_frame).get_file().get_basename()
 			candidates.append(REFERENCE_ROOT + entity + "/" + frame_name + "_ref.png")
@@ -764,6 +819,25 @@ func _center_preview_driver() -> void:
 	if _driver == null or _viewport == null:
 		return
 	_driver.position = Vector2(_viewport.size) * 0.5
+
+func _update_static_frame_info(file_name: String, texture: Texture2D) -> void:
+	if texture == null:
+		_frame_info_label.text = "%s - introuvable" % file_name
+		return
+	var size := texture.get_size()
+	_frame_info_label.text = "%s - %dx%d px" % [file_name, int(size.x), int(size.y)]
+
+func _center_static_texture() -> void:
+	if _static_texture_rect == null or _viewport == null:
+		return
+	var texture := _static_texture_rect.texture
+	if texture == null:
+		_static_texture_rect.position = Vector2(_viewport.size) * 0.5
+		_static_texture_rect.size = Vector2.ZERO
+		return
+	var tex_size := texture.get_size()
+	_static_texture_rect.size = tex_size
+	_static_texture_rect.position = (Vector2(_viewport.size) - tex_size) * 0.5
 
 func _center_reference_texture() -> void:
 	if _reference_texture_rect == null or _reference_viewport == null:

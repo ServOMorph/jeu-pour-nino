@@ -27,31 +27,31 @@ func setup(message: String, color: Color, victory: bool) -> void:
 	add_child(center)
 
 	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 10)
+	vbox.add_theme_constant_override("separation", 40)
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	center.add_child(vbox)
 
 	var title := Label.new()
 	title.text = message
 	title.add_theme_color_override("font_color", color)
-	title.add_theme_font_size_override("font_size", 20)
+	title.add_theme_font_size_override("font_size", 80)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(title)
 
 	var spacer := Control.new()
-	spacer.custom_minimum_size = Vector2(0, 14)
+	spacer.custom_minimum_size = Vector2(0, 56)
 	vbox.add_child(spacer)
 
 	var retry := Button.new()
 	retry.text = "REESSAYER" if not victory else "REJOUER"
-	retry.custom_minimum_size = Vector2(200, 34)
+	retry.custom_minimum_size = Vector2(800, 136)
 	vbox.add_child(retry)
 	retry.pressed.connect(_on_retry)
 	_buttons.append(retry)
 
 	var menu := Button.new()
 	menu.text = "MENU"
-	menu.custom_minimum_size = Vector2(200, 34)
+	menu.custom_minimum_size = Vector2(800, 136)
 	vbox.add_child(menu)
 	menu.pressed.connect(_on_menu)
 	_buttons.append(menu)
@@ -59,7 +59,7 @@ func setup(message: String, color: Color, victory: bool) -> void:
 	if not victory:
 		var quit := Button.new()
 		quit.text = "FERMER LE JEU"
-		quit.custom_minimum_size = Vector2(200, 34)
+		quit.custom_minimum_size = Vector2(800, 136)
 		vbox.add_child(quit)
 		quit.pressed.connect(_on_quit)
 		_buttons.append(quit)

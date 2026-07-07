@@ -23,6 +23,15 @@ Projet Godot autonome pour visualiser, editer et auditer les sprites et animatio
 10. Lancer `python sync.py`.
 11. Valider dans le jeu avec `python run_game.py`.
 
+## Workflow sprites pixel art
+
+- Pour les petits sprites gameplay (minerais, objets, pickups, petites icones), produire le sprite final directement a la taille reelle de jeu.
+- Workflow valide : `reference visuelle -> sprite final sur grille -> palette limitee -> preview x8 -> validation editeur/jeu`.
+- Une generation IA brute peut servir de reference de forme, matiere ou palette, mais jamais d'asset final livre tel quel.
+- Ne pas utiliser comme livrable final un workflow `generation IA -> detourage -> reduction`.
+- Chaque sprite final small-size doit etre accompagne d'une preview agrandie nommee `*_preview_x8.png`.
+- Le critere de validation principal est la lisibilite a taille reelle, pas le rendu zoome.
+
 ## Edition
 
 - Les metadonnees d'animation sont dans `data/animations.json`.

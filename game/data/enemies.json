@@ -2,19 +2,19 @@
   "EnemyGround": {
     "max_hp": 6,
     "contact_damage": 3,
-    "gravity": 800.0,
-    "speed": 48.0,
-    "patrol_range": 70.0,
-    "max_fall": 380.0,
-    "hit_stun_decel": 460.0
+    "gravity": 3200.0,
+    "speed": 192.0,
+    "patrol_range": 280.0,
+    "max_fall": 1520.0,
+    "hit_stun_decel": 1840.0
   },
   "EnemyFlyer":  {
     "max_hp": 4,
     "contact_damage": 3,
-    "speed": 68.0,
-    "detect_range": 200.0,
-    "hover_amplitude": 14.0,
+    "speed": 272.0,
+    "detect_range": 800.0,
+    "hover_amplitude": 56.0,
     "hover_speed": 2.2,
-    "hit_stun_decel": 650.0
+    "hit_stun_decel": 2600.0
   }
 }

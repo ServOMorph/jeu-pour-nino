@@ -41,3 +41,6 @@ Le principal reste ouvert hors tooling : remplacer les etats legacy par de vrais
   nommage et applique exactement le meme zoom que la preview principale.
 - Les fiches `specs/<entity>.md` sont generees depuis `animations.json`, `manifest.json`
   et l'audit courant pour servir de brief art directement exploitable.
+- Pour les petits sprites gameplay, le process valide est : reference visuelle,
+  production directe a la taille finale sur grille, palette limitee, preview x8,
+  puis validation. Une reduction d'image IA ne doit pas etre livree comme asset final.

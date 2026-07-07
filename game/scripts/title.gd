@@ -30,19 +30,19 @@ func _ready() -> void:
 
 	var title := Label.new()
 	title.text = "CoreDive Challenge"
-	title.add_theme_font_size_override("font_size", 24)
+	title.add_theme_font_size_override("font_size", 96)
 	title.add_theme_color_override("font_color", Color(0.7, 0.4, 0.9))
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.position = Vector2(0, 28)
-	title.size = Vector2(480, 32)
+	title.position = Vector2(0, 112)
+	title.size = Vector2(1920, 128)
 	add_child(title)
 
 	var sub := Label.new()
 	sub.text = "Sauras-tu atteindre le Noyau ?"
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	sub.add_theme_font_size_override("font_size", 11)
-	sub.position = Vector2(0, 66)
-	sub.size = Vector2(480, 20)
+	sub.add_theme_font_size_override("font_size", 44)
+	sub.position = Vector2(0, 264)
+	sub.size = Vector2(1920, 80)
 	add_child(sub)
 
 	_build_main_menu()
@@ -51,10 +51,10 @@ func _ready() -> void:
 	var hint_pad := Label.new()
 	hint_pad.text = "Manette : stick gauche bouger   A sauter   RB attaquer"
 	hint_pad.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	hint_pad.add_theme_font_size_override("font_size", 9)
+	hint_pad.add_theme_font_size_override("font_size", 36)
 	hint_pad.add_theme_color_override("font_color", Color(0.6, 0.8, 1.0))
-	hint_pad.position = Vector2(0, 246)
-	hint_pad.size = Vector2(480, 16)
+	hint_pad.position = Vector2(0, 984)
+	hint_pad.size = Vector2(1920, 64)
 	add_child(hint_pad)
 
 	_show_main()
@@ -66,9 +66,9 @@ func _build_main_menu() -> void:
 		var lbl := Label.new()
 		lbl.text = MAIN_ENTRIES[i]
 		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		lbl.add_theme_font_size_override("font_size", 14)
-		lbl.position = Vector2(0, 126 + i * 28)
-		lbl.size = Vector2(480, 22)
+		lbl.add_theme_font_size_override("font_size", 56)
+		lbl.position = Vector2(0, 504 + i * 112)
+		lbl.size = Vector2(1920, 88)
 		_main_root.add_child(lbl)
 		_main_labels.append(lbl)
 
@@ -79,19 +79,19 @@ func _build_dev_menu() -> void:
 	var dev_title := Label.new()
 	dev_title.text = "— MODE DEV —"
 	dev_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	dev_title.add_theme_font_size_override("font_size", 11)
+	dev_title.add_theme_font_size_override("font_size", 44)
 	dev_title.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
-	dev_title.position = Vector2(0, 92)
-	dev_title.size = Vector2(480, 18)
+	dev_title.position = Vector2(0, 368)
+	dev_title.size = Vector2(1920, 72)
 	_dev_root.add_child(dev_title)
 
 	for i in DEV_ENTRIES.size():
 		var lbl := Label.new()
 		lbl.text = DEV_ENTRIES[i]
 		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		lbl.add_theme_font_size_override("font_size", 14)
-		lbl.position = Vector2(0, 116 + i * 24)
-		lbl.size = Vector2(480, 22)
+		lbl.add_theme_font_size_override("font_size", 56)
+		lbl.position = Vector2(0, 464 + i * 96)
+		lbl.size = Vector2(1920, 88)
 		_dev_root.add_child(lbl)
 		_dev_labels.append(lbl)
 

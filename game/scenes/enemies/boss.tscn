@@ -4,10 +4,10 @@
 [ext_resource type="Script" path="res://scripts/animation_driver.gd" id="2"]
 
 [sub_resource type="RectangleShape2D" id="body"]
-size = Vector2(28, 36)
+size = Vector2(112, 144)
 
 [sub_resource type="RectangleShape2D" id="hit"]
-size = Vector2(30, 38)
+size = Vector2(120, 152)
 
 [node name="Boss" type="CharacterBody2D" groups=["boss"]]
 collision_layer = 4

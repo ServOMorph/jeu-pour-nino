@@ -1,7 +1,7 @@
 extends Camera2D
 
 const DECAY := 6.0
-const MAX_OFFSET := Vector2(6, 4)
+const MAX_OFFSET := Vector2(24, 16)
 
 var trauma := 0.0
 

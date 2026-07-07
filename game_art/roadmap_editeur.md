@@ -36,6 +36,7 @@ que ce que le manifest connait : un manifest non tenu a jour rend l'audit vert m
 - Phase 3 : close
 - Phase 4 : close
 - Phase 5 : en cours
+- Phase 6 : close
 
 ## Phase 5 - Finitions
 
@@ -54,6 +55,20 @@ Un cycle complet `sheet produit -> depot assets -> visualisation/reglage dans l'
 Support concret retenu : les sprites player standard Terraria-like (entree `en_cours`
 de `backlog_art.md`, signal P3 de `_contexte/signals.md`) — premier remplacement de
 placeholder reel, priorite 1 de la regle Q071 (joueur > ennemis > boss > tilesets > UI).
+
+## Phase 6 - Extensions v3
+
+Ouverte par necessite concrete (regle "ne pas anticiper" de la section Perimetre) :
+session game_art 2026-07-06 en cours sur les sprites de gisements/minerais
+(`Sprites gisements/minerais par type de materiau`, backlog_art.md), besoin de
+validation visuelle immediate.
+
+- [x] Previsualisation des sprites de gisements/minerais (objects/ore_*.png) dans
+      le panneau preview de l'editeur, a l'echelle jeu.
+
+Perimetre de cette phase : uniquement les gisements/minerais, tires par le besoin
+ci-dessus. Tilesets, parallax, shaders/overlays cicatrices et icones UI restent hors
+perimetre tant qu'aucun besoin concret equivalent n'apparait (cf. Perimetre).
 
 ## Apres Phase 5 : maintenance
 

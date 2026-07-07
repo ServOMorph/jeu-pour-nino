@@ -1,3 +1,14 @@
+## v1.33 - 2026-07-07
+
+### Ajoute
+- `plan_graphismes_standard_2d.md` (racine) : plan de pivot pixel art -> graphismes 2D standard. Pipeline retenu : generation d'image via le module Codex puis rescale a la taille de rendu cible. Couvre rendu (project.godot), production/integration des assets, refonte de la zone game_art (editeur, outils, charte, workflow), doc jeu, validation.
+
+### Modifie
+- `game/project.godot` : rendu passe en filtre lineaire (`default_texture_filter=1`) et `stretch/mode="canvas_items"` (au lieu de nearest/viewport, adaptes au pixel art) ; description sans "pixel art".
+- `roadmap.md`, `questions.md`, `game/README.md`, `README.md` : mentions 480x270/pixel art/grille 16x16 corrigees vers 1920x1080 natif / 2D standard.
+- `game_art/backlog_art.md` : entree de handoff "Pivot 2026-07-07" creee pour signaler le pivot a l'agent game_art (specs individuelles a reviser cote game_art).
+- Migration resolution 1920x1080 (`plan_resolution_1920x1080.md`, phases A a E transitoire) confirmee appliquee dans le repo (project.godot, JSON gameplay x4, scenes, scripts UI, sprites upscales) ; validation GUT/run manuel restant a faire.
+
 ## v1.32 - 2026-07-07
 
 ### Ajoute

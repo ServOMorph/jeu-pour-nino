@@ -45,30 +45,30 @@ func _ready() -> void:
 
 	_pad_label = Label.new()
 	_pad_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_pad_label.add_theme_font_size_override("font_size", 8)
+	_pad_label.add_theme_font_size_override("font_size", 32)
 	_pad_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
-	_pad_label.position = Vector2(0, 10); _pad_label.size = Vector2(480, 16)
+	_pad_label.position = Vector2(0, 40); _pad_label.size = Vector2(1920, 64)
 	add_child(_pad_label)
 
 	_progress = Label.new()
 	_progress.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_progress.add_theme_font_size_override("font_size", 9)
+	_progress.add_theme_font_size_override("font_size", 36)
 	_progress.add_theme_color_override("font_color", Color(0.5, 0.8, 1.0))
-	_progress.position = Vector2(0, 80); _progress.size = Vector2(480, 20)
+	_progress.position = Vector2(0, 320); _progress.size = Vector2(1920, 80)
 	add_child(_progress)
 
 	_prompt = Label.new()
 	_prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_prompt.add_theme_font_size_override("font_size", 18)
+	_prompt.add_theme_font_size_override("font_size", 72)
 	_prompt.add_theme_color_override("font_color", Color(1.0, 0.9, 0.3))
-	_prompt.position = Vector2(0, 110); _prompt.size = Vector2(480, 36)
+	_prompt.position = Vector2(0, 440); _prompt.size = Vector2(1920, 144)
 	add_child(_prompt)
 
 	_done = Label.new()
 	_done.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_done.add_theme_font_size_override("font_size", 10)
+	_done.add_theme_font_size_override("font_size", 40)
 	_done.add_theme_color_override("font_color", Color(0.4, 1.0, 0.5))
-	_done.position = Vector2(0, 180); _done.size = Vector2(480, 60)
+	_done.position = Vector2(0, 720); _done.size = Vector2(1920, 240)
 	add_child(_done)
 
 func _process(_delta: float) -> void:

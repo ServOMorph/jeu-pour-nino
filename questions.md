@@ -123,7 +123,7 @@ Les exemples `membre_raidi`/`vision_voilee` de la roadmap Phase 6 sont abandonn�
 
 **Q037 (P2)** ✅ **TRANCHÉ : élite = variante boostée sur spawn normal ; porteur = salle taggée.** Un élite est un ennemi normal avec stats majorées (HP/dégâts) et une teinte/effet visuel distinctif, tiré aléatoirement sur un spawn point normal (pas de salle dédiée). Les porteurs de recettes apparaissent sur des salles spécifiquement taggées, avec une probabilité définie dans la config biome.
 
-**Q038 (P2)** ✅ **TRANCHÉ : écran fixe par salle.** Chaque salle = un écran de 480×270 sans scroll interne. Confirme le comportement actuel, pas de caméra dynamique à gérer par salle.
+**Q038 (P2)** ✅ **TRANCHÉ : écran fixe par salle.** Chaque salle = un écran de 1920×1080 sans scroll interne (résolution native depuis la migration viewport, `plan_resolution_1920x1080.md` — 480×270 d'origine obsolète). Confirme le comportement actuel, pas de caméra dynamique à gérer par salle.
 
 **Q039 (P2)** ✅ **TRANCHÉ : rien de plus pour l'instant.** Le HUB reste minimal : 4 sorties, Grimoire, établi. Un HUB évolutif (décorations débloquables, PNJ, coffre persistant) part au backlog post-v3.
 
@@ -323,7 +323,7 @@ Chaque recette de la table Q043 porte son `workbench_tier` correspondant.
 
 ## 11. Direction artistique et assets (P2/P3)
 
-**Q068 (P2)** ✅ **TRANCHÉ : grille de tiles 16×16.** Adaptée à la résolution de référence 480×270 (30×17 tiles à l'écran), cohérente avec le pixel art détaillé visé par la charte graphique. Les templates de salles (Phase 4) s'aligneront sur cette grille. *(Reste ouvert : palettes concrètes par biome — à cadrer au fil de l'eau dans `game_art/backlog_art.md`, pas bloquant pour le développement jeu.)*
+**Q068 (P2)** ✅ **TRANCHÉ (révisé) : plus de grille de tiles imposée.** Décision d'origine (grille 16×16, résolution 480×270, pixel art) obsolète depuis le pivot vers des graphismes 2D standard (`plan_graphismes_standard_2d.md`) et la migration résolution native 1920×1080. Tuiles/décors désormais produits à résolution native, sans contrainte de grille ni de palette réduite. Les templates de salles (Phase 4) restent valides dans leur logique de composition, pas dans leur unité de mesure pixel art.
 
 **Q069 (P2)** ✅ **TRANCHÉ : 2-3 couches de parallax.** Fond lointain + fond intermédiaire + plateformes au premier plan. Bon compromis profondeur/charge de production pour un développement solo.
 
@@ -341,7 +341,7 @@ Tous réalisables avec les outils Godot standards (shaders 2D, CPUParticles2D).
 
 ## 12. Performances, technique, configuration (P2/P3)
 
-**Q072 (P2)** ✅ **TRANCHÉ : 60 FPS, plein écran par défaut.** Résolution de rendu 480×270 upscalée. Basculable en fenêtré via les options (Q058). Aucun enjeu de performance réel vu la simplicité technique du jeu.
+**Q072 (P2)** ✅ **TRANCHÉ : 60 FPS, plein écran par défaut.** Résolution de rendu 1920×1080 native (`plan_resolution_1920x1080.md` — 480×270 upscalé d'origine obsolète). Basculable en fenêtré via les options (Q058). Aucun enjeu de performance réel vu la simplicité technique du jeu.
 
 **Q073 (P2)** ✅ **TRANCHÉ : un seul biome vivant en mémoire à la fois.** L'Arène du Voile est l'unique exception (biome détaché mais conservé pendant la traversée de l'Arène lors d'une résurrection, Phase 5). Jamais plusieurs biomes simultanés — cohérent avec Q002 (régénération à chaque entrée).
 
@@ -380,4 +380,4 @@ Toutes les réponses ci-dessus sont marquées ✅ TRANCHÉ. Ce document constitu
 
 ## Ce qui est déjà tranché (ne pas re-questionner)
 
-Pour éviter de rouvrir des décisions actées : Godot 4.5 + GDScript ; manette uniquement via `joymap.gd` ; toutes valeurs gameplay en JSON ; génération par templates de salles (pas de PCG pur) ; persistance biome pendant l'Arène par détachement de scène ; Miroir limité à 2 paramètres ; placeholders systématiques + `game_art/backlog_art.md` ; GUT avec couverture 85 % ; jalons J1-J7 et refactos R1/R1.5/R2/R3 ; textes en français ; charte pixel art dark fantasy ; sprites joueur 40×56 ; PNG chargés en runtime (pas de `preload`).
+Pour éviter de rouvrir des décisions actées : Godot 4.5 + GDScript ; manette uniquement via `joymap.gd` ; toutes valeurs gameplay en JSON ; génération par templates de salles (pas de PCG pur) ; persistance biome pendant l'Arène par détachement de scène ; Miroir limité à 2 paramètres ; placeholders systématiques + `game_art/backlog_art.md` ; GUT avec couverture 85 % ; jalons J1-J7 et refactos R1/R1.5/R2/R3 ; textes en français ; charte dark fantasy en 2D standard (pixel art abandonné, `plan_graphismes_standard_2d.md`) ; sprites joueur ~150 px de haut (résolution native 1920×1080, `plan_resolution_1920x1080.md`) ; PNG chargés en runtime (pas de `preload`).

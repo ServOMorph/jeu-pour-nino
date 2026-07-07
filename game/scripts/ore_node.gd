@@ -1,9 +1,9 @@
 extends StaticBody2D
 
-const DEFAULT_SIZE := Vector2(14, 14)
+const DEFAULT_SIZE := Vector2(56, 56)
 const DEFAULT_HP := 3
 const DEFAULT_DROP := 1
-const DEFAULT_TEXTURE_PATH := "res://assets/sprites/objects/ore_copper.png"
+const DEFAULT_TEXTURE_PATH := "res://assets/sprites/objects/ore_copper_handmade_v2.png"
 
 var material_id := "cuivre"
 
@@ -86,8 +86,8 @@ func _burst_particles(count: int, big: bool) -> void:
 	p.lifetime = lt
 	p.direction = Vector2(0, -1)
 	p.spread = 180.0
-	p.gravity = Vector2(0, 300)
-	p.initial_velocity_min = 40.0 if big else 20.0
-	p.initial_velocity_max = 100.0 if big else 50.0
+	p.gravity = Vector2(0, 1200)
+	p.initial_velocity_min = 160.0 if big else 80.0
+	p.initial_velocity_max = 400.0 if big else 200.0
 	p.color = Color(0.25, 0.55, 0.85)
 	get_tree().create_timer(lt + 0.1).timeout.connect(p.queue_free)

@@ -2,6 +2,19 @@
 
 Backlog des assets à produire pour la zone jeu. Alimenté par les phases de `roadmap.md` (racine) : chaque phase jeu qui pose un placeholder ajoute une entrée ici. Les sessions game_art piochent dedans par priorité.
 
+## Pivot 2026-07-07 — abandon du pixel art, graphismes 2D standard
+
+Décision jeu : le style visuel passe du pixel art à de la 2D standard (raster haute résolution lissée, plus de grille ni de palette réduite). Plan complet : `plan_graphismes_standard_2d.md` (racine). S'articule avec `plan_resolution_1920x1080.md` (résolution native 1920×1080 conservée).
+
+Pipeline de production retenu : génération d'image via le module Codex, puis rescale à la taille de rendu cible (pas de dessin manuel, pas de vectoriel, pas d'asset packs). Point de vigilance signalé au plan : dérive de cadrage/échelle entre frames d'une même animation générées séparément — à contrôler avant intégration.
+
+Conséquences pour cette zone (à traiter côté game_art, hors périmètre jeu) :
+- `docs/charte_graphique_pixel_art_dark_fantasy.md` et `docs/workflow_image_gen_fable5.md` : obsolètes, à réécrire pour le nouveau pipeline (voir plan §3).
+- `game_art/tools/ref_to_sprite.py` : sans objet (réduction pixel), à remplacer par un script de rescale simple.
+- Éditeur (`game_art/editeur/`) : filtre de preview nearest → linéaire, preview "x8" et audit de tailles sur grille à retirer/refondre.
+- Toutes les entrées ci-dessous portant une spec en grille pixel (14×14, 16×16, palette limitée) sont à réviser vers des tailles 2D standard à résolution native — la colonne `specs:` reste la propriété de l'agent game_art.
+- La précision « Grille de tiles : 16×16 » ci-dessous est révisée : plus de grille imposée.
+
 ## Précisions v3.1 (questions.md, 2026-07-06)
 
 77 questions de conception (+ Q026b) ont été tranchées avant le développement — voir `questions.md` à la racine du projet. Les entrées ci-dessous intègrent déjà ces décisions. Points de cadrage transverses à connaître avant de produire :
