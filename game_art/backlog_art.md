@@ -79,7 +79,7 @@ Conséquences pour cette zone (à traiter côté game_art, hors périmètre jeu)
 - placeholder: `ore_copper.png` unique pour tous les gisements
 - specs: 14x14, un sprite par matériau — 13 définitifs (questions.md Q041) : `bois`, `pierre`, `cuivre`, `cuir` (B1), `fer`, `charbon`, `minerai_sombre` (B2), `cristal`, `minerai_celeste`, `essence_vent` (B3), `fragment_noyau`, `minerai_abyssal` (B4), `essence_voile` (Voile, drop uniquement, pas de gisement). Lisibilité de rareté croissante (charte graphique).
 - priorite: moyenne
-- statut: a_faire
+- statut: en_cours
 
 ### Sprite manquant — minerai abyssal
 - phase: 1 — Matériaux typés
@@ -151,7 +151,7 @@ Conséquences pour cette zone (à traiter côté game_art, hors périmètre jeu)
 - placeholder: sprite boss actuel recoloré
 - specs: **un seul Gardien à produire au lancement** (questions.md Q029) — thème cendres/braises, cohérent avec ses 3 attaques (charge au sol, projectile de cendres, zone d'explosion retardée) + pose de pause vulnérable. Les 7 autres Gardiens du pool (Roi Sans Visage, Collecteur d'Âmes, Veuve du Vide, Dévoreur de Souvenirs, Porte-Flamme, Gardien des Os, Écho du Noyau) ne sont à produire qu'après activation de R2 côté jeu — ne pas anticiper.
 - priorite: moyenne
-- statut: a_faire
+- statut: en_cours
 
 ### Effets visuels cicatrices — 5 paliers fixes
 - phase: 6 — Cicatrices (jalon J3)

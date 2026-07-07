@@ -1,3 +1,11 @@
+## v1.35 - 2026-07-07
+
+### Modifie
+- `game_art/assets/enemies/boss_guardian.png`, `enemy_ground.png`, `enemy_flyer.png` et copies `game/assets/sprites/enemies/` : sprites boss et mobs refaits en HD puis redimensionnes aux tailles runtime.
+- `game_art/assets/objects/ore_copper_handmade_v2.png`, `ore_copper.png`, `ore_iron.png`, `ore_abyssal.png`, `workbench.png` et copies `game/assets/sprites/objects/` : sprites minerais et atelier refaits puis synchronises.
+- `game_art/data/manifest.json` et `game/scenes/enemies/boss.tscn` : tailles ennemies runtime realignees ; boss porte a `389x500` avec collisions associees.
+- `game_art/_contexte/`, `game_art/backlog_art.md`, `game_art/roadmap_editeur.md` : contexte de session aligne sur la validation en jeu du set joueur et la reprise de production boss/mobs/objets.
+
 ## v1.34 - 2026-07-07
 
 ### Modifie

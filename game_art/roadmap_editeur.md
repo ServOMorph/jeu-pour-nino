@@ -40,6 +40,8 @@ que ce que le manifest connait : un manifest non tenu a jour rend l'audit vert m
 
 ## Phase 5 - Finitions
 
+- [x] Validation en jeu du set player synchronise : cycle `asset -> sync -> verification en jeu`
+      execute une fois avec le set joueur HD retenu.
 - [x] Comparaison cote a cote : second SubViewport dans le panneau preview affichant
       le PNG de `assets/from_reference/` correspondant. Meme zoom applique aux deux.
 - [x] Fiche de specs par entite : export Markdown `game_art/specs/<entity>.md`

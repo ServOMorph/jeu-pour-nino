@@ -13,3 +13,13 @@
   (sort_keys=false explicite) ; le defaut Godot reordonne tout le fichier.
 - Verification des changements GDScript sans interaction souris/clavier : privilegier
   les scripts de test headless qui appellent directement `main.gd`/`inspector.gd`.
+- L'inspecteur doit rester utilisable en demi-ecran : panneau droit compact,
+  controles empiles si necessaire, pas de dependance a un scroll horizontal.
+- `player.run.fps` est valide a 8.1 depuis la cloture Phase 3.3 du 2026-07-05.
+- Le manifest d'audit utilise un schema par etat, pas par entite, pour supporter
+  des tailles differentes comme `player.attack` en `129x150`.
+- Les regressions de la phase audit sont verifiees en headless via
+  `test_audit.gd` et `test_audit_ui.gd`.
+- Pour les petits sprites gameplay, le process valide etait : reference visuelle,
+  production directe a la taille finale sur grille, palette limitee, preview x8,
+  puis validation. Une reduction d'image IA ne devait pas etre livree comme asset final.

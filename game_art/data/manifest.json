@@ -49,26 +49,26 @@
     "states": {
       "idle": {
         "frame_size": [
-          32,
-          32
+          64,
+          64
         ]
       },
       "walk": {
         "frame_size": [
-          32,
-          32
+          64,
+          64
         ]
       },
       "hurt": {
         "frame_size": [
-          32,
-          32
+          64,
+          64
         ]
       },
       "dead": {
         "frame_size": [
-          32,
-          32
+          64,
+          64
         ]
       }
     }
@@ -77,26 +77,26 @@
     "states": {
       "idle": {
         "frame_size": [
-          32,
-          24
+          56,
+          40
         ]
       },
       "fly": {
         "frame_size": [
-          32,
-          24
+          56,
+          40
         ]
       },
       "hurt": {
         "frame_size": [
-          32,
-          24
+          56,
+          40
         ]
       },
       "dead": {
         "frame_size": [
-          32,
-          24
+          56,
+          40
         ]
       }
     }
@@ -105,56 +105,56 @@
     "states": {
       "sleep": {
         "frame_size": [
-          96,
-          128
+          389,
+          500
         ]
       },
       "idle": {
         "frame_size": [
-          96,
-          128
+          389,
+          500
         ]
       },
       "charge": {
         "frame_size": [
-          96,
-          128
+          389,
+          500
         ]
       },
       "volley": {
         "frame_size": [
-          96,
-          128
+          389,
+          500
         ]
       },
       "slam_rise": {
         "frame_size": [
-          96,
-          128
+          389,
+          500
         ]
       },
       "slam_fall": {
         "frame_size": [
-          96,
-          128
+          389,
+          500
         ]
       },
       "pause": {
         "frame_size": [
-          96,
-          128
+          389,
+          500
         ]
       },
       "hurt": {
         "frame_size": [
-          96,
-          128
+          389,
+          500
         ]
       },
       "dead": {
         "frame_size": [
-          96,
-          128
+          389,
+          500
         ]
       }
     }

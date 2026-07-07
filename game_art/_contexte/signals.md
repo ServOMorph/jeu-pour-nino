@@ -2,12 +2,15 @@
 
 ## Actions ouvertes
 
-- [P1] Valider en jeu le set joueur produit.
-  fait quand: `idle`, `run`, `jump`, `fall`, `attack`, `hurt` et `dead` sont verifies en jeu sans probleme visible d'echelle, d'ancrage sol ou d'orientation.
-  ref: game/assets/sprites/player/, game/data/animations.json, game_art/data/animations.json.
+- [P1] Valider en jeu les nouveaux sprites boss, mobs et objets gameplay critiques.
+  fait quand: `boss_guardian`, `enemy_ground`, `enemy_flyer`, `ore_copper_handmade_v2`, `ore_iron`, `ore_abyssal` et `workbench` sont verifies en jeu sans probleme visible de lisibilite, d'echelle ou d'ancrage.
+  ref: game/assets/sprites/enemies/, game/assets/sprites/objects/, game/scenes/enemies/boss.tscn.
 - [P2] Migrer le player vers un vrai set spritesheet complet.
   fait quand: les etats legacy du player quittent les PNG unitaires pour un format `sheet` + `frame_size` + indices, sans fallback legacy cote jeu/editeur.
   ref: game_art/roadmap_editeur.md (phase 5), game_art/data/animations.json, game/scripts/animation_driver.gd, game_art/backlog_art.md.
+- [P3] Completer les sprites de gisements/minerais dedies.
+  fait quand: chaque materiau de `game/data/materials.json` utilise un sprite dedie sans fallback cuivre.
+  ref: game_art/backlog_art.md, game/data/materials.json, game_art/assets/objects/.
 
 ## Blocages
 
@@ -15,30 +18,24 @@
 # Session du 2026-07-07
 
 ## Decisions prises
-- Le workflow valide pour les sprites personnage est : generation `image_gen` HD,
-  fond chroma-key, suppression locale du fond, resize exact a la taille cible,
-  puis integration.
-- Le set joueur source doit etre oriente vers la droite ; le flip en jeu reste
-  le comportement standard du driver.
-- L'attaque ne doit pas etre compensee par un offset vertical artificiel :
-  `player.attack.offset` est remis a `[0, 0]`.
+- Le set joueur HD est valide en jeu et devient la base visuelle de reference.
+- Les sprites boss, mobs et objets gameplay critiques sont desormais regeneres en HD
+  puis redimensionnes a la taille runtime exacte.
 
 ## Livrables produits ou modifies
-- game_art/assets/player/player_idle_v2.png, player_run1.png, player_run2.png, player_run_sheet.png, player_jump.png, player_attack.png : set joueur HD redimensionne, oriente a droite et synchronise vers `game/`.
-- game_art/assets/generated_raw/player_run1_raw.png, player_run2_raw.png, player_jump_raw.png, player_attack_raw.png : sources brutes conservees pour iteration.
-- game_art/data/animations.json : `player.run.frame_size` passe en `87x150` et `player.attack.offset` revient a `0`.
-- docs/workflow_image_gen_fable5.md, docs/process_generation_sprites.md, game_art/backlog_art.md : workflow et handoff alignes sur le pipeline retenu.
-- game_art/editeur/test_audit_ui.gd et game_art/editeur/test_specs_export.gd : attentes alignees sur l'etat reel du player.
+- game_art/assets/enemies/boss_guardian.png, enemy_ground.png, enemy_flyer.png et copies dans `game/assets/sprites/enemies/` : sprites refaits et synchronises.
+- game_art/assets/objects/ore_copper_handmade_v2.png, ore_copper.png, ore_iron.png, ore_abyssal.png, workbench.png et copies dans `game/assets/sprites/objects/` : sprites refaits et synchronises.
+- game_art/data/manifest.json et game/scenes/enemies/boss.tscn : tailles runtime ennemies realignees ; boss porte a `389x500` avec collisions associees.
 
 ## Hypotheses validees / invalidees
-- VALIDE : une image source HD + detourage + resize exact peut produire un rendu
-  joueur accepte visuellement.
-- VALIDE : `hurt` et `dead` restent coherents en reutilisant `idle`, et `fall` en reutilisant `jump`.
-- EN ATTENTE : validation visuelle complete en jeu du set joueur apres sync.
+- VALIDE : le pipeline generation HD + detourage + resize exact fonctionne aussi pour les mobs et objets gameplay.
+- VALIDE : la validation en jeu du set joueur confirme la viabilite du pipeline retenu.
+- EN ATTENTE : coherence visuelle et lisibilite en jeu du boss, des mobs et des objets refaits.
 
 ## Prochaine etape exacte
-Verifier en jeu l'ensemble des etats du player produits cette session.
-Si le rendu est valide, lancer ensuite la migration vers un vrai set spritesheet.
+Verifier en jeu le boss, les mobs de base et les objets gameplay refaits.
+Si le rendu est valide, poursuivre la migration du player vers un vrai set spritesheet
+et continuer la couverture des sprites de materiaux dedies.
 
 ## Question bloquante pour la session suivante
 Aucune
