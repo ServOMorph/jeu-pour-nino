@@ -27,3 +27,10 @@
   cliquable et exportable, sans refonte de layout principal.
 - La preview de reference resout les PNG de `assets/from_reference/` par convention de
   nommage et applique exactement le meme zoom que la preview principale.
+- Les fiches `specs/<entity>.md` sont generees depuis `animations.json`, `manifest.json`
+  et l'audit courant pour servir de brief art directement exploitable.
+- Workflow valide pour les sprites personnage depuis le test `player idle` :
+  generation `image_gen` en source HD sur fond chroma-key, suppression locale du fond,
+  redimensionnement exact a la taille cible, puis integration.
+- `player.attack.offset` reste a `[0, 0]` avec les assets 150 px ; si l'attaque
+  touche le sol, corriger le sprite source avant de retoucher les offsets.

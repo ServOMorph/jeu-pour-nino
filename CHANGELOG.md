@@ -1,3 +1,13 @@
+## v1.37 - 2026-07-07
+
+### Corrige
+- `game_art/editeur/main.gd` : panneau `Reference` retire et centrage de la preview `Produit` corrige par positionnement explicite de la texture de frame.
+- `game_art/editeur/test_preview_center.gd` : test headless ajoute pour couvrir le centrage de la preview.
+- `game_art/data/manifest.json` : etats d'attaque player directionnels ajoutes avec taille cible `129x150`.
+
+### Modifie
+- `game_art/README.md`, `game_art/roadmap_editeur.md`, `game_art/_contexte/` : documentation alignee sur le workflow sans panneau `Reference`.
+
 ## v1.36 - 2026-07-07
 
 ### Modifie

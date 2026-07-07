@@ -1,7 +1,7 @@
 # Audit sprites
 
 - error: 0
-- warning: 37
+- warning: 20
 - info: 5
 
 ## global
@@ -31,81 +31,13 @@
 
 - [ ] info: placeholder detecte: res://assets/enemies/boss_guardian.png partage par [sleep, idle, charge, volley, slam_rise, slam_fall, pause, hurt, dead]
 
-### charge
-
-- [ ] warning: taille incoherente: res://assets/enemies/boss_guardian.png = 112x144, attendu 96x128
-
-### dead
-
-- [ ] warning: taille incoherente: res://assets/enemies/boss_guardian.png = 112x144, attendu 96x128
-
-### hurt
-
-- [ ] warning: taille incoherente: res://assets/enemies/boss_guardian.png = 112x144, attendu 96x128
-
-### idle
-
-- [ ] warning: taille incoherente: res://assets/enemies/boss_guardian.png = 112x144, attendu 96x128
-
-### pause
-
-- [ ] warning: taille incoherente: res://assets/enemies/boss_guardian.png = 112x144, attendu 96x128
-
-### slam_fall
-
-- [ ] warning: taille incoherente: res://assets/enemies/boss_guardian.png = 112x144, attendu 96x128
-
-### slam_rise
-
-- [ ] warning: taille incoherente: res://assets/enemies/boss_guardian.png = 112x144, attendu 96x128
-
-### sleep
-
-- [ ] warning: taille incoherente: res://assets/enemies/boss_guardian.png = 112x144, attendu 96x128
-
-### volley
-
-- [ ] warning: taille incoherente: res://assets/enemies/boss_guardian.png = 112x144, attendu 96x128
-
 ## enemy_flyer
 
 - [ ] info: placeholder detecte: res://assets/enemies/enemy_flyer.png partage par [idle, fly, hurt, dead]
 
-### dead
-
-- [ ] warning: taille incoherente: res://assets/enemies/enemy_flyer.png = 56x40, attendu 32x24
-
-### fly
-
-- [ ] warning: taille incoherente: res://assets/enemies/enemy_flyer.png = 56x40, attendu 32x24
-
-### hurt
-
-- [ ] warning: taille incoherente: res://assets/enemies/enemy_flyer.png = 56x40, attendu 32x24
-
-### idle
-
-- [ ] warning: taille incoherente: res://assets/enemies/enemy_flyer.png = 56x40, attendu 32x24
-
 ## enemy_ground
 
 - [ ] info: placeholder detecte: res://assets/enemies/enemy_ground.png partage par [idle, walk, hurt, dead]
-
-### dead
-
-- [ ] warning: taille incoherente: res://assets/enemies/enemy_ground.png = 64x64, attendu 32x32
-
-### hurt
-
-- [ ] warning: taille incoherente: res://assets/enemies/enemy_ground.png = 64x64, attendu 32x32
-
-### idle
-
-- [ ] warning: taille incoherente: res://assets/enemies/enemy_ground.png = 64x64, attendu 32x32
-
-### walk
-
-- [ ] warning: taille incoherente: res://assets/enemies/enemy_ground.png = 64x64, attendu 32x32
 
 ## player
 

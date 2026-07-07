@@ -42,8 +42,6 @@ que ce que le manifest connait : un manifest non tenu a jour rend l'audit vert m
 
 - [x] Validation en jeu du set player synchronise : cycle `asset -> sync -> verification en jeu`
       execute une fois avec le set joueur HD retenu.
-- [x] Comparaison cote a cote : second SubViewport dans le panneau preview affichant
-      le PNG de `assets/from_reference/` correspondant. Meme zoom applique aux deux.
 - [x] Fiche de specs par entite : export Markdown `game_art/specs/<entity>.md`
       avec tailles, etats, timings, sheets et anomalies ouvertes.
 - [ ] Migration spritesheet complete : convertir les etats legacy restants
@@ -90,7 +88,7 @@ Le temps de la zone game_art va a la production d'assets, pas au polissage de l'
 | Sync seule | `python sync.py` |
 | Test audit moteur | `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --headless --path "D:\ServOMorph\Jeu pour Nino\game_art" --script res://editeur/test_audit.gd` |
 | Test audit UI | `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --headless --path "D:\ServOMorph\Jeu pour Nino\game_art" --script res://editeur/test_audit_ui.gd` |
-| Test preview reference | `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --headless --path "D:\ServOMorph\Jeu pour Nino\game_art" --script res://editeur/test_reference_preview.gd` |
+| Test centrage preview | `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --headless --path "D:\ServOMorph\Jeu pour Nino\game_art" --script res://editeur/test_preview_center.gd` |
 | Test export specs | `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --headless --path "D:\ServOMorph\Jeu pour Nino\game_art" --script res://editeur/test_specs_export.gd` |
 
 ## Point d'attention

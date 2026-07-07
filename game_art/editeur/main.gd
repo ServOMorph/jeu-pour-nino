@@ -3,7 +3,6 @@ extends VBoxContainer
 const ANIM_CONFIG := "res://data/animations.json"
 const MANIFEST_CONFIG := "res://data/manifest.json"
 const AUDIT_REPORT_PATH := "res://audit_report.md"
-const REFERENCE_ROOT := "res://assets/from_reference/"
 const STATIC_ROOT := "res://assets/objects/"
 const SPECS_DIR := "res://specs"
 const AnimationDriverEditorScript := preload("res://editeur/animation_driver.gd")
@@ -19,9 +18,7 @@ var _inspector_panel: Control
 var _preview_row: HBoxContainer
 var _preview_container: SubViewportContainer
 var _viewport: SubViewport
-var _reference_preview_container: SubViewportContainer
-var _reference_viewport: SubViewport
-var _reference_texture_rect: TextureRect
+var _checker_rect: TextureRect
 var _driver: AnimationDriverEditorScript
 var _inspector: InspectorScript
 var _frame_info_label: Label
@@ -196,13 +193,14 @@ func _build_preview_panel(parent: Control) -> void:
 	_viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
 	_preview_container.add_child(_viewport)
 
-	var checker := TextureRect.new()
-	checker.texture = _build_checker_texture()
-	checker.stretch_mode = TextureRect.STRETCH_TILE
-	checker.size = Vector2(200, 200)
-	_viewport.add_child(checker)
+	_checker_rect = TextureRect.new()
+	_checker_rect.texture = _build_checker_texture()
+	_checker_rect.stretch_mode = TextureRect.STRETCH_TILE
+	_checker_rect.size = Vector2(200, 200)
+	_viewport.add_child(_checker_rect)
 
 	_driver = AnimationDriverEditorScript.new()
+	_driver.centered = false
 	_viewport.add_child(_driver)
 	_driver.frame_changed.connect(_update_frame_info)
 
@@ -210,35 +208,6 @@ func _build_preview_panel(parent: Control) -> void:
 	_static_texture_rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_static_texture_rect.visible = false
 	_viewport.add_child(_static_texture_rect)
-
-	var reference_column := VBoxContainer.new()
-	_preview_row.add_child(reference_column)
-
-	var reference_label := Label.new()
-	reference_label.text = "Reference"
-	reference_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	reference_column.add_child(reference_label)
-
-	_reference_preview_container = SubViewportContainer.new()
-	_reference_preview_container.stretch = true
-	_reference_preview_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	reference_column.add_child(_reference_preview_container)
-
-	_reference_viewport = SubViewport.new()
-	_reference_viewport.size = Vector2i(200, 200)
-	_reference_viewport.transparent_bg = true
-	_reference_viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
-	_reference_preview_container.add_child(_reference_viewport)
-
-	var reference_checker := TextureRect.new()
-	reference_checker.texture = _build_checker_texture()
-	reference_checker.stretch_mode = TextureRect.STRETCH_TILE
-	reference_checker.size = Vector2(200, 200)
-	_reference_viewport.add_child(reference_checker)
-
-	_reference_texture_rect = TextureRect.new()
-	_reference_texture_rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	_reference_viewport.add_child(_reference_texture_rect)
 
 	_frame_info_label = Label.new()
 	_frame_info_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -359,8 +328,6 @@ func _on_static_selected(index: int) -> void:
 	_static_texture_rect.texture = texture
 	_static_texture_rect.visible = true
 	_center_static_texture()
-	_reference_texture_rect.texture = null
-	_center_reference_texture()
 	_update_static_frame_info(file_name, texture)
 
 func _on_entity_selected(index: int) -> void:
@@ -383,7 +350,7 @@ func _on_state_selected(index: int) -> void:
 	var state := _state_list.get_item_text(index)
 	_driver.load_entity(_current_entity)
 	_driver.play_state(state)
-	_update_reference_preview(_current_entity, state)
+	_center_preview_driver()
 	_paused = false
 	_driver.speed_scale = 1.0
 	_btn_pause.text = "II"
@@ -402,7 +369,7 @@ func _on_state_edited(entity: String, state: String, _cfg: Dictionary) -> void:
 	var entity_cfg: Dictionary = _entities.get(entity, {})
 	_driver.load_from_dict(entity_cfg)
 	_driver.play_state(state)
-	_update_reference_preview(entity, state)
+	_center_preview_driver()
 	_driver.speed_scale = 0.0 if _paused else 1.0
 	_update_frame_info()
 
@@ -697,11 +664,10 @@ func _write_text_file(path: String, content: String) -> void:
 func _set_zoom(z: float) -> void:
 	_zoom = z
 	_preview_container.stretch_shrink = int(z)
-	_reference_preview_container.stretch_shrink = int(z)
 	_update_preview_size()
 
 func _update_preview_size() -> void:
-	if _preview_container == null or _reference_preview_container == null or _preview_row == null:
+	if _preview_container == null or _preview_row == null:
 		return
 	var target_size: float = BASE_PREVIEW_SIZE * _zoom
 	var side_width: float = MIN_SIDE_PANEL_WIDTH * 2.0
@@ -709,16 +675,20 @@ func _update_preview_size() -> void:
 		side_width = max(side_width, _gallery_panel.custom_minimum_size.x + MIN_SIDE_PANEL_WIDTH)
 	if _inspector_panel != null:
 		side_width = max(side_width, MIN_SIDE_PANEL_WIDTH + _inspector_panel.custom_minimum_size.x)
-	var available_width: float = size.x - side_width - 48.0
-	var total_preview_size: float = clampf(available_width, MIN_PREVIEW_SIZE * 2.0 + 12.0, target_size * 2.0 + 12.0)
-	var single_preview_size: float = clampf((total_preview_size - 12.0) / 2.0, MIN_PREVIEW_SIZE, target_size)
-	_preview_row.add_theme_constant_override("separation", 12)
-	_preview_row.custom_minimum_size = Vector2(single_preview_size * 2.0 + 12.0, single_preview_size)
+	var available_width: float = size.x - side_width - 36.0
+	var single_preview_size: float = clampf(available_width, MIN_PREVIEW_SIZE, target_size)
+	_preview_row.custom_minimum_size = Vector2(single_preview_size, single_preview_size)
 	_preview_container.custom_minimum_size = Vector2(single_preview_size, single_preview_size)
-	_reference_preview_container.custom_minimum_size = Vector2(single_preview_size, single_preview_size)
+	_queue_preview_refresh()
+
+func _queue_preview_refresh() -> void:
+	call_deferred("_refresh_preview_layout")
+
+func _refresh_preview_layout() -> void:
+	if _checker_rect != null:
+		_checker_rect.size = Vector2(_viewport.size)
 	_center_preview_driver()
 	_center_static_texture()
-	_center_reference_texture()
 
 func _toggle_pause() -> void:
 	_paused = not _paused
@@ -749,6 +719,7 @@ func _update_frame_info() -> void:
 	if _driver.sprite_frames == null or _driver.animation == "":
 		_frame_info_label.text = ""
 		return
+	_center_preview_driver()
 	var anim := _driver.animation
 	var total := _driver.sprite_frames.get_frame_count(anim)
 	var cfg := _driver.get_current_state_cfg()
@@ -766,49 +737,6 @@ func _update_frame_info() -> void:
 		_driver.frame + 1, total, size.x, size.y, fps, "loop" if loop else "once"
 	]
 
-func _update_reference_preview(entity: String, state: String) -> void:
-	var reference_path := _resolve_reference_path(entity, state)
-	if reference_path.is_empty():
-		_reference_texture_rect.texture = null
-		_center_reference_texture()
-		return
-	_reference_texture_rect.texture = _load_texture(reference_path)
-	_center_reference_texture()
-
-func _resolve_reference_path(entity: String, state: String) -> String:
-	var entity_cfg: Dictionary = _entities.get(entity, {})
-	var states: Dictionary = entity_cfg.get("states", {})
-	var state_cfg: Dictionary = states.get(state, {})
-	var candidates: PackedStringArray = []
-	var state_name := "%s_%s" % [entity, state]
-	candidates.append(REFERENCE_ROOT + entity + "/" + state_name + "_ref.png")
-	candidates.append(REFERENCE_ROOT + entity + "/" + _normalize_reference_name(state_name) + "_ref.png")
-	var sheet_path := String(state_cfg.get("sheet", ""))
-	if not sheet_path.is_empty():
-		var sheet_name := sheet_path.get_file().get_basename()
-		candidates.append(REFERENCE_ROOT + entity + "/" + sheet_name + "_ref.png")
-		candidates.append(REFERENCE_ROOT + entity + "/" + _normalize_reference_name(sheet_name) + "_ref.png")
-	var frames: Variant = state_cfg.get("frames", [])
-	if frames is Array and not frames.is_empty():
-		var first_frame: Variant = frames[0]
-		if first_frame is String:
-			var frame_name := String(first_frame).get_file().get_basename()
-			candidates.append(REFERENCE_ROOT + entity + "/" + frame_name + "_ref.png")
-			candidates.append(REFERENCE_ROOT + entity + "/" + _normalize_reference_name(frame_name) + "_ref.png")
-	for candidate in candidates:
-		if FileAccess.file_exists(candidate):
-			return candidate
-	return ""
-
-func _normalize_reference_name(name: String) -> String:
-	var normalized := name
-	if normalized.ends_with("_sheet"):
-		normalized = normalized.trim_suffix("_sheet")
-	for suffix in ["_v2", "_v3", "_v4"]:
-		if normalized.ends_with(suffix):
-			normalized = normalized.trim_suffix(suffix)
-	return normalized
-
 func _load_texture(path: String) -> Texture2D:
 	var image := Image.load_from_file(ProjectSettings.globalize_path(path))
 	if image == null or image.is_empty():
@@ -818,7 +746,15 @@ func _load_texture(path: String) -> Texture2D:
 func _center_preview_driver() -> void:
 	if _driver == null or _viewport == null:
 		return
-	_driver.position = Vector2(_viewport.size) * 0.5
+	if _driver.sprite_frames == null or _driver.animation.is_empty():
+		_driver.position = Vector2(_viewport.size) * 0.5
+		return
+	var texture: Texture2D = _driver.sprite_frames.get_frame_texture(_driver.animation, _driver.frame)
+	if texture == null:
+		_driver.position = Vector2(_viewport.size) * 0.5
+		return
+	var texture_size: Vector2 = texture.get_size()
+	_driver.position = (Vector2(_viewport.size) - texture_size) * 0.5
 
 func _update_static_frame_info(file_name: String, texture: Texture2D) -> void:
 	if texture == null:
@@ -838,15 +774,3 @@ func _center_static_texture() -> void:
 	var tex_size := texture.get_size()
 	_static_texture_rect.size = tex_size
 	_static_texture_rect.position = (Vector2(_viewport.size) - tex_size) * 0.5
-
-func _center_reference_texture() -> void:
-	if _reference_texture_rect == null or _reference_viewport == null:
-		return
-	var texture := _reference_texture_rect.texture
-	if texture == null:
-		_reference_texture_rect.position = Vector2(_reference_viewport.size) * 0.5
-		_reference_texture_rect.size = Vector2.ZERO
-		return
-	var tex_size := texture.get_size()
-	_reference_texture_rect.size = tex_size
-	_reference_texture_rect.position = (Vector2(_reference_viewport.size) - tex_size) * 0.5

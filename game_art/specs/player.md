@@ -119,3 +119,4 @@
 
 - info: placeholder detecte: res://assets/player/player_idle_v2.png partage par [idle, hurt, dead]
 - info: placeholder detecte: res://assets/player/player_jump.png partage par [jump, fall]
+

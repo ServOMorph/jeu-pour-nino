@@ -31,6 +31,30 @@
           150
         ]
       },
+      "attack_up_diag": {
+        "frame_size": [
+          129,
+          150
+        ]
+      },
+      "attack_down_diag": {
+        "frame_size": [
+          129,
+          150
+        ]
+      },
+      "attack_up": {
+        "frame_size": [
+          129,
+          150
+        ]
+      },
+      "attack_down": {
+        "frame_size": [
+          129,
+          150
+        ]
+      },
       "hurt": {
         "frame_size": [
           87,

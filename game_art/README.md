@@ -14,7 +14,7 @@ Projet Godot autonome pour visualiser, editer et auditer les sprites et animatio
 1. Deposer les PNG produits dans `game_art/assets/`.
 2. Ouvrir l'editeur.
 3. Selectionner une entite puis un etat.
-4. Verifier la preview `Produit` et la preview `Reference`.
+4. Verifier la preview `Produit`.
 5. Ajuster `fps`, `loop`, `offset`, `frame_size` et l'ordre des frames si necessaire.
 6. Sauvegarder.
 7. Lancer l'audit.
@@ -23,14 +23,12 @@ Projet Godot autonome pour visualiser, editer et auditer les sprites et animatio
 10. Lancer `python sync.py`.
 11. Valider dans le jeu avec `python run_game.py`.
 
-## Workflow sprites pixel art
+## Workflow sprites 2D standard
 
-- Pour les petits sprites gameplay (minerais, objets, pickups, petites icones), produire le sprite final directement a la taille reelle de jeu.
-- Workflow valide : `reference visuelle -> sprite final sur grille -> palette limitee -> preview x8 -> validation editeur/jeu`.
-- Une generation IA brute peut servir de reference de forme, matiere ou palette, mais jamais d'asset final livre tel quel.
-- Ne pas utiliser comme livrable final un workflow `generation IA -> detourage -> reduction`.
-- Chaque sprite final small-size doit etre accompagne d'une preview agrandie nommee `*_preview_x8.png`.
-- Le critere de validation principal est la lisibilite a taille reelle, pas le rendu zoome.
+- Produire les sprites en source HD sur fond detourable, puis detourer et redimensionner exactement a la taille runtime.
+- Pour une animation, partir d'une frame maitre et deriver les autres frames pour limiter les derives de cadrage.
+- Valider en priorite la lisibilite a taille reelle dans la preview `Produit`, puis dans le jeu.
+- `assets/generated_raw/` conserve les sources de generation et ne part pas dans le build du jeu.
 
 ## Edition
 
@@ -54,19 +52,11 @@ Projet Godot autonome pour visualiser, editer et auditer les sprites et animatio
 - `animations.json` doit garder des chemins format jeu : `res://assets/sprites/...`
 - L'editeur traduit ces chemins vers `res://assets/...`
 - Ne jamais ecrire de chemins format editeur dans `animations.json`.
-- Les references visuelles sont dans `assets/from_reference/`.
-- Convention de nommage reference : `<nom>_ref.png` dans le sous-dossier miroir.
 - `assets/from_reference/` et `assets/generated_raw/` ne partent pas dans le build du jeu.
-
-## Nommage spritesheet
-
-- Exemple sheet : `assets/player/player_run_sheet.png`
-- Exemple reference associee : `assets/from_reference/player/player_run_ref.png`
-- L'editeur sait aussi retomber sur un nom simplifie, par exemple `player_idle_v2.png` vers `player_idle_ref.png`.
 
 ## Tests utiles
 
 - `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --headless --path "D:\ServOMorph\Jeu pour Nino\game_art" --script res://editeur/test_audit.gd`
 - `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --headless --path "D:\ServOMorph\Jeu pour Nino\game_art" --script res://editeur/test_audit_ui.gd`
-- `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --headless --path "D:\ServOMorph\Jeu pour Nino\game_art" --script res://editeur/test_reference_preview.gd`
+- `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --headless --path "D:\ServOMorph\Jeu pour Nino\game_art" --script res://editeur/test_preview_center.gd`
 - `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --headless --path "D:\ServOMorph\Jeu pour Nino\game_art" --script res://editeur/test_specs_export.gd`

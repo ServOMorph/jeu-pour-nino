@@ -7,7 +7,7 @@
 
 ### dead
 
-- target_frame_size: 32x32
+- target_frame_size: 64x64
 - fps: 1.0
 - loop: false
 - frame_count: 1
@@ -17,7 +17,7 @@
 
 ### hurt
 
-- target_frame_size: 32x32
+- target_frame_size: 64x64
 - fps: 1.0
 - loop: false
 - frame_count: 1
@@ -27,7 +27,7 @@
 
 ### idle
 
-- target_frame_size: 32x32
+- target_frame_size: 64x64
 - fps: 1.0
 - loop: true
 - frame_count: 1
@@ -37,7 +37,7 @@
 
 ### walk
 
-- target_frame_size: 32x32
+- target_frame_size: 64x64
 - fps: 4.0
 - loop: true
 - frame_count: 1
@@ -47,9 +47,5 @@
 
 ## Anomalies ouvertes
 
-- idle / warning: taille incoherente: res://assets/enemies/enemy_ground.png = 64x64, attendu 32x32
-- walk / warning: taille incoherente: res://assets/enemies/enemy_ground.png = 64x64, attendu 32x32
-- hurt / warning: taille incoherente: res://assets/enemies/enemy_ground.png = 64x64, attendu 32x32
-- dead / warning: taille incoherente: res://assets/enemies/enemy_ground.png = 64x64, attendu 32x32
 - info: placeholder detecte: res://assets/enemies/enemy_ground.png partage par [idle, walk, hurt, dead]
 
