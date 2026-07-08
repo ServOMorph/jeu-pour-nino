@@ -1,7 +1,7 @@
 extends CanvasLayer
 
-const RECIPE_FILE := "res://data/recipes.json"
-const LEGACY_RESOURCE_MATERIAL := "cuivre"
+const RECIPE_CATALOG := preload("res://scripts/recipe_catalog.gd")
+
 const PX := 560.0
 const PY := 308.0
 const PW := 800.0
@@ -9,11 +9,12 @@ const ROW_H := 88.0
 
 var PH := 460.0
 
-var _recipes: Array = []
-var _visible_recipes: Array = []
+var _recipes: Array[Dictionary] = []
+var _visible_recipes: Array[Dictionary] = []
 var _selected := 0
 var _row_bgs: Array[ColorRect] = []
 var _row_labels: Array[Label] = []
+var _workbench_tier := 1
 
 func _ready() -> void:
 	layer = 10
@@ -23,12 +24,8 @@ func _ready() -> void:
 	visible = false
 
 func _load_recipes() -> void:
-	var f := FileAccess.open(RECIPE_FILE, FileAccess.READ)
-	if f == null:
-		return
-	var parsed: Variant = JSON.parse_string(f.get_as_text())
-	if parsed is Array:
-		_recipes = parsed
+	_recipes = RECIPE_CATALOG.load_recipes()
+	RECIPE_CATALOG.bootstrap_starters(_recipes)
 	PH = 104.0 + _recipes.size() * ROW_H + 80.0
 
 func _build_ui() -> void:
@@ -85,7 +82,8 @@ func _build_row(i: int) -> void:
 	_row_bgs.append(bg)
 	_row_labels.append(lbl)
 
-func open() -> void:
+func open(workbench_tier: int = 1) -> void:
+	_workbench_tier = max(1, workbench_tier)
 	_sync_visible_recipes()
 	_selected = 0
 	_refresh()
@@ -107,8 +105,8 @@ func _refresh() -> void:
 		var recipe: Dictionary = _visible_recipes[i]
 		var costs := _get_recipe_costs(recipe)
 		var cost_text := _format_costs(costs)
-		var id: String = recipe["id"]
-		var is_consumable: bool = recipe.get("consumable", false)
+		var id := String(recipe.get("id", ""))
+		var is_consumable := String(recipe.get("slot", "")) == "consumable"
 		var done := false
 		if not is_consumable:
 			done = RunState.has_item(id)
@@ -148,8 +146,8 @@ func _try_craft(i: int) -> void:
 	if i >= _visible_recipes.size():
 		return
 	var recipe: Dictionary = _visible_recipes[i]
-	var id: String = recipe["id"]
-	var is_consumable: bool = recipe.get("consumable", false)
+	var id := String(recipe.get("id", ""))
+	var is_consumable := String(recipe.get("slot", "")) == "consumable"
 	if not is_consumable:
 		if RunState.has_item(id):
 			return
@@ -172,6 +170,11 @@ func _flash_fail(i: int) -> void:
 func _sync_visible_recipes() -> void:
 	_visible_recipes.clear()
 	for recipe in _recipes:
+		var id := String(recipe.get("id", ""))
+		if not MetaState.is_mastered(id):
+			continue
+		if int(recipe.get("workbench_tier", 1)) > _workbench_tier:
+			continue
 		if _is_recipe_obsolete(recipe):
 			continue
 		_visible_recipes.append(recipe)
@@ -181,7 +184,7 @@ func _sync_visible_recipes() -> void:
 		_selected = clampi(_selected, 0, _visible_recipes.size() - 1)
 
 func _is_recipe_obsolete(recipe: Dictionary) -> bool:
-	var id: String = recipe["id"]
+	var id := String(recipe.get("id", ""))
 	if id == "epee_bois" and (RunState.has_item("epee_cuivre") or RunState.has_item("epee_fer")):
 		return true
 	if id == "epee_cuivre" and RunState.has_item("epee_fer"):
@@ -192,8 +195,6 @@ func _get_recipe_costs(recipe: Dictionary) -> Dictionary:
 	var raw_costs: Variant = recipe.get("materials", {})
 	if raw_costs is Dictionary and not raw_costs.is_empty():
 		return raw_costs
-	if "cost" in recipe:
-		return {LEGACY_RESOURCE_MATERIAL: int(recipe["cost"])}
 	return {}
 
 func _can_afford(costs: Dictionary) -> bool:

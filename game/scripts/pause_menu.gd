@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 signal resume_requested
+signal equipment_requested
 signal restart_requested
 signal title_requested
 signal dev_resources_requested
@@ -13,7 +14,7 @@ const COLOR_SELECTED := Color(1.0, 1.0, 1.0)
 const COLOR_IDLE := Color(0.45, 0.45, 0.45)
 const COLOR_ON := Color(0.4, 1.0, 0.4)
 
-const MAIN_ENTRIES := ["REPRENDRE", "RECOMMENCER", "QUITTER", "MODE DEV"]
+const MAIN_ENTRIES := ["EQUIPEMENT", "REPRENDRE", "RECOMMENCER", "QUITTER", "MODE DEV"]
 const DEV_ENTRIES := ["[ ] 100 MAT", "[ ] VIE INF", "ATELIER", "TEST BOSS", "RETOUR"]
 
 var _state := State.MAIN
@@ -170,12 +171,14 @@ func _confirm() -> void:
 	if _state == State.MAIN:
 		match _selected:
 			0:
-				resume_requested.emit()
+				equipment_requested.emit()
 			1:
-				restart_requested.emit()
+				resume_requested.emit()
 			2:
-				title_requested.emit()
+				restart_requested.emit()
 			3:
+				title_requested.emit()
+			4:
 				_show_dev()
 	else:
 		match _selected:

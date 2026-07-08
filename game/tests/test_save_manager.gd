@@ -39,7 +39,7 @@ func test_save_and_load_preserves_skill_points() -> void:
 
 func test_save_and_load_preserves_grimoire() -> void:
 	ms.discover_recipe("corde")
-	ms.master_recipe("corde")
+	ms.master_recipe("corde", 0)
 	var loaded := _write_and_read(ms)
 	assert_true(loaded.is_mastered("corde"))
 

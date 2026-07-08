@@ -7,9 +7,12 @@ Aucune côté jeu — le pivot 2D standard est signalé à game_art via `game_ar
 - [P1] Traiter le pivot pixel art → 2D standard côté game_art : éditeur dépixélisé, `ref_to_sprite.py` remplacé par un script de rescale, premier asset produit via le pipeline actif.
   fait quand: plus aucune mention pixel art/grille/palette limitée dans la doc et l'outillage game_art ; premier asset produit via le pipeline Codex + rescale.
   réf: `plan_graphismes_standard_2d.md`, `game_art/backlog_art.md` (entrée « Pivot 2026-07-07 »)
-- [P1] Démarrer la Phase 2 — Grimoire, Points de Compétence, Craft v3 (roadmap.md Phase 2), maintenant que la migration résolution 1920×1080 est validée.
-  fait quand: `recipes.json` étendu au schéma cible, écran d'équipement manuel (4 slots), Grimoire accessible au HUB ; tests verts.
-  réf: `roadmap.md` Phase 2, `questions.md` Q043/Q055/Q056
+- [P1] Valider manuellement en urgence le flux Phase 2 déjà branché : Grimoire dev → maîtrise d'une recette → lancement de partie → craft → équipement via pause → HUD/consommable.
+  fait quand: un run manuel confirme le flux complet sans bug bloquant, ou qu'une liste de correctifs bloquants est établie et traitée.
+  réf: `game/scripts/grimoire_menu.gd`, `game/scripts/equipment_menu.gd`, `game/scripts/craft_menu.gd`, `game/scripts/player.gd`
+- [P1] Compléter la Phase 2 restante côté jeu : barème/gain de PC, progression de run associée, armes à distance et tests craft dédiés.
+  fait quand: `progression.json` branché, compteurs de run persistés jusqu'au calcul PC, mécanique distance jouable, `tests/test_craft.gd` vert.
+  réf: `roadmap.md` Phase 2, `questions.md` Q016/Q043/Q044/Q055/Q056
 - [P2] Lancer le développement avec 2 agents séparés (jeu et game_art) en s'appuyant sur `questions.md` comme source d'arbitrage commune en cas de doute de conception.
   fait quand: les deux agents travaillent sans contradiction — `roadmap.md` (jeu) et `game_art/backlog_art.md` (game_art) sont cohérents entre eux et avec `questions.md`.
   réf: `questions.md` (racine), `roadmap.md`, `game_art/backlog_art.md`
@@ -52,28 +55,31 @@ Aucune côté jeu — le pivot 2D standard est signalé à game_art via `game_ar
 - Phase A du pivot 2D standard appliquée côté jeu : `game/project.godot` en filtre linéaire (`default_texture_filter=1`) et `stretch/mode="canvas_items"` (au lieu de nearest/viewport, adaptés au pixel art).
 - Pivot signalé à game_art via `game_art/backlog_art.md` (entrée « Pivot 2026-07-07 ») : éditeur, `ref_to_sprite.py`, charte graphique et workflow à refondre — propriété exclusive de l'agent game_art, non traité côté jeu.
 - Documentation active réalignée le 2026-07-08 sur la direction 2D standard : `README.md`, docs pipeline/charte, backlog art et roadmap éditeur.
+- **Phase 2 branchée le 2026-07-08 côté jeu** : `recipes.json` migré au schéma 27 recettes, starters bootstrapés, `MetaState` et `RunState` étendus, `craft_menu.gd` filtré par maîtrise/tier, `grimoire_menu.gd` accessible via le menu dev du titre, `equipment_menu.gd` accessible via la pause. GUT `25/25` vert et démarrage headless OK.
+- **Urgence prochaine session** : faire la validation manuelle complète du flux Phase 2 avant de poursuivre le développement des points restants (PC/progression, armes à distance, tests craft supplémentaires).
 
-## Dernière session (2026-07-08 — validation migration 1920×1080 et doc)
+## Dernière session (2026-07-08 — socle Phase 2 branché)
 
 # Session du 2026-07-08
 
 ## Décisions prises
-- Migration résolution 1920×1080 validée côté jeu : GUT, headless et test manuel concordants.
-- Documentation active réalignée sur la direction 2D standard et le pipeline Codex + rescale.
+- Socle technique de la Phase 2 branché côté jeu : schéma recettes cible, Grimoire dev, équipement manuel via pause, craft filtré par maîtrise/tier.
+- La validation manuelle complète du flux Phase 2 devient la priorité urgente de la prochaine session avant toute extension supplémentaire.
 
 ## Livrables produits ou modifiés
-- `README.md` : état projet et direction visuelle active mis à jour.
-- `docs/process_generation_sprites.md`, `docs/workflow_image_gen_fable5.md`, `docs/charte_graphique_pixel_art_dark_fantasy.md` : réécrits pour la 2D standard.
-- `docs/Document de conception — Jeu pixel art run court & challenge.md`, `docs/v3/CoreDive Challenge — Design Document v3.md`, `docs/profi joueur nino.md`, `docs/prompt_lancememnt_opus.txt` : mentions historiques clarifiées.
-- `game_art/backlog_art.md`, `game_art/roadmap_editeur.md` : specs et périmètre alignés sur la 2D standard.
+- `game/data/recipes.json`, `weapons.json`, `armor.json`, `consumables.json` : socle données Phase 2 branché.
+- `game/scripts/meta_state.gd`, `run_state.gd`, `craft_menu.gd`, `player.gd`, `pause_menu.gd`, `level.gd`, `title.gd`, `hud.gd`, `workbench.gd` : logique Phase 2 branchée.
+- `game/scripts/recipe_catalog.gd`, `grimoire_menu.gd`, `equipment_menu.gd` : nouveaux écrans et helper Phase 2.
+- `game/tests/test_meta_state.gd`, `test_run_state.gd`, `test_save_manager.gd` : couverture mise à jour, GUT vert (`25/25`).
 
 ## Hypothèses validées / invalidées
-- VALIDE : la migration résolution 1920×1080 est stable côté jeu.
-- VALIDE : la doc active peut être réalignée sans changement de code additionnel.
-- EN ATTENTE : refonte outillage/production game_art complète (script de rescale et premier asset pipeline 2D standard).
+- VALIDE : le socle Phase 2 compile, démarre en headless et passe les tests automatisés.
+- EN ATTENTE : validation manuelle en jeu du flux Grimoire → craft → équipement → HUD.
+- EN ATTENTE : gain de PC, progression de run et armes à distance restent à implémenter.
 
 ## Prochaine étape exacte
-Démarrer la Phase 2 côté jeu, puis ouvrir une session game_art pour finaliser le pivot outillage/production côté art.
+Faire en priorité la validation manuelle complète du flux Phase 2 déjà branché.
+Corriger immédiatement tout bug bloquant trouvé, puis reprendre les items restants de la Phase 2.
 
 ## Question bloquante pour la session suivante
 Aucune côté jeu.

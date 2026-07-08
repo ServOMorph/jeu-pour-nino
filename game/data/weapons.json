@@ -1,5 +1,13 @@
 {
-  "epee_bois":   {"damage": 3, "range": 64.0, "pickaxe_tier": 1},
+  "epee_bois": {"damage": 3, "range": 64.0, "pickaxe_tier": 1},
   "epee_cuivre": {"damage": 4, "range": 72.0, "pickaxe_tier": 2},
-  "epee_fer":    {"damage": 5, "range": 80.0, "pickaxe_tier": 3}
+  "epee_fer": {"damage": 5, "range": 80.0, "pickaxe_tier": 3},
+  "arc_bois": {"damage": 3, "range": 96.0},
+  "arbalete_fer": {"damage": 5, "range": 108.0},
+  "lance_cristalline": {"damage": 6, "range": 92.0},
+  "arc_celeste": {"damage": 6, "range": 118.0},
+  "marteau_magmatique": {"damage": 8, "range": 88.0},
+  "epee_tempete_noyau": {"damage": 9, "range": 96.0},
+  "lame_noyau": {"damage": 10, "range": 104.0},
+  "lame_spectrale": {"damage": 8, "range": 98.0}
 }

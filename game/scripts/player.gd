@@ -70,6 +70,8 @@ func _ready() -> void:
 	attack_visual.visible = false
 	hurtbox.area_entered.connect(_on_hurtbox_area_entered)
 	RunState.items_changed.connect(_apply_equipment)
+	RunState.equipment_changed.connect(_on_equipment_changed)
+	_apply_equipment()
 	_update_facing()
 	_update_visual()
 	health_changed.emit(hp, max_hp)
@@ -351,20 +353,19 @@ func _apply_equipment() -> void:
 	attack_range  = float(cbt.get("attack_range", attack_range))
 	damage_reduction = 0
 
-	for item_id in ["epee_fer", "epee_cuivre", "epee_bois"]:
-		if RunState.has_item(item_id) and item_id in _weapon_cfg:
-			var w: Dictionary = _weapon_cfg[item_id]
-			if "damage" in w: attack_damage = int(w["damage"])
-			if "range"  in w: attack_range  = float(w["range"])
-			break
+	var weapon_id := RunState.get_equipped_item("weapon")
+	if not weapon_id.is_empty() and weapon_id in _weapon_cfg:
+		var w: Dictionary = _weapon_cfg[weapon_id]
+		if "damage" in w: attack_damage = int(w["damage"])
+		if "range"  in w: attack_range  = float(w["range"])
 
 	_update_weapon_visual()
 
-	for item_id in _armor_cfg:
-		if RunState.has_item(item_id):
-			var a: Dictionary = _armor_cfg[item_id]
-			if "max_hp"           in a: max_hp           = int(a["max_hp"])
-			if "damage_reduction" in a: damage_reduction += int(a["damage_reduction"])
+	var armor_id := RunState.get_equipped_item("armor")
+	if not armor_id.is_empty() and armor_id in _armor_cfg:
+		var a: Dictionary = _armor_cfg[armor_id]
+		if "max_hp"           in a: max_hp           = int(a["max_hp"])
+		if "damage_reduction" in a: damage_reduction += int(a["damage_reduction"])
 
 	var delta_hp := max_hp - old_max
 	if delta_hp > 0:
@@ -374,7 +375,8 @@ func _apply_equipment() -> void:
 	health_changed.emit(hp, max_hp)
 
 func _use_consumable() -> void:
-	if _dead or RunState.get_consumable_count("potion") <= 0:
+	var active_id := RunState.active_consumable
+	if _dead or active_id.is_empty() or RunState.get_consumable_count(active_id) <= 0:
 		return
 	var id := RunState.use_consumable()
 	if id in _consumable_cfg:
@@ -385,14 +387,18 @@ func _use_consumable() -> void:
 	AudioManager.play("potion")
 
 func _update_weapon_visual() -> void:
-	if RunState.has_item("epee_fer"):
+	var equipped_weapon := RunState.get_equipped_item("weapon")
+	if equipped_weapon == "epee_fer":
 		attack_visual.color = Color(0.6, 0.75, 0.9)
-	elif RunState.has_item("epee_cuivre"):
+	elif equipped_weapon == "epee_cuivre":
 		attack_visual.color = Color(0.9, 0.55, 0.2)
-	elif RunState.has_item("epee_bois"):
+	elif equipped_weapon == "epee_bois":
 		attack_visual.color = Color(0.65, 0.45, 0.2)
 	else:
 		attack_visual.color = Color(1.0, 1.0, 1.0)
+
+func _on_equipment_changed(_slot: String, _id: String) -> void:
+	_apply_equipment()
 
 func _screen_shake(amount: float) -> void:
 	var cam := get_node_or_null("Camera2D")

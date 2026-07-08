@@ -205,7 +205,7 @@ Le mode dev « 100 MIN » (`title.gd:176-177`, `Dev.dev_resources`, `level.gd:34
 ## Phase 2 — Grimoire, Points de Compétence, Craft v3
 
 ### Tâches
-- [ ] Étendre `recipes.json` — schéma cible (remplace le format actuel `{id, name, cost}`) :
+- [x] Étendre `recipes.json` — schéma cible (remplace le format actuel `{id, name, cost}`) :
   ```json
   {
     "id": "epee_cuivre",
@@ -221,21 +221,22 @@ Le mode dev « 100 MIN » (`title.gd:176-177`, `Dev.dev_resources`, `level.gd:34
   }
   ```
   `discovered`/`mastered` ne vivent PAS dans ce fichier (état méta → `MetaState.grimoire`). `starter: true` = maîtrisée d'office. Champ `slot` ∈ `{weapon, armor, accessory, tool, consumable, utility}` — voir 4 slots d'équipement ci-dessous.
-- [ ] **Grimoire complet — 27 recettes définitives (questions.md Q043)**, table exhaustive id/nom/rareté/tier/coût PC/matériaux/découverte à reprendre telle quelle depuis `questions.md` section 6. Ne pas réinventer de recettes supplémentaires sans repasser par une décision explicite.
-- [ ] Recettes de départ (`starter: true`, tier 1, coût PC 0) : `epee_bois`, `armure_bois`, `pioche_renforcee`, `potion_petite`, `torche`, `corde` (= grappin, cf. Phase joueur ci-dessous), `etabli_portable`. Au premier lancement (grimoire vide), `MetaState` enregistre les starters comme découvertes+maîtrisées (méthode `ensure_starters(ids: Array)` appelée après `load_meta`).
-- [ ] **4 slots d'équipement (Q017)** : `weapon` (mêlée OU distance, un seul slot actif), `armor`, `accessory`, `tool`. `RunState`/`MetaState` équipement et `_apply_equipment()` étendus pour gérer 4 emplacements au lieu de 2. Pas d'auto-équipement « meilleure arme possédée » — le choix est manuel (écran dédié, Phase 3/10, cf. Q055).
+- [x] **Grimoire complet — 27 recettes définitives (questions.md Q043)**, table exhaustive id/nom/rareté/tier/coût PC/matériaux/découverte à reprendre telle quelle depuis `questions.md` section 6. Ne pas réinventer de recettes supplémentaires sans repasser par une décision explicite.
+- [x] Recettes de départ (`starter: true`, tier 1, coût PC 0) : `epee_bois`, `armure_bois`, `pioche_renforcee`, `potion_petite`, `torche`, `corde` (= grappin, cf. Phase joueur ci-dessous), `etabli_portable`. Au premier lancement (grimoire vide), `MetaState` enregistre les starters comme découvertes+maîtrisées.
+- [x] **4 slots d'équipement (Q017)** : `weapon` (mêlée OU distance, un seul slot actif), `armor`, `accessory`, `tool`. `RunState` et `_apply_equipment()` sont étendus pour gérer 4 emplacements ; écran manuel minimal branché via pause. Effets gameplay spécifiques des nouveaux slots/objets encore à compléter selon les futures phases.
 - [ ] **Armes à distance (Q016)** : nouveau type dans `weapons.json` (portée, vitesse de projectile), scène de projectile, nouveau bouton manette dans `joymap.gd`. Usage illimité, pas de munitions — fonctionne comme le mêlée (cooldown/dégâts/portée différencient les armes).
 - [ ] **Barème PC (Q044)**, `game/data/progression.json` : biome visité 1 PC, salle secrète 1 PC, élite vaincu 1 PC, boss de biome vaincu 2 PC, résurrection réussie 1 PC, victoire finale (Miroir) +3 PC bonus, run raté ×0.5 sur le total. Pas de PC par salle normale explorée.
-- [ ] `MetaState` : la base existe (`discover_recipe`, `master_recipe`, `is_mastered`). Ajouter la dépense de PC à la maîtrise : `master_recipe(id, cost: int) -> bool` (échec si `skill_points < cost` ou non découverte). Le coût vient de `recipes.json` (`skill_cost`), passé par l'appelant — `MetaState` ne lit pas les fichiers de données.
+- [x] `MetaState` : la base existe (`discover_recipe`, `master_recipe`, `is_mastered`). Ajouter la dépense de PC à la maîtrise : `master_recipe(id, cost: int) -> bool` (échec si `skill_points < cost` ou non découverte). Le coût vient de `recipes.json` (`skill_cost`), passé par l'appelant — `MetaState` ne lit pas les fichiers de données.
 - [ ] Refondre `craft_menu.gd` :
   - Charger `recipes.json` au nouveau schéma.
   - `_sync_visible_recipes()` : ne proposer QUE les recettes maîtrisées (`MetaState.is_mastered`). Affichage coût : liste des matériaux (`"2 bois, 3 cuivre"`) au lieu de `"%d MIN"`.
   - `_try_craft()` : `RunState.spend_materials(recipe["materials"])`.
   - Supprimer `_is_recipe_obsolete()` (craft_menu.gd:181-187, hardcodé épées) — remplacé par la maîtrise + paliers.
 - [ ] Gain de PC en fin de run — métrique : salles explorées + biomes visités + élites/boss vaincus + salles secrètes + réussite du run. Compteurs dans `RunState` (incrémentés par `level.gd`), barème dans `game/data/progression.json`, calcul dans une fonction pure `compute_skill_points(counters: Dictionary, bareme: Dictionary) -> int` (testable). Appel aux deux points de fin de run existants : `level.gd._on_player_died` et `_on_boss_died` (level.gd:301-314), avant `SaveManager.save_meta()`. Tant que salles/biomes n'existent pas (Phases 3-4), les compteurs valent 0 ou 1 — le barème fonctionne quand même.
-- [ ] Écran de déblocage des recettes (dépense de PC) : CanvasLayer programmatique sur le modèle de `craft_menu.gd` (liste, sélection, `ui_accept` pour maîtriser). Livré en Phase 2 accessible via le menu dev de `title.gd` ; branché au HUB en Phase 3. Recenser mise en page/icônes du Grimoire dans `game_art/backlog_art.md`. **[game_art]**
+- [x] Écran de déblocage des recettes (dépense de PC) : CanvasLayer programmatique sur le modèle de `craft_menu.gd` (liste, sélection, `ui_accept` pour maîtriser). Livré en Phase 2 accessible via le menu dev de `title.gd` ; branché au HUB en Phase 3. Recenser mise en page/icônes du Grimoire dans `game_art/backlog_art.md`. **[game_art]**
+- [ ] Validation manuelle urgente du flux Phase 2 déjà branché : ouvrir le Grimoire en mode dev, maîtriser une recette, lancer une partie, crafter, équiper via pause, vérifier HUD/consommable.
 - [ ] Test dédié synergie cross-biomes : une recette multi-matériaux (ex. fer + cristaux + fragment du Noyau) craftable si et seulement si tous les matériaux sont présents.
-- [ ] `workbench_tier` stocké dès maintenant ; activation réelle des établis avancés en Phase 7.
+- [x] `workbench_tier` stocké dès maintenant ; activation réelle des établis avancés en Phase 7.
 - [ ] Nouveau `tests/test_craft.gd` : filtrage maîtrisées, craft débite les matériaux, découverte → maîtrise (coût PC), starters, gain de PC (barème).
 
 ### Fait quand

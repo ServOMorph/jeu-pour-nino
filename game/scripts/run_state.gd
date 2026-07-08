@@ -3,14 +3,18 @@ extends Node
 signal materials_changed(id: String, count: int)
 signal items_changed()
 signal consumable_changed(id: String)
+signal equipment_changed(slot: String, id: String)
 
 const MATERIALS_CONFIG := "res://data/materials.json"
 const WEAPONS_CONFIG := "res://data/weapons.json"
 const LEGACY_RESOURCE_MATERIAL := "cuivre"
+const EQUIPMENT_SLOTS := ["weapon", "armor", "accessory", "tool"]
 
 var materials: Dictionary = {}
 var items: Array[String] = []
 var consumables: Dictionary = {}
+var equipped: Dictionary = {}
+var active_consumable := ""
 
 var _material_defs: Dictionary = {}
 var _weapon_defs: Dictionary = {}
@@ -19,9 +23,12 @@ func reset() -> void:
 	materials.clear()
 	items.clear()
 	consumables.clear()
+	equipped.clear()
+	active_consumable = ""
 	_emit_all_materials()
 	items_changed.emit()
 	consumable_changed.emit("")
+	_emit_all_equipment()
 
 func add_material(id: String, qty: int) -> void:
 	if qty <= 0:
@@ -87,6 +94,8 @@ func clear_dev_materials() -> void:
 		materials_changed.emit(id, 0)
 
 func add_item(id: String) -> void:
+	if has_item(id):
+		return
 	items.append(id)
 	items_changed.emit()
 
@@ -95,29 +104,65 @@ func has_item(id: String) -> bool:
 
 func add_consumable(id: String) -> void:
 	consumables[id] = get_consumable_count(id) + 1
-	consumable_changed.emit(id)
+	if active_consumable.is_empty():
+		active_consumable = id
+	consumable_changed.emit(active_consumable)
 
 func get_consumable_count(id: String) -> int:
 	return int(consumables.get(id, 0))
 
 func use_consumable() -> String:
-	for id in consumables.keys():
-		var count := int(consumables[id])
-		if count > 0:
-			count -= 1
-			if count <= 0:
-				consumables.erase(id)
-			else:
-				consumables[id] = count
-			consumable_changed.emit(String(id) if count > 0 else "")
-			return String(id)
-	return ""
+	if active_consumable.is_empty():
+		return ""
+	var id := active_consumable
+	var count := int(consumables.get(id, 0))
+	if count <= 0:
+		active_consumable = _find_next_consumable()
+		consumable_changed.emit(active_consumable)
+		return ""
+	count -= 1
+	if count <= 0:
+		consumables.erase(id)
+		active_consumable = _find_next_consumable()
+	else:
+		consumables[id] = count
+	consumable_changed.emit(active_consumable)
+	return id
+
+func get_equipped_item(slot: String) -> String:
+	return String(equipped.get(slot, ""))
+
+func equip_item(slot: String, id: String) -> bool:
+	if slot not in EQUIPMENT_SLOTS:
+		return false
+	if id.is_empty():
+		equipped.erase(slot)
+		equipment_changed.emit(slot, "")
+		return true
+	if not has_item(id):
+		return false
+	equipped[slot] = id
+	equipment_changed.emit(slot, id)
+	return true
+
+func set_active_consumable(id: String) -> bool:
+	if id.is_empty():
+		active_consumable = ""
+		consumable_changed.emit("")
+		return true
+	if get_consumable_count(id) <= 0:
+		return false
+	active_consumable = id
+	consumable_changed.emit(active_consumable)
+	return true
 
 func serialize() -> Dictionary:
 	return {
 		"materials": materials.duplicate(),
 		"items": items.duplicate(),
 		"consumables": consumables.duplicate(),
+		"equipped": equipped.duplicate(),
+		"active_consumable": active_consumable,
 	}
 
 func deserialize(data: Dictionary) -> void:
@@ -131,9 +176,14 @@ func deserialize(data: Dictionary) -> void:
 		materials[LEGACY_RESOURCE_MATERIAL] = int(data.get("resources", 0))
 	items = Array(data.get("items", []), TYPE_STRING, "", null)
 	consumables = data.get("consumables", {}).duplicate()
+	equipped = data.get("equipped", {}).duplicate()
+	active_consumable = String(data.get("active_consumable", ""))
+	if not active_consumable.is_empty() and get_consumable_count(active_consumable) <= 0:
+		active_consumable = ""
 	_emit_all_materials()
 	items_changed.emit()
-	consumable_changed.emit("")
+	consumable_changed.emit(active_consumable)
+	_emit_all_equipment()
 
 func _ensure_material_defs() -> void:
 	if not _material_defs.is_empty():
@@ -158,3 +208,14 @@ func _ensure_weapon_defs() -> void:
 func _emit_all_materials() -> void:
 	for id in get_material_ids():
 		materials_changed.emit(id, get_material(id))
+
+func _emit_all_equipment() -> void:
+	for slot in EQUIPMENT_SLOTS:
+		equipment_changed.emit(slot, get_equipped_item(slot))
+
+func _find_next_consumable() -> String:
+	for raw_id in consumables.keys():
+		var id := String(raw_id)
+		if int(consumables[raw_id]) > 0:
+			return id
+	return ""

@@ -5,6 +5,7 @@ enum State { MAIN, DEV }
 const COLOR_SELECTED  := Color(1.0, 1.0, 1.0)
 const COLOR_IDLE      := Color(0.45, 0.45, 0.45)
 const COLOR_TOGGLE_ON := Color(0.4, 1.0, 0.4)
+const GRIMOIRE_MENU_SCRIPT := preload("res://scripts/grimoire_menu.gd")
 
 var _state    := State.MAIN
 var _selected := 0
@@ -17,9 +18,10 @@ var _main_root:   Control
 var _dev_root:    Control
 var _main_labels: Array[Label] = []
 var _dev_labels:  Array[Label] = []
+var _grimoire_menu: CanvasLayer
 
 const MAIN_ENTRIES := ["JOUER", "MODE DEV"]
-const DEV_ENTRIES  := ["[ ] 100 MAT", "[ ] VIE INF", "JOUER", "ATELIER", "TEST BOSS", "RETOUR"]
+const DEV_ENTRIES  := ["[ ] 100 MAT", "[ ] VIE INF", "GRIMOIRE", "JOUER", "ATELIER", "TEST BOSS", "RETOUR"]
 
 func _ready() -> void:
 	var bg := ColorRect.new()
@@ -47,6 +49,7 @@ func _ready() -> void:
 
 	_build_main_menu()
 	_build_dev_menu()
+	_setup_grimoire_menu()
 
 	var hint_pad := Label.new()
 	hint_pad.text = "Manette : stick gauche bouger   A sauter   RB attaquer"
@@ -135,6 +138,8 @@ func _refresh() -> void:
 						COLOR_SELECTED if i == _selected else COLOR_IDLE)
 
 func _process(_delta: float) -> void:
+	if _grimoire_menu and _grimoire_menu.visible:
+		return
 	var a := false
 	for pad in Input.get_connected_joypads():
 		if Input.is_joy_button_pressed(pad, JOY_BUTTON_A):
@@ -173,10 +178,15 @@ func _confirm() -> void:
 			match _selected:
 				0: _dev_res = not _dev_res; _refresh()
 				1: _dev_hp = not _dev_hp; _refresh()
-				2: _start_game("", 100 if _dev_res else 0)
-				3: _start_game("atelier", 100 if _dev_res else 0)
-				4: _start_game("boss", 0)
-				5: _show_main()
+				2: _grimoire_menu.open_menu()
+				3: _start_game("", 100 if _dev_res else 0)
+				4: _start_game("atelier", 100 if _dev_res else 0)
+				5: _start_game("boss", 0)
+				6: _show_main()
+
+func _setup_grimoire_menu() -> void:
+	_grimoire_menu = GRIMOIRE_MENU_SCRIPT.new()
+	add_child(_grimoire_menu)
 
 func _start_game(spawn: String, resources: int) -> void:
 	if _started:

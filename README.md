@@ -65,9 +65,9 @@ Necessite Godot 4.5 disponible dans le PATH, ou via `D:\tmp\godot45\Godot_v4.5-s
 
 ## Etat actuel
 
-**v1.39.** Migration resolution 1920x1080 validee (GUT vert, lancement headless OK, test manuel confirme).
-Direction visuelle active : graphismes 2D standard via pipeline Codex + rescale (`plan_graphismes_standard_2d.md`), documentation active realignee.
-Prochaine etape : demarrer la Phase 2 (Grimoire / Points de Competence / Craft v3), puis laisser game_art finaliser le pivot outillage/production.
+**v1.40.** Socle Phase 2 branche cote jeu : `recipes.json` au schema cible 27 recettes, starters bootstrapes, Grimoire via menu dev, equipement manuel via pause, craft filtre par maitrise et tier d'etabli.
+Verification automatisee OK : GUT `25/25` vert et lancement headless OK.
+Prochaine etape urgente : valider manuellement le flux complet Grimoire -> craft -> equipement -> HUD, puis reprendre gain de PC / progression / armes a distance.
 
 ## Roadmap
 

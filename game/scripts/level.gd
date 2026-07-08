@@ -8,8 +8,10 @@ const BOSS := preload("res://scenes/enemies/boss.tscn")
 const ORE_NODE := preload("res://scripts/ore_node.gd")
 const WORKBENCH_SCRIPT := preload("res://scripts/workbench.gd")
 const CRAFT_MENU_SCRIPT := preload("res://scripts/craft_menu.gd")
+const EQUIPMENT_MENU_SCRIPT := preload("res://scripts/equipment_menu.gd")
 
 const LEVEL_CONFIG := "res://data/level.json"
+const ORE_SURFACE_OFFSET := Vector2(0, 32)
 
 var player: CharacterBody2D
 var boss: Node = null
@@ -26,6 +28,7 @@ const PAUSE_MENU_SCRIPT := preload("res://scripts/pause_menu.gd")
 var _hud: CanvasLayer
 var _craft_menu: CanvasLayer
 var _pause_menu: CanvasLayer
+var _equipment_menu: CanvasLayer
 
 func _ready() -> void:
 	randomize()
@@ -44,6 +47,7 @@ func _ready() -> void:
 	_spawn_workbench()
 	_setup_hud()
 	_setup_pause_menu()
+	_setup_equipment_menu()
 	if cfg["boss_active"]:
 		_start_boss_fight()
 
@@ -209,7 +213,7 @@ func _spawn_ores() -> void:
 		var ore := ORE_NODE.new()
 		ore.material_id = String(ore_cfg.get("material", "cuivre"))
 		add_child(ore)
-		ore.global_position = _vec2(ore_cfg["pos"])
+		ore.global_position = _vec2(ore_cfg["pos"]) + ORE_SURFACE_OFFSET
 
 func _spawn_workbench() -> void:
 	_craft_menu = CRAFT_MENU_SCRIPT.new()
@@ -217,7 +221,7 @@ func _spawn_workbench() -> void:
 	var wb := WORKBENCH_SCRIPT.new()
 	add_child(wb)
 	wb.global_position = _vec2(_level_cfg["workbench"]["pos"])
-	wb.interact_requested.connect(_craft_menu.open)
+	wb.interact_requested.connect(func() -> void: _craft_menu.open(wb.workbench_tier))
 
 func _start_boss_fight() -> void:
 	if _boss_started:
@@ -249,6 +253,7 @@ func _setup_hud() -> void:
 func _setup_pause_menu() -> void:
 	_pause_menu = PAUSE_MENU_SCRIPT.new()
 	add_child(_pause_menu)
+	_pause_menu.equipment_requested.connect(_open_equipment_menu)
 	_pause_menu.resume_requested.connect(_close_pause_menu)
 	_pause_menu.restart_requested.connect(_restart_run)
 	_pause_menu.title_requested.connect(_return_to_title)
@@ -259,7 +264,24 @@ func _setup_pause_menu() -> void:
 func _open_pause_menu() -> void:
 	if _craft_menu and _craft_menu.visible:
 		return
+	if _equipment_menu and _equipment_menu.visible:
+		return
 	get_tree().paused = true
+	_pause_menu.open_menu()
+
+func _setup_equipment_menu() -> void:
+	_equipment_menu = EQUIPMENT_MENU_SCRIPT.new()
+	add_child(_equipment_menu)
+	_equipment_menu.closed.connect(_reopen_pause_menu)
+
+func _open_equipment_menu() -> void:
+	if _pause_menu:
+		_pause_menu.hide_menu()
+	_equipment_menu.open_menu()
+
+func _reopen_pause_menu() -> void:
+	if _ended:
+		return
 	_pause_menu.open_menu()
 
 func _close_pause_menu() -> void:

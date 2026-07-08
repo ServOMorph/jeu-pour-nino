@@ -38,12 +38,12 @@ func test_add_item_and_has_item() -> void:
 	assert_false(rs.has_item("epee_fer"))
 
 func test_consumable_use() -> void:
-	rs.add_consumable("potion")
-	rs.add_consumable("potion")
-	assert_eq(rs.get_consumable_count("potion"), 2)
+	rs.add_consumable("potion_petite")
+	rs.add_consumable("potion_petite")
+	assert_eq(rs.get_consumable_count("potion_petite"), 2)
 	var used: String = rs.use_consumable()
-	assert_eq(used, "potion")
-	assert_eq(rs.get_consumable_count("potion"), 1)
+	assert_eq(used, "potion_petite")
+	assert_eq(rs.get_consumable_count("potion_petite"), 1)
 
 func test_reset_clears_everything() -> void:
 	rs.add_material("cuivre", 50)
@@ -58,7 +58,9 @@ func test_serialize_deserialize_roundtrip() -> void:
 	rs.add_material("cuivre", 30)
 	rs.add_material("bois", 4)
 	rs.add_item("armure_bois")
-	rs.add_consumable("potion")
+	rs.equip_item("armor", "armure_bois")
+	rs.add_consumable("potion_petite")
+	rs.set_active_consumable("potion_petite")
 	var data: Dictionary = rs.serialize()
 	var rs2: Node = load("res://scripts/run_state.gd").new()
 	add_child_autofree(rs2)
@@ -66,7 +68,9 @@ func test_serialize_deserialize_roundtrip() -> void:
 	assert_eq(rs2.get_material("cuivre"), 30)
 	assert_eq(rs2.get_material("bois"), 4)
 	assert_true(rs2.has_item("armure_bois"))
-	assert_eq(rs2.get_consumable_count("potion"), 1)
+	assert_eq(rs2.get_equipped_item("armor"), "armure_bois")
+	assert_eq(rs2.get_consumable_count("potion_petite"), 1)
+	assert_eq(rs2.active_consumable, "potion_petite")
 
 func test_deserialize_legacy_resources_maps_to_cuivre() -> void:
 	rs.deserialize({"resources": 12})
@@ -82,3 +86,9 @@ func test_pickaxe_tier_follows_best_owned_weapon() -> void:
 	assert_eq(rs.get_pickaxe_tier(), 2)
 	rs.add_item("epee_fer")
 	assert_eq(rs.get_pickaxe_tier(), 3)
+
+func test_equip_item_requires_owned_item() -> void:
+	assert_false(rs.equip_item("weapon", "epee_bois"))
+	rs.add_item("epee_bois")
+	assert_true(rs.equip_item("weapon", "epee_bois"))
+	assert_eq(rs.get_equipped_item("weapon"), "epee_bois")

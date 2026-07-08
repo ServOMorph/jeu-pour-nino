@@ -1,3 +1,6 @@
 {
-  "potion": {"heal": 3}
+  "potion": {"heal": 3},
+  "potion_petite": {"heal": 3},
+  "bombe_instable": {"heal": 0},
+  "elixir_resurgence": {"heal": 6}
 }

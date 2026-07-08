@@ -30,12 +30,14 @@ func test_discover_recipe() -> void:
 
 func test_master_recipe() -> void:
 	ms.discover_recipe("potion_soin")
-	var result: bool = ms.master_recipe("potion_soin")
+	ms.add_skill_points(3)
+	var result: bool = ms.master_recipe("potion_soin", 2)
 	assert_true(result)
 	assert_true(ms.is_mastered("potion_soin"))
+	assert_eq(ms.skill_points, 1)
 
 func test_master_undiscovered_recipe_fails() -> void:
-	var result: bool = ms.master_recipe("recette_inconnue")
+	var result: bool = ms.master_recipe("recette_inconnue", 1)
 	assert_false(result)
 
 func test_discover_is_idempotent() -> void:
@@ -46,7 +48,7 @@ func test_discover_is_idempotent() -> void:
 func test_serialize_deserialize_roundtrip() -> void:
 	ms.add_skill_points(10)
 	ms.discover_recipe("epee_bois")
-	ms.master_recipe("epee_bois")
+	ms.master_recipe("epee_bois", 0)
 	var data: Dictionary = ms.serialize()
 	var ms2: Node = load("res://scripts/meta_state.gd").new()
 	add_child_autofree(ms2)
@@ -60,3 +62,8 @@ func test_reset_for_new_game() -> void:
 	ms.reset_for_new_game()
 	assert_eq(ms.skill_points, 0)
 	assert_true(ms.grimoire.is_empty())
+
+func test_ensure_recipe_can_bootstrap_starter_mastery() -> void:
+	ms.ensure_recipe("torche", true)
+	assert_true(ms.is_discovered("torche"))
+	assert_true(ms.is_mastered("torche"))

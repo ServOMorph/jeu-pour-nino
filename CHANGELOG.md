@@ -1,3 +1,13 @@
+## v1.40 - 2026-07-08
+
+### Ajoute
+- `game/scripts/recipe_catalog.gd`, `game/scripts/grimoire_menu.gd`, `game/scripts/equipment_menu.gd` : helper recettes et ecrans Phase 2 branches (Grimoire via menu dev, equipement via pause).
+
+### Modifie
+- `game/data/recipes.json`, `game/data/weapons.json`, `game/data/armor.json`, `game/data/consumables.json` : socle donnees Phase 2 aligne sur le schema cible et la table de 27 recettes.
+- `game/scripts/meta_state.gd`, `game/scripts/run_state.gd`, `game/scripts/craft_menu.gd`, `game/scripts/player.gd`, `game/scripts/pause_menu.gd`, `game/scripts/level.gd`, `game/scripts/title.gd`, `game/scripts/hud.gd`, `game/scripts/workbench.gd` : Grimoire, maitrise avec cout PC, equipement manuel, consommable actif et filtrage craft branches.
+- `game/tests/test_meta_state.gd`, `game/tests/test_run_state.gd`, `game/tests/test_save_manager.gd`, `_contexte/signals.md`, `_contexte/contexte.md`, `roadmap.md`, `README.md` : tests et contexte realignes sur un socle Phase 2 branche mais encore en attente de validation manuelle urgente.
+
 ## v1.39 - 2026-07-08
 
 ### Modifie

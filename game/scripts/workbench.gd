@@ -6,6 +6,8 @@ const SIZE := Vector2(80, 72)
 const ZONE_SIZE := Vector2(240, 200)
 const WORKBENCH_TEXTURE_PATH := "res://assets/sprites/objects/workbench.png"
 
+@export var workbench_tier := 1
+
 var _in_range := false
 var _prompt: Label
 

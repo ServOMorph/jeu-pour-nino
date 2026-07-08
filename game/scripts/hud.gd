@@ -80,7 +80,7 @@ func _refresh_materials() -> void:
 			continue
 		parts.append("%s %d" % [_material_short_label(id), count])
 	if parts.is_empty():
-		_materials_label.text = "MAT —"
+		_materials_label.text = "MAT -"
 	else:
 		_materials_label.text = "MAT " + " | ".join(parts)
 
@@ -89,12 +89,13 @@ func _material_short_label(id: String) -> String:
 	return name.left(3)
 
 func _on_consumable_changed(id: String) -> void:
-	var count := RunState.get_consumable_count("potion")
-	if count <= 0:
-		_consumable_label.text = "LB: —"
+	var active_id := id if not id.is_empty() else RunState.active_consumable
+	if active_id.is_empty():
+		_consumable_label.text = "LB: -"
 		_consumable_label.modulate = Color(0.4, 0.4, 0.4)
 	else:
-		_consumable_label.text = "LB: POTION x%d" % count
+		var count := RunState.get_consumable_count(active_id)
+		_consumable_label.text = "LB: %s x%d" % [active_id.to_upper(), count]
 		_consumable_label.modulate = Color(0.5, 1.0, 0.5)
 
 func show_boss_bar() -> void:
