@@ -1,8 +1,8 @@
 ```
 Avant de commencer à coder, lis attentivement ces deux documents :
 
-- "C:\Users\raph6\Documents\SerenIATech\SérénIATech_dev\Projets en cours\Jeu pour Nino\docs\Document de conception — Jeu pixel art run court & challenge.md"
-- "C:\Users\raph6\Documents\SerenIATech\SérénIATech_dev\Projets en cours\Jeu pour Nino\docs\roadmap.md"
+- "C:\Users\raph6\Documents\SerenIATech\SérénIATech_dev\Projets en cours\Jeu pour Nino\docs\Document de conception — Jeu pixel art run court & challenge.md" (historique, direction visuelle obsolète)
+- "C:\Users\raph6\Documents\SerenIATech\SérénIATech_dev\Projets en cours\Jeu pour Nino\roadmap.md"
 
 Une fois les deux documents lus et compris, suis la roadmap phase par phase
 (Phase 0 → Phase 5) pour produire une v1 complètement jouable de

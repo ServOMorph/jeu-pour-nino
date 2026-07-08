@@ -16,7 +16,7 @@ et detecter les sprites manquants ou orphelins. Pas d'edition pixel par pixel
 ## Perimetre
 Couvert : sprites et animations d'entites (player, ennemis, boss, Gardiens, porteurs)
 via `animations.json` + manifest d'audit.
-Hors perimetre (valides directement en jeu, pas dans l'editeur) : tilesets 16x16 et
+Hors perimetre (valides directement en jeu, pas dans l'editeur) : tilesets et
 parallax (phases jeu 4/7), shaders et overlays des cicatrices (phase 6), icones UI
 (Grimoire, slots d'equipement, cicatrices), sprites de gisements, projectiles.
 Si un besoin de previsualisation apparait pour ces types, ouvrir une phase 6
@@ -69,7 +69,7 @@ validation visuelle immediate.
       le panneau preview de l'editeur, a l'echelle jeu.
 
 Perimetre de cette phase : uniquement les gisements/minerais, tires par le besoin
-ci-dessus. Tilesets, parallax, shaders/overlays cicatrices et icones UI restent hors
+ci-dessus. Tilesets 2D standard, parallax, shaders/overlays cicatrices et icones UI restent hors
 perimetre tant qu'aucun besoin concret equivalent n'apparait (cf. Perimetre).
 
 ## Apres Phase 5 : maintenance

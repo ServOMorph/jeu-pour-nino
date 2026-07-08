@@ -1,3 +1,10 @@
+## v1.39 - 2026-07-08
+
+### Modifie
+- `_contexte/signals.md`, `_contexte/contexte.md` et `README.md` : etat projet aligne sur la validation effective de la migration resolution 1920x1080 et sur l'ouverture de la Phase 2.
+- `docs/process_generation_sprites.md`, `docs/workflow_image_gen_fable5.md`, `docs/charte_graphique_pixel_art_dark_fantasy.md` : documentation active reorientee vers la 2D standard et le pipeline `Codex + rescale`.
+- `docs/Document de conception — Jeu pixel art run court & challenge.md`, `docs/v3/CoreDive Challenge — Design Document v3.md`, `docs/profi joueur nino.md`, `docs/prompt_lancememnt_opus.txt`, `game_art/backlog_art.md`, `game_art/roadmap_editeur.md` : mentions historiques clarifiees et specs/portee alignees sur la direction visuelle actuelle.
+
 ## v1.38 - 2026-07-08
 
 ### Ajoute

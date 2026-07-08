@@ -8,8 +8,8 @@ Jeu de plateforme/action pixel art fait pour Nino. Roguelite : exploration de bi
 - GDScript
 
 ## État actuel (réécrit intégralement à chaque /close)
-v1.33. Migration résolution 1920×1080 exécutée dans le working tree (JSON/scènes/scripts/sprites), validation GUT + run manuel restant à faire. **Pivot acté : abandon du pixel art, graphismes 2D standard** (pipeline Codex + rescale, `plan_graphismes_standard_2d.md`). Phase A du pivot appliquée côté jeu (rendu linéaire). Refonte game_art (éditeur, charte, workflow) signalée via `backlog_art.md`, non commencée.
-Prochaine étape : valider GUT + run manuel de la migration résolution, puis ouvrir une session game_art sur le pivot.
+v1.39. Migration résolution 1920×1080 validée côté jeu (GUT vert, headless OK, test manuel confirmé). Direction visuelle active : 2D standard via pipeline Codex + rescale, documentation réalignée. Le socle jeu est prêt pour lancer la Phase 2.
+Prochaine étape : démarrer Grimoire / Points de Compétence / Craft v3, puis laisser game_art finaliser le pivot outillage/production.
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
 - 2026-07-06 : Périmètre de `game_art/roadmap_editeur.md` clarifié — l'éditeur couvre sprites/animations d'entités uniquement, pas tilesets/parallax/shaders/icônes UI ; passe en maintenance après Phase 5.
@@ -21,3 +21,5 @@ Prochaine étape : valider GUT + run manuel de la migration résolution, puis ou
 - 2026-07-07 : Migration résolution retenue — viewport natif 1920×1080 (facteur ×4 monde) plutôt que 480×270 conservé avec sprite agrandi ; player idle ciblé à 150 px (~×6.25, upscale ×6=144px transitoire en attendant un sprite natif game_art).
 - 2026-07-07 : Migration résolution exécutée (project.godot, JSON, scènes, scripts, sprites) — validation GUT/run manuel restant à faire.
 - 2026-07-07 : Pivot pixel art → 2D standard acté. Résolution 1920×1080 conservée. Pipeline de production : génération Codex + rescale.
+- 2026-07-08 : Migration résolution 1920×1080 validée formellement côté jeu (GUT + headless + test manuel).
+- 2026-07-08 : Documentation active réalignée sur la 2D standard ; Phase 2 peut démarrer côté jeu.

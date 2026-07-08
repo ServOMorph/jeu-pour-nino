@@ -1,16 +1,13 @@
-# Signals — jeu   (MAJ 2026-07-07)
+# Signals — jeu   (MAJ 2026-07-08)
 
 ## Question bloquante
 Aucune côté jeu — le pivot 2D standard est signalé à game_art via `game_art/backlog_art.md` (entrée « Pivot 2026-07-07 »), en attente de sa prise en charge.
 
 ## Actions ouvertes
-- [P1] Valider la migration résolution 1920×1080 déjà exécutée (JSON/scènes/scripts/sprites transitoires en place, confirmé par relecture directe — pas encore par test).
-  fait quand: GUT vert (23/23), lancement headless OK, run manuel complet validé (title → biome → craft → boss → menus).
-  réf: `plan_resolution_1920x1080.md` phase G
-- [P1] Traiter le pivot pixel art → 2D standard côté game_art : éditeur dépixélisé (filtre linéaire, retrait preview x8/audit grille), `ref_to_sprite.py` remplacé par un script de rescale, charte graphique et workflow réécrits, `backlog_art.md` révisé entrée par entrée.
+- [P1] Traiter le pivot pixel art → 2D standard côté game_art : éditeur dépixélisé, `ref_to_sprite.py` remplacé par un script de rescale, premier asset produit via le pipeline actif.
   fait quand: plus aucune mention pixel art/grille/palette limitée dans la doc et l'outillage game_art ; premier asset produit via le pipeline Codex + rescale.
   réf: `plan_graphismes_standard_2d.md`, `game_art/backlog_art.md` (entrée « Pivot 2026-07-07 »)
-- [P2] Démarrer la Phase 2 — Grimoire, Points de Compétence, Craft v3 (roadmap.md Phase 2), maintenant que la Phase 1 est close. Reste en attente tant que la migration résolution n'est pas validée (GUT + run manuel).
+- [P1] Démarrer la Phase 2 — Grimoire, Points de Compétence, Craft v3 (roadmap.md Phase 2), maintenant que la migration résolution 1920×1080 est validée.
   fait quand: `recipes.json` étendu au schéma cible, écran d'équipement manuel (4 slots), Grimoire accessible au HUB ; tests verts.
   réf: `roadmap.md` Phase 2, `questions.md` Q043/Q055/Q056
 - [P2] Lancer le développement avec 2 agents séparés (jeu et game_art) en s'appuyant sur `questions.md` comme source d'arbitrage commune en cas de doute de conception.
@@ -50,33 +47,33 @@ Aucune côté jeu — le pivot 2D standard est signalé à game_art via `game_ar
 - game_art Phase 2 (2.1 à 2.4) intégralement terminée et validée visuellement.
 - Protocole de communication jeu ↔ game_art revu le 2026-07-06 : `game_art/backlog_art.md` est désormais l'unique canal de handoff (statuts `a_faire`/`en_cours`/`livre`/`integre`, champs `debloque:`/`livraison:`) ; `/start jeu` charge le backlog et remonte les entrées `livre` ; plus aucune écriture croisée dans le `_contexte/` de l'autre zone (voir `.claude/zones.md` pour la matrice de propriété des fichiers).
 - **Phase 1 close le 2026-07-06** : run manuel complet validé (minage tiers 2/3, craft, HUD, menu dev), GUT vert (`23/23`). `minerai_abyssal` utilise son sprite dédié `ore_abyssal.png`, `fer` rebranché sur `ore_iron.png` (utilisait encore le placeholder cuivre par erreur).
-- **Migration résolution 1920×1080 exécutée** (project.godot, JSON gameplay ×4, scènes, scripts UI, sprites upscalés ×6 transitoires) — confirmée par relecture directe des fichiers, mais GUT et run manuel restent à (re)lancer pour valider formellement (phase G du plan non cochée).
+- **Migration résolution 1920×1080 validée le 2026-07-08** : GUT vert, lancement headless OK et run manuel confirmé par l'utilisateur. Le socle jeu est considéré stable côté résolution.
 - **Pivot 2026-07-07 : abandon du pixel art, passage à des graphismes 2D standard.** Décision utilisateur. Plan écrit (`plan_graphismes_standard_2d.md`) avant exécution. Pipeline de production retenu : génération d'image via le module Codex, puis rescale à la taille de rendu cible — pas de dessin manuel, pas de vectoriel, pas d'asset packs. Point de vigilance : dérive de cadrage/échelle possible entre frames d'une même animation générées séparément par l'IA, à contrôler avant intégration. La résolution native 1920×1080 est conservée (plus pertinente pour du 2D lissé que pour du pixel art).
 - Phase A du pivot 2D standard appliquée côté jeu : `game/project.godot` en filtre linéaire (`default_texture_filter=1`) et `stretch/mode="canvas_items"` (au lieu de nearest/viewport, adaptés au pixel art).
 - Pivot signalé à game_art via `game_art/backlog_art.md` (entrée « Pivot 2026-07-07 ») : éditeur, `ref_to_sprite.py`, charte graphique et workflow à refondre — propriété exclusive de l'agent game_art, non traité côté jeu.
+- Documentation active réalignée le 2026-07-08 sur la direction 2D standard : `README.md`, docs pipeline/charte, backlog art et roadmap éditeur.
 
-## Dernière session (2026-07-07 — Pivot graphismes 2D standard)
+## Dernière session (2026-07-08 — validation migration 1920×1080 et doc)
 
-# Session du 2026-07-07
+# Session du 2026-07-08
 
 ## Décisions prises
-- Abandon du pixel art, passage à des graphismes 2D standard (résolution native lissée, plus de grille/palette). Résolution 1920×1080 conservée.
-- Pipeline de production des assets : génération Codex + rescale à la taille cible.
+- Migration résolution 1920×1080 validée côté jeu : GUT, headless et test manuel concordants.
+- Documentation active réalignée sur la direction 2D standard et le pipeline Codex + rescale.
 
 ## Livrables produits ou modifiés
-- `plan_graphismes_standard_2d.md` (racine) : plan complet (impact, rendu, production, refonte game_art, doc, validation).
-- `game/project.godot` : rendu passé en filtre linéaire + `stretch/mode="canvas_items"`.
-- `roadmap.md`, `questions.md`, `game/README.md` : mentions 480×270/pixel art/grille 16×16 corrigées vers 1920×1080/2D standard.
-- `game_art/backlog_art.md` : entrée de handoff « Pivot 2026-07-07 » créée pour la zone game_art.
-- Migration résolution 1920×1080 (`plan_resolution_1920x1080.md`, phases A-E transitoire) confirmée appliquée dans le working tree (project.godot, JSON, scènes, scripts, sprites upscalés).
+- `README.md` : état projet et direction visuelle active mis à jour.
+- `docs/process_generation_sprites.md`, `docs/workflow_image_gen_fable5.md`, `docs/charte_graphique_pixel_art_dark_fantasy.md` : réécrits pour la 2D standard.
+- `docs/Document de conception — Jeu pixel art run court & challenge.md`, `docs/v3/CoreDive Challenge — Design Document v3.md`, `docs/profi joueur nino.md`, `docs/prompt_lancememnt_opus.txt` : mentions historiques clarifiées.
+- `game_art/backlog_art.md`, `game_art/roadmap_editeur.md` : specs et périmètre alignés sur la 2D standard.
 
 ## Hypothèses validées / invalidées
-- VALIDE : la migration résolution est cohérente sur relecture directe (dimensions JSON, sprites upscalés, animations.json).
-- INVALIDE : direction pixel art — pivot acté vers 2D standard.
-- EN ATTENTE : GUT + run manuel non (re)lancés depuis la migration résolution ; refonte game_art (éditeur, charte, workflow, script de rescale) non commencée.
+- VALIDE : la migration résolution 1920×1080 est stable côté jeu.
+- VALIDE : la doc active peut être réalignée sans changement de code additionnel.
+- EN ATTENTE : refonte outillage/production game_art complète (script de rescale et premier asset pipeline 2D standard).
 
 ## Prochaine étape exacte
-Lancer GUT + run manuel pour valider formellement la migration résolution, puis ouvrir une session game_art pour traiter le pivot signalé dans `backlog_art.md`.
+Démarrer la Phase 2 côté jeu, puis ouvrir une session game_art pour finaliser le pivot outillage/production côté art.
 
 ## Question bloquante pour la session suivante
 Aucune côté jeu.

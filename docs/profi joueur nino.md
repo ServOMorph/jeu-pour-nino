@@ -10,7 +10,7 @@ Ce n'est pas un genre parmi d'autres : c'est **le** genre. Tous les autres jeux 
 
 ## 2. Les jeux 2D qu'il a déjà beaucoup joués (signal direct pour ton projet)
 
-C'est la partie la plus utile : **~488 h (25 % du total)** sont passées sur des jeux qui sont déjà en 2D / pixel art, donc on a un signal direct sur le type de jeu 2D qu'il aime, pas juste une extrapolation depuis des jeux 3D.
+C'est la partie la plus utile : **~488 h (25 % du total)** sont passées sur des jeux qui sont déjà en 2D, souvent avec une stylisation forte, donc on a un signal direct sur le type de jeu 2D qu'il aime, pas juste une extrapolation depuis des jeux 3D.
 
 | Jeu | Heures | Ce que ça représente |
 |---|---|---|
@@ -74,4 +74,4 @@ Autrement dit : un peu de Terraria (boucle crafting/exploration/boss) + un peu d
 - **Solo, coop, ou les deux ?** Vu que ~33 % de son temps est en coop mais que ses jeux les plus joués (Terraria, Elden Ring, Hollow Knight, Noita) se font très bien en solo, le coop est un bonus, pas un prérequis.
 - **Durée de session visée** : runs courts (15-30 min, façon roguelite) ou sessions longues (survie monde persistant) ? Les deux l'intéressent, mais ça change beaucoup la structure du jeu.
 - **Niveau de difficulté/punition** : il tolère très bien la difficulté (Elden Ring, Lies of P, Hollow Knight), donc ne pas hésiter à proposer un vrai challenge plutôt qu'un jeu "confort".
-- **Style visuel** : pixel art détaillé/atmosphérique (Hollow Knight, Terraria) vs. plus minimaliste/géométrique (Noita) — un test rapide avec lui sur des références visuelles pourrait orienter la direction artistique.
+- **Style visuel** : point désormais tranché côté projet — dark fantasy en 2D standard raster, avec priorité à la lisibilité et à l'atmosphère plutôt qu'à une exécution pixel art.

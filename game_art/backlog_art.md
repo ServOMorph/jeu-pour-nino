@@ -19,7 +19,7 @@ Conséquences pour cette zone (à traiter côté game_art, hors périmètre jeu)
 
 77 questions de conception (+ Q026b) ont été tranchées avant le développement — voir `questions.md` à la racine du projet. Les entrées ci-dessous intègrent déjà ces décisions. Points de cadrage transverses à connaître avant de produire :
 
-- **Grille de tiles : 16×16** (résolution de référence 480×270 = 30×17 tiles à l'écran).
+- **Pas de grille de tiles imposée** : les décors sont désormais produits en 2D standard à résolution native 1920×1080.
 - **2-3 couches de parallax** par biome (fond lointain + intermédiaire + premier plan).
 - **Style dark fantasy** (voir `docs/charte_graphique_pixel_art_dark_fantasy.md`) — pas l'imagerie « lumineuse arcade » suggérée par endroits dans les docs v3 historiques.
 - **Un seul Gardien du Voile au lancement** (Le Veilleur des Cendres) — ne pas produire les 7 autres avant que la roadmap jeu (refacto R2) ne les active.
@@ -77,7 +77,7 @@ Conséquences pour cette zone (à traiter côté game_art, hors périmètre jeu)
 ### Sprites gisements/minerais par type de matériau
 - phase: 1 — Matériaux typés
 - placeholder: `ore_copper.png` unique pour tous les gisements
-- specs: 14x14, un sprite par matériau — 13 définitifs (questions.md Q041) : `bois`, `pierre`, `cuivre`, `cuir` (B1), `fer`, `charbon`, `minerai_sombre` (B2), `cristal`, `minerai_celeste`, `essence_vent` (B3), `fragment_noyau`, `minerai_abyssal` (B4), `essence_voile` (Voile, drop uniquement, pas de gisement). Lisibilité de rareté croissante (charte graphique).
+- specs: un sprite par matériau, lisible en 2D standard à la taille runtime des gisements (`56x56` actuellement côté jeu) — 13 définitifs (questions.md Q041) : `bois`, `pierre`, `cuivre`, `cuir` (B1), `fer`, `charbon`, `minerai_sombre` (B2), `cristal`, `minerai_celeste`, `essence_vent` (B3), `fragment_noyau`, `minerai_abyssal` (B4), `essence_voile` (Voile, drop uniquement, pas de gisement). Lisibilité de rareté croissante (charte graphique).
 - priorite: moyenne
 - statut: en_cours
 
@@ -114,7 +114,7 @@ Conséquences pour cette zone (à traiter côté game_art, hors périmètre jeu)
 ### Décor du HUB
 - phase: 3 — HUB (jalon J1)
 - placeholder: rects colorés
-- specs: point central + 4 directions visibles, viewport 480x270. Le HUB reste minimal (4 sorties, Grimoire, établi) — pas de décor évolutif en v3 (questions.md Q039).
+- specs: point central + 4 directions visibles, composition pensée pour un écran fixe 1920×1080. Le HUB reste minimal (4 sorties, Grimoire, établi) — pas de décor évolutif en v3 (questions.md Q039).
 - priorite: haute
 - statut: a_faire
 
@@ -128,7 +128,7 @@ Conséquences pour cette zone (à traiter côté game_art, hors périmètre jeu)
 ### Tileset et décors — Biome 1 Galeries Verdoyantes
 - phase: 4 — Génération biomes (jalon J2)
 - placeholder: rects/polygones colorés
-- specs: **grille de tiles 16×16** (questions.md Q068), compatibles avec 8-10 templates de salles (5-7 salles par run, connexions 4 directions), 2-3 couches de parallax (Q069), ambiance cavernes végétales, lumière filtrante
+- specs: décors 2D standard à résolution native, sans grille imposée, compatibles avec 8-10 templates de salles (5-7 salles par run, connexions 4 directions), 2-3 couches de parallax (Q069), ambiance cavernes végétales, lumière filtrante
 - priorite: haute
 - statut: a_faire
 
@@ -170,21 +170,21 @@ Conséquences pour cette zone (à traiter côté game_art, hors périmètre jeu)
 ### Biome 2 Mines Obscures — ennemis, boss, tileset
 - phase: 7a (jalon J4)
 - placeholder: assets biome 1 recolorés
-- specs: sprites ennemis (questions.md Q050) — Mineur spectral (`ground`), Golem de pierre (`ground` tanky), Araignée géante (`jumper` — nouvel archétype bondissant), Machine abandonnée (`turret` — nouvel archétype stationnaire tirant). Boss **Foreur Maudit** : arène « atelier de forage », attaques charge frontale / tir de boulons / mine posée (explosion différée), phase rage à bas HP (Q051). Tileset galeries sombres, grille 16×16, overlay d'obscurité (entrée dédiée ci-dessus) requiert un fond lisible même assombri.
+- specs: sprites ennemis (questions.md Q050) — Mineur spectral (`ground`), Golem de pierre (`ground` tanky), Araignée géante (`jumper` — nouvel archétype bondissant), Machine abandonnée (`turret` — nouvel archétype stationnaire tirant). Boss **Foreur Maudit** : arène « atelier de forage », attaques charge frontale / tir de boulons / mine posée (explosion différée), phase rage à bas HP (Q051). Décors galeries sombres en 2D standard ; l'overlay d'obscurité (entrée dédiée ci-dessus) requiert un fond lisible même assombri.
 - priorite: basse (monte en haute à l'ouverture de 7a)
 - statut: a_faire
 
 ### Biome 3 Îles Célestes — ennemis, boss, tileset
 - phase: 7b (jalon J5)
 - placeholder: assets biome 1 recolorés
-- specs: sprites ennemis (Q050) — Sentinelle volante (`flyer` distance), Élémentaire du vent (`flyer`), Créature céleste (`flyer`), Gardien cristallin (`turret`, bouclier + zone). Boss **Orage Éternel** : arène « plateforme aérienne », attaques éclair ciblé (zone télégraphiée) / téléportation courte / tempête de cristaux (Q051). Tileset îles flottantes/cristaux, grille 16×16 — biome parcouru **vers le haut**, prévoir des salles empilables verticalement (connexions top/bottom, questions.md Q032).
+- specs: sprites ennemis (Q050) — Sentinelle volante (`flyer` distance), Élémentaire du vent (`flyer`), Créature céleste (`flyer`), Gardien cristallin (`turret`, bouclier + zone). Boss **Orage Éternel** : arène « plateforme aérienne », attaques éclair ciblé (zone télégraphiée) / téléportation courte / tempête de cristaux (Q051). Décors îles flottantes/cristaux en 2D standard — biome parcouru **vers le haut**, prévoir des salles empilables verticalement (connexions top/bottom, questions.md Q032).
 - priorite: basse (monte en haute à l'ouverture de 7b)
 - statut: a_faire
 
 ### Biome 4 Descente vers le Noyau — ennemis, boss, tileset
 - phase: 7c (jalon J6)
 - placeholder: assets biome 1 recolorés
-- specs: sprites ennemis (Q050) — Revenant (`ground` drain de vie), Créature corrompue (`ground`/`flyer` hybride), Manifestation du Voile (`teleporter` — nouvel archétype). Boss **Gardien du Noyau** : arène « sanctuaire du Noyau », attaques charge lourde / onde de corruption / invocation de revenants, phase 2 à mi-HP (Q051). Tileset roche en fusion — **imagerie volcanique confirmée sur ce biome** (Marteau Magmatique, Armure Volcanique, questions.md Q042), grille 16×16, biome parcouru **vers le bas** (connexions top/bottom).
+- specs: sprites ennemis (Q050) — Revenant (`ground` drain de vie), Créature corrompue (`ground`/`flyer` hybride), Manifestation du Voile (`teleporter` — nouvel archétype). Boss **Gardien du Noyau** : arène « sanctuaire du Noyau », attaques charge lourde / onde de corruption / invocation de revenants, phase 2 à mi-HP (Q051). Décors roche en fusion en 2D standard — **imagerie volcanique confirmée sur ce biome** (Marteau Magmatique, Armure Volcanique, questions.md Q042), biome parcouru **vers le bas** (connexions top/bottom).
 - priorite: basse (monte en haute à l'ouverture de 7c)
 - statut: a_faire
 

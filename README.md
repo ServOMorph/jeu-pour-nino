@@ -1,6 +1,6 @@
 # CoreDive Challenge
 
-Jeu de plateforme/action fait pour Nino. Un run court dans le biome 1, des ennemis, un boss. Fait en Godot 4.5. Direction visuelle en transition : abandon du pixel art vers des graphismes 2D standard (voir `plan_graphismes_standard_2d.md`).
+Jeu de plateforme/action fait pour Nino. Un run court dans le biome 1, des ennemis, un boss. Fait en Godot 4.5. Direction visuelle active : graphismes 2D standard en 1920×1080 natif (voir `plan_graphismes_standard_2d.md`).
 
 ## Lancer le jeu
 
@@ -47,7 +47,7 @@ Necessite Godot 4.5 disponible dans le PATH, ou via `D:\tmp\godot45\Godot_v4.5-s
 |-- roadmap.md          # Roadmap active v3
 |-- docs/               # GDD, profil joueur et charte graphique
 `-- game/               # Projet Godot
-    |-- assets/         # Sprites (transition pixel art -> 2D standard)
+    |-- assets/         # Sprites 2D standard
     |-- project.godot
     |-- scenes/
     |   |-- player/
@@ -65,9 +65,9 @@ Necessite Godot 4.5 disponible dans le PATH, ou via `D:\tmp\godot45\Godot_v4.5-s
 
 ## Etat actuel
 
-**v1.33.** Migration resolution 1920x1080 executee (project.godot, JSON, scenes, scripts, sprites) ; validation GUT/run manuel a refaire.
-Pivot acte : abandon du pixel art, graphismes 2D standard (pipeline Codex + rescale, `plan_graphismes_standard_2d.md`). Refonte game_art signalee, non commencee.
-Prochaine etape : valider GUT + run manuel de la migration resolution, puis session game_art sur le pivot.
+**v1.39.** Migration resolution 1920x1080 validee (GUT vert, lancement headless OK, test manuel confirme).
+Direction visuelle active : graphismes 2D standard via pipeline Codex + rescale (`plan_graphismes_standard_2d.md`), documentation active realignee.
+Prochaine etape : demarrer la Phase 2 (Grimoire / Points de Competence / Craft v3), puis laisser game_art finaliser le pivot outillage/production.
 
 ## Roadmap
 

@@ -1,227 +1,176 @@
-# Charte graphique — Pixel art dark fantasy
+# Charte graphique — dark fantasy 2D standard
+
+## Statut
+
+Le nom de fichier est historique. Le contenu actif décrit la direction visuelle actuelle : 2D standard raster, pas pixel art.
 
 ## Intention
 
-Le jeu doit évoluer vers une direction visuelle **dark fantasy majestueuse**, sombre et lisible, avec une sensation de ruines anciennes, de monde souterrain sacré et dangereux.
+Le jeu vise une direction visuelle dark fantasy majestueuse, sombre et lisible, avec une sensation de ruines anciennes, de monde souterrain sacré et dangereux.
 
-Référence d'ambiance : **Elden Ring** pour le ton général, l'échelle mythique, les silhouettes usées, les ruines, l'or ancien et la mélancolie.  
-Attention : il ne faut pas copier des personnages, armures, boss, symboles, interfaces ou lieux précis. L'objectif est de retrouver une famille d'ambiance, pas de reproduire une identité existante.
+Référence d'ambiance : Elden Ring pour le ton général, l'échelle mythique, les silhouettes usées, les ruines, l'or ancien et la mélancolie.
+
+Interdit :
+- copier des personnages, armures, boss, symboles, interfaces ou lieux précis ;
+- reproduire une identité visuelle existante ;
+- basculer vers une imagerie cartoon saturée.
 
 ## Mots-clés
 
-- Souterrain
-- Ancien
-- Sacré
-- Ruiné
-- Mystérieux
-- Dangereux
-- Mélancolique
-- Minéral
-- Doré terni
-- Lumière rare
+- souterrain
+- ancien
+- sacré
+- ruiné
+- mystérieux
+- dangereux
+- mélancolique
+- minéral
+- doré terni
+- lumière rare
 
 ## Style général
 
-- Pixel art lisible, avec silhouettes fortes.
-- Peu de détails fins : priorité à la forme globale et au contraste.
-- Décor sombre, personnages et ennemis bien détachés du fond.
-- Couleurs moins saturées que du pixel art arcade classique.
-- Effets lumineux rares mais importants : torches, minerais, magie, noyau, yeux ennemis.
-- Les éléments importants doivent être identifiables immédiatement : joueur, ennemis, minerais, établi, boss, porte.
+- 2D raster lisible, avec silhouettes fortes
+- détails contrôlés, jamais bruités pour le plaisir
+- décor sombre, personnages et ennemis bien détachés du fond
+- couleurs désaturées, sans obligation de palette réduite
+- effets lumineux rares mais marquants
+- éléments de gameplay immédiatement identifiables
 
 ## Palette cible
 
-### Couleurs dominantes
+### Dominantes
 
-- Pierre froide : gris bleuté, gris vert, ardoise.
-- Terre sombre : brun noir, brun mousse, ocre sale.
-- Métal usé : fer sombre, acier froid, cuivre oxydé.
-- Or ancien : jaune terni, ambre, bronze.
-- Ombres : bleu nuit, violet très sombre, noir adouci.
+- pierre froide : gris bleuté, gris vert, ardoise
+- terre sombre : brun noir, brun mousse, ocre sale
+- métal usé : fer sombre, acier froid, cuivre oxydé
+- or ancien : jaune terni, ambre, bronze
+- ombres : bleu nuit, violet très sombre, noir adouci
 
-### Couleurs d'accent
+### Accents
 
-- Minerai : cuivre chaud, fer clair, cristal froid.
-- Danger : rouge sombre, orange lave, éclat sang.
-- Magie / noyau : or lumineux, blanc chaud, cyan très rare.
-- Vie / soin : vert doux ou rouge potion, mais utilisé avec retenue.
+- minerai : cuivre chaud, fer clair, cristal froid
+- danger : rouge sombre, orange lave, éclat sang
+- magie / noyau : or lumineux, blanc chaud, cyan très rare
+- vie / soin : vert doux ou rouge potion, avec retenue
 
 ## Règles de lisibilité
 
-- Le joueur doit rester plus lisible que le décor.
-- Les ennemis doivent avoir une silhouette différente du joueur.
-- Les projectiles et attaques doivent utiliser une couleur d'accent claire.
-- Le fond ne doit pas partager exactement la même luminosité que les plateformes.
-- Les zones praticables doivent être immédiatement compréhensibles.
-- Les objets interactifs doivent avoir un détail lumineux ou une couleur distinctive.
+- le joueur doit rester plus lisible que le décor
+- les ennemis doivent avoir une silhouette distincte
+- les projectiles et attaques ont une couleur d'accent claire
+- le fond ne doit pas confondre plateformes et volumes traversables
+- les objets interactifs doivent se distinguer immédiatement
+- la lecture à taille réelle prime sur le détail zoomé
 
 ## Joueur
 
-### Direction
+Direction :
+- aventurier de mine / chevalier pauvre
+- fragile mais déterminé
+- jamais héroïque ou suréquipé dès le départ
 
-Petit aventurier de mine / chevalier pauvre, fragile mais déterminé. Il ne doit pas ressembler à un héros royal ou surpuissant.
+Silhouette :
+- compacte
+- cape courte ou tissu usé possible
+- casque simple, capuche ou cheveux visibles
+- arme lisible en main
 
-### Silhouette
-
-- Corps compact.
-- Cape courte ou tissu usé possible.
-- Casque simple, capuche ou cheveux visibles.
-- Arme lisible en main.
-- Pioche ou équipement de départ visible si possible.
-
-### Couleurs
-
-- Tenue sombre : brun, gris, cuir.
-- Accent clair : foulard, bord de cape, petit éclat métallique.
-- Améliorations visibles par matériaux : bois, cuivre, fer.
-
-### Animations prioritaires
-
-- Idle
-- Marche / course
-- Saut
-- Attaque
-- Dégât reçu
-- Mort
+Couleurs :
+- brun, gris, cuir
+- petit accent clair
+- progression visible par matériau et qualité d'équipement
 
 ## Ennemis
 
-## Mob au sol
+### Mob au sol
 
-Créature de galerie : mélange d'insecte, limace blindée ou bête de roche.
+- créature de galerie, insecte, bête de roche ou équivalent
+- silhouette basse
+- lecture immédiate du danger
+- accent lumineux possible
 
-Règles :
-- Silhouette basse.
-- Déplacement menaçant mais simple.
-- Couleur proche du biome, avec yeux ou noyau lumineux.
-- Doit rester identifiable même en petit format.
+### Mob volant
 
-## Mob volant
-
-Créature légère : chauve-souris minérale, insecte cavernicole, fragment vivant.
-
-Règles :
-- Silhouette plus fine et aérienne.
-- Ailes ou appendices immédiatement visibles.
-- Couleur légèrement plus froide que le mob au sol.
-- Point lumineux possible pour aider à le suivre.
+- silhouette plus fine et aérienne
+- appendices ou ailes visibles
+- lecture claire sur fond sombre
 
 ## Boss
 
-Le boss doit donner une impression de gardien ancien, plus grand que le joueur, lié à la roche ou au noyau.
+- silhouette massive
+- plusieurs zones visuelles claires
+- accent lumineux fort
+- impression de gardien ancien
+- menace lisible avant même l'animation
 
-Règles :
-- Silhouette massive.
-- Plusieurs zones visuelles : tête, bras, coeur, arme ou cornes.
-- Accent lumineux fort : coeur doré, oeil, fissures magiques.
-- Animation lente mais menaçante.
-- Le joueur doit comprendre visuellement que c'est un mur de fin de run.
+## Biomes
 
-## Biome 1 — Galeries de surface
+### Biome 1 — Galeries Verdoyantes
 
-Ambiance : grotte ancienne proche de la surface, racines, pierre humide, traces d'un vieux monde enfoui.
-
-Palette :
-- bruns sombres
-- verts mousse
-- gris pierre
-- cuivre
-- lumière chaude faible
-
-Éléments visuels :
+- pierre humide
 - racines
-- pierres fissurées
-- minerais de cuivre
-- planches ou restes d'atelier
-- torches rares
+- cuivre
+- lumière chaude rare
 
-## Biome 2 — Profondeurs cristallines
+### Biome 2 — Mines Obscures
 
-Ambiance : cavernes froides, cristaux, silence, magie ancienne.
+- galeries sombres
+- métal usé
+- lecture compatible avec l'overlay d'obscurité
 
-Palette :
-- bleu sombre
-- violet désaturé
-- gris froid
-- cyan rare
-- blanc bleuté
+### Biome 3 — Îles Célestes
 
-Éléments visuels :
-- cristaux lumineux
-- brume légère
-- pierre noire
-- reflets froids
+- cristaux
+- lumière froide
+- verticalité
 
-## Biome 3 — Approches du Noyau
+### Biome 4 — Descente vers le Noyau
 
-Ambiance : ruines brûlées, chaleur, pression, monde qui se déforme près du coeur.
-
-Palette :
-- rouge sombre
-- orange lave
-- brun brûlé
-- noir chaud
-- or ancien
-
-Éléments visuels :
+- roche en fusion
 - fissures lumineuses
-- lave ou braises
-- structures anciennes cassées
-- minerais rares
+- corruption
+- chaleur visuelle
 
 ## Interface
 
-L'interface doit rester simple et lisible, sans surcharge décorative.
+- sobre
+- lisible
+- fond sombre semi-opaque si nécessaire
+- titres et accents en or terni
+- rouge pour danger
+- couleurs d'icônes cohérentes avec leur fonction
 
-Règles :
-- Texte clair et court.
-- Fond sombre semi-opaque si nécessaire.
-- Couleur or terni pour titres ou éléments importants.
-- Rouge pour danger / PV.
-- Vert ou rouge potion pour soin.
-- Icônes simples en pixel art pour potion, minerai, or.
+## Format des assets
 
-## Format des sprites
-
-Formats recommandés :
-- Joueur : 24x24 ou 32x32 px.
-- Mob au sol : 24x16 ou 32x24 px.
-- Mob volant : 24x24 px.
-- Boss : 64x64 à 96x96 px.
-- Tiles : 16x16 px.
-- Objets interactifs : 16x16 ou 24x24 px.
-
-Règles techniques :
-- Fond transparent.
-- Pas d'anti-aliasing flou.
-- Contours lisibles, pas forcément noirs.
-- Palette limitée par sprite.
-- Export PNG.
+- PNG avec alpha propre
+- pas de grille imposée
+- pas d'obligation de palette limitée
+- pas d'obligation de contours noirs
+- pas d'obligation de rendu pixelisé
+- tailles définies par les besoins runtime du jeu
 
 ## À éviter
 
-- Couleurs trop vives façon cartoon.
-- Personnages trop mignons si cela casse la tension.
-- Décor trop détaillé qui masque le gameplay.
-- Copie directe d'armures, boss, symboles ou lieux Elden Ring.
-- Trop de noir pur : préférer des ombres colorées.
-- Trop d'effets visuels qui rendent les attaques illisibles.
+- couleurs trop vives
+- volumes trop flous
+- décor qui masque le gameplay
+- surcharge d'effets
+- détail microscopique illisible à taille réelle
 
 ## Priorité de production
 
-1. Sprite joueur avec idle, course, saut, attaque.
-2. Mob au sol.
-3. Mob volant.
-4. Boss.
-5. Minerais et établi.
-6. Tiles biome 1.
-7. UI icons : potion, or, minerai.
+1. joueur
+2. ennemis
+3. boss
+4. décors / tilesets
+5. UI
 
 ## Critère de validation
 
 Un asset est accepté si :
-- il reste lisible à sa taille réelle dans Godot ;
-- sa silhouette est identifiable sans zoom ;
-- il respecte la palette dark fantasy ;
-- il ne copie pas une référence existante ;
-- il améliore la compréhension du gameplay.
+- il reste lisible à taille réelle dans Godot
+- sa silhouette est identifiable sans zoom
+- il respecte la direction dark fantasy
+- il ne copie pas une référence existante
+- il améliore la compréhension du gameplay

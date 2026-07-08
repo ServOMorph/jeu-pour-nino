@@ -1,10 +1,12 @@
 # CoreDive Challenge — Document de conception
 
-*Basé sur le profil joueur établi précédemment. Décisions validées : solo, runs courts, pixel art type Terraria, thème de la descente, 3 biomes, moteur Godot, défi "sauras-tu arriver au bout ?".*
+> Note 2026-07-08 : ce document est historique. La direction visuelle active n'est plus le pixel art mais la 2D standard raster en 1920×1080 natif. Pour l'état de vérité courant, voir `roadmap.md`, `questions.md`, `plan_resolution_1920x1080.md` et `plan_graphismes_standard_2d.md`.
+
+*Basé sur le profil joueur établi précédemment. Décisions initiales : solo, runs courts, style Terraria-like, thème de la descente, 3 biomes, moteur Godot, défi "sauras-tu arriver au bout ?".*
 
 ## 1. Pitch
 
-**CoreDive Challenge** est un roguelite 2D en pixel art où chaque partie ("run") consiste à **plonger toujours plus profond vers le Noyau** d'un monde souterrain généré procéduralement, en récoltant des ressources, en améliorant son équipement en cours de route, et en affrontant des ennemis et boss de plus en plus durs. L'objectif est clair et visible dès le départ : **atteindre le Noyau, au fond du troisième biome**. Mourir en chemin met fin au run, mais certains éléments persistent pour la prochaine tentative.
+**CoreDive Challenge** est un roguelite 2D où chaque partie ("run") consiste à **plonger toujours plus profond vers le Noyau** d'un monde souterrain généré procéduralement, en récoltant des ressources, en améliorant son équipement en cours de route, et en affrontant des ennemis et boss de plus en plus durs. L'objectif est clair et visible dès le départ : **atteindre le Noyau, au fond du troisième biome**. Mourir en chemin met fin au run, mais certains éléments persistent pour la prochaine tentative.
 
 C'est l'ADN Terraria (exploration, ressources, craft, palier d'équipement, boss) condensé dans une structure de run courte façon Hades/Noita, avec l'exigence d'un Hollow Knight côté difficulté. Le titre "CoreDive" résume la promesse : à chaque run, on plonge un peu plus loin vers le cœur du monde — et la question posée au joueur est simple : *sauras-tu atteindre le Noyau ?*
 

@@ -13,12 +13,13 @@
 - **Un seul Gardien du Voile implémenté au lancement** (Le Veilleur des Cendres) ; les 7 autres du pool de 8 sont ajoutés progressivement (refacto R2 de la roadmap).
 - **Solo strict**, pas d'anticipation d'une coop future.
 - Table de rareté des recettes réalignée : les cristaux restent liés au Biome 3, l'imagerie volcanique (Marteau Magmatique, Armure Volcanique) est réattribuée au Biome 4 (cohérent avec « roche en fusion »).
+- **Direction visuelle révisée le 2026-07-07** : abandon du pixel art au profit d'une 2D standard raster, résolution native 1920×1080 conservée.
 
 ---
 
 ## Vision Générale
 
-CoreDive Challenge est un jeu de plateforme/action roguelite en pixel art.
+CoreDive Challenge est un jeu de plateforme/action roguelite en 2D standard raster.
 
 Le joueur descend vers le Noyau, une intelligence ancienne enfouie au cœur du monde. Il explore, récolte, fabrique et survit dans des biomes procéduraux. La mort n'est pas une fin — c'est une épreuve. Chaque run raconte une histoire unique faite de découvertes, de sacrifices et de transformations.
 
