@@ -1,8 +1,8 @@
 # Audit sprites
 
 - error: 0
-- warning: 20
-- info: 5
+- warning: 32
+- info: 3
 
 ## global
 
@@ -19,6 +19,18 @@
 - [ ] warning: sprite orphelin: res://assets/objects/ore_copper_workflow_contact_v2.png
 - [ ] warning: sprite orphelin: res://assets/objects/ore_iron.png
 - [ ] warning: sprite orphelin: res://assets/objects/workbench.png
+- [ ] warning: sprite orphelin: res://assets/player/player_attack.png
+- [ ] warning: sprite orphelin: res://assets/player/player_attack_down.png
+- [ ] warning: sprite orphelin: res://assets/player/player_attack_down_diag.png
+- [ ] warning: sprite orphelin: res://assets/player/player_attack_down_diag_transition.png
+- [ ] warning: sprite orphelin: res://assets/player/player_attack_down_transition.png
+- [ ] warning: sprite orphelin: res://assets/player/player_attack_transition.png
+- [ ] warning: sprite orphelin: res://assets/player/player_attack_up.png
+- [ ] warning: sprite orphelin: res://assets/player/player_attack_up_diag.png
+- [ ] warning: sprite orphelin: res://assets/player/player_attack_up_diag_transition.png
+- [ ] warning: sprite orphelin: res://assets/player/player_attack_up_transition.png
+- [ ] warning: sprite orphelin: res://assets/player/player_idle_v2.png
+- [ ] warning: sprite orphelin: res://assets/player/player_jump.png
 - [ ] warning: sprite orphelin: res://assets/player/player_run1.png
 - [ ] warning: sprite orphelin: res://assets/player/player_run2.png
 - [ ] warning: sprite orphelin: res://assets/sprite_contact_sheet.png
@@ -38,9 +50,4 @@
 ## enemy_ground
 
 - [ ] info: placeholder detecte: res://assets/enemies/enemy_ground.png partage par [idle, walk, hurt, dead]
-
-## player
-
-- [ ] info: placeholder detecte: res://assets/player/player_idle_v2.png partage par [idle, hurt, dead]
-- [ ] info: placeholder detecte: res://assets/player/player_jump.png partage par [jump, fall]
 

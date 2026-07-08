@@ -1,3 +1,12 @@
+## v1.38 - 2026-07-08
+
+### Ajoute
+- `game_art/assets/player/player_*_sheet.png` : sheets runtime ajoutes pour tous les etats player, y compris les 5 directions d'attaque.
+
+### Modifie
+- `game_art/data/animations.json` et `game/data/animations.json` : player migre a 100% vers `sheet` + `frame_size` + indices, sans fallback legacy cote jeu/editeur.
+- `game_art/editeur/test_specs_export.gd`, `game_art/editeur/test_audit_ui.gd`, `game_art/specs/player.md`, `game_art/audit_report.md`, `game_art/_contexte/`, `game_art/roadmap_editeur.md` et `game_art/backlog_art.md` : tests, exports et contexte alignes sur la migration complete du format player.
+
 ## v1.37 - 2026-07-07
 
 ### Corrige

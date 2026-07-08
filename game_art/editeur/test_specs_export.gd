@@ -17,12 +17,14 @@ func _initialize() -> void:
 	var expected_snippets := [
 		"# player",
 		"## Etats",
+		"### attack",
+		"- sheet: res://assets/sprites/player/player_attack_sheet.png",
 		"### run",
 		"- target_frame_size: 87x150",
 		"- fps: 8.1",
 		"- sheet: res://assets/sprites/player/player_run_sheet.png",
 		"## Anomalies ouvertes",
-		"- info: placeholder detecte: res://assets/player/player_idle_v2.png partage par [idle, hurt, dead]"
+		"- aucune"
 	]
 	for snippet in expected_snippets:
 		if not content.contains(snippet):

@@ -23,8 +23,8 @@ func _initialize() -> void:
 		"- warning: ",
 		"- info: ",
 		"## global",
-		"## player",
-		"- [ ] info: placeholder detecte: res://assets/player/player_jump.png partage par [jump, fall]"
+		"## boss",
+		"- [ ] info: placeholder detecte: res://assets/enemies/enemy_ground.png partage par [idle, walk, hurt, dead]"
 	]
 	for snippet in expected_snippets:
 		if not report.contains(snippet):
@@ -32,15 +32,15 @@ func _initialize() -> void:
 			quit(1)
 			return
 
-	var entity_item := _find_tree_item(main._audit_tree, "player", "")
+	var entity_item := _find_tree_item(main._audit_tree, "boss", "")
 	if entity_item == null:
-		push_error("anomalie player introuvable")
+		push_error("anomalie boss introuvable")
 		quit(1)
 		return
 	main._audit_tree.set_selected(entity_item, 0)
 	main._on_audit_item_activated()
 
-	var ok: bool = main._current_entity == "player"
+	var ok: bool = main._current_entity == "boss"
 	print("audit_ui_select=", ok)
 	quit(0 if ok else 1)
 

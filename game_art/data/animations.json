@@ -9,8 +9,13 @@
           0.0,
           0.0
         ],
+        "sheet": "res://assets/sprites/player/player_idle_sheet.png",
+        "frame_size": [
+          87.0,
+          150.0
+        ],
         "frames": [
-          "res://assets/sprites/player/player_idle_v2.png"
+          0.0
         ]
       },
       "run": {
@@ -37,8 +42,13 @@
           0.0,
           0.0
         ],
+        "sheet": "res://assets/sprites/player/player_jump_sheet.png",
+        "frame_size": [
+          87.0,
+          150.0
+        ],
         "frames": [
-          "res://assets/sprites/player/player_jump.png"
+          0.0
         ]
       },
       "fall": {
@@ -48,8 +58,13 @@
           0.0,
           0.0
         ],
+        "sheet": "res://assets/sprites/player/player_fall_sheet.png",
+        "frame_size": [
+          87.0,
+          150.0
+        ],
         "frames": [
-          "res://assets/sprites/player/player_jump.png"
+          0.0
         ]
       },
       "attack": {
@@ -59,12 +74,17 @@
           0.0,
           0.0
         ],
+        "sheet": "res://assets/sprites/player/player_attack_sheet.png",
+        "frame_size": [
+          129.0,
+          150.0
+        ],
         "frames": [
-          "res://assets/sprites/player/player_attack_transition.png",
-          "res://assets/sprites/player/player_attack.png",
-          "res://assets/sprites/player/player_attack.png",
-          "res://assets/sprites/player/player_attack.png",
-          "res://assets/sprites/player/player_attack.png"
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0
         ]
       },
       "attack_up_diag": {
@@ -74,12 +94,17 @@
           0.0,
           0.0
         ],
+        "sheet": "res://assets/sprites/player/player_attack_up_diag_sheet.png",
+        "frame_size": [
+          129.0,
+          150.0
+        ],
         "frames": [
-          "res://assets/sprites/player/player_attack_up_diag_transition.png",
-          "res://assets/sprites/player/player_attack_up_diag.png",
-          "res://assets/sprites/player/player_attack_up_diag.png",
-          "res://assets/sprites/player/player_attack_up_diag.png",
-          "res://assets/sprites/player/player_attack_up_diag.png"
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0
         ]
       },
       "attack_down_diag": {
@@ -89,12 +114,17 @@
           0.0,
           0.0
         ],
+        "sheet": "res://assets/sprites/player/player_attack_down_diag_sheet.png",
+        "frame_size": [
+          129.0,
+          150.0
+        ],
         "frames": [
-          "res://assets/sprites/player/player_attack_down_diag_transition.png",
-          "res://assets/sprites/player/player_attack_down_diag.png",
-          "res://assets/sprites/player/player_attack_down_diag.png",
-          "res://assets/sprites/player/player_attack_down_diag.png",
-          "res://assets/sprites/player/player_attack_down_diag.png"
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0
         ]
       },
       "attack_up": {
@@ -104,12 +134,17 @@
           0.0,
           0.0
         ],
+        "sheet": "res://assets/sprites/player/player_attack_up_sheet.png",
+        "frame_size": [
+          129.0,
+          150.0
+        ],
         "frames": [
-          "res://assets/sprites/player/player_attack_up_transition.png",
-          "res://assets/sprites/player/player_attack_up.png",
-          "res://assets/sprites/player/player_attack_up.png",
-          "res://assets/sprites/player/player_attack_up.png",
-          "res://assets/sprites/player/player_attack_up.png"
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0
         ]
       },
       "attack_down": {
@@ -119,12 +154,17 @@
           0.0,
           0.0
         ],
+        "sheet": "res://assets/sprites/player/player_attack_down_sheet.png",
+        "frame_size": [
+          129.0,
+          150.0
+        ],
         "frames": [
-          "res://assets/sprites/player/player_attack_down_transition.png",
-          "res://assets/sprites/player/player_attack_down.png",
-          "res://assets/sprites/player/player_attack_down.png",
-          "res://assets/sprites/player/player_attack_down.png",
-          "res://assets/sprites/player/player_attack_down.png"
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0
         ]
       },
       "hurt": {
@@ -134,8 +174,13 @@
           0.0,
           0.0
         ],
+        "sheet": "res://assets/sprites/player/player_hurt_sheet.png",
+        "frame_size": [
+          87.0,
+          150.0
+        ],
         "frames": [
-          "res://assets/sprites/player/player_idle_v2.png"
+          0.0
         ]
       },
       "dead": {
@@ -145,8 +190,13 @@
           0.0,
           0.0
         ],
+        "sheet": "res://assets/sprites/player/player_dead_sheet.png",
+        "frame_size": [
+          87.0,
+          150.0
+        ],
         "frames": [
-          "res://assets/sprites/player/player_idle_v2.png"
+          0.0
         ]
       }
     }

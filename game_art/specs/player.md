@@ -11,8 +11,8 @@
 - fps: 12.0
 - loop: false
 - frame_count: 5
-- sheet: legacy
-- frame_size: n/a
+- sheet: res://assets/sprites/player/player_attack_sheet.png
+- frame_size: 129x150
 - offset: [0.0, 0.0]
 
 ### attack_down
@@ -21,8 +21,8 @@
 - fps: 12.0
 - loop: false
 - frame_count: 5
-- sheet: legacy
-- frame_size: n/a
+- sheet: res://assets/sprites/player/player_attack_down_sheet.png
+- frame_size: 129x150
 - offset: [0.0, 0.0]
 
 ### attack_down_diag
@@ -31,8 +31,8 @@
 - fps: 12.0
 - loop: false
 - frame_count: 5
-- sheet: legacy
-- frame_size: n/a
+- sheet: res://assets/sprites/player/player_attack_down_diag_sheet.png
+- frame_size: 129x150
 - offset: [0.0, 0.0]
 
 ### attack_up
@@ -41,8 +41,8 @@
 - fps: 12.0
 - loop: false
 - frame_count: 5
-- sheet: legacy
-- frame_size: n/a
+- sheet: res://assets/sprites/player/player_attack_up_sheet.png
+- frame_size: 129x150
 - offset: [0.0, 0.0]
 
 ### attack_up_diag
@@ -51,8 +51,8 @@
 - fps: 12.0
 - loop: false
 - frame_count: 5
-- sheet: legacy
-- frame_size: n/a
+- sheet: res://assets/sprites/player/player_attack_up_diag_sheet.png
+- frame_size: 129x150
 - offset: [0.0, 0.0]
 
 ### dead
@@ -61,8 +61,8 @@
 - fps: 1.0
 - loop: false
 - frame_count: 1
-- sheet: legacy
-- frame_size: n/a
+- sheet: res://assets/sprites/player/player_dead_sheet.png
+- frame_size: 87x150
 - offset: [0.0, 0.0]
 
 ### fall
@@ -71,8 +71,8 @@
 - fps: 1.0
 - loop: false
 - frame_count: 1
-- sheet: legacy
-- frame_size: n/a
+- sheet: res://assets/sprites/player/player_fall_sheet.png
+- frame_size: 87x150
 - offset: [0.0, 0.0]
 
 ### hurt
@@ -81,8 +81,8 @@
 - fps: 1.0
 - loop: false
 - frame_count: 1
-- sheet: legacy
-- frame_size: n/a
+- sheet: res://assets/sprites/player/player_hurt_sheet.png
+- frame_size: 87x150
 - offset: [0.0, 0.0]
 
 ### idle
@@ -91,8 +91,8 @@
 - fps: 1.0
 - loop: true
 - frame_count: 1
-- sheet: legacy
-- frame_size: n/a
+- sheet: res://assets/sprites/player/player_idle_sheet.png
+- frame_size: 87x150
 - offset: [0.0, 0.0]
 
 ### jump
@@ -101,8 +101,8 @@
 - fps: 1.0
 - loop: false
 - frame_count: 1
-- sheet: legacy
-- frame_size: n/a
+- sheet: res://assets/sprites/player/player_jump_sheet.png
+- frame_size: 87x150
 - offset: [0.0, 0.0]
 
 ### run
@@ -117,6 +117,5 @@
 
 ## Anomalies ouvertes
 
-- info: placeholder detecte: res://assets/player/player_idle_v2.png partage par [idle, hurt, dead]
-- info: placeholder detecte: res://assets/player/player_jump.png partage par [jump, fall]
+- aucune
 

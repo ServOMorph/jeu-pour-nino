@@ -34,3 +34,7 @@
   redimensionnement exact a la taille cible, puis integration.
 - `player.attack.offset` reste a `[0, 0]` avec les assets 150 px ; si l'attaque
   touche le sol, corriger le sprite source avant de retoucher les offsets.
+- Les sprites source du player doivent etre orientes vers la droite ; le flip du jeu
+  reste standard et ne doit pas compenser une orientation source inverse.
+- Le set joueur HD est valide en jeu depuis le 2026-07-07 et devient la base visuelle
+  de reference pour la suite de la production.
