@@ -1,6 +1,7 @@
 extends VBoxContainer
 
 signal state_edited(entity: String, state: String, cfg: Dictionary)
+signal preview_frame_requested(frame_index: int)
 
 var _entity := ""
 var _state := ""
@@ -165,6 +166,7 @@ func _build_frames_section(is_sheet: bool) -> void:
 	_frames_list = ItemList.new()
 	_frames_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_frames_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_frames_list.item_selected.connect(_on_frame_selected)
 	add_child(_frames_list)
 
 	var frames: Variant = _cfg.get("frames", [])
@@ -222,6 +224,9 @@ func _format_frame_label(value: String) -> String:
 	if value.begins_with("res://"):
 		return value.get_file()
 	return value
+
+func _on_frame_selected(index: int) -> void:
+	preview_frame_requested.emit(index)
 
 func _move_frame(delta: int) -> void:
 	var selected := _frames_list.get_selected_items()

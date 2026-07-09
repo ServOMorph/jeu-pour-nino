@@ -110,6 +110,11 @@ func _build_toolbar(parent: Control) -> void:
 	btn_save.pressed.connect(_save)
 	bar.add_child(btn_save)
 
+	var btn_reload := Button.new()
+	btn_reload.text = "Recharger"
+	btn_reload.pressed.connect(_reload_editor_data)
+	bar.add_child(btn_reload)
+
 	var btn_audit := Button.new()
 	btn_audit.text = "Audit"
 	btn_audit.pressed.connect(_open_audit_dialog)
@@ -241,6 +246,7 @@ func _build_inspector_panel(parent: Control) -> void:
 	_inspector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_inspector.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_inspector.state_edited.connect(_on_state_edited)
+	_inspector.preview_frame_requested.connect(_on_preview_frame_requested)
 	scroll.add_child(_inspector)
 
 func _build_audit_dialog() -> void:
@@ -371,6 +377,51 @@ func _on_state_edited(entity: String, state: String, _cfg: Dictionary) -> void:
 	_driver.play_state(state)
 	_center_preview_driver()
 	_driver.speed_scale = 0.0 if _paused else 1.0
+	_update_frame_info()
+
+func _reload_editor_data() -> void:
+	var selected_entity := _current_entity
+	var selected_state := ""
+	var selected_static := ""
+
+	var state_selection := _state_list.get_selected_items()
+	if not state_selection.is_empty():
+		selected_state = _state_list.get_item_text(state_selection[0])
+
+	var static_selection := _static_list.get_selected_items()
+	if not static_selection.is_empty():
+		selected_static = _static_list.get_item_text(static_selection[0])
+
+	_load_entities()
+	_load_static_sprites()
+
+	if not selected_static.is_empty():
+		var static_idx := _find_item_index(_static_list, selected_static)
+		if static_idx >= 0:
+			_static_list.select(static_idx)
+			_on_static_selected(static_idx)
+			return
+
+	if not selected_entity.is_empty():
+		var entity_idx := _find_item_index(_entity_list, selected_entity)
+		if entity_idx >= 0:
+			_entity_list.select(entity_idx)
+			_on_entity_selected(entity_idx)
+			if not selected_state.is_empty():
+				var state_idx := _find_item_index(_state_list, selected_state)
+				if state_idx >= 0:
+					_state_list.select(state_idx)
+					_on_state_selected(state_idx)
+
+func _on_preview_frame_requested(frame_index: int) -> void:
+	if _driver.sprite_frames == null or _driver.animation == "":
+		return
+	var frame_count := _driver.sprite_frames.get_frame_count(_driver.animation)
+	if frame_index < 0 or frame_index >= frame_count:
+		return
+	_driver.frame = frame_index
+	_driver.speed_scale = 0.0 if _paused else 1.0
+	_btn_pause.text = ">" if _paused else "II"
 	_update_frame_info()
 
 func _update_title() -> void:

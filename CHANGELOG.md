@@ -1,3 +1,10 @@
+## v1.42 - 2026-07-09
+
+### Modifie
+- `game_art/editeur/main.gd` et `game_art/editeur/inspector.gd` : clic sur frame branche sur la preview et bouton `Recharger` ajoute pour relire assets et `animations.json` sans relance Godot.
+- `game_art/assets/player/player_attack_sheet.png`, `game_art/data/animations.json` et `game/data/animations.json` : etat `player/attack` regenere depuis une frame de reference et sequence de lecture changee en `0,1,2,3,3,3,2,1,0`.
+- `game_art/_contexte/`, `game_art/roadmap_editeur.md` et `game_art/backlog_art.md` : contexte de maintenance aligne sur la regeneration complete de `attack` et sur le flux `Recharger`.
+
 ## v1.41 - 2026-07-09
 
 ### Modifie

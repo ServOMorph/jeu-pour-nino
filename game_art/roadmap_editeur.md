@@ -94,5 +94,6 @@ Le temps de la zone game_art va a la production d'assets, pas au polissage de l'
 ## Point d'attention
 
 La migration de format est close pour le player et ses PNG legacy sont archives hors
-audit. Le point restant n'est plus le format, mais la validation visuelle en jeu des
-assets critiques livres (Veilleur des Cendres, projectile d'ash, gisements dedies).
+audit. Le point chaud de maintenance est maintenant la validation visuelle de
+`player/attack` regenere depuis une frame de reference, ainsi que le bon usage du
+bouton `Recharger` pour eviter les relances inutiles de l'editeur.
