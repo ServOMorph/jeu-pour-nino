@@ -79,7 +79,8 @@ Conséquences pour cette zone (à traiter côté game_art, hors périmètre jeu)
 - placeholder: `ore_copper.png` unique pour tous les gisements
 - specs: un sprite par matériau, lisible en 2D standard à la taille runtime des gisements (`56x56` actuellement côté jeu) — 13 définitifs (questions.md Q041) : `bois`, `pierre`, `cuivre`, `cuir` (B1), `fer`, `charbon`, `minerai_sombre` (B2), `cristal`, `minerai_celeste`, `essence_vent` (B3), `fragment_noyau`, `minerai_abyssal` (B4), `essence_voile` (Voile, drop uniquement, pas de gisement). Lisibilité de rareté croissante (charte graphique).
 - priorite: moyenne
-- statut: en_cours
+- statut: livre
+- livraison: `game_art/assets/objects/ore_bois.png`, `game_art/assets/objects/ore_pierre.png`, `game_art/assets/objects/ore_copper_handmade_v2.png`, `game_art/assets/objects/ore_iron.png`, `game_art/assets/objects/ore_charbon.png`, `game_art/assets/objects/ore_minerai_sombre.png`, `game_art/assets/objects/ore_cristal.png`, `game_art/assets/objects/ore_minerai_celeste.png`, `game_art/assets/objects/ore_fragment_noyau.png`, `game_art/assets/objects/ore_abyssal.png`
 
 ### Sprite manquant — minerai abyssal
 - phase: 1 — Matériaux typés
@@ -151,7 +152,8 @@ Conséquences pour cette zone (à traiter côté game_art, hors périmètre jeu)
 - placeholder: sprite boss actuel recoloré
 - specs: **un seul Gardien à produire au lancement** (questions.md Q029) — thème cendres/braises, cohérent avec ses 3 attaques (charge au sol, projectile de cendres, zone d'explosion retardée) + pose de pause vulnérable. Les 7 autres Gardiens du pool (Roi Sans Visage, Collecteur d'Âmes, Veuve du Vide, Dévoreur de Souvenirs, Porte-Flamme, Gardien des Os, Écho du Noyau) ne sont à produire qu'après activation de R2 côté jeu — ne pas anticiper.
 - priorite: moyenne
-- statut: en_cours
+- statut: livre
+- livraison: `game_art/assets/enemies/boss_guardian_ashes.png`, `game_art/assets/enemies/boss_guardian_ashes_pause.png`, `game_art/assets/enemies/boss_projectile_ash.png`, `game_art/data/animations.json`, `game/scenes/enemies/boss_projectile.tscn`
 
 ### Effets visuels cicatrices — 5 paliers fixes
 - phase: 6 — Cicatrices (jalon J3)

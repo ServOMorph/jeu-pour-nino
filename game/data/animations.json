@@ -307,10 +307,10 @@
         "loop": true,
         "offset": [
           0.0,
-          0.0
+          13.0
         ],
         "frames": [
-          "res://assets/sprites/enemies/boss_guardian.png"
+          "res://assets/sprites/enemies/boss_guardian_ashes.png"
         ]
       },
       "idle": {
@@ -318,10 +318,10 @@
         "loop": true,
         "offset": [
           0.0,
-          0.0
+          13.0
         ],
         "frames": [
-          "res://assets/sprites/enemies/boss_guardian.png"
+          "res://assets/sprites/enemies/boss_guardian_ashes.png"
         ]
       },
       "charge": {
@@ -329,10 +329,10 @@
         "loop": true,
         "offset": [
           0.0,
-          0.0
+          13.0
         ],
         "frames": [
-          "res://assets/sprites/enemies/boss_guardian.png"
+          "res://assets/sprites/enemies/boss_guardian_ashes.png"
         ]
       },
       "volley": {
@@ -340,10 +340,10 @@
         "loop": true,
         "offset": [
           0.0,
-          0.0
+          13.0
         ],
         "frames": [
-          "res://assets/sprites/enemies/boss_guardian.png"
+          "res://assets/sprites/enemies/boss_guardian_ashes.png"
         ]
       },
       "slam_rise": {
@@ -351,10 +351,10 @@
         "loop": true,
         "offset": [
           0.0,
-          0.0
+          13.0
         ],
         "frames": [
-          "res://assets/sprites/enemies/boss_guardian.png"
+          "res://assets/sprites/enemies/boss_guardian_ashes.png"
         ]
       },
       "slam_fall": {
@@ -362,10 +362,10 @@
         "loop": true,
         "offset": [
           0.0,
-          0.0
+          13.0
         ],
         "frames": [
-          "res://assets/sprites/enemies/boss_guardian.png"
+          "res://assets/sprites/enemies/boss_guardian_ashes.png"
         ]
       },
       "pause": {
@@ -373,10 +373,10 @@
         "loop": true,
         "offset": [
           0.0,
-          0.0
+          35.0
         ],
         "frames": [
-          "res://assets/sprites/enemies/boss_guardian.png"
+          "res://assets/sprites/enemies/boss_guardian_ashes_pause.png"
         ]
       },
       "hurt": {
@@ -384,10 +384,10 @@
         "loop": false,
         "offset": [
           0.0,
-          0.0
+          13.0
         ],
         "frames": [
-          "res://assets/sprites/enemies/boss_guardian.png"
+          "res://assets/sprites/enemies/boss_guardian_ashes.png"
         ]
       },
       "dead": {
@@ -395,10 +395,10 @@
         "loop": false,
         "offset": [
           0.0,
-          0.0
+          13.0
         ],
         "frames": [
-          "res://assets/sprites/enemies/boss_guardian.png"
+          "res://assets/sprites/enemies/boss_guardian_ashes.png"
         ]
       }
     }

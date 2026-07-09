@@ -12,11 +12,11 @@ pour visualiser, animer et auditer les sprites. Cible player actuelle :
 - Synchro vers jeu : sync.py a la racine projet (gere par zone jeu)
 
 ## Etat actuel
-Phases 0, 1, 2, 3 et 4 sont closes cote editeur ; la phase 5 reste ouverte.
-Le player est maintenant migre a 100% en sheets cote editeur et cote jeu, sans fallback legacy dans `animations.json`.
-Les tests headless `test_preview_center`, `test_specs_export`, `test_audit_ui` et `test_audit` passent.
-Les anciens PNG player restent presents comme sources non referencees et polluent l'audit via des warnings globaux.
-Boss, mobs et objets gameplay critiques restent livres ; validation visuelle interactive encore a faire.
+Phases 0 a 6 sont closes cote editeur ; la zone est revenue en maintenance.
+Le player est migre a 100% en sheets et ses PNG legacy sont maintenant archives hors audit.
+Les gisements disposent d'un set dedie branche dans `game/data/materials.json`.
+Le Veilleur des Cendres est livre avec sprite principal, pose `pause` et projectile dedie.
+La validation visuelle interactive en jeu et dans l'editeur reste a faire sur ces livrables.
 
 ## Decisions structurantes
 - Pour les mobs, boss et objets gameplay, le workflow valide est : generation HD sur fond chroma-key, detourage local, puis resize exact a la taille runtime.
@@ -28,5 +28,9 @@ Boss, mobs et objets gameplay critiques restent livres ; validation visuelle int
   de la frame courante explicitement dans le viewport.
 - Le player utilise desormais uniquement des etats `sheet`, y compris les attaques
   directionnelles et les etats mono-frame encapsules en sheet 1 frame.
-- Les PNG player legacy sont conserves localement comme sources tant qu'aucune decision
-  explicite de nettoyage ou d'exclusion d'audit n'a ete prise.
+- Les PNG player legacy sont conserves comme sources dans `assets/player/legacy_archive/`
+  et exclus explicitement de l'audit.
+- Les gisements exploitent maintenant des sprites dedies par materiau, sans fallback
+  cuivre pour les ressources minables runtime.
+- Le Veilleur des Cendres est livre comme set statique runtime avec projectile d'ash
+  dedie ; les reglages fins de depart/visibilite restent pilotes cote jeu.

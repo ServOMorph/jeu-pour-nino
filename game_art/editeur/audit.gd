@@ -1,5 +1,11 @@
 extends RefCounted
 
+const AUDIT_EXCLUDED_DIRS := {
+	"from_reference": true,
+	"generated_raw": true,
+	"legacy_archive": true
+}
+
 static func run_audit(manifest: Dictionary, animations: Dictionary, assets_root: String) -> Array[Dictionary]:
 	var anomalies: Array[Dictionary] = []
 	var referenced_assets: Dictionary = {}
@@ -162,7 +168,7 @@ static func _walk_png(dir_path: String, results: Array[String]) -> void:
 			continue
 		var child := dir_path + "/" + name
 		if dir.current_is_dir():
-			if name == "from_reference" or name == "generated_raw":
+			if AUDIT_EXCLUDED_DIRS.has(name):
 				continue
 			_walk_png(child, results)
 		elif name.to_lower().ends_with(".png"):

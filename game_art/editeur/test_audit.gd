@@ -18,8 +18,7 @@ func _initialize() -> void:
 	var mutated_manifest: Dictionary = manifest.duplicate(true)
 	var mutated_animations: Dictionary = animations.duplicate(true)
 	mutated_animations["enemy_ground"]["states"].erase("walk")
-	mutated_animations["player"]["states"]["jump"]["frames"] = ["res://assets/sprites/player/introuvable.png"]
-	mutated_manifest["player"]["states"]["run"]["frame_size"] = [14, 24]
+	mutated_animations["player"]["states"]["jump"]["sheet"] = "res://assets/sprites/player/introuvable.png"
 	mutated_animations["player"]["states"]["run"]["frames"] = [999]
 
 	var anomalies: Array[Dictionary] = AuditScript.run_audit(mutated_manifest, mutated_animations, "res://assets")

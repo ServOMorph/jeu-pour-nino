@@ -1,12 +1,16 @@
 # Audit sprites
 
 - error: 0
-- warning: 32
+- warning: 27
 - info: 3
 
 ## global
 
+- [ ] warning: sprite orphelin: res://assets/enemies/boss_guardian.png
+- [ ] warning: sprite orphelin: res://assets/enemies/boss_projectile_ash.png
 - [ ] warning: sprite orphelin: res://assets/objects/ore_abyssal.png
+- [ ] warning: sprite orphelin: res://assets/objects/ore_bois.png
+- [ ] warning: sprite orphelin: res://assets/objects/ore_charbon.png
 - [ ] warning: sprite orphelin: res://assets/objects/ore_copper.png
 - [ ] warning: sprite orphelin: res://assets/objects/ore_copper_handmade_v1.png
 - [ ] warning: sprite orphelin: res://assets/objects/ore_copper_handmade_v1_preview_x8.png
@@ -17,22 +21,13 @@
 - [ ] warning: sprite orphelin: res://assets/objects/ore_copper_v3_test.png
 - [ ] warning: sprite orphelin: res://assets/objects/ore_copper_v3_test_28x28.png
 - [ ] warning: sprite orphelin: res://assets/objects/ore_copper_workflow_contact_v2.png
+- [ ] warning: sprite orphelin: res://assets/objects/ore_cristal.png
+- [ ] warning: sprite orphelin: res://assets/objects/ore_fragment_noyau.png
 - [ ] warning: sprite orphelin: res://assets/objects/ore_iron.png
+- [ ] warning: sprite orphelin: res://assets/objects/ore_minerai_celeste.png
+- [ ] warning: sprite orphelin: res://assets/objects/ore_minerai_sombre.png
+- [ ] warning: sprite orphelin: res://assets/objects/ore_pierre.png
 - [ ] warning: sprite orphelin: res://assets/objects/workbench.png
-- [ ] warning: sprite orphelin: res://assets/player/player_attack.png
-- [ ] warning: sprite orphelin: res://assets/player/player_attack_down.png
-- [ ] warning: sprite orphelin: res://assets/player/player_attack_down_diag.png
-- [ ] warning: sprite orphelin: res://assets/player/player_attack_down_diag_transition.png
-- [ ] warning: sprite orphelin: res://assets/player/player_attack_down_transition.png
-- [ ] warning: sprite orphelin: res://assets/player/player_attack_transition.png
-- [ ] warning: sprite orphelin: res://assets/player/player_attack_up.png
-- [ ] warning: sprite orphelin: res://assets/player/player_attack_up_diag.png
-- [ ] warning: sprite orphelin: res://assets/player/player_attack_up_diag_transition.png
-- [ ] warning: sprite orphelin: res://assets/player/player_attack_up_transition.png
-- [ ] warning: sprite orphelin: res://assets/player/player_idle_v2.png
-- [ ] warning: sprite orphelin: res://assets/player/player_jump.png
-- [ ] warning: sprite orphelin: res://assets/player/player_run1.png
-- [ ] warning: sprite orphelin: res://assets/player/player_run2.png
 - [ ] warning: sprite orphelin: res://assets/sprite_contact_sheet.png
 - [ ] warning: sprite orphelin: res://assets/tiles/biome1_ground.png
 - [ ] warning: sprite orphelin: res://assets/tiles/biome1_wall.png
@@ -41,7 +36,7 @@
 
 ## boss
 
-- [ ] info: placeholder detecte: res://assets/enemies/boss_guardian.png partage par [sleep, idle, charge, volley, slam_rise, slam_fall, pause, hurt, dead]
+- [ ] info: placeholder detecte: res://assets/enemies/boss_guardian_ashes.png partage par [sleep, idle, charge, volley, slam_rise, slam_fall, hurt, dead]
 
 ## enemy_flyer
 

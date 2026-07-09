@@ -6,6 +6,7 @@ signal died
 const BOSS_CONFIG_FILE := "res://data/boss.json"
 
 const PROJECTILE := preload("res://scenes/enemies/boss_projectile.tscn")
+const PROJECTILE_MUZZLE_OFFSET := Vector2(0.0, -82.0)
 
 enum State { SLEEP, IDLE, CHARGE, VOLLEY, SLAM_RISE, SLAM_FALL, PAUSE }
 
@@ -151,7 +152,7 @@ func _physics_process(delta: float) -> void:
 			if _state_time <= 0.0:
 				_choose_attack()
 		State.CHARGE:
-			velocity.x = _facing * charge_speed
+			velocity.x = 0.0
 			if is_on_wall() or _state_time <= 0.0:
 				_set_state(State.PAUSE, dur_attack_pause)
 		State.VOLLEY:
@@ -172,6 +173,7 @@ func _physics_process(delta: float) -> void:
 			if _state_time <= 0.0:
 				_set_state(State.IDLE, dur_idle)
 
+	velocity.x = 0.0
 	move_and_slide()
 
 func _update_facing() -> void:
@@ -223,13 +225,14 @@ func _choose_attack() -> void:
 func _fire_volley() -> void:
 	if not (_player and is_instance_valid(_player)):
 		return
-	var base_dir := (_player.global_position - global_position).normalized()
-	for i in range(volley_count):
-		var p := PROJECTILE.instantiate()
-		get_parent().add_child(p)
-		p.global_position = global_position
-		var ang := deg_to_rad((i - (volley_count / 2)) * volley_spread_deg)
-		p.direction = base_dir.rotated(ang)
+	var muzzle_origin := global_position + PROJECTILE_MUZZLE_OFFSET
+	var target_pos := _player.global_position
+	var shot_dir := (target_pos - muzzle_origin).normalized()
+	print("[boss] fire_volley origin=", muzzle_origin)
+	var p := PROJECTILE.instantiate()
+	get_parent().add_child(p)
+	p.direction = shot_dir
+	p.global_position = muzzle_origin + shot_dir * 28.0
 
 func _slam_impact() -> void:
 	if _player and is_instance_valid(_player):

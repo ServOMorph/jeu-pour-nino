@@ -24,7 +24,7 @@
       "pause_duration":   0.8
     },
     "volley": {
-      "count":         5,
+      "count":         1,
       "spread_deg":   15.0,
       "duration":      0.5,
       "pause_duration":0.7

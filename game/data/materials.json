@@ -4,14 +4,14 @@
     "biome": "biome1",
     "rarity": "common",
     "tier": 1,
-    "ore": {"hp": 2, "drop": 1, "size": [56, 56], "sprite": "res://assets/sprites/objects/ore_copper_handmade_v2.png"}
+    "ore": {"hp": 2, "drop": 1, "size": [56, 56], "sprite": "res://assets/sprites/objects/ore_bois.png"}
   },
   "pierre": {
     "name": "Pierre",
     "biome": "biome1",
     "rarity": "common",
     "tier": 1,
-    "ore": {"hp": 3, "drop": 1, "size": [56, 56], "sprite": "res://assets/sprites/objects/ore_copper_handmade_v2.png"}
+    "ore": {"hp": 3, "drop": 1, "size": [56, 56], "sprite": "res://assets/sprites/objects/ore_pierre.png"}
   },
   "cuivre": {
     "name": "Cuivre",
@@ -39,28 +39,28 @@
     "biome": "biome2",
     "rarity": "uncommon",
     "tier": 2,
-    "ore": {"hp": 3, "drop": 1, "size": [56, 56], "sprite": "res://assets/sprites/objects/ore_copper_handmade_v2.png"}
+    "ore": {"hp": 3, "drop": 1, "size": [56, 56], "sprite": "res://assets/sprites/objects/ore_charbon.png"}
   },
   "minerai_sombre": {
     "name": "Minerai sombre",
     "biome": "biome2",
     "rarity": "rare",
     "tier": 2,
-    "ore": {"hp": 5, "drop": 1, "size": [56, 56], "sprite": "res://assets/sprites/objects/ore_copper_handmade_v2.png"}
+    "ore": {"hp": 5, "drop": 1, "size": [56, 56], "sprite": "res://assets/sprites/objects/ore_minerai_sombre.png"}
   },
   "cristal": {
     "name": "Cristal",
     "biome": "biome3",
     "rarity": "rare",
     "tier": 2,
-    "ore": {"hp": 4, "drop": 1, "size": [56, 56], "sprite": "res://assets/sprites/objects/ore_copper_handmade_v2.png"}
+    "ore": {"hp": 4, "drop": 1, "size": [56, 56], "sprite": "res://assets/sprites/objects/ore_cristal.png"}
   },
   "minerai_celeste": {
     "name": "Minerai céleste",
     "biome": "biome3",
     "rarity": "rare",
     "tier": 2,
-    "ore": {"hp": 5, "drop": 1, "size": [56, 56], "sprite": "res://assets/sprites/objects/ore_copper_handmade_v2.png"}
+    "ore": {"hp": 5, "drop": 1, "size": [56, 56], "sprite": "res://assets/sprites/objects/ore_minerai_celeste.png"}
   },
   "essence_vent": {
     "name": "Essence de vent",
@@ -75,7 +75,7 @@
     "rarity": "epic",
     "tier": 3,
     "source": "drop_boss",
-    "ore": {"hp": 6, "drop": 1, "size": [56, 56], "sprite": "res://assets/sprites/objects/ore_copper_handmade_v2.png"}
+    "ore": {"hp": 6, "drop": 1, "size": [56, 56], "sprite": "res://assets/sprites/objects/ore_fragment_noyau.png"}
   },
   "minerai_abyssal": {
     "name": "Minerai abyssal",

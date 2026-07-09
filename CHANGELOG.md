@@ -1,3 +1,11 @@
+## v1.41 - 2026-07-09
+
+### Modifie
+- `game_art/assets/player/legacy_archive/`, `game_art/editeur/audit.gd`, `game_art/editeur/test_audit.gd` et `game_art/audit_report.md` : anciens PNG player archives et exclus de l'audit.
+- `game_art/assets/objects/ore_*.png`, `game/data/materials.json` et copies `game/assets/sprites/objects/` : set dedie des gisements complete et branche sans fallback cuivre.
+- `game_art/assets/enemies/boss_guardian_ashes.png`, `boss_guardian_ashes_pause.png`, `boss_projectile_ash.png`, `game_art/data/animations.json` et branchements runtime cote `game/` : Veilleur des Cendres livre avec pose vulnerable et projectile dedie.
+- `game_art/_contexte/`, `game_art/backlog_art.md` et `game_art/roadmap_editeur.md` : contexte et phase de maintenance realignes sur les livrables reels de la session.
+
 ## v1.40 - 2026-07-08
 
 ### Ajoute

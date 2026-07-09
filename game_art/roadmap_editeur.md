@@ -35,7 +35,7 @@ que ce que le manifest connait : un manifest non tenu a jour rend l'audit vert m
 - Phase 2 : close
 - Phase 3 : close
 - Phase 4 : close
-- Phase 5 : en cours
+- Phase 5 : close
 - Phase 6 : close
 
 ## Phase 5 - Finitions
@@ -93,5 +93,6 @@ Le temps de la zone game_art va a la production d'assets, pas au polissage de l'
 
 ## Point d'attention
 
-La migration de format est close pour le player, mais les anciens PNG legacy restent
-present comme sources et polluent l'audit tant qu'ils ne sont ni exclus ni nettoyes.
+La migration de format est close pour le player et ses PNG legacy sont archives hors
+audit. Le point restant n'est plus le format, mais la validation visuelle en jeu des
+assets critiques livres (Veilleur des Cendres, projectile d'ash, gisements dedies).

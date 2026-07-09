@@ -215,8 +215,6 @@ func _update_facing_from_input(move_dir: float, aim: Vector2) -> void:
 	var next_facing := facing
 	if absf(move_dir) > 0.0:
 		next_facing = 1 if move_dir > 0.0 else -1
-	elif absf(aim.x) > 0.0:
-		next_facing = 1 if aim.x >= 0.0 else -1
 	if next_facing != facing:
 		facing = next_facing
 		_update_facing()

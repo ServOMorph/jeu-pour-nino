@@ -1,6 +1,7 @@
 extends Area2D
 
 const BOSS_CONFIG_FILE := "res://data/boss.json"
+const PROJECTILE_TEXTURE_PATH := "res://assets/sprites/enemies/boss_projectile_ash.png"
 
 var speed := 110.0
 var lifetime := 4.0
@@ -8,6 +9,8 @@ var damage := 1
 
 var direction := Vector2.RIGHT
 var _life := 0.0
+
+@onready var visual: Sprite2D = $Visual
 
 func _load_config() -> void:
 	var f := FileAccess.open(BOSS_CONFIG_FILE, FileAccess.READ)
@@ -26,6 +29,7 @@ func _load_config() -> void:
 func _ready() -> void:
 	_load_config()
 	_life = lifetime
+	_assign_visual()
 	area_entered.connect(_on_area_entered)
 
 func _physics_process(delta: float) -> void:
@@ -40,3 +44,11 @@ func _on_area_entered(area: Area2D) -> void:
 		if player.has_method("take_damage"):
 			player.take_damage(damage, direction)
 		queue_free()
+
+func _assign_visual() -> void:
+	if visual == null:
+		return
+	var image := Image.load_from_file(ProjectSettings.globalize_path(PROJECTILE_TEXTURE_PATH))
+	if image == null or image.is_empty():
+		return
+	visual.texture = ImageTexture.create_from_image(image)
