@@ -13,10 +13,11 @@ pour visualiser, animer et auditer les sprites. Cible player actuelle :
 
 ## Etat actuel
 La zone game_art reste en maintenance de production sur les animations player.
-L'etat `player/idle` a ete remplace par une nouvelle sheet 6 frames, lue en pratique sur `0,1,2,3,5` a `5 fps`.
+L'etat `player/idle` reste sur une sheet 6 frames lue en pratique sur `0,1,2,3,5` a `5 fps`.
 L'etat `player/attack` conserve sa regeneration complete et sa sequence `0,1,2,3,3,3,2,1,0`.
+Les 4 attaques directionnelles ont ete regenerees integralement, synchronisees dans `game/`, et lues elles aussi sur `0,1,2,3,3,3,2,1,0`.
 Les sources brutes de regeneration sont conservees dans `game_art/assets/generated_raw/player/`.
-La validation manuelle finale de `idle`, puis de `attack`, reste a faire dans l'editeur.
+La validation manuelle finale des 4 attaques directionnelles, puis de `idle` et `attack`, reste a faire dans l'editeur.
 
 ## Decisions structurantes
 - Le manifest d'audit des ennemis doit refleter les dimensions runtime reelles des assets pour rester coherent avec l'integration jeu.
@@ -39,3 +40,5 @@ La validation manuelle finale de `idle`, puis de `attack`, reste a faire dans l'
   reference validee ; corriger des frames isolees cree des derives de gabarit.
 - Le nouvel `idle` du player est cadence a `5 fps` sur la sequence `0,1,2,3,5` :
   la frame `4.0` est exclue tant qu'elle n'est pas regeneree proprement.
+- Les 4 attaques directionnelles du player suivent desormais la meme sequence runtime
+  que `player/attack` : `0,1,2,3,3,3,2,1,0`, apres regeneration complete des frames.

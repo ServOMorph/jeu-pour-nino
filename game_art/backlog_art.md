@@ -1,47 +1,47 @@
-# Backlog art — CoreDive Challenge
+# Backlog art - CoreDive Challenge
 
-Backlog des assets à produire pour la zone jeu. Alimenté par les phases de `roadmap.md` (racine) : chaque phase jeu qui pose un placeholder ajoute une entrée ici. Les sessions game_art piochent dedans par priorité.
+Backlog des assets a produire pour la zone jeu. Alimente par les phases de `roadmap.md` (racine) : chaque phase jeu qui pose un placeholder ajoute une entree ici. Les sessions game_art piochent dedans par priorite.
 
-## Pivot 2026-07-07 — abandon du pixel art, graphismes 2D standard
+## Pivot 2026-07-07 - abandon du pixel art, graphismes 2D standard
 
-Décision jeu : le style visuel passe du pixel art à de la 2D standard (raster haute résolution lissée, plus de grille ni de palette réduite). Plan complet : `plan_graphismes_standard_2d.md` (racine). S'articule avec `plan_resolution_1920x1080.md` (résolution native 1920×1080 conservée).
+Decision jeu : le style visuel passe du pixel art a de la 2D standard (raster haute resolution lissee, plus de grille ni de palette reduite). Plan complet : `plan_graphismes_standard_2d.md` (racine). S'articule avec `plan_resolution_1920x1080.md` (resolution native 1920x1080 conservee).
 
-Pipeline de production retenu : génération d'image via le module Codex, puis rescale à la taille de rendu cible (pas de dessin manuel, pas de vectoriel, pas d'asset packs). Point de vigilance signalé au plan : dérive de cadrage/échelle entre frames d'une même animation générées séparément — à contrôler avant intégration.
+Pipeline de production retenu : generation d'image via le module Codex, puis rescale a la taille de rendu cible (pas de dessin manuel, pas de vectoriel, pas d'asset packs). Point de vigilance signale au plan : derive de cadrage/echelle entre frames d'une meme animation generees separement - a controler avant integration.
 
-Conséquences pour cette zone (à traiter côté game_art, hors périmètre jeu) :
-- `docs/charte_graphique_pixel_art_dark_fantasy.md` et `docs/workflow_image_gen_fable5.md` : obsolètes, à réécrire pour le nouveau pipeline (voir plan §3).
-- `game_art/tools/ref_to_sprite.py` : sans objet (réduction pixel), à remplacer par un script de rescale simple.
-- Éditeur (`game_art/editeur/`) : filtre de preview nearest → linéaire, preview "x8" et audit de tailles sur grille à retirer/refondre.
-- Toutes les entrées ci-dessous portant une spec en grille pixel (14×14, 16×16, palette limitée) sont à réviser vers des tailles 2D standard à résolution native — la colonne `specs:` reste la propriété de l'agent game_art.
-- La précision « Grille de tiles : 16×16 » ci-dessous est révisée : plus de grille imposée.
+Consequences pour cette zone (a traiter cote game_art, hors perimetre jeu) :
+- `docs/charte_graphique_pixel_art_dark_fantasy.md` et `docs/workflow_image_gen_fable5.md` : obsoletes, a reecrire pour le nouveau pipeline (voir plan section 3).
+- `game_art/tools/ref_to_sprite.py` : sans objet (reduction pixel), a remplacer par un script de rescale simple.
+- Editeur (`game_art/editeur/`) : filtre de preview nearest -> lineaire, preview "x8" et audit de tailles sur grille a retirer/refondre.
+- Toutes les entrees ci-dessous portant une spec en grille pixel (14x14, 16x16, palette limitee) sont a reviser vers des tailles 2D standard a resolution native - la colonne `specs:` reste la propriete de l'agent game_art.
+- La precision "Grille de tiles : 16x16" ci-dessous est revisee : plus de grille imposee.
 
-## Précisions v3.1 (questions.md, 2026-07-06)
+## Precisions v3.1 (questions.md, 2026-07-06)
 
-77 questions de conception (+ Q026b) ont été tranchées avant le développement — voir `questions.md` à la racine du projet. Les entrées ci-dessous intègrent déjà ces décisions. Points de cadrage transverses à connaître avant de produire :
+77 questions de conception (+ Q026b) ont ete tranchees avant le developpement - voir `questions.md` a la racine du projet. Les entrees ci-dessous integrent deja ces decisions. Points de cadrage transverses a connaitre avant de produire :
 
-- **Pas de grille de tiles imposée** : les décors sont désormais produits en 2D standard à résolution native 1920×1080.
-- **2-3 couches de parallax** par biome (fond lointain + intermédiaire + premier plan).
-- **Style dark fantasy** (voir `docs/charte_graphique_pixel_art_dark_fantasy.md`) — pas l'imagerie « lumineuse arcade » suggérée par endroits dans les docs v3 historiques.
-- **Un seul Gardien du Voile au lancement** (Le Veilleur des Cendres) — ne pas produire les 7 autres avant que la roadmap jeu (refacto R2) ne les active.
-- **Rareté/biomes réalignés** : cristaux → Biome 3 (Îles Célestes), imagerie volcanique → Biome 4 (Descente vers le Noyau). Ne pas suivre d'anciennes versions des docs qui inversaient ces deux biomes.
-- **Cicatrices visuelles = 5 paliers fixes**, shaders + overlays uniquement, jamais de retouche de spritesheet (détail des paliers dans l'entrée dédiée ci-dessous).
+- **Pas de grille de tiles imposee** : les decors sont desormais produits en 2D standard a resolution native 1920x1080.
+- **2-3 couches de parallax** par biome (fond lointain + intermediaire + premier plan).
+- **Style dark fantasy** (voir `docs/charte_graphique_pixel_art_dark_fantasy.md`) - pas l'imagerie "lumineuse arcade" suggeree par endroits dans les docs v3 historiques.
+- **Un seul Gardien du Voile au lancement** (Le Veilleur des Cendres) - ne pas produire les 7 autres avant que la roadmap jeu (refacto R2) ne les active.
+- **Rarete/biomes realignes** : cristaux -> Biome 3 (Iles Celestes), imagerie volcanique -> Biome 4 (Descente vers le Noyau). Ne pas suivre d'anciennes versions des docs qui inversaient ces deux biomes.
+- **Cicatrices visuelles = 5 paliers fixes**, shaders + overlays uniquement, jamais de retouche de spritesheet (detail des paliers dans l'entree dediee ci-dessous).
 
-## Règles
+## Regles
 
-- Une phase jeu n'est « faite » que si ses placeholders sont recensés ici.
-- Priorité héritée des jalons jouables : ce qui est visible dans le jalon courant passe devant.
-- Livraison : produire dans `game_art/assets/` + `game_art/data/animations.json`, puis sync.py → `game/`. Ne jamais éditer `game/assets/sprites/` directement.
-- Manifest d'audit : toute entrée impliquant une entité animée (nouvel archétype ennemi, boss, Gardien, porteur, module du Miroir) ajoute son entité au manifest de l'éditeur AVANT production des sheets — sinon l'audit « sprites manquants » ne la verra jamais (cf. `roadmap_editeur.md`, règle de synchronisation du manifest).
-- Standard visuel : Terraria-like, réf `docs/process_generation_sprites.md`.
-- Statuts et propriété des transitions :
-  - `a_faire` → `en_cours` → `livre` : possédé par l'agent game_art.
-  - `livre` → `integre` : possédé par l'agent jeu, une fois l'asset branché côté `game/`.
-  - Ce fichier est l'unique canal de handoff entre les deux agents. Aucun autre fichier (`_contexte/signals.md` d'une zone ou de l'autre) ne doit porter le statut ou la priorité d'un item art — au besoin, y référencer l'entrée par son nom.
-- Champs de handoff (voir format d'entrée) :
-  - `debloque:` — rempli par l'agent jeu à la création de l'entrée : quelle tâche/phase dev ce visuel débloque.
-  - `livraison:` — rempli par l'agent game_art au passage à `livre` : chemin exact des fichiers produits (assets + entrée `animations.json` le cas échéant).
+- Une phase jeu n'est "faite" que si ses placeholders sont recenses ici.
+- Priorite heritee des jalons jouables : ce qui est visible dans le jalon courant passe devant.
+- Livraison : produire dans `game_art/assets/` + `game_art/data/animations.json`, puis sync.py -> `game/`. Ne jamais editer `game/assets/sprites/` directement.
+- Manifest d'audit : toute entree impliquant une entite animee (nouvel archetype ennemi, boss, Gardien, porteur, module du Miroir) ajoute son entite au manifest de l'editeur AVANT production des sheets - sinon l'audit "sprites manquants" ne la verra jamais (cf. `roadmap_editeur.md`, regle de synchronisation du manifest).
+- Standard visuel : Terraria-like, ref `docs/process_generation_sprites.md`.
+- Statuts et propriete des transitions :
+  - `a_faire` -> `en_cours` -> `livre` : possede par l'agent game_art.
+  - `livre` -> `integre` : possede par l'agent jeu, une fois l'asset branche cote `game/`.
+  - Ce fichier est l'unique canal de handoff entre les deux agents. Aucun autre fichier (`_contexte/signals.md` d'une zone ou de l'autre) ne doit porter le statut ou la priorite d'un item art - au besoin, y referencer l'entree par son nom.
+- Champs de handoff (voir format d'entree) :
+  - `debloque:` - rempli par l'agent jeu a la creation de l'entree : quelle tache/phase dev ce visuel debloque.
+  - `livraison:` - rempli par l'agent game_art au passage a `livre` : chemin exact des fichiers produits (assets + entree `animations.json` le cas echeant).
 
-## Format d'entrée
+## Format d'entree
 
 ```
 ### <nom de l'asset>
@@ -50,163 +50,163 @@ Conséquences pour cette zone (à traiter côté game_art, hors périmètre jeu)
 - specs: <dimensions, format, contraintes>
 - priorite: <haute | moyenne | basse>
 - statut: a_faire
-- debloque: <tâche/phase dev bloquée tant que cet asset n'est pas integre>
-- livraison: <chemin des fichiers produits — rempli au passage a "livre">
+- debloque: <tache/phase dev bloquee tant que cet asset n'est pas integre>
+- livraison: <chemin des fichiers produits - rempli au passage a "livre">
 ```
 
 ---
 
-## Entrées
+## Entrees
 
-### Sprites player — standard Terraria-like
-- phase: antérieure (P3 signals)
+### Sprites player - standard Terraria-like
+- phase: anterieure (P3 signals)
 - placeholder: sprites actuels hors standard
 - specs: nouvelle cible definitive joueur = 150 px de haut ; idle/run1/run2/jump/fall/hurt/dead en 87x150, attack en 129x150
 - priorite: haute
 - statut: integre
 - livraison: `game_art/assets/player/player_idle_v2.png`, `game_art/assets/player/player_run1.png`, `game_art/assets/player/player_run2.png`, `game_art/assets/player/player_jump.png`, `game_art/assets/player/player_attack.png`, `game_art/assets/player/player_attack_transition.png`, `game_art/assets/player/player_attack_up.png`, `game_art/assets/player/player_attack_up_transition.png`, `game_art/assets/player/player_attack_up_diag.png`, `game_art/assets/player/player_attack_up_diag_transition.png`, `game_art/assets/player/player_attack_down.png`, `game_art/assets/player/player_attack_down_transition.png`, `game_art/assets/player/player_attack_down_diag.png`, `game_art/assets/player/player_attack_down_diag_transition.png`, `game_art/assets/player/player_run_sheet.png`, `game_art/assets/player/player_idle_sheet.png`, `game_art/assets/player/player_jump_sheet.png`, `game_art/assets/player/player_fall_sheet.png`, `game_art/assets/player/player_hurt_sheet.png`, `game_art/assets/player/player_dead_sheet.png`, `game_art/assets/player/player_attack_sheet.png`, `game_art/assets/player/player_attack_up_sheet.png`, `game_art/assets/player/player_attack_down_sheet.png`, `game_art/assets/player/player_attack_up_diag_sheet.png`, `game_art/assets/player/player_attack_down_diag_sheet.png`, `game_art/data/animations.json`
-- note: cette entrée est aussi le support du « Fait quand » de la Phase 5 de `roadmap_editeur.md` (premier cycle complet sheet → éditeur → audit → sync → validation en jeu). En maintenance 2026-07-09 : `player/attack` a été regénéré intégralement depuis une frame de référence ; la séquence visée est `0,1,2,3,3,3,2,1,0`. En maintenance 2026-07-10 : `player/idle` a été refait en 6 frames ; la lecture courante ignore `4.0` et vise `0,1,2,3,5`.
+- note: cette entree est aussi le support du "Fait quand" de la Phase 5 de `roadmap_editeur.md` (premier cycle complet sheet -> editeur -> audit -> sync -> validation en jeu). En maintenance 2026-07-09 : `player/attack` a ete regenere integralement depuis une frame de reference ; la sequence visee est `0,1,2,3,3,3,2,1,0`. En maintenance 2026-07-10 : `player/idle` a ete refait en 6 frames ; la lecture courante ignore `4.0` et vise `0,1,2,3,5`. En maintenance 2026-07-10 : les 4 attaques directionnelles ont ete regenerees integralement, synchronisees dans `game/`, et lues sur `0,1,2,3,3,3,2,1,0`, mais leur coherence visuelle exacte reste a valider dans l'editeur.
 
-### Animations mobilité — double saut, corde/grappin
-- phase: 2 — Grimoire/PC/Craft (mobilité définie questions.md Q015)
-- placeholder: aucune animation dédiée (saut simple uniquement actuellement)
-- specs: frame(s) additionnelle(s) pour le double saut (variation de la pose de saut existante), animation d'utilisation de la corde/grappin (lancer + traction). Pas de dash, pas de wall jump à prévoir.
+### Animations mobilite - double saut, corde/grappin
+- phase: 2 - Grimoire/PC/Craft (mobilite definie questions.md Q015)
+- placeholder: aucune animation dediee (saut simple uniquement actuellement)
+- specs: frame(s) additionnelle(s) pour le double saut (variation de la pose de saut existante), animation d'utilisation de la corde/grappin (lancer + traction). Pas de dash, pas de wall jump a prevoir.
 - priorite: moyenne
 - statut: a_faire
 
-### Sprites gisements/minerais par type de matériau
-- phase: 1 — Matériaux typés
+### Sprites gisements/minerais par type de materiau
+- phase: 1 - Materiaux types
 - placeholder: `ore_copper.png` unique pour tous les gisements
-- specs: un sprite par matériau, lisible en 2D standard à la taille runtime des gisements (`56x56` actuellement côté jeu) — 13 définitifs (questions.md Q041) : `bois`, `pierre`, `cuivre`, `cuir` (B1), `fer`, `charbon`, `minerai_sombre` (B2), `cristal`, `minerai_celeste`, `essence_vent` (B3), `fragment_noyau`, `minerai_abyssal` (B4), `essence_voile` (Voile, drop uniquement, pas de gisement). Lisibilité de rareté croissante (charte graphique).
+- specs: un sprite par materiau, lisible en 2D standard a la taille runtime des gisements (`56x56` actuellement cote jeu) - 13 definitifs (questions.md Q041) : `bois`, `pierre`, `cuivre`, `cuir` (B1), `fer`, `charbon`, `minerai_sombre` (B2), `cristal`, `minerai_celeste`, `essence_vent` (B3), `fragment_noyau`, `minerai_abyssal` (B4), `essence_voile` (Voile, drop uniquement, pas de gisement). Lisibilite de rarete croissante (charte graphique).
 - priorite: moyenne
 - statut: livre
 - livraison: `game_art/assets/objects/ore_bois.png`, `game_art/assets/objects/ore_pierre.png`, `game_art/assets/objects/ore_copper_handmade_v2.png`, `game_art/assets/objects/ore_iron.png`, `game_art/assets/objects/ore_charbon.png`, `game_art/assets/objects/ore_minerai_sombre.png`, `game_art/assets/objects/ore_cristal.png`, `game_art/assets/objects/ore_minerai_celeste.png`, `game_art/assets/objects/ore_fragment_noyau.png`, `game_art/assets/objects/ore_abyssal.png`
 
-### Sprite manquant — minerai abyssal
-- phase: 1 — Matériaux typés
-- placeholder: le jeu utilise encore le sprite générique cuivre pour `minerai_abyssal`
-- specs: sprite dédié pour `minerai_abyssal`, cohérent avec un matériau tier 3 / biome 4, clairement distinct visuellement de `ore_copper.png` et `ore_iron.png`
+### Sprite manquant - minerai abyssal
+- phase: 1 - Materiaux types
+- placeholder: le jeu utilise encore le sprite generique cuivre pour `minerai_abyssal`
+- specs: sprite dedie pour `minerai_abyssal`, coherent avec un materiau tier 3 / biome 4, clairement distinct visuellement de `ore_copper.png` et `ore_iron.png`
 - priorite: haute
 - statut: integre
-- debloque: clôture Phase 1 roadmap.md — lisibilité du test manuel tier 3
+- debloque: cloture Phase 1 roadmap.md - lisibilite du test manuel tier 3
 - livraison: `game_art/assets/objects/ore_abyssal.png`
 
-### Icônes d'équipement — 4 slots
-- phase: 2 — Grimoire/PC/Craft
-- placeholder: aucun (auto-équipement sans UI dédiée)
-- specs: écran d'équipement manuel (questions.md Q055) — icônes pour 4 slots : Arme (mêlée ou distance), Armure, Accessoire, Outil. Une icône par objet équipable de la table de 27 recettes (Q043).
+### Icones d'equipement - 4 slots
+- phase: 2 - Grimoire/PC/Craft
+- placeholder: aucun (auto-equipement sans UI dediee)
+- specs: ecran d'equipement manuel (questions.md Q055) - icones pour 4 slots : Arme (melee ou distance), Armure, Accessoire, Outil. Une icone par objet equipable de la table de 27 recettes (Q043).
 - priorite: moyenne
 - statut: a_faire
 
-### Sprites armes à distance + projectiles
-- phase: 2 — Grimoire/PC/Craft
-- placeholder: aucun (arme à distance non existante actuellement)
-- specs: Arc en Bois, Arbalète de Fer, Arc Céleste, Bombe Instable (questions.md Q043) — sprite arme + sprite/anim de projectile en vol + impact. Cohérent avec le mêlée existant (pas de refonte de style).
+### Sprites armes a distance + projectiles
+- phase: 2 - Grimoire/PC/Craft
+- placeholder: aucun (arme a distance non existante actuellement)
+- specs: Arc en Bois, Arbalete de Fer, Arc Celeste, Bombe Instable (questions.md Q043) - sprite arme + sprite/anim de projectile en vol + impact. Coherent avec le melee existant (pas de refonte de style).
 - priorite: moyenne
 - statut: a_faire
 
-### Grimoire — mise en page et icônes
-- phase: 2 — Grimoire/PC/Craft
+### Grimoire - mise en page et icones
+- phase: 2 - Grimoire/PC/Craft
 - placeholder: UI Godot brute (labels/rects)
-- specs: écran de déblocage des recettes, **accessible au HUB uniquement** (questions.md Q056), icônes pour les 27 recettes définitives (Q043) par rareté (commune/peu commune/rare/épique/légendaire/Voile)
+- specs: ecran de deblocage des recettes, **accessible au HUB uniquement** (questions.md Q056), icones pour les 27 recettes definitives (Q043) par rarete (commune/peu commune/rare/epique/legendaire/Voile)
 - priorite: moyenne
 - statut: a_faire
 
-### Décor du HUB
-- phase: 3 — HUB (jalon J1)
-- placeholder: rects colorés
-- specs: point central + 4 directions visibles, composition pensée pour un écran fixe 1920×1080. Le HUB reste minimal (4 sorties, Grimoire, établi) — pas de décor évolutif en v3 (questions.md Q039).
+### Decor du HUB
+- phase: 3 - HUB (jalon J1)
+- placeholder: rects colores
+- specs: point central + 4 directions visibles, composition pensee pour un ecran fixe 1920x1080. Le HUB reste minimal (4 sorties, Grimoire, etabli) - pas de decor evolutif en v3 (questions.md Q039).
 - priorite: haute
 - statut: a_faire
 
 ### Objet/portail de sortie volontaire de biome
-- phase: 3 — HUB (jalon J1)
+- phase: 3 - HUB (jalon J1)
 - placeholder: aucun
 - specs: objet ou portail visible dans chaque biome, permettant un retour au HUB en cours d'exploration sans mourir ni battre le boss (questions.md Q006)
 - priorite: basse
 - statut: a_faire
 
-### Tileset et décors — Biome 1 Galeries Verdoyantes
-- phase: 4 — Génération biomes (jalon J2)
-- placeholder: rects/polygones colorés
-- specs: décors 2D standard à résolution native, sans grille imposée, compatibles avec 8-10 templates de salles (5-7 salles par run, connexions 4 directions), 2-3 couches de parallax (Q069), ambiance cavernes végétales, lumière filtrante
+### Tileset et decors - Biome 1 Galeries Verdoyantes
+- phase: 4 - Generation biomes (jalon J2)
+- placeholder: rects/polygones colores
+- specs: decors 2D standard a resolution native, sans grille imposee, compatibles avec 8-10 templates de salles (5-7 salles par run, connexions 4 directions), 2-3 couches de parallax (Q069), ambiance cavernes vegetales, lumiere filtrante
 - priorite: haute
 - statut: a_faire
 
-### Overlay d'obscurité — Biome 2 (Mines Obscures)
-- phase: 4/7a — Génération biomes / Mines Obscures
+### Overlay d'obscurite - Biome 2 (Mines Obscures)
+- phase: 4/7a - Generation biomes / Mines Obscures
 - placeholder: aucun
-- specs: overlay/vignette sombre plein écran, activé quand la Torche n'est pas équipée (slot Outil) — pas de Light2D dynamique à rayon suivant le joueur (questions.md Q018/Q021). Doit rendre le biome réellement difficile à lire sans la Torche, sans bloquer totalement la visibilité.
+- specs: overlay/vignette sombre plein ecran, active quand la Torche n'est pas equipee (slot Outil) - pas de Light2D dynamique a rayon suivant le joueur (questions.md Q018/Q021). Doit rendre le biome reellement difficile a lire sans la Torche, sans bloquer totalement la visibilite.
 - priorite: moyenne
 - statut: a_faire
 
-### Décor Arène du Voile — tribunal cosmique
-- phase: 5 — Mort/Résurrection
-- placeholder: rects colorés
-- specs: plateforme suspendue, ciel fracturé, fragments de biomes flottants
+### Decor Arene du Voile - tribunal cosmique
+- phase: 5 - Mort/Resurrection
+- placeholder: rects colores
+- specs: plateforme suspendue, ciel fracture, fragments de biomes flottants
 - priorite: moyenne
 - statut: a_faire
 
-### Sprites et patterns visuels — Le Veilleur des Cendres (Gardien unique de lancement)
-- phase: 5 — Mort/Résurrection
-- placeholder: sprite boss actuel recoloré
-- specs: **un seul Gardien à produire au lancement** (questions.md Q029) — thème cendres/braises, cohérent avec ses 3 attaques (charge au sol, projectile de cendres, zone d'explosion retardée) + pose de pause vulnérable. Les 7 autres Gardiens du pool (Roi Sans Visage, Collecteur d'Âmes, Veuve du Vide, Dévoreur de Souvenirs, Porte-Flamme, Gardien des Os, Écho du Noyau) ne sont à produire qu'après activation de R2 côté jeu — ne pas anticiper.
+### Sprites et patterns visuels - Le Veilleur des Cendres (Gardien unique de lancement)
+- phase: 5 - Mort/Resurrection
+- placeholder: sprite boss actuel recolore
+- specs: **un seul Gardien a produire au lancement** (questions.md Q029) - theme cendres/braises, coherent avec ses 3 attaques (charge au sol, projectile de cendres, zone d'explosion retardee) + pose de pause vulnerable. Les 7 autres Gardiens du pool (Roi Sans Visage, Collecteur d'Ames, Veuve du Vide, Devoreur de Souvenirs, Porte-Flamme, Gardien des Os, Echo du Noyau) ne sont a produire qu'apres activation de R2 cote jeu - ne pas anticiper.
 - priorite: moyenne
 - statut: livre
 - livraison: `game_art/assets/enemies/boss_guardian_ashes.png`, `game_art/assets/enemies/boss_guardian_ashes_pause.png`, `game_art/assets/enemies/boss_projectile_ash.png`, `game_art/data/animations.json`, `game/scenes/enemies/boss_projectile.tscn`
 
-### Effets visuels cicatrices — 5 paliers fixes
-- phase: 6 — Cicatrices (jalon J3)
+### Effets visuels cicatrices - 5 paliers fixes
+- phase: 6 - Cicatrices (jalon J3)
 - placeholder: aucun effet visuel
-- specs: shaders + overlays de particules UNIQUEMENT, zéro modification des spritesheets (questions.md Q070). Paliers définitifs : **1** overlay lumineux (yeux) + particules discrètes ; **2** shader teinte veines lumineuses + halo ; **3** shader transparence partielle ; **4** overlay fragments flottants + teinte cristalline ; **5+** combinaison de tous les shaders précédents à intensité maximale + particules denses. Outils Godot standards (shaders 2D, CPUParticles2D).
+- specs: shaders + overlays de particules UNIQUEMENT, zero modification des spritesheets (questions.md Q070). Paliers definitifs : **1** overlay lumineux (yeux) + particules discretes ; **2** shader teinte veines lumineuses + halo ; **3** shader transparence partielle ; **4** overlay fragments flottants + teinte cristalline ; **5+** combinaison de tous les shaders precedents a intensite maximale + particules denses. Outils Godot standards (shaders 2D, CPUParticles2D).
 - priorite: moyenne
 - statut: a_faire
 
-### Icônes des 5 cicatrices — HUD
-- phase: 6 — Cicatrices (jalon J3)
+### Icones des 5 cicatrices - HUD
+- phase: 6 - Cicatrices (jalon J3)
 - placeholder: aucun
-- specs: une icône par cicatrice définitive (questions.md Q026) — Cicatrice du Sang, de l'Os, de l'Âme, de la Peur, du Noyau — affichées en rangée dans le HUD
+- specs: une icone par cicatrice definitive (questions.md Q026) - Cicatrice du Sang, de l'Os, de l'Ame, de la Peur, du Noyau - affichees en rangee dans le HUD
 - priorite: basse
 - statut: a_faire
 
-### Biome 2 Mines Obscures — ennemis, boss, tileset
+### Biome 2 Mines Obscures - ennemis, boss, tileset
 - phase: 7a (jalon J4)
-- placeholder: assets biome 1 recolorés
-- specs: sprites ennemis (questions.md Q050) — Mineur spectral (`ground`), Golem de pierre (`ground` tanky), Araignée géante (`jumper` — nouvel archétype bondissant), Machine abandonnée (`turret` — nouvel archétype stationnaire tirant). Boss **Foreur Maudit** : arène « atelier de forage », attaques charge frontale / tir de boulons / mine posée (explosion différée), phase rage à bas HP (Q051). Décors galeries sombres en 2D standard ; l'overlay d'obscurité (entrée dédiée ci-dessus) requiert un fond lisible même assombri.
-- priorite: basse (monte en haute à l'ouverture de 7a)
+- placeholder: assets biome 1 recolores
+- specs: sprites ennemis (questions.md Q050) - Mineur spectral (`ground`), Golem de pierre (`ground` tanky), Araignee geante (`jumper` - nouvel archetype bondissant), Machine abandonnee (`turret` - nouvel archetype stationnaire tirant). Boss **Foreur Maudit** : arene "atelier de forage", attaques charge frontale / tir de boulons / mine posee (explosion differee), phase rage a bas HP (Q051). Decors galeries sombres en 2D standard ; l'overlay d'obscurite (entree dediee ci-dessus) requiert un fond lisible meme assombri.
+- priorite: basse (monte en haute a l'ouverture de 7a)
 - statut: a_faire
 
-### Biome 3 Îles Célestes — ennemis, boss, tileset
+### Biome 3 Iles Celestes - ennemis, boss, tileset
 - phase: 7b (jalon J5)
-- placeholder: assets biome 1 recolorés
-- specs: sprites ennemis (Q050) — Sentinelle volante (`flyer` distance), Élémentaire du vent (`flyer`), Créature céleste (`flyer`), Gardien cristallin (`turret`, bouclier + zone). Boss **Orage Éternel** : arène « plateforme aérienne », attaques éclair ciblé (zone télégraphiée) / téléportation courte / tempête de cristaux (Q051). Décors îles flottantes/cristaux en 2D standard — biome parcouru **vers le haut**, prévoir des salles empilables verticalement (connexions top/bottom, questions.md Q032).
-- priorite: basse (monte en haute à l'ouverture de 7b)
+- placeholder: assets biome 1 recolores
+- specs: sprites ennemis (Q050) - Sentinelle volante (`flyer` distance), Elementaire du vent (`flyer`), Creature celeste (`flyer`), Gardien cristallin (`turret`, bouclier + zone). Boss **Orage Eternel** : arene "plateforme aerienne", attaques eclair cible (zone telegraphiee) / teleportation courte / tempete de cristaux (Q051). Decors iles flottantes/cristaux en 2D standard - biome parcouru **vers le haut**, prevoir des salles empilables verticalement (connexions top/bottom, questions.md Q032).
+- priorite: basse (monte en haute a l'ouverture de 7b)
 - statut: a_faire
 
-### Biome 4 Descente vers le Noyau — ennemis, boss, tileset
+### Biome 4 Descente vers le Noyau - ennemis, boss, tileset
 - phase: 7c (jalon J6)
-- placeholder: assets biome 1 recolorés
-- specs: sprites ennemis (Q050) — Revenant (`ground` drain de vie), Créature corrompue (`ground`/`flyer` hybride), Manifestation du Voile (`teleporter` — nouvel archétype). Boss **Gardien du Noyau** : arène « sanctuaire du Noyau », attaques charge lourde / onde de corruption / invocation de revenants, phase 2 à mi-HP (Q051). Décors roche en fusion en 2D standard — **imagerie volcanique confirmée sur ce biome** (Marteau Magmatique, Armure Volcanique, questions.md Q042), biome parcouru **vers le bas** (connexions top/bottom).
-- priorite: basse (monte en haute à l'ouverture de 7c)
+- placeholder: assets biome 1 recolores
+- specs: sprites ennemis (Q050) - Revenant (`ground` drain de vie), Creature corrompue (`ground`/`flyer` hybride), Manifestation du Voile (`teleporter` - nouvel archetype). Boss **Gardien du Noyau** : arene "sanctuaire du Noyau", attaques charge lourde / onde de corruption / invocation de revenants, phase 2 a mi-HP (Q051). Decors roche en fusion en 2D standard - **imagerie volcanique confirmee sur ce biome** (Marteau Magmatique, Armure Volcanique, questions.md Q042), biome parcouru **vers le bas** (connexions top/bottom).
+- priorite: basse (monte en haute a l'ouverture de 7c)
 - statut: a_faire
 
 ### Sprites des 4 porteurs de recettes
-- phase: 8 — Porteurs
+- phase: 8 - Porteurs
 - placeholder: sprites ennemis standards
-- specs: Archiviste Perdu (drop Couronne Spectrale), Golem Artisan, Mineur Spectral, Forgeron Maudit (drop Armure du Noyau, Lame du Noyau) — silhouettes distinctives (rareté lisible), sources précises dans questions.md Q043
+- specs: Archiviste Perdu (drop Couronne Spectrale), Golem Artisan, Mineur Spectral, Forgeron Maudit (drop Armure du Noyau, Lame du Noyau) - silhouettes distinctives (rarete lisible), sources precises dans questions.md Q043
 - priorite: basse
 - statut: a_faire
 
 ### Modules visuels du Miroir du Noyau
-- phase: 9 — Boss final (jalon J7)
+- phase: 9 - Boss final (jalon J7)
 - placeholder: assemblage de sprites boss existants
-- specs: modules combinables selon `mirror.json` (questions.md Q052) — 4 modules biome (racines/immobilisation/invocation végétale ; armure renforcée/charge/explosion ; déplacement aérien/éclairs/cristaux ; énergie du Noyau/corruption/zone majeure) + 5 mutations cicatrice (saignement, résistance, drain, poursuite, dégâts élevés) ; compatibles assemblage runtime. Un Miroir généré avec un seul biome/aucune cicatrice doit rester visuellement cohérent (pas de module manquant).
+- specs: modules combinables selon `mirror.json` (questions.md Q052) - 4 modules biome (racines/immobilisation/invocation vegetale ; armure renforcee/charge/explosion ; deplacement aerien/eclairs/cristaux ; energie du Noyau/corruption/zone majeure) + 5 mutations cicatrice (saignement, resistance, drain, poursuite, degats eleves) ; compatibles assemblage runtime. Un Miroir genere avec un seul biome/aucune cicatrice doit rester visuellement coherent (pas de module manquant).
 - priorite: basse
 - statut: a_faire
 
-### UI complémentaires — barres de vie, menu options, écran contrôles
-- phase: 10 — Polish
+### UI complementaires - barres de vie, menu options, ecran controles
+- phase: 10 - Polish
 - placeholder: aucun
-- specs: barres de vie fines au-dessus des ennemis (questions.md Q057) ; menu options (volumes, plein écran/fenêtré, recalibration manette, Q058) ; écran de rappel des contrôles manette (Q059) ; confirmation d'effacement à « Nouvelle partie » (Q060). Priorité basse — UI passe après joueur/ennemis/boss/tilesets (Q071).
+- specs: barres de vie fines au-dessus des ennemis (questions.md Q057) ; menu options (volumes, plein ecran/fenetre, recalibration manette, Q058) ; ecran de rappel des controles manette (Q059) ; confirmation d'effacement a "Nouvelle partie" (Q060). Priorite basse - UI passe apres joueur/ennemis/boss/tilesets (Q071).
 - priorite: basse
 - statut: a_faire

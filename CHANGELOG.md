@@ -1,3 +1,10 @@
+## v1.44 - 2026-07-10
+
+### Modifie
+- `game_art/assets/player/player_attack_up_sheet.png`, `player_attack_down_sheet.png`, `player_attack_up_diag_sheet.png` et `player_attack_down_diag_sheet.png` : 4 attaques directionnelles du player regenerees integralement depuis de nouvelles frames sources.
+- `game_art/assets/generated_raw/player/attack_*_regen_f*_raw.png`, `game_art/data/animations.json` et `game/data/animations.json` : sources brutes conservees et lectures runtime des 4 attaques directionnelles alignees sur `0,1,2,3,3,3,2,1,0`.
+- `game_art/_contexte/`, `game_art/backlog_art.md` et `game_art/roadmap_editeur.md` : contexte de maintenance realigne sur la validation visuelle restante des attaques directionnelles, puis de `idle` et `attack`.
+
 ## v1.43 - 2026-07-10
 
 ### Modifie
