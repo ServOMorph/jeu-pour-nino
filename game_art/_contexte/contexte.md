@@ -12,11 +12,11 @@ pour visualiser, animer et auditer les sprites. Cible player actuelle :
 - Synchro vers jeu : sync.py a la racine projet (gere par zone jeu)
 
 ## Etat actuel
-La zone game_art est en maintenance outillage + production.
-L'editeur dispose maintenant d'un bouton `Recharger` pour relire assets et `animations.json` sans relance.
-L'etat `player/attack` a ete regenere en 4 frames uniques a partir d'une frame de reference, puis relu via la sequence `0,1,2,3,3,3,2,1,0`.
-Les sources HD de regeneration sont conservees dans `game_art/assets/generated_raw/player/`.
-La validation manuelle finale de la fluidite de `player/attack` reste a faire dans l'editeur.
+La zone game_art reste en maintenance de production sur les animations player.
+L'etat `player/idle` a ete remplace par une nouvelle sheet 6 frames, lue en pratique sur `0,1,2,3,5` a `5 fps`.
+L'etat `player/attack` conserve sa regeneration complete et sa sequence `0,1,2,3,3,3,2,1,0`.
+Les sources brutes de regeneration sont conservees dans `game_art/assets/generated_raw/player/`.
+La validation manuelle finale de `idle`, puis de `attack`, reste a faire dans l'editeur.
 
 ## Decisions structurantes
 - Le manifest d'audit des ennemis doit refleter les dimensions runtime reelles des assets pour rester coherent avec l'integration jeu.
@@ -37,3 +37,5 @@ La validation manuelle finale de la fluidite de `player/attack` reste a faire da
   `animations.json` sans redemarrer Godot.
 - Une animation a refaire doit etre regeneree integralement depuis une frame de
   reference validee ; corriger des frames isolees cree des derives de gabarit.
+- Le nouvel `idle` du player est cadence a `5 fps` sur la sequence `0,1,2,3,5` :
+  la frame `4.0` est exclue tant qu'elle n'est pas regeneree proprement.

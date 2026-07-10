@@ -10,7 +10,7 @@
 - target_frame_size: 129x150
 - fps: 12.0
 - loop: false
-- frame_count: 5
+- frame_count: 9
 - sheet: res://assets/sprites/player/player_attack_sheet.png
 - frame_size: 129x150
 - offset: [0.0, 0.0]
@@ -88,9 +88,9 @@
 ### idle
 
 - target_frame_size: 87x150
-- fps: 1.0
+- fps: 5.0
 - loop: true
-- frame_count: 1
+- frame_count: 5
 - sheet: res://assets/sprites/player/player_idle_sheet.png
 - frame_size: 87x150
 - offset: [0.0, 0.0]
@@ -118,4 +118,3 @@
 ## Anomalies ouvertes
 
 - aucune
-

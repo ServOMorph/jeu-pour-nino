@@ -3,7 +3,7 @@
     "default_state": "idle",
     "states": {
       "idle": {
-        "fps": 1.0,
+        "fps": 5.0,
         "loop": true,
         "offset": [
           0.0,
@@ -15,7 +15,11 @@
           150.0
         ],
         "frames": [
-          0.0
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          5.0
         ]
       },
       "run": {

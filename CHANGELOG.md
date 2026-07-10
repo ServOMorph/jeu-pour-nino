@@ -1,3 +1,10 @@
+## v1.43 - 2026-07-10
+
+### Modifie
+- `game_art/assets/player/player_idle_sheet.png`, `game_art/data/animations.json` et `game/data/animations.json` : etat `player/idle` refait en 6 frames, cadence a `5 fps`, avec lecture runtime `0,1,2,3,5` pour exclure la frame `4.0` decalee.
+- `game_art/assets/generated_raw/player/player_idle_6f_raw.png`, `game_art/specs/player.md` et `game_art/specs/boss.md` : source brute idle et exports de specs realignes sur l'etat courant.
+- `game_art/_contexte/`, `game_art/backlog_art.md` et `game_art/roadmap_editeur.md` : contexte de maintenance realigne sur la validation restante de `player/idle` puis `player/attack`.
+
 ## v1.42 - 2026-07-09
 
 ### Modifie

@@ -94,6 +94,7 @@ Le temps de la zone game_art va a la production d'assets, pas au polissage de l'
 ## Point d'attention
 
 La migration de format est close pour le player et ses PNG legacy sont archives hors
-audit. Le point chaud de maintenance est maintenant la validation visuelle de
-`player/attack` regenere depuis une frame de reference, ainsi que le bon usage du
-bouton `Recharger` pour eviter les relances inutiles de l'editeur.
+audit. Les points chauds de maintenance sont maintenant la validation visuelle de
+`player/idle` regenere en 6 frames mais lu sur `0,1,2,3,5`, puis de `player/attack`
+regenere depuis une frame de reference, ainsi que le bon usage du bouton `Recharger`
+pour eviter les relances inutiles de l'editeur.
