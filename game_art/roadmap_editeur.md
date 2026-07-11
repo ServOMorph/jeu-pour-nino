@@ -77,6 +77,8 @@ perimetre tant qu'aucun besoin concret equivalent n'apparait (cf. Perimetre).
 Une fois la Phase 5 close, l'editeur passe en maintenance : plus d'evolution d'outillage
 sauf besoin concret tire par une entree de `backlog_art.md` (cf. Perimetre ci-dessus).
 Le temps de la zone game_art va a la production d'assets, pas au polissage de l'outil.
+La preview d'entite rend a la resolution affichee et utilise le filtrage lineaire du jeu ;
+le test `test_preview_center.gd` couvre le centrage player et le cadrage du boss.
 
 ## Commandes de reference
 

@@ -15,6 +15,7 @@ DST_ANIM    = ROOT / "game" / "data" / "animations.json"
 IGNORE = shutil.ignore_patterns(
     "from_reference",
     "generated_raw",
+    "legacy_archive",
     "*.import",
     "sprite_contact_sheet.png",
     "sprite_generation_manifest.json",

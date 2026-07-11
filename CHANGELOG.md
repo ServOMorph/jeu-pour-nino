@@ -1,3 +1,9 @@
+## v1.46 - 2026-07-11
+
+### Corrige
+- `game_art/editeur/main.gd` et `game_art/editeur/test_preview_center.gd` : preview du boss rendue a la resolution affichee, avec cadrage proportionnel et filtrage lineaire aligne sur le jeu.
+- `game_art/assets/`, `game/assets/sprites/` et `sync.py` : sprites orphelins, doublons et images de test retires ; les archives player sont exclues de la synchronisation runtime.
+
 ## v1.45 - 2026-07-11
 
 ### Modifie

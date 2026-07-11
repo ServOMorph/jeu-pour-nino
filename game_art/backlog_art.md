@@ -11,7 +11,7 @@ Pipeline de production retenu : generation d'image via le module Codex, puis res
 Consequences pour cette zone (a traiter cote game_art, hors perimetre jeu) :
 - `docs/charte_graphique_pixel_art_dark_fantasy.md` et `docs/workflow_image_gen_fable5.md` : obsoletes, a reecrire pour le nouveau pipeline (voir plan section 3).
 - `game_art/tools/ref_to_sprite.py` : sans objet (reduction pixel), a remplacer par un script de rescale simple.
-- Editeur (`game_art/editeur/`) : filtre de preview nearest -> lineaire, preview "x8" et audit de tailles sur grille a retirer/refondre.
+- Editeur (`game_art/editeur/`) : filtre de preview aligne sur le lineaire runtime et rendu a la resolution affichee ; les anciens libelles de preview "x8" et l'audit de tailles sur grille restent a refondre.
 - Toutes les entrees ci-dessous portant une spec en grille pixel (14x14, 16x16, palette limitee) sont a reviser vers des tailles 2D standard a resolution native - la colonne `specs:` reste la propriete de l'agent game_art.
 - La precision "Grille de tiles : 16x16" ci-dessous est revisee : plus de grille imposee.
 

@@ -15,19 +15,17 @@
 # Session du 2026-07-11
 
 ## Decisions prises
-- Les 4 attaques directionnelles du player et `player/idle` sont validees manuellement dans l'editeur.
-- Le decor du HUB est livre comme fond fixe `1920x1080`.
-- L'atelier runtime est regenere en plus grand format et realigne cote jeu.
+- Le preview de l'editeur rend desormais a la resolution affichee et reprend le filtrage lineaire du jeu.
+- Les sprites orphelins, doublons et images de test sont retires du depot et de la synchronisation runtime.
 
 ## Livrables produits ou modifies
-- game_art/assets/player/player_attack_up_sheet.png, game_art/assets/generated_raw/player/attack_up_regen_strip_raw.png, attack_up_regen_f0_raw.png, attack_up_regen_f1_raw.png, attack_up_regen_f2_raw.png, attack_up_regen_f3_raw.png : `player/attack_up` regenere completement pour corriger la frame `0.0`.
-- game_art/assets/tiles/hub_decor.png, game_art/assets/generated_raw/hub_decor_raw.png : decor du HUB produit en `1920x1080`.
-- game_art/assets/objects/workbench.png, game_art/assets/generated_raw/workbench_raw.png, game/scripts/workbench.gd, game/data/level.json : atelier regenere en `160x144`, collision/zone et ancrage runtime realignes.
+- game_art/editeur/main.gd, game_art/editeur/test_preview_center.gd, game_art/specs/player.md : rendu et cadrage du boss corriges, avec test du non-debordement et du ratio ; comptes de frames player exportes.
+- game_art/assets/, game/assets/sprites/, sync.py : sprites non utilises supprimes et archives player exclus de la copie runtime.
+- game_art/audit_report.md : rapport obsolete retire.
 
 ## Hypotheses validees / invalidees
-- VALIDE : les 4 attaques directionnelles sont jugees fluides et coherentes en lecture editeur.
-- VALIDE : `player/idle` est juge fluide sur `0,1,2,3,5`.
-- VALIDE : l'atelier peut etre agrandi a `160x144` si le runtime suit avec collision et position reajustees.
+- VALIDE : le test headless couvre le centrage du player et le boss entier, sans deformation ni debordement.
+- VALIDE : le filtrage de preview est aligne sur celui du jeu.
 - EN ATTENTE : validation manuelle de `player/attack`, puis verification du flux `Recharger`.
 
 ## Prochaine etape exacte

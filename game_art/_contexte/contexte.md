@@ -12,17 +12,12 @@ pour visualiser, animer et auditer les sprites. Cible player actuelle :
 - Synchro vers jeu : sync.py a la racine projet (gere par zone jeu)
 
 ## Etat actuel
-La zone game_art reste en maintenance de production, avec la boucle player presque close.
-`player/idle` et les 4 attaques directionnelles sont maintenant valides en lecture editeur.
+La zone game_art reste en maintenance de production.
 `player/attack` reste le dernier etat player a valider manuellement, avec le flux `Recharger`.
-Le decor du HUB est livre comme fond fixe `1920x1080` dans `assets/tiles/`.
-L'atelier runtime a ete regenere en `160x144` et realigne cote jeu pour rester coherent en scene.
+L'editeur rend les previews a leur resolution affichee, avec filtrage lineaire coherent avec le jeu.
+Les sprites orphelins et assets de test ont ete retires ; `legacy_archive` reste conserve hors runtime.
 
 ## Decisions structurantes
-- Les PNG player legacy sont conserves comme sources dans `assets/player/legacy_archive/`
-  et exclus explicitement de l'audit.
-- Les gisements exploitent maintenant des sprites dedies par materiau, sans fallback
-  cuivre pour les ressources minables runtime.
 - Le Veilleur des Cendres est livre comme set statique runtime avec projectile d'ash
   dedie ; les reglages fins de depart/visibilite restent pilotes cote jeu.
 - Le bouton `Recharger` de l'editeur est le flux standard pour relire assets et
@@ -38,3 +33,6 @@ L'atelier runtime a ete regenere en `160x144` et realigne cote jeu pour rester c
 - Le decor du HUB est livre comme fond fixe `1920x1080`, pret pour branchement cote jeu.
 - L'atelier runtime utilise desormais un sprite `160x144` avec collision, zone
   d'interaction et ancrage au sol realignes.
+- Le zoom de preview doit rendre le viewport a la resolution affichee, puis agrandir
+  le sprite ; il ne doit pas agrandir un rendu interne de faible resolution.
+- Les previews 2D standard emploient le filtrage lineaire, comme le runtime du jeu.

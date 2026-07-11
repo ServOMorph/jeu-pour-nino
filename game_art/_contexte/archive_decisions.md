@@ -1,5 +1,9 @@
 # Archive décisions — game_art
 
+- Les PNG player legacy sont conserves comme sources dans `assets/player/legacy_archive/`
+  et exclus explicitement de l'audit.
+- Les gisements exploitent maintenant des sprites dedies par materiau, sans fallback
+  cuivre pour les ressources minables runtime.
 - game_art/ = racine du projet Godot éditeur (res:// pointe ici)
 - game/assets/sprites/ et game/data/animations.json = copies générées (ne pas éditer manuellement)
 - Format sprites cible = spritesheets (grille de frames, découpe AtlasTexture)

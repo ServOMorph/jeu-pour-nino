@@ -20,7 +20,7 @@
 - target_frame_size: 129x150
 - fps: 12.0
 - loop: false
-- frame_count: 5
+- frame_count: 9
 - sheet: res://assets/sprites/player/player_attack_down_sheet.png
 - frame_size: 129x150
 - offset: [0.0, 0.0]
@@ -30,7 +30,7 @@
 - target_frame_size: 129x150
 - fps: 12.0
 - loop: false
-- frame_count: 5
+- frame_count: 9
 - sheet: res://assets/sprites/player/player_attack_down_diag_sheet.png
 - frame_size: 129x150
 - offset: [0.0, 0.0]
@@ -40,7 +40,7 @@
 - target_frame_size: 129x150
 - fps: 12.0
 - loop: false
-- frame_count: 5
+- frame_count: 9
 - sheet: res://assets/sprites/player/player_attack_up_sheet.png
 - frame_size: 129x150
 - offset: [0.0, 0.0]
@@ -50,7 +50,7 @@
 - target_frame_size: 129x150
 - fps: 12.0
 - loop: false
-- frame_count: 5
+- frame_count: 9
 - sheet: res://assets/sprites/player/player_attack_up_diag_sheet.png
 - frame_size: 129x150
 - offset: [0.0, 0.0]
@@ -118,3 +118,4 @@
 ## Anomalies ouvertes
 
 - aucune
+

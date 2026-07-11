@@ -189,13 +189,13 @@ func _build_preview_panel(parent: Control) -> void:
 
 	_preview_container = SubViewportContainer.new()
 	_preview_container.stretch = true
-	_preview_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_preview_container.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	produced_column.add_child(_preview_container)
 
 	_viewport = SubViewport.new()
 	_viewport.size = Vector2i(200, 200)
 	_viewport.transparent_bg = true
-	_viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
+	_viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_LINEAR
 	_preview_container.add_child(_viewport)
 
 	_checker_rect = TextureRect.new()
@@ -210,7 +210,7 @@ func _build_preview_panel(parent: Control) -> void:
 	_driver.frame_changed.connect(_update_frame_info)
 
 	_static_texture_rect = TextureRect.new()
-	_static_texture_rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_static_texture_rect.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	_static_texture_rect.visible = false
 	_viewport.add_child(_static_texture_rect)
 
@@ -714,7 +714,7 @@ func _write_text_file(path: String, content: String) -> void:
 
 func _set_zoom(z: float) -> void:
 	_zoom = z
-	_preview_container.stretch_shrink = int(z)
+	_preview_container.stretch_shrink = 1
 	_update_preview_size()
 
 func _update_preview_size() -> void:
@@ -798,14 +798,19 @@ func _center_preview_driver() -> void:
 	if _driver == null or _viewport == null:
 		return
 	if _driver.sprite_frames == null or _driver.animation.is_empty():
+		_driver.scale = Vector2.ONE
 		_driver.position = Vector2(_viewport.size) * 0.5
 		return
 	var texture: Texture2D = _driver.sprite_frames.get_frame_texture(_driver.animation, _driver.frame)
 	if texture == null:
+		_driver.scale = Vector2.ONE
 		_driver.position = Vector2(_viewport.size) * 0.5
 		return
 	var texture_size: Vector2 = texture.get_size()
-	_driver.position = (Vector2(_viewport.size) - texture_size) * 0.5
+	var viewport_size := Vector2(_viewport.size)
+	var fit_scale := minf(_zoom, minf(viewport_size.x / texture_size.x, viewport_size.y / texture_size.y))
+	_driver.scale = Vector2.ONE * fit_scale
+	_driver.position = (viewport_size - texture_size * fit_scale) * 0.5
 
 func _update_static_frame_info(file_name: String, texture: Texture2D) -> void:
 	if texture == null:
@@ -819,9 +824,13 @@ func _center_static_texture() -> void:
 		return
 	var texture := _static_texture_rect.texture
 	if texture == null:
+		_static_texture_rect.scale = Vector2.ONE
 		_static_texture_rect.position = Vector2(_viewport.size) * 0.5
 		_static_texture_rect.size = Vector2.ZERO
 		return
 	var tex_size := texture.get_size()
+	var viewport_size := Vector2(_viewport.size)
+	var fit_scale := minf(_zoom, minf(viewport_size.x / tex_size.x, viewport_size.y / tex_size.y))
+	_static_texture_rect.scale = Vector2.ONE * fit_scale
 	_static_texture_rect.size = tex_size
-	_static_texture_rect.position = (Vector2(_viewport.size) - tex_size) * 0.5
+	_static_texture_rect.position = (viewport_size - tex_size * fit_scale) * 0.5
