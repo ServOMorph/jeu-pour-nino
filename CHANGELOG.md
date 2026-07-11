@@ -1,3 +1,11 @@
+## v1.45 - 2026-07-11
+
+### Modifie
+- `game_art/assets/player/player_attack_up_sheet.png` et `game_art/assets/generated_raw/player/attack_up_regen_*` : `player/attack_up` regenere completement pour corriger la frame `0.0` incoherente.
+- `game_art/assets/tiles/hub_decor.png`, `game_art/assets/generated_raw/hub_decor_raw.png`, `game_art/backlog_art.md` et `game_art/roadmap_editeur.md` : decor du HUB produit en `1920x1080` et backlog game_art aligne sur sa livraison.
+- `game_art/assets/objects/workbench.png`, `game_art/assets/generated_raw/workbench_raw.png`, `game/scripts/workbench.gd` et `game/data/level.json` : atelier regenere en plus grand format (`160x144`) avec runtime realigne.
+- `game_art/_contexte/` : contexte de maintenance realigne sur la validation acquise des attaques directionnelles et de `idle`, avec `player/attack` et `Recharger` encore ouverts.
+
 ## v1.44 - 2026-07-10
 
 ### Modifie

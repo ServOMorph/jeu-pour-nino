@@ -38,3 +38,8 @@
   reste standard et ne doit pas compenser une orientation source inverse.
 - Le set joueur HD est valide en jeu depuis le 2026-07-07 et devient la base visuelle
   de reference pour la suite de la production.
+- Le manifest d'audit des ennemis doit refleter les dimensions runtime reelles des assets pour rester coherent avec l'integration jeu.
+- La scene `boss.tscn` aligne desormais visuel et collisions sur un gabarit `389x500`.
+- Le panneau `Reference` de l'editeur est supprime : les references visuelles ne sont plus affichees dans le workflow courant.
+- La preview `Produit` utilise `AnimatedSprite2D.centered = false` et centre la texture de la frame courante explicitement dans le viewport.
+- Le player utilise desormais uniquement des etats `sheet`, y compris les attaques directionnelles et les etats mono-frame encapsules en sheet 1 frame.

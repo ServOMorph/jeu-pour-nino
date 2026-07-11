@@ -2,8 +2,8 @@ extends StaticBody2D
 
 signal interact_requested
 
-const SIZE := Vector2(80, 72)
-const ZONE_SIZE := Vector2(240, 200)
+const SIZE := Vector2(160, 144)
+const ZONE_SIZE := Vector2(280, 220)
 const WORKBENCH_TEXTURE_PATH := "res://assets/sprites/objects/workbench.png"
 
 @export var workbench_tier := 1
@@ -42,7 +42,7 @@ func _ready() -> void:
 	_prompt = Label.new()
 	_prompt.text = "Y : crafter"
 	_prompt.add_theme_font_size_override("font_size", 32)
-	_prompt.position = Vector2(-72, -88)
+	_prompt.position = Vector2(-72, -160)
 	_prompt.visible = false
 	add_child(_prompt)
 
