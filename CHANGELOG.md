@@ -1,3 +1,12 @@
+## v1.47 - 2026-07-11
+
+### Corrige
+- `game/scripts/equipment_menu.gd` : bug de compilation (`SLOT_ORDER` non typé cassait `level.gd`) ; affichage retravaille (nom lisible au lieu de l'id brut, marqueur consommable actif).
+- `game/scripts/title.gd` : hint manette obsolete supprime, menu dev reformate pour tenir dans la fenetre 1920x1080.
+
+### Ajoute
+- `tests_manuels.md` (racine) : suivi detaille et numerote de la validation manuelle du flux Phase 2.
+
 ## v1.46 - 2026-07-11
 
 ### Corrige

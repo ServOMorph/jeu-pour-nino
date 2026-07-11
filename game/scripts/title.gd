@@ -51,15 +51,6 @@ func _ready() -> void:
 	_build_dev_menu()
 	_setup_grimoire_menu()
 
-	var hint_pad := Label.new()
-	hint_pad.text = "Manette : stick gauche bouger   A sauter   RB attaquer"
-	hint_pad.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	hint_pad.add_theme_font_size_override("font_size", 36)
-	hint_pad.add_theme_color_override("font_color", Color(0.6, 0.8, 1.0))
-	hint_pad.position = Vector2(0, 984)
-	hint_pad.size = Vector2(1920, 64)
-	add_child(hint_pad)
-
 	_show_main()
 
 func _build_main_menu() -> void:
@@ -84,17 +75,18 @@ func _build_dev_menu() -> void:
 	dev_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	dev_title.add_theme_font_size_override("font_size", 44)
 	dev_title.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
-	dev_title.position = Vector2(0, 368)
-	dev_title.size = Vector2(1920, 72)
+	dev_title.position = Vector2(0, 372)
+	dev_title.size = Vector2(1920, 64)
 	_dev_root.add_child(dev_title)
 
+	const DEV_ROW_H := 84.0
 	for i in DEV_ENTRIES.size():
 		var lbl := Label.new()
 		lbl.text = DEV_ENTRIES[i]
 		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		lbl.add_theme_font_size_override("font_size", 56)
-		lbl.position = Vector2(0, 464 + i * 96)
-		lbl.size = Vector2(1920, 88)
+		lbl.add_theme_font_size_override("font_size", 44)
+		lbl.position = Vector2(0, 460 + i * DEV_ROW_H)
+		lbl.size = Vector2(1920, 72)
 		_dev_root.add_child(lbl)
 		_dev_labels.append(lbl)
 

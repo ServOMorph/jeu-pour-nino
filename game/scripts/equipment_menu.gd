@@ -4,7 +4,7 @@ const RECIPE_CATALOG := preload("res://scripts/recipe_catalog.gd")
 
 signal closed
 
-const SLOT_ORDER := ["weapon", "armor", "accessory", "tool", "consumable"]
+const SLOT_ORDER: Array[String] = ["weapon", "armor", "accessory", "tool", "consumable"]
 const SLOT_LABELS := {
 	"weapon": "ARME",
 	"armor": "ARMURE",
@@ -14,11 +14,13 @@ const SLOT_LABELS := {
 }
 
 var _recipes: Array[Dictionary] = []
+var _recipe_names: Dictionary = {}
 var _selected_slot := 0
 var _selected_item := 0
 var _open := false
 
 var _slot_labels: Array[Label] = []
+var _slot_equipped_labels: Array[Label] = []
 var _item_labels: Array[Label] = []
 var _item_bgs: Array[ColorRect] = []
 
@@ -27,8 +29,13 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_recipes = RECIPE_CATALOG.load_recipes()
 	RECIPE_CATALOG.bootstrap_starters(_recipes)
+	for recipe in _recipes:
+		_recipe_names[String(recipe.get("id", ""))] = String(recipe.get("name", ""))
 	_build_ui()
 	visible = false
+
+func _recipe_name(id: String) -> String:
+	return String(_recipe_names.get(id, id))
 
 func open_menu() -> void:
 	_open = true
@@ -75,12 +82,24 @@ func _build_ui() -> void:
 		var slot := SLOT_ORDER[i]
 		var lbl := Label.new()
 		lbl.position = Vector2(420 + i * 220, 292)
-		lbl.size = Vector2(200, 42)
+		lbl.size = Vector2(200, 36)
 		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		lbl.clip_text = true
 		lbl.add_theme_font_size_override("font_size", 28)
 		lbl.text = String(SLOT_LABELS.get(slot, slot))
 		add_child(lbl)
 		_slot_labels.append(lbl)
+
+		var equipped_lbl := Label.new()
+		equipped_lbl.position = Vector2(420 + i * 220, 328)
+		equipped_lbl.size = Vector2(200, 30)
+		equipped_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		equipped_lbl.clip_text = true
+		equipped_lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		equipped_lbl.add_theme_font_size_override("font_size", 20)
+		equipped_lbl.modulate = Color(0.7, 0.85, 0.7)
+		add_child(equipped_lbl)
+		_slot_equipped_labels.append(equipped_lbl)
 
 	for i in range(8):
 		var bg := ColorRect.new()
@@ -146,9 +165,12 @@ func _refresh() -> void:
 	for i in SLOT_ORDER.size():
 		var slot := SLOT_ORDER[i]
 		var equipped := RunState.active_consumable if slot == "consumable" else RunState.get_equipped_item(slot)
-		var suffix := " : %s" % equipped if not equipped.is_empty() else ""
-		_slot_labels[i].text = "%s%s" % [String(SLOT_LABELS.get(slot, slot)), suffix]
+		_slot_labels[i].text = String(SLOT_LABELS.get(slot, slot))
 		_slot_labels[i].modulate = Color(1, 1, 1) if i == _selected_slot else Color(0.5, 0.5, 0.5)
+		if slot == "consumable":
+			_slot_equipped_labels[i].text = ""
+		else:
+			_slot_equipped_labels[i].text = _recipe_name(equipped) if not equipped.is_empty() else "-"
 
 	var options := _current_options()
 	_selected_item = clampi(_selected_item, 0, max(0, options.size() - 1))
@@ -161,11 +183,15 @@ func _refresh() -> void:
 		var option := options[i]
 		var id := String(option.get("id", ""))
 		var label := String(option.get("name", ""))
-		if SLOT_ORDER[_selected_slot] == "consumable" and not id.is_empty():
+		var is_consumable_slot := SLOT_ORDER[_selected_slot] == "consumable"
+		if is_consumable_slot and not id.is_empty():
 			label += " x%d" % RunState.get_consumable_count(id)
+		var is_active := is_consumable_slot and id == RunState.active_consumable and not id.is_empty()
+		if is_active:
+			label += " (actif)"
 		_item_labels[i].text = label
 		_item_bgs[i].color = Color(0.24, 0.22, 0.18) if i == _selected_item else Color(0.16, 0.15, 0.12)
-		_item_labels[i].modulate = Color(1, 1, 1)
+		_item_labels[i].modulate = Color(0.6, 1.0, 0.6) if is_active else Color(1, 1, 1)
 
 func _apply_selection() -> void:
 	var options := _current_options()

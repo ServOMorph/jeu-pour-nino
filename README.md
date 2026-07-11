@@ -65,9 +65,9 @@ Necessite Godot 4.5 disponible dans le PATH, ou via `D:\tmp\godot45\Godot_v4.5-s
 
 ## Etat actuel
 
-**v1.40.** Socle Phase 2 branche cote jeu : `recipes.json` au schema cible 27 recettes, starters bootstrapes, Grimoire via menu dev, equipement manuel via pause, craft filtre par maitrise et tier d'etabli.
-Verification automatisee OK : GUT `25/25` vert et lancement headless OK.
-Prochaine etape urgente : valider manuellement le flux complet Grimoire -> craft -> equipement -> HUD, puis reprendre gain de PC / progression / armes a distance.
+**v1.47.** Validation manuelle du flux Phase 2 en cours (voir `tests_manuels.md`) : Grimoire, lancement de partie, craft et equipement (partiel) valides OK.
+Deux blocages ouverts : decouverte de recettes non-starter jamais declenchee en jeu, selection de consommable dans l'ecran Equipement sans effet visible confirme.
+Prochaine etape urgente : debugger la selection de consommable, terminer la validation du HUD/consommable, puis debloquer la decouverte de recettes avant de reprendre gain de PC / progression / armes a distance.
 
 ## Roadmap
 
