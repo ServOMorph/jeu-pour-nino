@@ -4,10 +4,10 @@
 [ext_resource type="Script" path="res://scripts/animation_driver.gd" id="2"]
 
 [sub_resource type="RectangleShape2D" id="body"]
-size = Vector2(56, 40)
+size = Vector2(112, 80)
 
 [sub_resource type="RectangleShape2D" id="hit"]
-size = Vector2(64, 48)
+size = Vector2(128, 96)
 
 [node name="EnemyFlyer" type="CharacterBody2D"]
 collision_layer = 4

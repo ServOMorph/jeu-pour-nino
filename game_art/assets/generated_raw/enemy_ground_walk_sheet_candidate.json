@@ -1,0 +1,242 @@
+{
+  "input_dir": "game_art\\assets\\generated_raw\\enemy_ground_walk_frames_alpha",
+  "output_dir": "game_art\\assets\\generated_raw\\enemy_ground_walk_frames_norm",
+  "sheet_out": "game_art\\assets\\generated_raw\\enemy_ground_walk_sheet_candidate.png",
+  "frame_size": [
+    128,
+    128
+  ],
+  "top_pad": 0,
+  "bottom_pad": 0,
+  "side_pad": 0,
+  "fit_scales": [
+    0.1198501872659176,
+    0.1114012184508268,
+    0.10372771474878444,
+    0.11743119266055047,
+    0.12916246215943492,
+    0.12391093901258471,
+    0.12673267326732673,
+    0.12942366026289182
+  ],
+  "summary": {
+    "base_scale": 0.12188056313925116,
+    "normalized_width_min": 121,
+    "normalized_width_max": 128,
+    "normalized_height_min": 72,
+    "normalized_height_max": 82,
+    "normalized_bottom_min": 127,
+    "normalized_bottom_max": 127,
+    "max_scale_delta_vs_base": 0.018152848390466728
+  },
+  "frames": [
+    {
+      "source": "frame_00.png",
+      "source_bbox": [
+        86,
+        273,
+        1154,
+        939
+      ],
+      "source_width": 1068,
+      "source_height": 666,
+      "fit_scale": 0.1198501872659176,
+      "applied_scale": 0.1198501872659176,
+      "scale_delta_vs_base": -0.002030375873333559,
+      "normalized_bbox": [
+        0,
+        48,
+        128,
+        128
+      ],
+      "normalized_width": 128,
+      "normalized_height": 80,
+      "normalized_bottom": 127,
+      "offset_x": 0,
+      "offset_y": 48,
+      "output": "frame_00.png"
+    },
+    {
+      "source": "frame_01.png",
+      "source_bbox": [
+        38,
+        271,
+        1187,
+        980
+      ],
+      "source_width": 1149,
+      "source_height": 709,
+      "fit_scale": 0.1114012184508268,
+      "applied_scale": 0.1114012184508268,
+      "scale_delta_vs_base": -0.01047934468842436,
+      "normalized_bbox": [
+        0,
+        49,
+        128,
+        128
+      ],
+      "normalized_width": 128,
+      "normalized_height": 79,
+      "normalized_bottom": 127,
+      "offset_x": 0,
+      "offset_y": 49,
+      "output": "frame_01.png"
+    },
+    {
+      "source": "frame_02.png",
+      "source_bbox": [
+        156,
+        86,
+        1390,
+        837
+      ],
+      "source_width": 1234,
+      "source_height": 751,
+      "fit_scale": 0.10372771474878444,
+      "applied_scale": 0.10372771474878444,
+      "scale_delta_vs_base": -0.018152848390466728,
+      "normalized_bbox": [
+        0,
+        50,
+        128,
+        128
+      ],
+      "normalized_width": 128,
+      "normalized_height": 78,
+      "normalized_bottom": 127,
+      "offset_x": 0,
+      "offset_y": 50,
+      "output": "frame_02.png"
+    },
+    {
+      "source": "frame_03.png",
+      "source_bbox": [
+        85,
+        256,
+        1175,
+        951
+      ],
+      "source_width": 1090,
+      "source_height": 695,
+      "fit_scale": 0.11743119266055047,
+      "applied_scale": 0.11743119266055047,
+      "scale_delta_vs_base": -0.004449370478700698,
+      "normalized_bbox": [
+        0,
+        46,
+        128,
+        128
+      ],
+      "normalized_width": 128,
+      "normalized_height": 82,
+      "normalized_bottom": 127,
+      "offset_x": 0,
+      "offset_y": 46,
+      "output": "frame_03.png"
+    },
+    {
+      "source": "frame_04.png",
+      "source_bbox": [
+        96,
+        249,
+        1087,
+        876
+      ],
+      "source_width": 991,
+      "source_height": 627,
+      "fit_scale": 0.12916246215943492,
+      "applied_scale": 0.12188056313925116,
+      "scale_delta_vs_base": 0.0,
+      "normalized_bbox": [
+        4,
+        52,
+        125,
+        128
+      ],
+      "normalized_width": 121,
+      "normalized_height": 76,
+      "normalized_bottom": 127,
+      "offset_x": 4,
+      "offset_y": 52,
+      "output": "frame_04.png"
+    },
+    {
+      "source": "frame_05.png",
+      "source_bbox": [
+        138,
+        280,
+        1171,
+        915
+      ],
+      "source_width": 1033,
+      "source_height": 635,
+      "fit_scale": 0.12391093901258471,
+      "applied_scale": 0.12188056313925116,
+      "scale_delta_vs_base": 0.0,
+      "normalized_bbox": [
+        1,
+        51,
+        127,
+        128
+      ],
+      "normalized_width": 126,
+      "normalized_height": 77,
+      "normalized_bottom": 127,
+      "offset_x": 1,
+      "offset_y": 51,
+      "output": "frame_05.png"
+    },
+    {
+      "source": "frame_06.png",
+      "source_bbox": [
+        111,
+        255,
+        1121,
+        891
+      ],
+      "source_width": 1010,
+      "source_height": 636,
+      "fit_scale": 0.12673267326732673,
+      "applied_scale": 0.12188056313925116,
+      "scale_delta_vs_base": 0.0,
+      "normalized_bbox": [
+        2,
+        50,
+        125,
+        128
+      ],
+      "normalized_width": 123,
+      "normalized_height": 78,
+      "normalized_bottom": 127,
+      "offset_x": 2,
+      "offset_y": 50,
+      "output": "frame_06.png"
+    },
+    {
+      "source": "frame_07.png",
+      "source_bbox": [
+        104,
+        282,
+        1093,
+        873
+      ],
+      "source_width": 989,
+      "source_height": 591,
+      "fit_scale": 0.12942366026289182,
+      "applied_scale": 0.12188056313925116,
+      "scale_delta_vs_base": 0.0,
+      "normalized_bbox": [
+        4,
+        56,
+        125,
+        128
+      ],
+      "normalized_width": 121,
+      "normalized_height": 72,
+      "normalized_bottom": 127,
+      "offset_x": 4,
+      "offset_y": 56,
+      "output": "frame_07.png"
+    }
+  ]
+}

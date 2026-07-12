@@ -49,3 +49,7 @@
 - Le panneau `Reference` de l'editeur est supprime : les references visuelles ne sont plus affichees dans le workflow courant.
 - La preview `Produit` utilise `AnimatedSprite2D.centered = false` et centre la texture de la frame courante explicitement dans le viewport.
 - Le player utilise desormais uniquement des etats `sheet`, y compris les attaques directionnelles et les etats mono-frame encapsules en sheet 1 frame.
+- Les 4 attaques directionnelles du player suivent desormais la meme sequence runtime
+  que `player/attack` : `0,1,2,3,3,3,2,1,0`, apres regeneration complete des frames.
+- Les 4 attaques directionnelles, `player/idle` et `player/attack` sont valides en lecture editeur.
+- Le flux `Recharger` est valide en session ouverte pour relire assets et `animations.json`.

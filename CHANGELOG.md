@@ -1,3 +1,28 @@
+## v1.53 - 2026-07-12
+
+### Modifie
+- `game_art/_contexte/signals.md`, `game_art/_contexte/contexte.md`, `game_art/roadmap_editeur.md` et `game_art/backlog_art.md` : fermeture de session alignee sur les nouveaux cycles mobs et sur la validation metrique encore ouverte.
+- `game_art/assets/enemies/enemy_ground.png`, `enemy_flyer.png`, `enemy_ground_walk_sheet.png`, `enemy_flyer_fly_sheet.png` et copies `game/assets/sprites/enemies/` : ids mobs regeneres et nouvelles sheets de deplacement branchees en runtime.
+- `game_art/data/animations.json`, `game/data/animations.json`, `game_art/specs/enemy_ground.md` et `game_art/specs/enemy_flyer.md` : etats `walk`/`fly` des mobs standard branches en sheets candidates, avec fiches regenerees.
+
+## v1.52 - 2026-07-12
+
+### Modifie
+- `game_art/assets/enemies/enemy_ground.png`, `enemy_flyer.png` et copies `game/assets/sprites/enemies/` : sprites des mobs standards regeneres en x2 ; boss inchange.
+- `game_art/data/animations.json`, `game_art/data/manifest.json`, `game_art/specs/enemy_ground.md` et `game_art/specs/enemy_flyer.md` : gabarits runtime des mobs portes a `128x128` et `112x80`.
+- `game/scenes/enemies/enemy_ground.tscn` et `enemy_flyer.tscn` : collisions et hurtboxes doublees pour suivre les nouveaux visuels.
+- `docs/process_generation_sprites.md` : tailles cibles des mobs mises a jour.
+
+### Ajoute
+- `game_art/assets/enemies/enemy_ground_walk_sheet.png` et `game_art/assets/generated_raw/enemy_ground_walk_*` : premiere animation multi-frames de deplacement du mob au sol regeneree via frames separees, detourage, normalisation automatique et sheet candidate.
+
+### Corrige
+- `game_art/assets/enemies/enemy_ground.png` et `game_art/assets/generated_raw/enemy_ground_idle_regen_*` : sprite `idle` du mob au sol regenere pour suivre le style, les proportions et le gabarit des nouvelles frames de marche.
+- `game_art/assets/enemies/enemy_flyer.png` et `game_art/assets/generated_raw/enemy_flyer_idle_regen_*` : sprite `idle` du flyer regenere et realigne sur son gabarit runtime `112x80`.
+
+### Ajoute
+- `game_art/assets/enemies/enemy_flyer_fly_sheet.png` et `game_art/assets/generated_raw/enemy_flyer_fly_*` : premiere animation multi-frames de deplacement du mob volant regeneree via frames separees, detourage, normalisation automatique et sheet candidate.
+
 ## v1.51 - 2026-07-12
 
 ### Ajoute

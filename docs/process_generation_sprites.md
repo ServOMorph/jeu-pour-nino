@@ -52,8 +52,8 @@ Demander :
 |---|---:|
 | Joueur idle/run/jump/fall/hurt/dead | 87x150 |
 | Joueur attaque | 129x150 |
-| Ennemi au sol | environ 64x64 |
-| Ennemi volant | environ 56x40 à 64x48 |
+| Ennemi au sol | 128x128 |
+| Ennemi volant | 112x80 |
 | Boss gardien | à valider par rapport au gameplay |
 | Établi | selon gabarit runtime |
 | Minerai / gisement | 56x56 |

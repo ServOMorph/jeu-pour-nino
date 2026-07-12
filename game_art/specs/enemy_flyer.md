@@ -7,7 +7,7 @@
 
 ### dead
 
-- target_frame_size: 56x40
+- target_frame_size: 112x80
 - fps: 1.0
 - loop: false
 - frame_count: 1
@@ -17,17 +17,17 @@
 
 ### fly
 
-- target_frame_size: 56x40
+- target_frame_size: 112x80
 - fps: 6.0
 - loop: true
-- frame_count: 1
-- sheet: legacy
-- frame_size: n/a
+- frame_count: 6
+- sheet: res://assets/sprites/enemies/enemy_flyer_fly_sheet.png
+- frame_size: 112x80
 - offset: [0.0, 0.0]
 
 ### hurt
 
-- target_frame_size: 56x40
+- target_frame_size: 112x80
 - fps: 1.0
 - loop: false
 - frame_count: 1
@@ -37,7 +37,7 @@
 
 ### idle
 
-- target_frame_size: 56x40
+- target_frame_size: 112x80
 - fps: 1.0
 - loop: true
 - frame_count: 1
@@ -47,5 +47,5 @@
 
 ## Anomalies ouvertes
 
-- info: placeholder detecte: res://assets/enemies/enemy_flyer.png partage par [idle, fly, hurt, dead]
+- info: placeholder detecte: res://assets/enemies/enemy_flyer.png partage par [idle, hurt, dead]
 

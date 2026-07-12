@@ -74,6 +74,15 @@ Consequences pour cette zone (a traiter cote game_art, hors perimetre jeu) :
 - priorite: moyenne
 - statut: a_faire
 
+### Mobs standards placeholder - ground et flyer
+- phase: anterieure (maintenance runtime)
+- placeholder: mobs standard a image unique sans vraie animation de deplacement, avec incoherences de style entre `idle` et mouvement
+- specs: `enemy_ground` en `128x128` avec `idle` regenere et `walk` en 8 frames ; `enemy_flyer` en `112x80` avec `idle` regenere et `fly` en 6 frames. Les sheets runtime candidates doivent rester coherentes avec `docs/process_generation_sprites.md` et converger vers les seuils metriques de `game_art/commands/generation_animation.md`.
+- priorite: moyenne
+- statut: livre
+- debloque: validation du workflow d'animation sur mobs et remplacement des placeholders ennemis visibles en jeu
+- livraison: `game_art/assets/enemies/enemy_ground.png`, `game_art/assets/enemies/enemy_ground_walk_sheet.png`, `game_art/assets/enemies/enemy_flyer.png`, `game_art/assets/enemies/enemy_flyer_fly_sheet.png`, `game_art/data/animations.json`, `game_art/assets/generated_raw/enemy_ground_walk_sheet_candidate.json`, `game_art/assets/generated_raw/enemy_flyer_fly_sheet_candidate.json`
+
 ### Sprites gisements/minerais par type de materiau
 - phase: 1 - Materiaux types
 - placeholder: `ore_copper.png` unique pour tous les gisements

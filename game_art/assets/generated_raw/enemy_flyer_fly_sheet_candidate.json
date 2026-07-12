@@ -1,0 +1,188 @@
+{
+  "input_dir": "game_art\\assets\\generated_raw\\enemy_flyer_fly_frames_alpha",
+  "output_dir": "game_art\\assets\\generated_raw\\enemy_flyer_fly_frames_norm",
+  "sheet_out": "game_art\\assets\\generated_raw\\enemy_flyer_fly_sheet_candidate.png",
+  "frame_size": [
+    112,
+    80
+  ],
+  "top_pad": 0,
+  "bottom_pad": 0,
+  "side_pad": 0,
+  "fit_scales": [
+    0.10638297872340426,
+    0.09663503019844694,
+    0.08595548733691481,
+    0.12004287245444802,
+    0.0918785890073831,
+    0.09046849757673667
+  ],
+  "summary": {
+    "base_scale": 0.09425680960291502,
+    "normalized_width_min": 77,
+    "normalized_width_max": 112,
+    "normalized_height_min": 42,
+    "normalized_height_max": 71,
+    "normalized_bottom_min": 79,
+    "normalized_bottom_max": 79,
+    "max_scale_delta_vs_base": 0.008301322266000208
+  },
+  "frames": [
+    {
+      "source": "frame_00.png",
+      "source_bbox": [
+        362,
+        91,
+        1175,
+        843
+      ],
+      "source_width": 813,
+      "source_height": 752,
+      "fit_scale": 0.10638297872340426,
+      "applied_scale": 0.09425680960291502,
+      "scale_delta_vs_base": 0.0,
+      "normalized_bbox": [
+        18,
+        9,
+        95,
+        80
+      ],
+      "normalized_width": 77,
+      "normalized_height": 71,
+      "normalized_bottom": 79,
+      "offset_x": 18,
+      "offset_y": 9,
+      "output": "frame_00.png"
+    },
+    {
+      "source": "frame_01.png",
+      "source_bbox": [
+        161,
+        195,
+        1320,
+        844
+      ],
+      "source_width": 1159,
+      "source_height": 649,
+      "fit_scale": 0.09663503019844694,
+      "applied_scale": 0.09425680960291502,
+      "scale_delta_vs_base": 0.0,
+      "normalized_bbox": [
+        2,
+        19,
+        111,
+        80
+      ],
+      "normalized_width": 109,
+      "normalized_height": 61,
+      "normalized_bottom": 79,
+      "offset_x": 2,
+      "offset_y": 19,
+      "output": "frame_01.png"
+    },
+    {
+      "source": "frame_02.png",
+      "source_bbox": [
+        83,
+        319,
+        1386,
+        803
+      ],
+      "source_width": 1303,
+      "source_height": 484,
+      "fit_scale": 0.08595548733691481,
+      "applied_scale": 0.08595548733691481,
+      "scale_delta_vs_base": -0.008301322266000208,
+      "normalized_bbox": [
+        0,
+        38,
+        112,
+        80
+      ],
+      "normalized_width": 112,
+      "normalized_height": 42,
+      "normalized_bottom": 79,
+      "offset_x": 0,
+      "offset_y": 38,
+      "output": "frame_02.png"
+    },
+    {
+      "source": "frame_03.png",
+      "source_bbox": [
+        260,
+        241,
+        1193,
+        850
+      ],
+      "source_width": 933,
+      "source_height": 609,
+      "fit_scale": 0.12004287245444802,
+      "applied_scale": 0.09425680960291502,
+      "scale_delta_vs_base": 0.0,
+      "normalized_bbox": [
+        12,
+        23,
+        100,
+        80
+      ],
+      "normalized_width": 88,
+      "normalized_height": 57,
+      "normalized_bottom": 79,
+      "offset_x": 12,
+      "offset_y": 23,
+      "output": "frame_03.png"
+    },
+    {
+      "source": "frame_04.png",
+      "source_bbox": [
+        107,
+        263,
+        1326,
+        832
+      ],
+      "source_width": 1219,
+      "source_height": 569,
+      "fit_scale": 0.0918785890073831,
+      "applied_scale": 0.0918785890073831,
+      "scale_delta_vs_base": -0.0023782205955319158,
+      "normalized_bbox": [
+        0,
+        28,
+        112,
+        80
+      ],
+      "normalized_width": 112,
+      "normalized_height": 52,
+      "normalized_bottom": 79,
+      "offset_x": 0,
+      "offset_y": 28,
+      "output": "frame_04.png"
+    },
+    {
+      "source": "frame_05.png",
+      "source_bbox": [
+        107,
+        131,
+        1345,
+        873
+      ],
+      "source_width": 1238,
+      "source_height": 742,
+      "fit_scale": 0.09046849757673667,
+      "applied_scale": 0.09046849757673667,
+      "scale_delta_vs_base": -0.003788312026178353,
+      "normalized_bbox": [
+        0,
+        13,
+        112,
+        80
+      ],
+      "normalized_width": 112,
+      "normalized_height": 67,
+      "normalized_bottom": 79,
+      "offset_x": 0,
+      "offset_y": 13,
+      "output": "frame_05.png"
+    }
+  ]
+}

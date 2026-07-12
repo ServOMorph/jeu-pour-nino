@@ -241,6 +241,10 @@
           0.0,
           0.0
         ],
+        "frame_size": [
+          128.0,
+          128.0
+        ],
         "frames": [
           "res://assets/sprites/enemies/enemy_ground.png"
         ]
@@ -252,8 +256,20 @@
           0.0,
           0.0
         ],
+        "sheet": "res://assets/sprites/enemies/enemy_ground_walk_sheet.png",
+        "frame_size": [
+          128.0,
+          128.0
+        ],
         "frames": [
-          "res://assets/sprites/enemies/enemy_ground.png"
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0,
+          7.0
         ]
       },
       "hurt": {
@@ -262,6 +278,10 @@
         "offset": [
           0.0,
           0.0
+        ],
+        "frame_size": [
+          128.0,
+          128.0
         ],
         "frames": [
           "res://assets/sprites/enemies/enemy_ground.png"
@@ -273,6 +293,10 @@
         "offset": [
           0.0,
           0.0
+        ],
+        "frame_size": [
+          128.0,
+          128.0
         ],
         "frames": [
           "res://assets/sprites/enemies/enemy_ground.png"
@@ -290,6 +314,10 @@
           0.0,
           0.0
         ],
+        "frame_size": [
+          112.0,
+          80.0
+        ],
         "frames": [
           "res://assets/sprites/enemies/enemy_flyer.png"
         ]
@@ -301,8 +329,18 @@
           0.0,
           0.0
         ],
+        "sheet": "res://assets/sprites/enemies/enemy_flyer_fly_sheet.png",
+        "frame_size": [
+          112.0,
+          80.0
+        ],
         "frames": [
-          "res://assets/sprites/enemies/enemy_flyer.png"
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0
         ]
       },
       "hurt": {
@@ -311,6 +349,10 @@
         "offset": [
           0.0,
           0.0
+        ],
+        "frame_size": [
+          112.0,
+          80.0
         ],
         "frames": [
           "res://assets/sprites/enemies/enemy_flyer.png"
@@ -322,6 +364,10 @@
         "offset": [
           0.0,
           0.0
+        ],
+        "frame_size": [
+          112.0,
+          80.0
         ],
         "frames": [
           "res://assets/sprites/enemies/enemy_flyer.png"

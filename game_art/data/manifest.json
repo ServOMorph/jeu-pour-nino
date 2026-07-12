@@ -73,26 +73,26 @@
     "states": {
       "idle": {
         "frame_size": [
-          64,
-          64
+          128,
+          128
         ]
       },
       "walk": {
         "frame_size": [
-          64,
-          64
+          128,
+          128
         ]
       },
       "hurt": {
         "frame_size": [
-          64,
-          64
+          128,
+          128
         ]
       },
       "dead": {
         "frame_size": [
-          64,
-          64
+          128,
+          128
         ]
       }
     }
@@ -101,26 +101,26 @@
     "states": {
       "idle": {
         "frame_size": [
-          56,
-          40
+          112,
+          80
         ]
       },
       "fly": {
         "frame_size": [
-          56,
-          40
+          112,
+          80
         ]
       },
       "hurt": {
         "frame_size": [
-          56,
-          40
+          112,
+          80
         ]
       },
       "dead": {
         "frame_size": [
-          56,
-          40
+          112,
+          80
         ]
       }
     }
