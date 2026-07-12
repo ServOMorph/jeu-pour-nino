@@ -120,6 +120,14 @@ Consequences pour cette zone (a traiter cote game_art, hors perimetre jeu) :
 - statut: livre
 - livraison: `game_art/assets/tiles/hub_decor.png`
 
+### Script de rescale ref_to_sprite.py
+- phase: pivot pixel art -> 2D standard (2026-07-07)
+- placeholder: `game_art/tools/ref_to_sprite.py` encore en logique pixel art (binarisation alpha, quantisation de palette median cut, `--size` en grille type 14x14) - dernier residu du pivot identifie lors d'un audit cote jeu le 2026-07-12
+- specs: remplacer par un script de rescale simple (resize exact vers la taille runtime cible, sans quantisation de palette ni binarisation en grille), conforme au pipeline decrit dans `docs/process_generation_sprites.md`
+- priorite: basse
+- statut: a_faire
+- debloque: aucun bloquant dev direct - dette d'outillage residuelle du pivot art
+
 ### Objet/portail de sortie volontaire de biome
 - phase: 3 - HUB (jalon J1)
 - placeholder: aucun

@@ -1,3 +1,12 @@
+## v1.50 - 2026-07-12
+
+### Modifie
+- `.claude/memory.md` : bindings manette completes (`use_item`, `sprint`, `pause_menu`) ; entree "Risques animation v2.1" purgee des dimensions pixel art obsoletes (14x24/40x56/48x56).
+- `game_art/backlog_art.md` : nouvelle entree "Script de rescale ref_to_sprite.py" - dernier residu pixel art identifie hors perimetre jeu.
+
+### Verifie
+- Audit du pivot pixel art -> 2D standard : aucune trace active du design/tailles pixel art restante cote jeu (docs, editeur, sprites), hors outillage `ref_to_sprite.py` deja trace comme dette game_art.
+
 ## v1.49 - 2026-07-12
 
 ### Ajoute

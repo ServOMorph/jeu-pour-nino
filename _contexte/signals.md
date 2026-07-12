@@ -47,26 +47,22 @@ Aucune côté jeu.
 - `tests_manuels.md` (racine) : validation manuelle Phase 2 complète (2026-07-12), toutes sections 1-9 OK sans anomalie.
 - `RecipeCatalog.discover_by_trigger()` (`game/scripts/recipe_catalog.gd`) : appelé depuis `level.gd._on_boss_died()` — seul trigger de découverte de recette branché à ce jour (victoire boss). Pattern réutilisable pour brancher les futurs triggers salle/porteur.
 
-## Dernière session (2026-07-12 — diagnostic 8.6, discover_recipe branché, validation Phase 2 complète)
+## Dernière session (2026-07-12 — audit mémoire projet et résidus pixel art)
 
 ## Décisions prises
-- 8.6 diagnostiqué comme faux bug : sélection de consommable fonctionne correctement, le comportement observé (pas de changement visible) est attendu quand un seul type de consommable est en stock.
-- `discover_recipe()` branché sur la victoire du boss uniquement (3/20 recettes non-starter) — les 17 recettes restantes attendent des systèmes de jeu non développés (biomes multiples, porteurs).
-- Validation manuelle du flux Phase 2 déclarée complète : sections 1-9 testées sans anomalie bloquante.
+- `.claude/memory.md` corrigé : bindings manette complétés (`use_item`, `sprint`, `pause_menu`), dimensions pixel art obsolètes (14x24/40x56/48x56) retirées de l'entrée « Risques animation v2.1 ».
+- Audit du pivot pixel art → 2D standard : aucune trace active dans le code/docs jeu (docs réécrits, éditeur déjà en filtre linéaire, sprites player aux bonnes dimensions). Seul résidu : `game_art/tools/ref_to_sprite.py` encore en logique de réduction pixel (outillage game_art, hors périmètre jeu).
 
 ## Livrables produits ou modifiés
-- `game/scripts/recipe_catalog.gd` : ajout de `discover_by_trigger()`.
-- `game/scripts/level.gd` : appel de `discover_by_trigger()` dans `_on_boss_died()`.
-- `tests_manuels.md` : sections 5, 8, 9 mises à jour et validées ; document réduit à un résumé de clôture.
-- `_contexte/signals.md`, `_contexte/contexte.md` : mis à jour en conséquence.
+- `.claude/memory.md` : entrées bindings manette et dimensions player mises à jour (entrée dimensions ensuite supprimée manuellement par l'utilisateur une fois jugée redondante avec `backlog_art.md`).
+- `game_art/backlog_art.md` : nouvelle entrée « Script de rescale ref_to_sprite.py » créée (statut `a_faire`, `debloque: aucun bloquant dev direct`) pour tracer ce résidu côté game_art.
 
 ## Hypothèses validées / invalidées
-- VALIDE : sélection de consommable (8.6) — comportement correct, pas de bug.
-- VALIDE : trigger `discover_recipe` sur victoire boss — testé manuellement en jeu, GUT 25/25 vert.
-- VALIDE : validation manuelle Phase 2 complète, aucune anomalie bloquante restante.
+- VALIDE : le pivot pixel art → 2D standard est effectif partout côté jeu/docs, hors un script d'outillage game_art déjà identifié comme dette.
+- EN ATTENTE : aucun code jeu modifié cette session — la Phase 2 reste dans l'état du close précédent.
 
 ## Prochaine étape exacte
-Compléter la Phase 2 restante : barème/gain de PC, progression de run persistée, armes à distance, tests craft dédiés (`roadmap.md` Phase 2).
+Compléter la Phase 2 restante : barème/gain de PC, progression de run persistée, armes à distance, tests craft dédiés (`roadmap.md` Phase 2) — inchangé depuis le dernier close.
 
 ## Question bloquante pour la session suivante
 Aucune côté jeu.
