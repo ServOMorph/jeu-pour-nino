@@ -65,9 +65,9 @@ Necessite Godot 4.5 disponible dans le PATH, ou via `D:\tmp\godot45\Godot_v4.5-s
 
 ## Etat actuel
 
-**v1.47.** Validation manuelle du flux Phase 2 en cours (voir `tests_manuels.md`) : Grimoire, lancement de partie, craft et equipement (partiel) valides OK.
-Deux blocages ouverts : decouverte de recettes non-starter jamais declenchee en jeu, selection de consommable dans l'ecran Equipement sans effet visible confirme.
-Prochaine etape urgente : debugger la selection de consommable, terminer la validation du HUD/consommable, puis debloquer la decouverte de recettes avant de reprendre gain de PC / progression / armes a distance.
+**v1.49.** Validation manuelle du flux Phase 2 complete (voir `tests_manuels.md`) : Grimoire, lancement de partie, craft, equipement et HUD/consommable valides OK, sans anomalie bloquante.
+Decouverte de recettes non-starter branchee sur la victoire du boss (3 recettes) ; les triggers salle/porteur restent a brancher une fois les biomes multiples et les porteurs developpes.
+Prochaine etape : gain de PC / progression de run / armes a distance (reste de la Phase 2).
 
 ## Roadmap
 

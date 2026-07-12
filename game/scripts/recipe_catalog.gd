@@ -26,3 +26,8 @@ static func bootstrap_starters(recipes: Array[Dictionary]) -> void:
 	for recipe in recipes:
 		if bool(recipe.get("starter", false)):
 			MetaState.ensure_recipe(String(recipe.get("id", "")), true)
+
+static func discover_by_trigger(recipes: Array[Dictionary], trigger: String) -> void:
+	for recipe in recipes:
+		if String(recipe.get("discovery", "")) == trigger:
+			MetaState.discover_recipe(String(recipe.get("id", "")))

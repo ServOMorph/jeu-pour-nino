@@ -1,18 +1,15 @@
-# Signals — jeu   (MAJ 2026-07-11)
+# Signals — jeu   (MAJ 2026-07-12)
 
 ## Question bloquante
 Aucune côté jeu.
 
 ## Actions ouvertes
-- [P1] Validation manuelle du flux Phase 2 complète (sections 1-4, 6-9 testées sans anomalie). Débloquer maintenant la découverte de recettes non-starter (§5 tests_manuels.md) : brancher `MetaState.discover_recipe()` via trigger gameplay (salle, drop porteur, victoire boss).
-  fait quand: `tests_manuels.md` intégralement coché sans anomalie bloquante restante.
-  réf: `tests_manuels.md` (racine)
-- [P1] Débloquer la découverte de recettes non-starter (voir Blocages) puis reprendre la validation de la maîtrise de recette (Grimoire).
-  fait quand: un trigger gameplay (salle, drop de porteur, victoire boss) appelle `MetaState.discover_recipe()` et au moins une recette non-starter devient maîtrisable manuellement.
-  réf: `game/scripts/meta_state.gd`, `game/data/recipes.json`
 - [P1] Compléter la Phase 2 restante côté jeu : barème/gain de PC, progression de run associée, armes à distance et tests craft dédiés.
   fait quand: `progression.json` branché, compteurs de run persistés jusqu'au calcul PC, mécanique distance jouable, `tests/test_craft.gd` vert.
   réf: `roadmap.md` Phase 2, `questions.md` Q016/Q043/Q044/Q055/Q056
+- [P2] Triggers `Salle B1-B4` et `Porteur` (17 recettes non-starter restantes) non branchables : dépendent de systèmes absents (biomes multiples, ennemis porteurs — phases 4, 7a-c, 8). À traiter quand ces phases seront développées, pas avant.
+  fait quand: n/a — dépend du développement des phases 4/7a-c/8.
+  réf: `game/scripts/recipe_catalog.gd` (`discover_by_trigger`), `game/data/recipes.json`
 - [P2] Traiter le pivot pixel art → 2D standard côté game_art : éditeur dépixélisé, `ref_to_sprite.py` remplacé par un script de rescale, premier asset produit via le pipeline actif.
   fait quand: plus aucune mention pixel art/grille/palette limitée dans la doc et l'outillage game_art ; premier asset produit via le pipeline Codex + rescale.
   réf: `plan_graphismes_standard_2d.md`, `game_art/backlog_art.md` (entrée « Pivot 2026-07-07 »)
@@ -28,7 +25,7 @@ Aucune côté jeu.
 ## Échéances
 
 ## Blocages
-- **Découverte de recettes non-starter absente en jeu** (constat 2026-07-11) : `MetaState.discover_recipe()` (`game/scripts/meta_state.gd:26`) n'est appelé nulle part hors tests GUT (`test_meta_state.gd`, `test_save_manager.gd`). Aucune salle/porteur/victoire boss ne déclenche la découverte des 20 recettes non-starter de `recipes.json`. Le Grimoire n'affiche donc que les 7 recettes `starter`, déjà maîtrisées à `PC 0`. Bloque la validation manuelle complète du flux Phase 2 (étape « maîtriser une recette non-starter » impossible). À traiter avant de considérer la Phase 2 validable.
+*Aucun.*
 
 ## Contexte chaud
 - `questions.md` (racine) : 77+1 questions de conception v3 tranchées le 2026-07-06 — source de vérité pour tout arbitrage de design ambigu.
@@ -46,49 +43,30 @@ Aucune côté jeu.
 - Piège Godot découvert 2026-07-05 : `SubViewportContainer.stretch = true` sans `stretch_shrink` réglé fait que le `SubViewport` interne se redimensionne à la taille du container au lieu de garder sa résolution fixe zoomée.
 - Piège GDScript découvert 2026-07-11 : un `const` de tableau non typé (`const X := [...]`) rend `X[i]` de type `Variant` — `var v := X[i]` échoue alors à l'inférence de type sous Godot 4.5 et casse la compilation du script entier (et de tout ce qui le précharge). Toujours typer les const tableaux utilisés pour de l'indexation (`const X: Array[String] = [...]`).
 - Slots `weapon`/`armor`/`accessory`/`tool`/`consumable` gérés par `equipment_menu.gd` ; les recettes de slot `utility` (`pioche_renforcee`, `corde`, `etabli_portable`) ne sont pas équipables via cet écran — `pioche_renforcee` agit automatiquement dès qu'elle est possédée (tier de minage), `corde`/`etabli_portable` n'ont aucun effet en jeu implémenté à ce stade.
-- Aucune recette starter n'a le slot `accessory` — le slot ACCESSOIRE reste normalement vide (`Aucun` seul choix) tant que le blocage `discover_recipe` n'est pas levé.
-- `tests_manuels.md` (racine) : document de suivi de la validation manuelle Phase 2, créé le 2026-07-11 — à consulter/mettre à jour en priorité pour reprendre les tests là où ils se sont arrêtés.
+- Aucune recette starter n'a le slot `accessory` — le slot ACCESSOIRE reste normalement vide (`Aucun` seul choix) hors des 3 recettes débloquées par victoire boss.
+- `tests_manuels.md` (racine) : validation manuelle Phase 2 complète (2026-07-12), toutes sections 1-9 OK sans anomalie.
+- `RecipeCatalog.discover_by_trigger()` (`game/scripts/recipe_catalog.gd`) : appelé depuis `level.gd._on_boss_died()` — seul trigger de découverte de recette branché à ce jour (victoire boss). Pattern réutilisable pour brancher les futurs triggers salle/porteur.
 
-## Dernière session (2026-07-12 — diagnostic 8.6 + clarification)
-
-# Session du 2026-07-11
+## Dernière session (2026-07-12 — diagnostic 8.6, discover_recipe branché, validation Phase 2 complète)
 
 ## Décisions prises
-- Menu titre reformaté : suppression du hint manette obsolète, menu dev retravaillé pour tenir entièrement dans la fenêtre 1920×1080.
-- Début de la validation manuelle du flux Phase 2 engagée avec l'utilisateur, suivie dans `tests_manuels.md` (racine).
+- 8.6 diagnostiqué comme faux bug : sélection de consommable fonctionne correctement, le comportement observé (pas de changement visible) est attendu quand un seul type de consommable est en stock.
+- `discover_recipe()` branché sur la victoire du boss uniquement (3/20 recettes non-starter) — les 17 recettes restantes attendent des systèmes de jeu non développés (biomes multiples, porteurs).
+- Validation manuelle du flux Phase 2 déclarée complète : sections 1-9 testées sans anomalie bloquante.
 
 ## Livrables produits ou modifiés
-- `game/scripts/title.gd` : suppression du hint manette, repositionnement/redimensionnement du menu dev (7 entrées) pour éviter le débordement bas d'écran.
-- `game/scripts/equipment_menu.gd` : correctif d'un bug de compilation (`SLOT_ORDER` non typé cassait le chargement de `level.gd`) ; affichage retravaillé (nom lisible sur seconde ligne au lieu de l'id brut, ligne masquée sous `CONSOMMABLE`, marqueur `(actif)` + couleur sur la ligne active dans la liste).
-- `tests_manuels.md` (racine, nouveau) : suivi détaillé et numéroté des tests manuels Phase 2, mis à jour au fil de la session (sections validées retirées au fur et à mesure).
+- `game/scripts/recipe_catalog.gd` : ajout de `discover_by_trigger()`.
+- `game/scripts/level.gd` : appel de `discover_by_trigger()` dans `_on_boss_died()`.
+- `tests_manuels.md` : sections 5, 8, 9 mises à jour et validées ; document réduit à un résumé de clôture.
+- `_contexte/signals.md`, `_contexte/contexte.md` : mis à jour en conséquence.
 
 ## Hypothèses validées / invalidées
-- VALIDE : sections 1 à 4, 6, 7 et 8.1-8.5 du flux Phase 2 validées manuellement sans anomalie.
-- VALIDE : correctif de compilation `equipment_menu.gd` confirmé (GUT `25/25`, plus d'erreur de chargement de niveau).
-- VALIDE : le comportement de sélection consommable est correct — premier consommable auto-actif dès le craft (`add_consumable()` ligne 107-108), réaffectation au même id produit aucun changement visible. Aucune correction requise sur `equipment_menu.gd` / `run_state.gd`.
-- EN ATTENTE : découverte de recettes non-starter (`discover_recipe` jamais appelé en jeu) toujours bloquante pour valider le Grimoire au-delà des recettes starter.
-
----
-
-# Session du 2026-07-12
-
-## Diagnostic 8.6
-Analyse du diagnostic "sélection de consommable sans effet visible" : confirmé comme faux bug. Le marqueur `(actif)` apparaît dès l'ouverture de l'écran Équipement sur `CONSOMMABLE` car le consommable est déjà actif (ligne 107-108 de `run_state.gd`). Avec un seul type en stock, la réaffectation ne produit aucun changement visible. Le code est correct. La vraie limitation : impossible d'avoir 2e consommable en stock tant que `discover_recipe()` n'est pas branché.
-
-## Livrables produits ou modifiés
-- `tests_manuels.md` : section 8.6 marquée comme validée (pas de bug) ; clarification que la limitation est l'absence `discover_recipe()`.
-- `_contexte/signals.md` : suppression du blocage "8.6 sélection consommable" (faux bug) ; conservé seul bloc "découverte recettes non-starter" (vrai blocage).
-- `_contexte/contexte.md` : mis à jour état actuel (8.1-8.6 validées OK, un bloc ouvert).
-
----
-
-# Session du 2026-07-12 (suite)
-
-## Validation Phase 2 — COMPLÈTE
-Sections 8.7, 8.8 et §9 testées avec succès manuellement. Aucune anomalie détectée.
+- VALIDE : sélection de consommable (8.6) — comportement correct, pas de bug.
+- VALIDE : trigger `discover_recipe` sur victoire boss — testé manuellement en jeu, GUT 25/25 vert.
+- VALIDE : validation manuelle Phase 2 complète, aucune anomalie bloquante restante.
 
 ## Prochaine étape exacte
-Brancher `MetaState.discover_recipe()` via trigger gameplay (salle, drop porteur, victoire boss) pour débloquer les recettes non-starter et terminer la validation du Grimoire.
+Compléter la Phase 2 restante : barème/gain de PC, progression de run persistée, armes à distance, tests craft dédiés (`roadmap.md` Phase 2).
 
 ## Question bloquante pour la session suivante
 Aucune côté jeu.

@@ -1,3 +1,11 @@
+## v1.49 - 2026-07-12
+
+### Ajoute
+- `game/scripts/recipe_catalog.gd` : `discover_by_trigger()`, branche depuis `level.gd._on_boss_died()` — decouverte automatique des recettes non-starter a la victoire du boss.
+
+### Corrige
+- `tests_manuels.md` : diagnostic du point 8.6 (selection de consommable) - comportement correct, pas un bug ; validation manuelle complete de la Phase 2 (sections 1-9, aucune anomalie).
+
 ## v1.48 - 2026-07-12
 
 ### Modifie

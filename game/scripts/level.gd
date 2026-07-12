@@ -5,6 +5,7 @@ const ENEMY_GROUND := preload("res://scenes/enemies/enemy_ground.tscn")
 const ENEMY_FLYER := preload("res://scenes/enemies/enemy_flyer.tscn")
 const BOSS := preload("res://scenes/enemies/boss.tscn")
 
+const RECIPE_CATALOG := preload("res://scripts/recipe_catalog.gd")
 const ORE_NODE := preload("res://scripts/ore_node.gd")
 const WORKBENCH_SCRIPT := preload("res://scripts/workbench.gd")
 const CRAFT_MENU_SCRIPT := preload("res://scripts/craft_menu.gd")
@@ -332,6 +333,7 @@ func _on_boss_died() -> void:
 		return
 	_ended = true
 	_hud.hide_boss_bar()
+	RECIPE_CATALOG.discover_by_trigger(RECIPE_CATALOG.load_recipes(), "Victoire Gardien du Voile")
 	SaveManager.save_meta()
 	_show_end_screen("NOYAU ATTEINT - VICTOIRE", Color(0.4, 0.85, 0.5), true)
 
