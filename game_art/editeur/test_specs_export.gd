@@ -20,7 +20,7 @@ func _initialize() -> void:
 		"### attack",
 		"- sheet: res://assets/sprites/player/player_attack_sheet.png",
 		"### run",
-		"- target_frame_size: 87x150",
+		"- target_frame_size: 104x150",
 		"- fps: 8.1",
 		"- sheet: res://assets/sprites/player/player_run_sheet.png",
 		"## Anomalies ouvertes",

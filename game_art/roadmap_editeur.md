@@ -101,7 +101,9 @@ le test `test_preview_center.gd` couvre le centrage player et le cadrage du boss
 
 La migration de format est close pour le player et ses PNG legacy sont archives hors
 audit. Les etats `player/idle`, `player/attack` et les 4 attaques directionnelles sont
-valides en lecture editeur. Le bouton `Recharger` est aussi valide en session ouverte.
+valides en lecture editeur. `player/jump` est maintenant une sheet `3` frames et
+`player/run` utilise des cases `104x150` pour faciliter l'edition manuelle.
+Le bouton `Recharger` est aussi valide en session ouverte.
 L'editeur est maintenant pilote a la souris uniquement ; les evenements manette y sont bloques.
 Le workflow de regeneration d'animation a maintenant ete confirme sur les mobs standards :
 `enemy_ground/walk` et `enemy_flyer/fly` sont branches comme sheets runtime candidates,

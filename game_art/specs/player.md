@@ -98,21 +98,21 @@
 ### jump
 
 - target_frame_size: 87x150
-- fps: 1.0
+- fps: 8.0
 - loop: false
-- frame_count: 1
+- frame_count: 3
 - sheet: res://assets/sprites/player/player_jump_sheet.png
 - frame_size: 87x150
 - offset: [0.0, 0.0]
 
 ### run
 
-- target_frame_size: 87x150
+- target_frame_size: 104x150
 - fps: 8.1
 - loop: true
 - frame_count: 8
 - sheet: res://assets/sprites/player/player_run_sheet.png
-- frame_size: 87x150
+- frame_size: 104x150
 - offset: [0.0, 0.0]
 
 ## Anomalies ouvertes

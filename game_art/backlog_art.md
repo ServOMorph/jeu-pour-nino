@@ -61,11 +61,11 @@ Consequences pour cette zone (a traiter cote game_art, hors perimetre jeu) :
 ### Sprites player - standard Terraria-like
 - phase: anterieure (P3 signals)
 - placeholder: sprites actuels hors standard
-- specs: nouvelle cible definitive joueur = 150 px de haut ; idle/run1/run2/jump/fall/hurt/dead en 87x150, attack en 129x150
+- specs: nouvelle cible definitive joueur = 150 px de haut ; idle/jump/fall/hurt/dead en 87x150, run en sheet `104x150`, attack en 129x150
 - priorite: haute
 - statut: integre
 - livraison: `game_art/assets/player/player_idle_v2.png`, `game_art/assets/player/player_run1.png`, `game_art/assets/player/player_run2.png`, `game_art/assets/player/player_jump.png`, `game_art/assets/player/player_attack.png`, `game_art/assets/player/player_attack_transition.png`, `game_art/assets/player/player_attack_up.png`, `game_art/assets/player/player_attack_up_transition.png`, `game_art/assets/player/player_attack_up_diag.png`, `game_art/assets/player/player_attack_up_diag_transition.png`, `game_art/assets/player/player_attack_down.png`, `game_art/assets/player/player_attack_down_transition.png`, `game_art/assets/player/player_attack_down_diag.png`, `game_art/assets/player/player_attack_down_diag_transition.png`, `game_art/assets/player/player_run_sheet.png`, `game_art/assets/player/player_idle_sheet.png`, `game_art/assets/player/player_jump_sheet.png`, `game_art/assets/player/player_fall_sheet.png`, `game_art/assets/player/player_hurt_sheet.png`, `game_art/assets/player/player_dead_sheet.png`, `game_art/assets/player/player_attack_sheet.png`, `game_art/assets/player/player_attack_up_sheet.png`, `game_art/assets/player/player_attack_down_sheet.png`, `game_art/assets/player/player_attack_up_diag_sheet.png`, `game_art/assets/player/player_attack_down_diag_sheet.png`, `game_art/data/animations.json`
-- note: cette entree est aussi le support du "Fait quand" de la Phase 5 de `roadmap_editeur.md` (premier cycle complet sheet -> editeur -> audit -> sync -> validation en jeu). En maintenance 2026-07-09 : `player/attack` a ete regenere integralement depuis une frame de reference ; la sequence visee est `0,1,2,3,3,3,2,1,0`. En maintenance 2026-07-10 : `player/idle` a ete refait en 6 frames ; la lecture courante ignore `4.0` et vise `0,1,2,3,5`. En maintenance 2026-07-11 : les 4 attaques directionnelles et `idle` sont valides dans l'editeur. En maintenance 2026-07-12 : `player/attack` et le flux `Recharger` sont valides manuellement en session ouverte. En maintenance 2026-07-12 : `player/run` est regenere via frames separees + normalisation automatique controlee ; la sheet candidate retenue est branchee dans l'editeur puis synchronisee vers le jeu.
+- note: cette entree est aussi le support du "Fait quand" de la Phase 5 de `roadmap_editeur.md` (premier cycle complet sheet -> editeur -> audit -> sync -> validation en jeu). En maintenance 2026-07-09 : `player/attack` a ete regenere integralement depuis une frame de reference ; la sequence visee est `0,1,2,3,3,3,2,1,0`. En maintenance 2026-07-10 : `player/idle` a ete refait en 6 frames ; la lecture courante ignore `4.0` et vise `0,1,2,3,5`. En maintenance 2026-07-11 : les 4 attaques directionnelles et `idle` sont valides dans l'editeur. En maintenance 2026-07-12 : `player/attack` et le flux `Recharger` sont valides manuellement en session ouverte. En maintenance 2026-07-12 : `player/run` est regenere via frames separees + normalisation automatique controlee ; la sheet candidate retenue est branchee dans l'editeur puis synchronisee vers le jeu. En maintenance 2026-07-12 : `player/jump` est regenere en `3` frames depuis la reference validee et `player/run` est reconditionne en cases `104x150` pour faciliter l'edition dans l'editeur.
 
 ### Animations mobilite - double saut, corde/grappin
 - phase: 2 - Grimoire/PC/Craft (mobilite definie questions.md Q015)
@@ -126,8 +126,9 @@ Consequences pour cette zone (a traiter cote game_art, hors perimetre jeu) :
 - placeholder: rects colores
 - specs: point central + 4 directions visibles, composition pensee pour un ecran fixe 1920x1080. Le HUB reste minimal (4 sorties, Grimoire, etabli) - pas de decor evolutif en v3 (questions.md Q039).
 - priorite: haute
-- statut: livre
-- livraison: `game_art/assets/tiles/hub_decor.png`
+- statut: integre
+- debloque: Phase 3 - HUB et selection de biome (jalon J1)
+- livraison: `game_art/assets/tiles/hub_decor.png` (branche en fond via `game/data/hub.json`)
 
 ### Script de rescale ref_to_sprite.py
 - phase: pivot pixel art -> 2D standard (2026-07-07)

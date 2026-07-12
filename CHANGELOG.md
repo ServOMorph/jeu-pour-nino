@@ -1,3 +1,10 @@
+## v1.55 - 2026-07-12
+
+### Modifie
+- `game_art/assets/player/player_jump_sheet.png`, `game_art/data/animations.json` et `game_art/specs/player.md` : `player/jump` regenere en sheet `3` frames et integre au runtime de l'editeur.
+- `game_art/assets/player/player_run_sheet.png`, `game_art/data/manifest.json` et `game_art/editeur/test_specs_export.gd` : `player/run` reconditionne en cases `104x150` pour redonner de la marge a `Editer sheet`, sans changer les poses.
+- `game_art/_contexte/`, `game_art/roadmap_editeur.md` et `game_art/backlog_art.md` : protocole de maintenance aligne sur ce nouveau state player.
+
 ## v1.54 - 2026-07-12
 
 ### Ajoute

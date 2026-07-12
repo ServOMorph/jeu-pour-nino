@@ -1,0 +1,107 @@
+{
+  "input_dir": "game_art\\assets\\generated_raw\\player\\jump_frames_v2_alpha",
+  "output_dir": "game_art\\assets\\generated_raw\\player\\jump_frames_v2_norm",
+  "sheet_out": "game_art\\assets\\generated_raw\\player\\player_jump_sheet_candidate_v2.png",
+  "frame_size": [
+    87,
+    150
+  ],
+  "top_pad": 0,
+  "bottom_pad": 0,
+  "side_pad": 2,
+  "fit_scales": [
+    0.12406947890818859,
+    0.12214983713355049,
+    0.12489592006661115
+  ],
+  "summary": {
+    "base_scale": 0.12406947890818859,
+    "normalized_width_min": 68,
+    "normalized_width_max": 70,
+    "normalized_height_min": 149,
+    "normalized_height_max": 150,
+    "normalized_bottom_min": 149,
+    "normalized_bottom_max": 149,
+    "max_scale_delta_vs_base": 0.0019196417746381034
+  },
+  "frames": [
+    {
+      "source": "frame_00.png",
+      "source_bbox": [
+        217,
+        212,
+        768,
+        1421
+      ],
+      "source_width": 551,
+      "source_height": 1209,
+      "fit_scale": 0.12406947890818859,
+      "applied_scale": 0.12406947890818859,
+      "scale_delta_vs_base": 0.0,
+      "normalized_bbox": [
+        10,
+        0,
+        78,
+        150
+      ],
+      "normalized_width": 68,
+      "normalized_height": 150,
+      "normalized_bottom": 149,
+      "offset_x": 10,
+      "offset_y": 0,
+      "output": "frame_00.png"
+    },
+    {
+      "source": "frame_01.png",
+      "source_bbox": [
+        217,
+        121,
+        787,
+        1349
+      ],
+      "source_width": 570,
+      "source_height": 1228,
+      "fit_scale": 0.12214983713355049,
+      "applied_scale": 0.12214983713355049,
+      "scale_delta_vs_base": -0.0019196417746381034,
+      "normalized_bbox": [
+        8,
+        0,
+        78,
+        150
+      ],
+      "normalized_width": 70,
+      "normalized_height": 150,
+      "normalized_bottom": 149,
+      "offset_x": 8,
+      "offset_y": 0,
+      "output": "frame_01.png"
+    },
+    {
+      "source": "frame_02.png",
+      "source_bbox": [
+        204,
+        110,
+        761,
+        1311
+      ],
+      "source_width": 557,
+      "source_height": 1201,
+      "fit_scale": 0.12489592006661115,
+      "applied_scale": 0.12406947890818859,
+      "scale_delta_vs_base": 0.0,
+      "normalized_bbox": [
+        9,
+        1,
+        78,
+        150
+      ],
+      "normalized_width": 69,
+      "normalized_height": 149,
+      "normalized_bottom": 149,
+      "offset_x": 9,
+      "offset_y": 1,
+      "output": "frame_02.png"
+    }
+  ]
+}

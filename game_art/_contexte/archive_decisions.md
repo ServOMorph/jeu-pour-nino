@@ -54,3 +54,7 @@
 - Les 4 attaques directionnelles, `player/idle` et `player/attack` sont valides en lecture editeur.
 - Le flux `Recharger` est valide en session ouverte pour relire assets et `animations.json`.
 - Le decor du HUB est livre comme fond fixe `1920x1080`, pret pour branchement cote jeu.
+- L'atelier runtime utilise desormais un sprite `160x144` avec collision, zone
+  d'interaction et ancrage au sol realignes.
+- Le zoom de preview doit rendre le viewport a la resolution affichee, puis agrandir
+  le sprite ; il ne doit pas agrandir un rendu interne de faible resolution.

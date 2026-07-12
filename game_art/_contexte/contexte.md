@@ -13,17 +13,12 @@ pour visualiser, animer et auditer les sprites. Cible player actuelle :
 
 ## Etat actuel
 La zone game_art reste en maintenance de production.
-Le workflow de regeneration d'animation a maintenant ete applique au player puis aux mobs standard.
-`enemy_ground/walk` et `enemy_flyer/fly` sont branches comme sheets runtime candidates ; leurs `idle` ont ete regenres pour rester coherents.
-Les deux lots mobs restent a stabiliser metrologiquement avant validation finale dans l'editeur ;
-l'editeur dispose desormais d'un bouton `Editer sheet` pour corriger manuellement une frame sans regeneration complete.
-L'editeur rend les previews a leur resolution affichee, avec filtrage lineaire coherent avec le jeu, et se pilote a la souris uniquement.
+Le workflow de regeneration d'animation couvre maintenant `player/jump`, reintegre en lot `3` frames `87x150`.
+`player/run` conserve ses poses actuelles mais utilise des cases `104x150` pour faciliter l'edition manuelle dans l'editeur.
+`enemy_ground/walk` et `enemy_flyer/fly` restent des sheets runtime candidates a stabiliser metrologiquement avant validation finale.
+L'editeur dispose d'un bouton `Editer sheet`, rend les previews a leur resolution affichee, applique le filtrage lineaire du jeu et se pilote a la souris uniquement.
 
 ## Decisions structurantes
-- L'atelier runtime utilise desormais un sprite `160x144` avec collision, zone
-  d'interaction et ancrage au sol realignes.
-- Le zoom de preview doit rendre le viewport a la resolution affichee, puis agrandir
-  le sprite ; il ne doit pas agrandir un rendu interne de faible resolution.
 - Les previews 2D standard emploient le filtrage lineaire, comme le runtime du jeu.
 - Les controles manette de l'editeur sont bloques a la source ; l'outil se pilote
   uniquement a la souris.
@@ -35,3 +30,5 @@ L'editeur rend les previews a leur resolution affichee, avec filtrage lineaire c
 - `enemy_flyer` utilise desormais un gabarit runtime `112x80` avec `fly` en sheet candidate et `idle` regenere sur cette base.
 - Une animation mob peut etre branchee en runtime comme candidate si la lecture visuelle est exploitable, mais elle n'est consideree validee qu'une fois les derives metriques revenues dans les seuils du workflow.
 - Le bouton `Editer sheet` permet un ajustement manuel (scale uniforme + position, contraint a la case, apercu temps reel) d'une frame de sheet directement dans l'editeur, avec reecriture du PNG source a la validation ; complement du workflow de normalisation automatique, pas un remplacement.
+- `player.jump` suit desormais une sheet `3` frames regeneree completement depuis la reference validee, au lieu d'une pose mono-frame.
+- `player.run` utilise des cases `104x150` dans la sheet pour permettre l'edition manuelle sans changer les poses source.
