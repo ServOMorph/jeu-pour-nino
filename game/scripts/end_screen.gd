@@ -13,7 +13,7 @@ var _a_was := false
 var _down_was := false
 var _up_was := false
 
-func setup(message: String, color: Color, victory: bool) -> void:
+func setup(message: String, color: Color, victory: bool, pc_gained: int = 0) -> void:
 	layer = 10
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
@@ -37,6 +37,13 @@ func setup(message: String, color: Color, victory: bool) -> void:
 	title.add_theme_font_size_override("font_size", 80)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(title)
+
+	var pc_label := Label.new()
+	pc_label.text = "+%d PC" % pc_gained
+	pc_label.add_theme_color_override("font_color", Color(0.9, 0.78, 0.45))
+	pc_label.add_theme_font_size_override("font_size", 44)
+	pc_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(pc_label)
 
 	var spacer := Control.new()
 	spacer.custom_minimum_size = Vector2(0, 56)

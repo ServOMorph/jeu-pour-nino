@@ -6,11 +6,10 @@ const COLOR_SELECTED  := Color(1.0, 1.0, 1.0)
 const COLOR_IDLE      := Color(0.45, 0.45, 0.45)
 const COLOR_TOGGLE_ON := Color(0.4, 1.0, 0.4)
 const GRIMOIRE_MENU_SCRIPT := preload("res://scripts/grimoire_menu.gd")
+const RECIPE_CATALOG := preload("res://scripts/recipe_catalog.gd")
 
 var _state    := State.MAIN
 var _selected := 0
-var _dev_res  := false
-var _dev_hp   := false
 var _started  := false
 var _a_was    := true
 
@@ -21,7 +20,7 @@ var _dev_labels:  Array[Label] = []
 var _grimoire_menu: CanvasLayer
 
 const MAIN_ENTRIES := ["JOUER", "MODE DEV"]
-const DEV_ENTRIES  := ["[ ] 100 MAT", "[ ] VIE INF", "GRIMOIRE", "JOUER", "ATELIER", "TEST BOSS", "RETOUR"]
+const DEV_ENTRIES  := ["[ ] 100 MAT", "[ ] VIE INF", "[ ] PC INFINI", "[ ] SANS MOBS", "[ ] ONE SHOT", "GRIMOIRE", "JOUER", "ATELIER", "TEST BOSS", "TOUT DECOUVRIR (DEV)", "RETOUR"]
 
 func _ready() -> void:
 	var bg := ColorRect.new()
@@ -79,14 +78,14 @@ func _build_dev_menu() -> void:
 	dev_title.size = Vector2(1920, 64)
 	_dev_root.add_child(dev_title)
 
-	const DEV_ROW_H := 84.0
+	const DEV_ROW_H := 54.0
 	for i in DEV_ENTRIES.size():
 		var lbl := Label.new()
 		lbl.text = DEV_ENTRIES[i]
 		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		lbl.add_theme_font_size_override("font_size", 44)
+		lbl.add_theme_font_size_override("font_size", 30)
 		lbl.position = Vector2(0, 460 + i * DEV_ROW_H)
-		lbl.size = Vector2(1920, 72)
+		lbl.size = Vector2(1920, 46)
 		_dev_root.add_child(lbl)
 		_dev_labels.append(lbl)
 
@@ -114,10 +113,10 @@ func _refresh() -> void:
 					COLOR_SELECTED if i == _selected else COLOR_IDLE)
 		State.DEV:
 			for i in _dev_labels.size():
-				var is_toggle := i <= 1
+				var is_toggle := i <= 4
 				if is_toggle:
-					var enabled := _dev_res if i == 0 else _dev_hp
-					var label := "100 MAT" if i == 0 else "VIE INF"
+					var enabled := _toggle_enabled(i)
+					var label := _toggle_label(i)
 					_dev_labels[i].text = ("[X] %s" if enabled else "[ ] %s") % label
 					var col: Color
 					if i == _selected:
@@ -128,6 +127,24 @@ func _refresh() -> void:
 				else:
 					_dev_labels[i].add_theme_color_override("font_color",
 						COLOR_SELECTED if i == _selected else COLOR_IDLE)
+
+func _toggle_enabled(i: int) -> bool:
+	match i:
+		0: return Dev.dev_resources > 0
+		1: return Dev.infinite_hp
+		2: return Dev.pc_infinite
+		3: return Dev.no_enemies
+		4: return Dev.one_shot
+	return false
+
+func _toggle_label(i: int) -> String:
+	match i:
+		0: return "100 MAT"
+		1: return "VIE INF"
+		2: return "PC INFINI"
+		3: return "SANS MOBS"
+		4: return "ONE SHOT"
+	return ""
 
 func _process(_delta: float) -> void:
 	if _grimoire_menu and _grimoire_menu.visible:
@@ -164,27 +181,39 @@ func _confirm() -> void:
 	match _state:
 		State.MAIN:
 			match _selected:
-				0: _start_game("", 0)
+				0: _start_game("")
 				1: _show_dev()
 		State.DEV:
 			match _selected:
-				0: _dev_res = not _dev_res; _refresh()
-				1: _dev_hp = not _dev_hp; _refresh()
-				2: _grimoire_menu.open_menu()
-				3: _start_game("", 100 if _dev_res else 0)
-				4: _start_game("atelier", 100 if _dev_res else 0)
-				5: _start_game("boss", 0)
-				6: _show_main()
+				0: Dev.dev_resources = 0 if Dev.dev_resources > 0 else 100; _refresh()
+				1: Dev.infinite_hp = not Dev.infinite_hp; _refresh()
+				2: _toggle_dev_pc()
+				3: Dev.no_enemies = not Dev.no_enemies; _refresh()
+				4: Dev.one_shot = not Dev.one_shot; _refresh()
+				5: _grimoire_menu.open_menu()
+				6: _start_game("")
+				7: _start_game("atelier")
+				8: _start_game("boss")
+				9: _discover_all_recipes()
+				10: _show_main()
+
+func _toggle_dev_pc() -> void:
+	Dev.pc_infinite = not Dev.pc_infinite
+	MetaState.grant_dev_skill_points(9999 if Dev.pc_infinite else 0)
+	_refresh()
+
+func _discover_all_recipes() -> void:
+	for recipe in RECIPE_CATALOG.load_recipes():
+		MetaState.discover_recipe(String(recipe.get("id", "")))
+	_grimoire_menu.open_menu()
 
 func _setup_grimoire_menu() -> void:
 	_grimoire_menu = GRIMOIRE_MENU_SCRIPT.new()
 	add_child(_grimoire_menu)
 
-func _start_game(spawn: String, resources: int) -> void:
+func _start_game(spawn: String) -> void:
 	if _started:
 		return
 	_started = true
 	Dev.spawn = spawn
-	Dev.dev_resources = resources
-	Dev.infinite_hp = _dev_hp
 	get_tree().change_scene_to_file("res://scenes/levels/biome1.tscn")

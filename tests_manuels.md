@@ -13,6 +13,24 @@ Sections 1 à 4, 6, 7, 8 et 9 validées OK — retirées de ce fichier.
 
 ---
 
-**Validation Phase 2 — COMPLÈTE (2026-07-12)**
+**Validation Phase 2 (socle Grimoire/PC/Craft) — COMPLÈTE (2026-07-12)**
 
 Toutes les sections 1-9 testées manuellement sans crash ni anomalie bloquante. Aucun blocage restant.
+
+---
+
+## 10. Armes à distance (Q016)
+
+**VALIDÉ (2026-07-12).** Tir à l'arc opérationnel : débloqué via TOUT DECOUVRIR (DEV) + maîtrise Grimoire, crafté et équipé à l'établi, tir au bouton **attack** (même bouton que le mêlée, bascule selon le type d'arme équipée), cooldown respecté, retour au mêlée OK après rééquipement d'une épée.
+
+## 11. Gain de PC en fin de run (Q044)
+
+**VALIDÉ (2026-07-12).** Écran de fin affiche le gain correct (« +3 PC » sur victoire boss, gain réduit ×0.5 sur mort), total Grimoire cohérent.
+
+## 12. Outils dev (menu titre + menu pause)
+
+**VALIDÉ (2026-07-12).** Les 5 bascules (100 MAT, VIE INF, PC INFINI, SANS MOBS, ONE SHOT) fonctionnent à l'identique dans les deux menus (état partagé via `Dev.*`), avec effet immédiat en jeu depuis la pause. GRIMOIRE accessible depuis les deux menus. Établi et Grimoire défilent correctement (fenêtre glissante) sans recette invisible.
+
+---
+
+**Statut global : toutes les sections (1-12) validées manuellement, aucun blocage restant.**

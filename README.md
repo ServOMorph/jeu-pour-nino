@@ -28,7 +28,7 @@ Necessite Godot 4.5 disponible dans le PATH, ou via `D:\tmp\godot45\Godot_v4.5-s
 |--------|--------|
 | Se deplacer | Stick gauche / Croix |
 | Sauter | A |
-| Attaquer | RB (visee vers le stick droit) |
+| Attaquer | RB (melee ou tir a distance selon l'arme equipee, visee via stick droit) |
 | Viser | Stick droit |
 | Interagir (etabli) | Y |
 | Courir | Clic stick gauche |
@@ -65,9 +65,10 @@ Necessite Godot 4.5 disponible dans le PATH, ou via `D:\tmp\godot45\Godot_v4.5-s
 
 ## Etat actuel
 
-**v1.49.** Validation manuelle du flux Phase 2 complete (voir `tests_manuels.md`) : Grimoire, lancement de partie, craft, equipement et HUD/consommable valides OK, sans anomalie bloquante.
+**P1 restant de Phase 2 complete (2026-07-12).** Bareme/gain de PC en fin de run, armes a distance (arc/arbalete, meme bouton que le melee selon l'arme equipee), et suite de tests dediee livres. GUT 40/40 vert, validation manuelle complete (`tests_manuels.md`, sections 1-12).
+Outils de mode dev etendus et unifies entre le menu titre et le menu pause (100 MAT, VIE INF, PC INFINI, SANS MOBS, ONE SHOT, acces Grimoire).
 Decouverte de recettes non-starter branchee sur la victoire du boss (3 recettes) ; les triggers salle/porteur restent a brancher une fois les biomes multiples et les porteurs developpes.
-Prochaine etape : gain de PC / progression de run / armes a distance (reste de la Phase 2).
+Prochaine etape : Phase 3 (HUB et selection de biome).
 
 ## Roadmap
 

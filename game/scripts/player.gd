@@ -7,6 +7,8 @@ const PLAYER_CONFIG      := "res://data/player.json"
 const WEAPONS_CONFIG     := "res://data/weapons.json"
 const ARMOR_CONFIG       := "res://data/armor.json"
 const CONSUMABLES_CONFIG := "res://data/consumables.json"
+const PLAYER_PROJECTILE  := preload("res://scenes/player/player_projectile.tscn")
+const PROJECTILE_MUZZLE_OFFSET := 24.0
 
 var speed            := 130.0
 var sprint_speed     := 175.0
@@ -40,6 +42,13 @@ var contact_dmg_default   := 1
 var aim_stick_deadzone := 0.2
 
 var damage_reduction := 0
+
+var _weapon_type := "melee"
+var _ranged_damage := 0
+var _ranged_speed := 0.0
+var _ranged_range := 0.0
+var _ranged_cooldown := 0.0
+var _ranged_cooldown_timer := 0.0
 
 var hp: int
 var facing := 1
@@ -145,6 +154,7 @@ func _physics_process(delta: float) -> void:
 		return
 
 	_attack_cooldown = max(0.0, _attack_cooldown - delta)
+	_ranged_cooldown_timer = max(0.0, _ranged_cooldown_timer - delta)
 	_invuln = max(0.0, _invuln - delta)
 	if _invuln > 0.0:
 		visual.modulate = Color(1, 1, 1) if int(_invuln * invuln_flash_rate) % 2 == 0 else Color(1, 0.4, 0.4)
@@ -178,8 +188,12 @@ func _physics_process(delta: float) -> void:
 		_attack_timer -= delta
 		if _attack_timer <= 0.0:
 			_end_attack()
-	if Input.is_action_just_pressed("attack") and _attack_cooldown <= 0.0 and _attack_timer <= 0.0:
-		_start_attack()
+	if Input.is_action_just_pressed("attack"):
+		if _weapon_type == "ranged":
+			if _ranged_cooldown_timer <= 0.0:
+				_fire_ranged()
+		elif _attack_cooldown <= 0.0 and _attack_timer <= 0.0:
+			_start_attack()
 
 	if Input.is_action_just_pressed("use_item"):
 		_use_consumable()
@@ -271,6 +285,23 @@ func _start_attack() -> void:
 		_screen_shake(screen_shake_hit)
 		AudioManager.play("hit")
 
+func _fire_ranged() -> void:
+	_ranged_cooldown_timer = _ranged_cooldown
+	var aim := _get_aim_dir()
+	if absf(aim.x) > 0.0:
+		var facing_dir := 1 if aim.x > 0.0 else -1
+		if facing_dir != facing:
+			facing = facing_dir
+			_update_facing()
+	var p := PLAYER_PROJECTILE.instantiate()
+	get_parent().add_child(p)
+	p.direction = aim
+	p.damage = _ranged_damage
+	p.speed = _ranged_speed
+	p.max_range = _ranged_range
+	p.global_position = global_position + aim * PROJECTILE_MUZZLE_OFFSET
+	AudioManager.play("shoot")
+
 func _end_attack() -> void:
 	attack_hitbox.monitoring = false
 	attack_hitbox.rotation = 0.0
@@ -351,11 +382,21 @@ func _apply_equipment() -> void:
 	attack_range  = float(cbt.get("attack_range", attack_range))
 	damage_reduction = 0
 
+	_weapon_type = "melee"
 	var weapon_id := RunState.get_equipped_item("weapon")
 	if not weapon_id.is_empty() and weapon_id in _weapon_cfg:
 		var w: Dictionary = _weapon_cfg[weapon_id]
+		_weapon_type = String(w.get("type", "melee"))
 		if "damage" in w: attack_damage = int(w["damage"])
 		if "range"  in w: attack_range  = float(w["range"])
+		_ranged_damage = int(w.get("damage", 0))
+		_ranged_speed = float(w.get("projectile_speed", 400.0))
+		_ranged_range = float(w.get("range", 400.0))
+		_ranged_cooldown = float(w.get("cooldown", attack_cooldown))
+
+	if Dev.one_shot:
+		attack_damage = 9999
+		_ranged_damage = 9999
 
 	_update_weapon_visual()
 

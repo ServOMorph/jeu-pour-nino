@@ -92,3 +92,18 @@ func test_equip_item_requires_owned_item() -> void:
 	rs.add_item("epee_bois")
 	assert_true(rs.equip_item("weapon", "epee_bois"))
 	assert_eq(rs.get_equipped_item("weapon"), "epee_bois")
+
+func test_increment_and_get_counter() -> void:
+	rs.increment_counter("bosses_defeated")
+	rs.increment_counter("bosses_defeated", 2)
+	assert_eq(rs.get_counter("bosses_defeated"), 3)
+
+func test_counter_flag_and_get_counters() -> void:
+	rs.set_counter_flag("run_failed", true)
+	var counters: Dictionary = rs.get_counters()
+	assert_true(bool(counters["run_failed"]))
+
+func test_reset_clears_counters() -> void:
+	rs.increment_counter("biomes_visited")
+	rs.reset()
+	assert_eq(rs.get_counter("biomes_visited"), 0)

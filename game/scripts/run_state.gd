@@ -15,6 +15,7 @@ var items: Array[String] = []
 var consumables: Dictionary = {}
 var equipped: Dictionary = {}
 var active_consumable := ""
+var run_counters: Dictionary = {}
 
 var _material_defs: Dictionary = {}
 var _weapon_defs: Dictionary = {}
@@ -25,10 +26,23 @@ func reset() -> void:
 	consumables.clear()
 	equipped.clear()
 	active_consumable = ""
+	run_counters.clear()
 	_emit_all_materials()
 	items_changed.emit()
 	consumable_changed.emit("")
 	_emit_all_equipment()
+
+func increment_counter(key: String, amount: int = 1) -> void:
+	run_counters[key] = get_counter(key) + amount
+
+func get_counter(key: String) -> int:
+	return int(run_counters.get(key, 0))
+
+func set_counter_flag(key: String, value: bool) -> void:
+	run_counters[key] = value
+
+func get_counters() -> Dictionary:
+	return run_counters.duplicate()
 
 func add_material(id: String, qty: int) -> void:
 	if qty <= 0:

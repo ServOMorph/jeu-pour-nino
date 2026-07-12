@@ -1,0 +1,9 @@
+{
+  "biome_visited": 1,
+  "secret_room": 1,
+  "elite_defeated": 1,
+  "boss_defeated": 2,
+  "resurrection_success": 1,
+  "victory_bonus": 3,
+  "failure_multiplier": 0.5
+}

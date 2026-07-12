@@ -6,6 +6,7 @@ const ENEMY_FLYER := preload("res://scenes/enemies/enemy_flyer.tscn")
 const BOSS := preload("res://scenes/enemies/boss.tscn")
 
 const RECIPE_CATALOG := preload("res://scripts/recipe_catalog.gd")
+const PROGRESSION := preload("res://scripts/progression.gd")
 const ORE_NODE := preload("res://scripts/ore_node.gd")
 const WORKBENCH_SCRIPT := preload("res://scripts/workbench.gd")
 const CRAFT_MENU_SCRIPT := preload("res://scripts/craft_menu.gd")
@@ -25,23 +26,26 @@ var _living_enemies := 0
 const END_SCREEN := preload("res://scripts/end_screen.gd")
 const HUD_SCRIPT := preload("res://scripts/hud.gd")
 const PAUSE_MENU_SCRIPT := preload("res://scripts/pause_menu.gd")
+const GRIMOIRE_MENU_SCRIPT := preload("res://scripts/grimoire_menu.gd")
 
 var _hud: CanvasLayer
 var _craft_menu: CanvasLayer
 var _pause_menu: CanvasLayer
 var _equipment_menu: CanvasLayer
+var _grimoire_menu: CanvasLayer
 
 func _ready() -> void:
 	randomize()
 	_load_level_config()
 	RunState.reset()
+	RunState.increment_counter("biomes_visited", 1)
 	if Dev.dev_resources > 0:
 		RunState.grant_dev_materials(Dev.dev_resources)
 	_build_background()
 	_build_geometry()
 	var cfg := _resolve_spawn()
 	_spawn_player(cfg["pos"])
-	if cfg["enemies"]:
+	if cfg["enemies"] and not Dev.no_enemies:
 		_spawn_enemies()
 	_spawn_boss()
 	_spawn_ores()
@@ -49,6 +53,7 @@ func _ready() -> void:
 	_setup_hud()
 	_setup_pause_menu()
 	_setup_equipment_menu()
+	_setup_grimoire_menu()
 	if cfg["boss_active"]:
 		_start_boss_fight()
 
@@ -260,6 +265,10 @@ func _setup_pause_menu() -> void:
 	_pause_menu.title_requested.connect(_return_to_title)
 	_pause_menu.dev_resources_requested.connect(_toggle_dev_resources)
 	_pause_menu.dev_hp_requested.connect(_toggle_dev_hp)
+	_pause_menu.dev_pc_requested.connect(_toggle_dev_pc)
+	_pause_menu.dev_no_enemies_requested.connect(_toggle_dev_no_enemies)
+	_pause_menu.dev_one_shot_requested.connect(_toggle_dev_one_shot)
+	_pause_menu.dev_grimoire_requested.connect(_open_grimoire_menu)
 	_pause_menu.teleport_requested.connect(_teleport_to_spawn)
 
 func _open_pause_menu() -> void:
@@ -279,6 +288,16 @@ func _open_equipment_menu() -> void:
 	if _pause_menu:
 		_pause_menu.hide_menu()
 	_equipment_menu.open_menu()
+
+func _setup_grimoire_menu() -> void:
+	_grimoire_menu = GRIMOIRE_MENU_SCRIPT.new()
+	add_child(_grimoire_menu)
+	_grimoire_menu.closed.connect(_reopen_pause_menu)
+
+func _open_grimoire_menu() -> void:
+	if _pause_menu:
+		_pause_menu.hide_menu()
+	_grimoire_menu.open_menu()
 
 func _reopen_pause_menu() -> void:
 	if _ended:
@@ -309,6 +328,25 @@ func _toggle_dev_resources() -> void:
 func _toggle_dev_hp() -> void:
 	Dev.infinite_hp = not Dev.infinite_hp
 
+func _toggle_dev_pc() -> void:
+	Dev.pc_infinite = not Dev.pc_infinite
+	MetaState.grant_dev_skill_points(9999 if Dev.pc_infinite else 0)
+
+func _toggle_dev_no_enemies() -> void:
+	Dev.no_enemies = not Dev.no_enemies
+	if Dev.no_enemies:
+		_clear_all_enemies()
+
+func _clear_all_enemies() -> void:
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		enemy.queue_free()
+	_living_enemies = 0
+
+func _toggle_dev_one_shot() -> void:
+	Dev.one_shot = not Dev.one_shot
+	if player and is_instance_valid(player):
+		player._apply_equipment()
+
 func _teleport_to_spawn(spawn_key: String) -> void:
 	var points: Dictionary = _level_cfg.get("spawns", {})
 	if not points.has(spawn_key) or player == null:
@@ -325,21 +363,31 @@ func _on_player_died() -> void:
 	if _ended:
 		return
 	_ended = true
+	RunState.set_counter_flag("run_failed", true)
+	var gained := _award_skill_points()
 	SaveManager.save_meta()
-	_show_end_screen("VOUS ETES TOMBE", Color(0.8, 0.2, 0.2), false)
+	_show_end_screen("VOUS ETES TOMBE", Color(0.8, 0.2, 0.2), false, gained)
 
 func _on_boss_died() -> void:
 	if _ended:
 		return
 	_ended = true
 	_hud.hide_boss_bar()
+	RunState.increment_counter("bosses_defeated", 1)
 	RECIPE_CATALOG.discover_by_trigger(RECIPE_CATALOG.load_recipes(), "Victoire Gardien du Voile")
+	var gained := _award_skill_points()
 	SaveManager.save_meta()
-	_show_end_screen("NOYAU ATTEINT - VICTOIRE", Color(0.4, 0.85, 0.5), true)
+	_show_end_screen("NOYAU ATTEINT - VICTOIRE", Color(0.4, 0.85, 0.5), true, gained)
 
-func _show_end_screen(message: String, color: Color, victory: bool) -> void:
+func _award_skill_points() -> int:
+	var bareme := PROGRESSION.load_bareme()
+	var gained := PROGRESSION.compute_skill_points(RunState.get_counters(), bareme)
+	MetaState.add_skill_points(gained)
+	return gained
+
+func _show_end_screen(message: String, color: Color, victory: bool, pc_gained: int) -> void:
 	await get_tree().create_timer(0.8).timeout
 	var screen := END_SCREEN.new()
 	add_child(screen)
-	screen.setup(message, color, victory)
+	screen.setup(message, color, victory, pc_gained)
 	get_tree().paused = true

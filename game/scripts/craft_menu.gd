@@ -3,18 +3,21 @@ extends CanvasLayer
 const RECIPE_CATALOG := preload("res://scripts/recipe_catalog.gd")
 
 const PX := 560.0
-const PY := 308.0
+const PY := 160.0
 const PW := 800.0
-const ROW_H := 88.0
+const ROW_H := 68.0
+const VISIBLE_ROWS := 10
 
-var PH := 460.0
+var PH := 104.0 + VISIBLE_ROWS * ROW_H + 80.0
 
 var _recipes: Array[Dictionary] = []
 var _visible_recipes: Array[Dictionary] = []
 var _selected := 0
+var _window_start := 0
 var _row_bgs: Array[ColorRect] = []
 var _row_labels: Array[Label] = []
 var _workbench_tier := 1
+var _position_label: Label
 
 func _ready() -> void:
 	layer = 10
@@ -26,7 +29,6 @@ func _ready() -> void:
 func _load_recipes() -> void:
 	_recipes = RECIPE_CATALOG.load_recipes()
 	RECIPE_CATALOG.bootstrap_starters(_recipes)
-	PH = 104.0 + _recipes.size() * ROW_H + 80.0
 
 func _build_ui() -> void:
 	var dim := ColorRect.new()
@@ -47,36 +49,42 @@ func _build_ui() -> void:
 	title.modulate = Color(0.9, 0.75, 0.4)
 	add_child(title)
 
+	_position_label = Label.new()
+	_position_label.position = Vector2(PX + PW - 240, PY + 32)
+	_position_label.size = Vector2(200, 40)
+	_position_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_position_label.add_theme_font_size_override("font_size", 26)
+	_position_label.modulate = Color(0.55, 0.55, 0.55)
+	add_child(_position_label)
+
 	var sep := ColorRect.new()
 	sep.color = Color(0.4, 0.3, 0.15)
 	sep.position = Vector2(PX + 16, PY + 88)
 	sep.size = Vector2(PW - 32, 4)
 	add_child(sep)
 
-	for i in _recipes.size():
-		_build_row(i)
+	for row in VISIBLE_ROWS:
+		_build_row(row)
 
 	var hint := Label.new()
-	hint.text = "A: craft   B: fermer"
+	hint.text = "A: craft   B: fermer   Haut/Bas: naviguer"
 	hint.position = Vector2(PX + 16, PY + PH - 56)
-	hint.add_theme_font_size_override("font_size", 28)
+	hint.add_theme_font_size_override("font_size", 26)
 	hint.modulate = Color(0.45, 0.45, 0.45)
 	add_child(hint)
 
-func _build_row(i: int) -> void:
-	var recipe: Dictionary = _recipes[i]
-	var y := PY + 104.0 + i * ROW_H
+func _build_row(row: int) -> void:
+	var y := PY + 104.0 + row * ROW_H
 
 	var bg := ColorRect.new()
 	bg.position = Vector2(PX + 16, y)
-	bg.size = Vector2(PW - 32, ROW_H - 16)
+	bg.size = Vector2(PW - 32, ROW_H - 12)
 	bg.color = Color(0.20, 0.18, 0.15)
 	add_child(bg)
 
 	var lbl := Label.new()
-	lbl.text = "%s — %s" % [recipe["name"], _format_costs(_get_recipe_costs(recipe))]
-	lbl.position = Vector2(PX + 32, y + 8)
-	lbl.add_theme_font_size_override("font_size", 36)
+	lbl.position = Vector2(PX + 32, y + 6)
+	lbl.add_theme_font_size_override("font_size", 28)
 	add_child(lbl)
 
 	_row_bgs.append(bg)
@@ -96,13 +104,22 @@ func close() -> void:
 
 func _refresh() -> void:
 	_sync_visible_recipes()
-	for i in _recipes.size():
-		var row_visible := i < _visible_recipes.size()
-		_row_bgs[i].visible = row_visible
-		_row_labels[i].visible = row_visible
+	var total := _visible_recipes.size()
+	_window_start = 0
+	if total > VISIBLE_ROWS:
+		_window_start = clampi(_selected - VISIBLE_ROWS / 2, 0, total - VISIBLE_ROWS)
+		_window_start = mini(_window_start, _selected)
+		_window_start = maxi(_window_start, _selected - VISIBLE_ROWS + 1)
+	_position_label.text = "%d/%d" % [_selected + 1, total] if total > 0 else ""
+
+	for row in VISIBLE_ROWS:
+		var idx := _window_start + row
+		var row_visible := idx < total
+		_row_bgs[row].visible = row_visible
+		_row_labels[row].visible = row_visible
 		if not row_visible:
 			continue
-		var recipe: Dictionary = _visible_recipes[i]
+		var recipe: Dictionary = _visible_recipes[idx]
 		var costs := _get_recipe_costs(recipe)
 		var cost_text := _format_costs(costs)
 		var id := String(recipe.get("id", ""))
@@ -112,17 +129,17 @@ func _refresh() -> void:
 			done = RunState.has_item(id)
 		var affordable := _can_afford(costs)
 
-		_row_bgs[i].color = Color(0.30, 0.26, 0.20) if i == _selected else Color(0.20, 0.18, 0.15)
+		_row_bgs[row].color = Color(0.30, 0.26, 0.20) if idx == _selected else Color(0.20, 0.18, 0.15)
 
 		if done:
-			_row_labels[i].text = "%s [PRET]" % recipe["name"]
-			_row_labels[i].modulate = Color(0.45, 0.70, 0.45)
+			_row_labels[row].text = "%s [PRET]" % recipe["name"]
+			_row_labels[row].modulate = Color(0.45, 0.70, 0.45)
 		elif affordable:
-			_row_labels[i].text = "%s — %s" % [recipe["name"], cost_text]
-			_row_labels[i].modulate = Color(1.0, 0.95, 0.8)
+			_row_labels[row].text = "%s — %s" % [recipe["name"], cost_text]
+			_row_labels[row].modulate = Color(1.0, 0.95, 0.8)
 		else:
-			_row_labels[i].text = "%s — %s" % [recipe["name"], cost_text]
-			_row_labels[i].modulate = Color(0.45, 0.45, 0.45)
+			_row_labels[row].text = "%s — %s" % [recipe["name"], cost_text]
+			_row_labels[row].modulate = Color(0.45, 0.45, 0.45)
 
 func _process(_delta: float) -> void:
 	if not visible:
@@ -159,10 +176,12 @@ func _try_craft(i: int) -> void:
 		_refresh()
 	else:
 		AudioManager.play("cant_craft")
-		_flash_fail(i)
+		_flash_fail(i - _window_start)
 
-func _flash_fail(i: int) -> void:
-	var lbl := _row_labels[i]
+func _flash_fail(row: int) -> void:
+	if row < 0 or row >= _row_labels.size():
+		return
+	var lbl := _row_labels[row]
 	var t := lbl.create_tween()
 	t.tween_property(lbl, "modulate", Color(1.0, 0.2, 0.2), 0.05)
 	t.tween_property(lbl, "modulate", Color(0.45, 0.45, 0.45), 0.20)

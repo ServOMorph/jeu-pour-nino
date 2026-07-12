@@ -16,6 +16,10 @@ func add_skill_points(amount: int) -> void:
 	skill_points += amount
 	skill_points_changed.emit(skill_points)
 
+func grant_dev_skill_points(amount: int) -> void:
+	skill_points = amount
+	skill_points_changed.emit(skill_points)
+
 func spend_skill_points(amount: int) -> bool:
 	if skill_points < amount:
 		return false

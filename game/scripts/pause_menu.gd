@@ -6,6 +6,10 @@ signal restart_requested
 signal title_requested
 signal dev_resources_requested
 signal dev_hp_requested
+signal dev_pc_requested
+signal dev_no_enemies_requested
+signal dev_one_shot_requested
+signal dev_grimoire_requested
 signal teleport_requested(spawn_key: String)
 
 enum State { MAIN, DEV }
@@ -15,7 +19,7 @@ const COLOR_IDLE := Color(0.45, 0.45, 0.45)
 const COLOR_ON := Color(0.4, 1.0, 0.4)
 
 const MAIN_ENTRIES := ["EQUIPEMENT", "REPRENDRE", "RECOMMENCER", "QUITTER", "MODE DEV"]
-const DEV_ENTRIES := ["[ ] 100 MAT", "[ ] VIE INF", "ATELIER", "TEST BOSS", "RETOUR"]
+const DEV_ENTRIES := ["[ ] 100 MAT", "[ ] VIE INF", "[ ] PC INFINI", "[ ] SANS MOBS", "[ ] ONE SHOT", "GRIMOIRE", "ATELIER", "TEST BOSS", "RETOUR"]
 
 var _state := State.MAIN
 var _selected := 0
@@ -58,8 +62,8 @@ func _build_ui() -> void:
 
 	var panel := ColorRect.new()
 	panel.color = Color(0.10, 0.08, 0.10)
-	panel.position = Vector2(520, 192)
-	panel.size = Vector2(880, 704)
+	panel.position = Vector2(520, 140)
+	panel.size = Vector2(880, 890)
 	add_child(panel)
 
 	var title := Label.new()
@@ -67,14 +71,14 @@ func _build_ui() -> void:
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 72)
 	title.add_theme_color_override("font_color", Color(0.8, 0.65, 0.35))
-	title.position = Vector2(520, 248)
+	title.position = Vector2(520, 196)
 	title.size = Vector2(880, 96)
 	add_child(title)
 
 	_main_root = Control.new()
 	add_child(_main_root)
 	for i in MAIN_ENTRIES.size():
-		var lbl := _make_label(MAIN_ENTRIES[i], 408 + i * 96)
+		var lbl := _make_label(MAIN_ENTRIES[i], 356 + i * 96)
 		_main_root.add_child(lbl)
 		_main_labels.append(lbl)
 
@@ -85,11 +89,11 @@ func _build_ui() -> void:
 	dev_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	dev_title.add_theme_font_size_override("font_size", 40)
 	dev_title.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
-	dev_title.position = Vector2(520, 352)
+	dev_title.position = Vector2(520, 300)
 	dev_title.size = Vector2(880, 72)
 	_dev_root.add_child(dev_title)
 	for i in DEV_ENTRIES.size():
-		var lbl := _make_label(DEV_ENTRIES[i], 432 + i * 88)
+		var lbl := _make_dev_label(DEV_ENTRIES[i], 380 + i * 70)
 		_dev_root.add_child(lbl)
 		_dev_labels.append(lbl)
 
@@ -100,6 +104,15 @@ func _make_label(text: String, y: float) -> Label:
 	lbl.add_theme_font_size_override("font_size", 52)
 	lbl.position = Vector2(520, y)
 	lbl.size = Vector2(880, 80)
+	return lbl
+
+func _make_dev_label(text: String, y: float) -> Label:
+	var lbl := Label.new()
+	lbl.text = text
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.add_theme_font_size_override("font_size", 42)
+	lbl.position = Vector2(520, y)
+	lbl.size = Vector2(880, 64)
 	return lbl
 
 func _process(_delta: float) -> void:
@@ -153,14 +166,30 @@ func _refresh() -> void:
 	for i in _main_labels.size():
 		_main_labels[i].add_theme_color_override("font_color", COLOR_SELECTED if i == _selected else COLOR_IDLE)
 	for i in _dev_labels.size():
-		if i == 0:
-			_dev_labels[i].text = "[X] 100 MAT" if Dev.dev_resources > 0 else "[ ] 100 MAT"
-			_dev_labels[i].add_theme_color_override("font_color", _toggle_color(i, Dev.dev_resources > 0))
-		elif i == 1:
-			_dev_labels[i].text = "[X] VIE INF" if Dev.infinite_hp else "[ ] VIE INF"
-			_dev_labels[i].add_theme_color_override("font_color", _toggle_color(i, Dev.infinite_hp))
+		if i <= 4:
+			var enabled := _toggle_enabled(i)
+			_dev_labels[i].text = ("[X] %s" if enabled else "[ ] %s") % _toggle_label(i)
+			_dev_labels[i].add_theme_color_override("font_color", _toggle_color(i, enabled))
 		else:
 			_dev_labels[i].add_theme_color_override("font_color", COLOR_SELECTED if i == _selected else COLOR_IDLE)
+
+func _toggle_enabled(i: int) -> bool:
+	match i:
+		0: return Dev.dev_resources > 0
+		1: return Dev.infinite_hp
+		2: return Dev.pc_infinite
+		3: return Dev.no_enemies
+		4: return Dev.one_shot
+	return false
+
+func _toggle_label(i: int) -> String:
+	match i:
+		0: return "100 MAT"
+		1: return "VIE INF"
+		2: return "PC INFINI"
+		3: return "SANS MOBS"
+		4: return "ONE SHOT"
+	return ""
 
 func _toggle_color(index: int, enabled: bool) -> Color:
 	if index == _selected:
@@ -189,10 +218,21 @@ func _confirm() -> void:
 				dev_hp_requested.emit()
 				_refresh()
 			2:
+				dev_pc_requested.emit()
+				_refresh()
+			3:
+				dev_no_enemies_requested.emit()
+				_refresh()
+			4:
+				dev_one_shot_requested.emit()
+				_refresh()
+			5:
+				dev_grimoire_requested.emit()
+			6:
 				teleport_requested.emit("atelier")
 				resume_requested.emit()
-			3:
+			7:
 				teleport_requested.emit("boss")
 				resume_requested.emit()
-			4:
+			8:
 				_show_main()

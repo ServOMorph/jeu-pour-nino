@@ -20,6 +20,7 @@ func _ready() -> void:
 	_streams["mine_break"] = _tone(220.0, 0.14, 0.32, "saw")
 	_streams["cant_craft"] = _tone(180.0, 0.12, 0.28, "saw")
 	_streams["potion"] = _tone(600.0, 0.18, 0.22, "sine")
+	_streams["shoot"] = _tone(700.0, 0.06, 0.22, "square")
 	for i in range(6):
 		var p := AudioStreamPlayer.new()
 		add_child(p)

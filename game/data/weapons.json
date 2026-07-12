@@ -1,13 +1,13 @@
 {
-  "epee_bois": {"damage": 3, "range": 64.0, "pickaxe_tier": 1},
-  "epee_cuivre": {"damage": 4, "range": 72.0, "pickaxe_tier": 2},
-  "epee_fer": {"damage": 5, "range": 80.0, "pickaxe_tier": 3},
-  "arc_bois": {"damage": 3, "range": 96.0},
-  "arbalete_fer": {"damage": 5, "range": 108.0},
-  "lance_cristalline": {"damage": 6, "range": 92.0},
-  "arc_celeste": {"damage": 6, "range": 118.0},
-  "marteau_magmatique": {"damage": 8, "range": 88.0},
-  "epee_tempete_noyau": {"damage": 9, "range": 96.0},
-  "lame_noyau": {"damage": 10, "range": 104.0},
-  "lame_spectrale": {"damage": 8, "range": 98.0}
+  "epee_bois": {"type": "melee", "damage": 3, "range": 64.0, "pickaxe_tier": 1},
+  "epee_cuivre": {"type": "melee", "damage": 4, "range": 72.0, "pickaxe_tier": 2},
+  "epee_fer": {"type": "melee", "damage": 5, "range": 80.0, "pickaxe_tier": 3},
+  "arc_bois": {"type": "ranged", "damage": 3, "range": 900.0, "projectile_speed": 420.0, "cooldown": 0.5},
+  "arbalete_fer": {"type": "ranged", "damage": 5, "range": 1000.0, "projectile_speed": 480.0, "cooldown": 0.6},
+  "lance_cristalline": {"type": "melee", "damage": 6, "range": 92.0},
+  "arc_celeste": {"type": "ranged", "damage": 6, "range": 1200.0, "projectile_speed": 540.0, "cooldown": 0.55},
+  "marteau_magmatique": {"type": "melee", "damage": 8, "range": 88.0},
+  "epee_tempete_noyau": {"type": "melee", "damage": 9, "range": 96.0},
+  "lame_noyau": {"type": "melee", "damage": 10, "range": 104.0},
+  "lame_spectrale": {"type": "melee", "damage": 8, "range": 98.0}
 }
