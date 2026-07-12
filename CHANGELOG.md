@@ -1,3 +1,9 @@
+## v1.48 - 2026-07-12
+
+### Modifie
+- `game_art/editeur/main.gd` : evenements joypad bloques dans l'editeur pour imposer un pilotage souris uniquement.
+- `game_art/_contexte/` et `game_art/roadmap_editeur.md` : contexte de maintenance realigne sur un editeur sans controles manette.
+
 ## v1.47 - 2026-07-11
 
 ### Corrige

@@ -1,5 +1,7 @@
 # Archive décisions — game_art
 
+- Le Veilleur des Cendres est livre comme set statique runtime avec projectile d'ash
+  dedie ; les reglages fins de depart/visibilite restent pilotes cote jeu.
 - Les PNG player legacy sont conserves comme sources dans `assets/player/legacy_archive/`
   et exclus explicitement de l'audit.
 - Les gisements exploitent maintenant des sprites dedies par materiau, sans fallback

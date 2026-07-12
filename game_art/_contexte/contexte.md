@@ -15,11 +15,10 @@ pour visualiser, animer et auditer les sprites. Cible player actuelle :
 La zone game_art reste en maintenance de production.
 Les validations manuelles player en editeur sont a jour, y compris `player/attack` et le flux `Recharger`.
 L'editeur rend les previews a leur resolution affichee, avec filtrage lineaire coherent avec le jeu.
+Les controles manette y sont desactives ; le pilotage courant se fait a la souris.
 Les sprites orphelins et assets de test ont ete retires ; `legacy_archive` reste conserve hors runtime.
 
 ## Decisions structurantes
-- Le Veilleur des Cendres est livre comme set statique runtime avec projectile d'ash
-  dedie ; les reglages fins de depart/visibilite restent pilotes cote jeu.
 - Le bouton `Recharger` de l'editeur est le flux standard pour relire assets et
   `animations.json` sans redemarrer Godot.
 - Une animation a refaire doit etre regeneree integralement depuis une frame de
@@ -36,3 +35,5 @@ Les sprites orphelins et assets de test ont ete retires ; `legacy_archive` reste
 - Le zoom de preview doit rendre le viewport a la resolution affichee, puis agrandir
   le sprite ; il ne doit pas agrandir un rendu interne de faible resolution.
 - Les previews 2D standard emploient le filtrage lineaire, comme le runtime du jeu.
+- Les controles manette de l'editeur sont bloques a la source ; l'outil se pilote
+  uniquement a la souris.

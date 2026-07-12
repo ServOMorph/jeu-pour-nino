@@ -49,6 +49,10 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
 		_update_preview_size()
 
+func _input(event: InputEvent) -> void:
+	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+		get_viewport().set_input_as_handled()
+
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and event.ctrl_pressed and event.keycode == KEY_S:
 		_save()

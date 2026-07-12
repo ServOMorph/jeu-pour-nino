@@ -8,22 +8,16 @@
 # Session du 2026-07-12
 
 ## Decisions prises
-- Le preview de l'editeur rend desormais a la resolution affichee et reprend le filtrage lineaire du jeu.
-- Les sprites orphelins, doublons et images de test sont retires du depot et de la synchronisation runtime.
-- `player/attack` est valide manuellement dans l'editeur sur la sequence `0,1,2,3,3,3,2,1,0`.
-- Le bouton `Recharger` est valide en session ouverte pour les modifications d'asset et de `animations.json`.
+- Les controles manette de l'editeur sont desactives a la source.
+- L'editeur se pilote desormais uniquement a la souris.
 
 ## Livrables produits ou modifies
-- game_art/editeur/main.gd, game_art/editeur/test_preview_center.gd, game_art/specs/player.md : rendu et cadrage du boss corriges, avec test du non-debordement et du ratio ; comptes de frames player exportes.
-- game_art/assets/, game/assets/sprites/, sync.py : sprites non utilises supprimes et archives player exclus de la copie runtime.
-- game_art/audit_report.md : rapport obsolete retire.
-- Validation manuelle : `player/attack` et flux `Recharger` confirmes en session editeur.
+- game_art/editeur/main.gd : evenements joypad bloques, sans impact sur le pilotage souris.
+- game_art/_contexte/, game_art/roadmap_editeur.md et CHANGELOG.md : contexte de maintenance realigne sur un editeur souris uniquement.
 
 ## Hypotheses validees / invalidees
-- VALIDE : le test headless couvre le centrage du player et le boss entier, sans deformation ni debordement.
-- VALIDE : le filtrage de preview est aligne sur celui du jeu.
-- VALIDE : `player/attack` est juge fluide dans l'editeur sur la sequence `0,1,2,3,3,3,2,1,0`.
-- VALIDE : `Recharger` reflete bien une modification d'asset ou de `animations.json` sans relance.
+- VALIDE : bloquer `InputEventJoypadButton` et `InputEventJoypadMotion` suffit pour desactiver la manette dans l'editeur.
+- VALIDE : le pilotage souris reste le mode de controle retenu pour l'outil.
 
 ## Prochaine etape exacte
 Aucune action ouverte de maintenance player dans l'editeur.
