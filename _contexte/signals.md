@@ -4,10 +4,7 @@
 Aucune côté jeu.
 
 ## Actions ouvertes
-- [P1] Débugger en urgence la sélection de consommable dans l'écran Équipement (voir Blocages).
-  fait quand: le marqueur `(actif)` reflète correctement la sélection réelle avec au moins 2 types de consommables différents en stock, testé manuellement.
-  réf: `game/scripts/equipment_menu.gd`, `game/scripts/run_state.gd`, `tests_manuels.md` (racine, section 8.6)
-- [P1] Terminer la validation manuelle du flux Phase 2 : 1 à 4, 6 et 7 validés OK ; 8.1-8.5 validés OK ; 8.6 bloqué (ci-dessus) ; 8.7-8.8 et §9 (HUD/consommable) restent à faire une fois 8.6 débloqué.
+- [P1] Validation manuelle du flux Phase 2 complète (sections 1-4, 6-9 testées sans anomalie). Débloquer maintenant la découverte de recettes non-starter (§5 tests_manuels.md) : brancher `MetaState.discover_recipe()` via trigger gameplay (salle, drop porteur, victoire boss).
   fait quand: `tests_manuels.md` intégralement coché sans anomalie bloquante restante.
   réf: `tests_manuels.md` (racine)
 - [P1] Débloquer la découverte de recettes non-starter (voir Blocages) puis reprendre la validation de la maîtrise de recette (Grimoire).
@@ -32,8 +29,6 @@ Aucune côté jeu.
 
 ## Blocages
 - **Découverte de recettes non-starter absente en jeu** (constat 2026-07-11) : `MetaState.discover_recipe()` (`game/scripts/meta_state.gd:26`) n'est appelé nulle part hors tests GUT (`test_meta_state.gd`, `test_save_manager.gd`). Aucune salle/porteur/victoire boss ne déclenche la découverte des 20 recettes non-starter de `recipes.json`. Le Grimoire n'affiche donc que les 7 recettes `starter`, déjà maîtrisées à `PC 0`. Bloque la validation manuelle complète du flux Phase 2 (étape « maîtriser une recette non-starter » impossible). À traiter avant de considérer la Phase 2 validable.
-- **[URGENT] Sélection d'un consommable dans l'écran Équipement sans effet visible** (constat 2026-07-11, non résolu malgré un premier correctif) : dans `equipment_menu.gd`, sélectionner `Petite Potion de Soin` sur le slot `CONSOMMABLE` et valider (Entrée/Espace/A) ne produit aucun changement visible à l'écran, confirmé par l'utilisateur après correctif (marqueur `(actif)` + couleur verte sur la ligne active dans `_refresh()`). Hypothèse non vérifiée : `RunState.add_consumable()` fixe déjà `active_consumable` au premier craft (si vide) — avec un seul type de consommable en stock, l'item est peut-être déjà actif par défaut avant tout appui, ce qui rendrait le symptôme un faux bug. À vérifier en priorité la prochaine session : (1) le marqueur `(actif)` apparaît-il déjà à l'ouverture de l'écran avant tout appui ? (2) reproduire avec 2 types de consommables différents en stock pour confirmer que le changement de sélection fonctionne réellement.
-  réf: `game/scripts/equipment_menu.gd`, `game/scripts/run_state.gd` (`add_consumable`, `set_active_consumable`), `tests_manuels.md` (racine, section 8.6)
 
 ## Contexte chaud
 - `questions.md` (racine) : 77+1 questions de conception v3 tranchées le 2026-07-06 — source de vérité pour tout arbitrage de design ambigu.
@@ -54,7 +49,7 @@ Aucune côté jeu.
 - Aucune recette starter n'a le slot `accessory` — le slot ACCESSOIRE reste normalement vide (`Aucun` seul choix) tant que le blocage `discover_recipe` n'est pas levé.
 - `tests_manuels.md` (racine) : document de suivi de la validation manuelle Phase 2, créé le 2026-07-11 — à consulter/mettre à jour en priorité pour reprendre les tests là où ils se sont arrêtés.
 
-## Dernière session (2026-07-11 — reformatage menu titre + début validation manuelle Phase 2)
+## Dernière session (2026-07-12 — diagnostic 8.6 + clarification)
 
 # Session du 2026-07-11
 
@@ -70,11 +65,30 @@ Aucune côté jeu.
 ## Hypothèses validées / invalidées
 - VALIDE : sections 1 à 4, 6, 7 et 8.1-8.5 du flux Phase 2 validées manuellement sans anomalie.
 - VALIDE : correctif de compilation `equipment_menu.gd` confirmé (GUT `25/25`, plus d'erreur de chargement de niveau).
-- INVALIDE : le correctif d'affichage du marqueur `(actif)` sur le consommable ne résout pas le symptôme rapporté par l'utilisateur (rien ne se passe visiblement à la sélection) → pivot : hypothèse que `active_consumable` est déjà fixé par défaut dès le craft, à vérifier en priorité la prochaine session.
+- VALIDE : le comportement de sélection consommable est correct — premier consommable auto-actif dès le craft (`add_consumable()` ligne 107-108), réaffectation au même id produit aucun changement visible. Aucune correction requise sur `equipment_menu.gd` / `run_state.gd`.
 - EN ATTENTE : découverte de recettes non-starter (`discover_recipe` jamais appelé en jeu) toujours bloquante pour valider le Grimoire au-delà des recettes starter.
 
+---
+
+# Session du 2026-07-12
+
+## Diagnostic 8.6
+Analyse du diagnostic "sélection de consommable sans effet visible" : confirmé comme faux bug. Le marqueur `(actif)` apparaît dès l'ouverture de l'écran Équipement sur `CONSOMMABLE` car le consommable est déjà actif (ligne 107-108 de `run_state.gd`). Avec un seul type en stock, la réaffectation ne produit aucun changement visible. Le code est correct. La vraie limitation : impossible d'avoir 2e consommable en stock tant que `discover_recipe()` n'est pas branché.
+
+## Livrables produits ou modifiés
+- `tests_manuels.md` : section 8.6 marquée comme validée (pas de bug) ; clarification que la limitation est l'absence `discover_recipe()`.
+- `_contexte/signals.md` : suppression du blocage "8.6 sélection consommable" (faux bug) ; conservé seul bloc "découverte recettes non-starter" (vrai blocage).
+- `_contexte/contexte.md` : mis à jour état actuel (8.1-8.6 validées OK, un bloc ouvert).
+
+---
+
+# Session du 2026-07-12 (suite)
+
+## Validation Phase 2 — COMPLÈTE
+Sections 8.7, 8.8 et §9 testées avec succès manuellement. Aucune anomalie détectée.
+
 ## Prochaine étape exacte
-Débugger en urgence la sélection de consommable dans l'écran Équipement (8.6), terminer 8.7-8.8 et §9 de `tests_manuels.md`, puis traiter le blocage `discover_recipe` (§5) avant de reprendre le reste de la Phase 2.
+Brancher `MetaState.discover_recipe()` via trigger gameplay (salle, drop porteur, victoire boss) pour débloquer les recettes non-starter et terminer la validation du Grimoire.
 
 ## Question bloquante pour la session suivante
 Aucune côté jeu.

@@ -8,10 +8,11 @@ Jeu de plateforme/action pixel art fait pour Nino. Roguelite : exploration de bi
 - GDScript
 
 ## État actuel (réécrit intégralement à chaque /close)
-v1.47. Validation manuelle du flux Phase 2 en cours (voir `tests_manuels.md` à la racine) : sections 1-4, 6, 7 et 8.1-8.5 validées OK.
-Deux blocages ouverts : découverte de recettes non-starter jamais déclenchée en jeu (`discover_recipe` non appelé) ; sélection de consommable dans l'écran Équipement sans effet visible confirmé (hypothèse à vérifier : déjà actif par défaut dès le craft).
-Menu titre/dev reformaté (hint manette supprimé, 7 entrées dev tiennent dans la fenêtre) ; bug de compilation `equipment_menu.gd` corrigé (`SLOT_ORDER` non typé) ; affichage équipement retravaillé (nom lisible, marqueur actif).
-Prochaine étape : débugger la sélection de consommable, terminer 8.7-8.8 et §9 de `tests_manuels.md`, puis débloquer `discover_recipe`.
+v1.47. **Validation manuelle du flux Phase 2 complète** (voir `tests_manuels.md` à la racine) : sections 1-4, 6-9 testées manuellement sans anomalie bloquante.
+Un blocage ouvert : découverte de recettes non-starter jamais déclenchée en jeu (`MetaState.discover_recipe()` non appelée).
+Diagnostic 8.6 confirmé : sélection consommable fonctionne correctement (premier consommable auto-actif dès craft, réaffectation identique = pas de changement visible). Aucune correction requise.
+Menu titre/dev reformaté (2026-07-11) ; bug de compilation `equipment_menu.gd` corrigé ; affichage équipement retravaillé.
+Prochaine étape : brancher `discover_recipe()` via trigger gameplay (salle, drop porteur, victoire boss) pour débloquer Grimoire, puis terminer Phase 2 (barème PC, progression run, armes distance).
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
 - 2026-07-06 : Phase 1 entamée — `RunState` migré vers `materials`, `coins` retirés du runtime, GUT vert (`21/21`) ; fermeture différée tant que le tier de pioche reste provisoire.

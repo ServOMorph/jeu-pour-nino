@@ -36,6 +36,7 @@ Toutes les valeurs numériques gameplay (stats, timings, physique, feel) doivent
 
 **Mobs sans frames :** mobs n'ont qu'une seule image statique. Architecture `animation_driver.gd` doit accepter animations à une frame (pas de crash, pas de boucle mal gérée).
 
-**Boss pas encore spritté :** boss une seule image = architecture `animation_driver.gd` doit être 100% prête avant production des frames boss. Pas de "test pendant la génération".
-
 **Ne pas mélanger timing :** durées attaque/invulnérabilité/stun/dégâts restent dans JSON gameplay, pas en dur dans animation. Animation = pur visuel, gameplay = pur gameplay.
+
+## 2026-07-09 — Refonte animations
+Pour refaire une animation, toujours régénérer toutes les frames à partir d’une frame de référence validée. Ne jamais corriger des frames isolées.
