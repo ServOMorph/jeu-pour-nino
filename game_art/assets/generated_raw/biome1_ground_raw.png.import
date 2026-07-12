@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://brloplnbgfmi4"
-path="res://.godot/imported/biome1_ground_raw.png-a5b47d3f09015f97117183e169fcd775.ctex"
+path="res://.godot/imported/biome1_ground_raw.png-1f562e1b33d986eb89a5aa6fceed4af3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/generated_raw/biome1_ground_raw.png"
-dest_files=["res://.godot/imported/biome1_ground_raw.png-a5b47d3f09015f97117183e169fcd775.ctex"]
+source_file="res://assets/generated_raw/biome1_ground_raw.png"
+dest_files=["res://.godot/imported/biome1_ground_raw.png-1f562e1b33d986eb89a5aa6fceed4af3.ctex"]
 
 [params]
 

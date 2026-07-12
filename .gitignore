@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+tmp/
+game_art/.godot/
+game_art/tools/__pycache__/
+game_art/editeur/*.gd.uid

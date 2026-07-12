@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://txsn0faswagk"
-path="res://.godot/imported/ore_copper_raw.png-371d3112793147aca1e45832f8f28358.ctex"
+path="res://.godot/imported/ore_copper_raw.png-f33bdca53f26087f26c2a71ce010d74f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/generated_raw/ore_copper_raw.png"
-dest_files=["res://.godot/imported/ore_copper_raw.png-371d3112793147aca1e45832f8f28358.ctex"]
+source_file="res://assets/generated_raw/ore_copper_raw.png"
+dest_files=["res://.godot/imported/ore_copper_raw.png-f33bdca53f26087f26c2a71ce010d74f.ctex"]
 
 [params]
 

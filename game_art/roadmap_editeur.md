@@ -96,7 +96,5 @@ le test `test_preview_center.gd` couvre le centrage player et le cadrage du boss
 ## Point d'attention
 
 La migration de format est close pour le player et ses PNG legacy sont archives hors
-audit. Les points chauds de maintenance sont maintenant la validation visuelle finale
-de `player/attack` regenere depuis une frame de reference, ainsi que le bon usage du
-bouton `Recharger` pour eviter les relances inutiles de l'editeur. Les 4 attaques
-directionnelles et `player/idle` sont desormais validees en lecture editeur.
+audit. Les etats `player/idle`, `player/attack` et les 4 attaques directionnelles sont
+valides en lecture editeur. Le bouton `Recharger` est aussi valide en session ouverte.

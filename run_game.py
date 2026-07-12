@@ -11,4 +11,4 @@ if not GODOT.exists():
 
 sync()
 
-subprocess.run([str(GODOT), "--path", str(GAME)])
+subprocess.Popen([str(GODOT), "--path", str(GAME)])

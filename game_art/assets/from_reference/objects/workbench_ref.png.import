@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d101ferrtw64q"
-path="res://.godot/imported/workbench_ref.png-a3e934eb87ab4c512066ecee11c7a5bc.ctex"
+path="res://.godot/imported/workbench_ref.png-5fb3128fbd97e79edb10df7b8da139d0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/from_reference/objects/workbench_ref.png"
-dest_files=["res://.godot/imported/workbench_ref.png-a3e934eb87ab4c512066ecee11c7a5bc.ctex"]
+source_file="res://assets/from_reference/objects/workbench_ref.png"
+dest_files=["res://.godot/imported/workbench_ref.png-5fb3128fbd97e79edb10df7b8da139d0.ctex"]
 
 [params]
 
