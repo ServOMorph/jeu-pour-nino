@@ -23,6 +23,7 @@
 - Pas d'emojis dans le code
 - Code fonctionnel uniquement
 - Pas de commentaires décoratifs
+- Toute demande de refonte d'animation impose une regeneration complete de toutes les frames depuis une frame de reference validee. Interdiction absolue de recomposer, melanger, reordonner, interpoler ou retoucher des frames existantes pour simuler une nouvelle animation. Si cette regeneration complete n'est pas possible, s'arreter et le signaler.
 
 ## Contrôle du contexte
 
