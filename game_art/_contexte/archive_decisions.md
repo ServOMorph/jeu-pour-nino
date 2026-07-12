@@ -53,3 +53,4 @@
   que `player/attack` : `0,1,2,3,3,3,2,1,0`, apres regeneration complete des frames.
 - Les 4 attaques directionnelles, `player/idle` et `player/attack` sont valides en lecture editeur.
 - Le flux `Recharger` est valide en session ouverte pour relire assets et `animations.json`.
+- Le decor du HUB est livre comme fond fixe `1920x1080`, pret pour branchement cote jeu.

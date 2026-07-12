@@ -1,3 +1,13 @@
+## v1.54 - 2026-07-12
+
+### Ajoute
+- `game_art/editeur/sheet_editor.gd`, `sheet_editor_canvas.gd`, `path_utils.gd` : bouton `Editer sheet` dans l'editeur, ajustement manuel (redimensionnement uniforme + deplacement, apercu temps reel) d'une frame contrainte a sa case, avec reecriture atomique du PNG source a la validation.
+- `game_art/editeur/test_sheet_editor.gd` : test headless de roundtrip PNG reel pour cette fonctionnalite.
+
+### Modifie
+- `game_art/editeur/main.gd`, `animation_driver.gd` : branchement du bouton et de son etat actif/inactif, delegation de la traduction de chemin vers `path_utils.gd`.
+- `game_art/README.md`, `game_art/roadmap_editeur.md` : documentation de la fonctionnalite, du nouveau test, et nuance de l'objectif de l'editeur (ajustement geometrique manuel autorise, refonte artistique pixel par pixel toujours exclue).
+
 ## v1.53 - 2026-07-12
 
 ### Modifie

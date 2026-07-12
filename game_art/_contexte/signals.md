@@ -3,7 +3,7 @@
 ## Actions ouvertes
 - P1 - Stabiliser metrologiquement les nouvelles animations mobs `enemy_ground/walk` et `enemy_flyer/fly`.
   fait quand: les deux lots passent sous les seuils recommandes du workflow (`height <= 3 px`, `width <= 6 px`, pas de derive visible), puis sont valides en lecture editeur.
-  ref: `game_art/commands/generation_animation.md`, `game_art/tools/normalize_animation_frames.py`, `game_art/assets/generated_raw/enemy_ground_walk_sheet_candidate.json`, `game_art/assets/generated_raw/enemy_flyer_fly_sheet_candidate.json`
+  ref: `game_art/commands/generation_animation.md`, `game_art/tools/normalize_animation_frames.py`, `game_art/assets/generated_raw/enemy_ground_walk_sheet_candidate.json`, `game_art/assets/generated_raw/enemy_flyer_fly_sheet_candidate.json`, bouton `Editer sheet` de l'editeur (correction manuelle possible sans regeneration complete)
 
 ## Blocages
 
@@ -11,24 +11,25 @@
 # Session du 2026-07-12
 
 ## Decisions prises
-- Les mobs standards passent a leurs gabarits runtime definitifs : `enemy_ground` = `128x128`, `enemy_flyer` = `112x80`, boss inchange.
-- Le workflow `generation_animation.md` a ete etendu aux mobs avec production de deux cycles multi-frames runtime candidats : `enemy_ground/walk` et `enemy_flyer/fly`.
-- Les sprites `idle` de `enemy_ground` et `enemy_flyer` ont ete regenres pour suivre les nouvelles animations et rester coherents avec leurs gabarits runtime.
+- Ajout d'un bouton `Editer sheet` dans l'editeur : ajustement manuel (redimensionnement uniforme + deplacement) d'une frame, contraint a sa case dans la sheet, avec apercu temps reel pendant le drag.
+- La validation reecrit directement le PNG source de la sheet sur disque (ecriture atomique tmp+rename) ; confirme par l'utilisateur que `run_game.py` (sync inclus) propage bien la modification en jeu sans etape manuelle supplementaire.
+- `roadmap_editeur.md` mis a jour : l'objectif "pas d'edition pixel par pixel" est nuance pour distinguer cet ajustement geometrique manuel d'une refonte artistique de sprite.
 
 ## Livrables produits ou modifies
-- game_art/assets/enemies/enemy_ground.png, enemy_flyer.png : sprites `idle` regeneres et rebranches.
-- game_art/assets/enemies/enemy_ground_walk_sheet.png, enemy_flyer_fly_sheet.png : nouvelles sheets multi-frames runtime candidates pour les mobs standard.
-- game_art/assets/generated_raw/enemy_ground_* et enemy_flyer_* : sources, alpha, frames normalisees et rapports JSON de regeneration.
-- game_art/data/animations.json, game_art/data/manifest.json, game_art/specs/enemy_ground.md, game_art/specs/enemy_flyer.md : etats runtime et gabarits realignes.
+- game_art/editeur/path_utils.gd : nouveau, fonction partagee de traduction de chemin (res://assets/sprites -> res://assets), reutilisee par animation_driver.gd.
+- game_art/editeur/sheet_editor_canvas.gd : nouveau, widget interactif (grille, selection, drag/resize par poignee scale uniforme, apercu temps reel, ajustement automatique du zoom a la fenetre).
+- game_art/editeur/sheet_editor.gd : nouveau, dialog Valider/Annuler, ecriture atomique du PNG source.
+- game_art/editeur/main.gd, animation_driver.gd : modifies pour brancher le bouton et deleguer la traduction de chemin.
+- game_art/editeur/test_sheet_editor.gd : nouveau test headless (roundtrip PNG reel sur sheet synthetique isolee).
+- game_art/README.md, game_art/roadmap_editeur.md : documentation de la fonctionnalite et du nouveau test.
 
 ## Hypotheses validees / invalidees
-- VALIDE : le workflow `generation_animation.md` est reutilisable sur des mobs et produit des sheets candidates exploitables.
-- INVALIDE : la simple regeneration frame par frame des mobs suffit a rester dans les seuils metriques recommandes -> pivot vers une reprise ciblee des lots trop derives.
-- EN ATTENTE : validation editeur finale de `enemy_ground/walk` et `enemy_flyer/fly` apres reduction des derives de largeur/hauteur.
+- VALIDE : l'API `Image` native de Godot 4.5 (`get_region`, `resize`, `fill_rect`, `blit_rect`, `save_png`) suffit a reecrire une sheet sans dependance Python/Pillow.
+- VALIDE : `run_game.py` propage la sheet modifiee en jeu via `sync.py`, sans etape manuelle supplementaire (confirme par l'utilisateur).
+- EN ATTENTE : validation ergonomique reelle a la souris dans l'editeur (le test headless verifie uniquement l'API programmatique `set_frame_transform`, pas l'interaction souris).
 
 ## Prochaine etape exacte
-Reprendre les cycles `enemy_ground/walk` et `enemy_flyer/fly` avec un gabarit plus stable.
-Mesurer chaque nouveau lot contre les rapports JSON actuels, puis ne remplacer les sheets runtime qu'une fois les derives metriques ramenes dans les seuils du workflow.
+Utiliser le bouton `Editer sheet` pour corriger manuellement les derives metriques de `enemy_ground/walk` et `enemy_flyer/fly` (action P1 ci-dessus), puis revalider en lecture editeur.
 
 ## Question bloquante pour la session suivante
 Aucune

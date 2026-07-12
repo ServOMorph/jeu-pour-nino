@@ -15,11 +15,11 @@ pour visualiser, animer et auditer les sprites. Cible player actuelle :
 La zone game_art reste en maintenance de production.
 Le workflow de regeneration d'animation a maintenant ete applique au player puis aux mobs standard.
 `enemy_ground/walk` et `enemy_flyer/fly` sont branches comme sheets runtime candidates ; leurs `idle` ont ete regenres pour rester coherents.
-Les deux lots mobs restent a stabiliser metrologiquement avant validation finale dans l'editeur.
+Les deux lots mobs restent a stabiliser metrologiquement avant validation finale dans l'editeur ;
+l'editeur dispose desormais d'un bouton `Editer sheet` pour corriger manuellement une frame sans regeneration complete.
 L'editeur rend les previews a leur resolution affichee, avec filtrage lineaire coherent avec le jeu, et se pilote a la souris uniquement.
 
 ## Decisions structurantes
-- Le decor du HUB est livre comme fond fixe `1920x1080`, pret pour branchement cote jeu.
 - L'atelier runtime utilise desormais un sprite `160x144` avec collision, zone
   d'interaction et ancrage au sol realignes.
 - Le zoom de preview doit rendre le viewport a la resolution affichee, puis agrandir
@@ -34,3 +34,4 @@ L'editeur rend les previews a leur resolution affichee, avec filtrage lineaire c
 - `enemy_ground` utilise desormais un gabarit runtime `128x128` avec `walk` en sheet candidate et `idle` regenere sur cette base.
 - `enemy_flyer` utilise desormais un gabarit runtime `112x80` avec `fly` en sheet candidate et `idle` regenere sur cette base.
 - Une animation mob peut etre branchee en runtime comme candidate si la lecture visuelle est exploitable, mais elle n'est consideree validee qu'une fois les derives metriques revenues dans les seuils du workflow.
+- Le bouton `Editer sheet` permet un ajustement manuel (scale uniforme + position, contraint a la case, apercu temps reel) d'une frame de sheet directement dans l'editeur, avec reecriture du PNG source a la validation ; complement du workflow de normalisation automatique, pas un remplacement.

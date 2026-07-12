@@ -2,6 +2,7 @@ extends AnimatedSprite2D
 class_name AnimationDriverEditor
 
 const ANIMATION_CONFIG := "res://data/animations.json"
+const PathUtilsScript := preload("res://editeur/path_utils.gd")
 
 var entity_key := ""
 var _state_configs: Dictionary = {}
@@ -84,7 +85,7 @@ func _build_sprite_frames(entity_cfg: Dictionary) -> void:
 					sprite_frames.add_frame(state_name, _placeholder_tex(16, 16))
 
 func _editor_path(path: String) -> String:
-	return path.replace("res://assets/sprites/", "res://assets/")
+	return PathUtilsScript.editor_path(path)
 
 func _apply_offset(cfg: Dictionary) -> void:
 	var o: Variant = cfg.get("offset", [0.0, 0.0])

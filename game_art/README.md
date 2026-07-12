@@ -37,6 +37,11 @@ Projet Godot autonome pour visualiser, editer et auditer les sprites et animatio
 - `Ctrl+S` sauvegarde aussi.
 - Les etats legacy restent supportes via `frames` = liste de PNG.
 - Les etats spritesheet utilisent `sheet`, `frame_size` et `frames` = indices.
+- Le bouton `Editer sheet` (actif uniquement si l'etat a une `sheet`) ouvre un dialog de retouche
+  geometrique des frames de l'etat selectionne : redimensionnement uniforme (poignee) et deplacement,
+  contraints a rester dans la case `frame_size` d'origine. `Valider` reecrit le PNG source sur disque ;
+  `Annuler` ou la fermeture du dialog n'ecrit rien. Complement manuel au workflow de normalisation
+  automatique (`game_art/tools/normalize_animation_frames.py`), ne le remplace pas.
 
 ## Audit
 
@@ -60,3 +65,4 @@ Projet Godot autonome pour visualiser, editer et auditer les sprites et animatio
 - `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --headless --path "D:\ServOMorph\Jeu pour Nino\game_art" --script res://editeur/test_audit_ui.gd`
 - `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --headless --path "D:\ServOMorph\Jeu pour Nino\game_art" --script res://editeur/test_preview_center.gd`
 - `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --headless --path "D:\ServOMorph\Jeu pour Nino\game_art" --script res://editeur/test_specs_export.gd`
+- `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --headless --path "D:\ServOMorph\Jeu pour Nino\game_art" --script res://editeur/test_sheet_editor.gd`

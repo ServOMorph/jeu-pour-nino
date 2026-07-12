@@ -8,6 +8,7 @@ const SPECS_DIR := "res://specs"
 const AnimationDriverEditorScript := preload("res://editeur/animation_driver.gd")
 const InspectorScript := preload("res://editeur/inspector.gd")
 const AuditScript := preload("res://editeur/audit.gd")
+const SheetEditorScript := preload("res://editeur/sheet_editor.gd")
 
 var _entity_list: ItemList
 var _state_list: ItemList
@@ -26,6 +27,8 @@ var _btn_pause: Button
 var _audit_dialog: AcceptDialog
 var _audit_tree: Tree
 var _audit_status_label: Label
+var _sheet_editor_dialog: SheetEditorScript
+var _btn_edit_sheet: Button
 var _entities: Dictionary = {}
 var _current_entity := ""
 var _paused := false
@@ -61,6 +64,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 func _build_ui() -> void:
 	_build_toolbar(self)
 	_build_audit_dialog()
+	_build_sheet_editor_dialog()
 
 	var hsplit_outer := HSplitContainer.new()
 	hsplit_outer.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -128,6 +132,14 @@ func _build_toolbar(parent: Control) -> void:
 	btn_specs.text = "Specs"
 	btn_specs.pressed.connect(_export_entity_specs)
 	bar.add_child(btn_specs)
+
+	bar.add_child(VSeparator.new())
+
+	_btn_edit_sheet = Button.new()
+	_btn_edit_sheet.text = "Editer sheet"
+	_btn_edit_sheet.disabled = true
+	_btn_edit_sheet.pressed.connect(_open_sheet_editor)
+	bar.add_child(_btn_edit_sheet)
 
 func _build_gallery_panel(parent: Control) -> void:
 	var panel := VBoxContainer.new()
@@ -294,6 +306,40 @@ func _build_audit_dialog() -> void:
 	_audit_tree.item_activated.connect(_on_audit_item_activated)
 	root.add_child(_audit_tree)
 
+func _build_sheet_editor_dialog() -> void:
+	_sheet_editor_dialog = SheetEditorScript.new()
+	add_child(_sheet_editor_dialog)
+	_sheet_editor_dialog.sheet_saved.connect(_on_sheet_saved)
+
+func _open_sheet_editor() -> void:
+	var cfg := _current_state_cfg()
+	if cfg.is_empty() or String(cfg.get("sheet", "")).is_empty():
+		return
+	_sheet_editor_dialog.open_for(_current_entity, _current_state_name(), cfg)
+
+func _current_state_cfg() -> Dictionary:
+	var selection := _state_list.get_selected_items()
+	if selection.is_empty():
+		return {}
+	var state := _state_list.get_item_text(selection[0])
+	var entity_cfg: Dictionary = _entities.get(_current_entity, {})
+	var states: Dictionary = entity_cfg.get("states", {})
+	return states.get(state, {})
+
+func _current_state_name() -> String:
+	var selection := _state_list.get_selected_items()
+	return _state_list.get_item_text(selection[0]) if not selection.is_empty() else ""
+
+func _update_sheet_editor_button() -> void:
+	if _btn_edit_sheet == null:
+		return
+	var cfg := _current_state_cfg()
+	_btn_edit_sheet.disabled = cfg.is_empty() or String(cfg.get("sheet", "")).is_empty()
+
+func _on_sheet_saved(entity: String, _state: String) -> void:
+	if entity == _current_entity:
+		_reload_editor_data()
+
 func _load_entities() -> void:
 	var file := FileAccess.open(ANIM_CONFIG, FileAccess.READ)
 	if file == null:
@@ -339,6 +385,8 @@ func _on_static_selected(index: int) -> void:
 	_static_texture_rect.visible = true
 	_center_static_texture()
 	_update_static_frame_info(file_name, texture)
+	if _btn_edit_sheet != null:
+		_btn_edit_sheet.disabled = true
 
 func _on_entity_selected(index: int) -> void:
 	_static_list.deselect_all()
@@ -370,6 +418,7 @@ func _on_state_selected(index: int) -> void:
 	var states: Dictionary = entity_cfg.get("states", {})
 	if states.has(state):
 		_inspector.setup(_current_entity, state, states[state], _driver)
+	_update_sheet_editor_button()
 
 func _on_state_edited(entity: String, state: String, _cfg: Dictionary) -> void:
 	_dirty = true

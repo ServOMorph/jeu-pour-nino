@@ -3,8 +3,11 @@
 ## Objectif
 Outil Godot autonome permettant de visualiser tous les sprites du jeu en taille reelle
 (echelle jeu), lire leurs animations a l'identique du jeu, editer les timings/offsets,
-et detecter les sprites manquants ou orphelins. Pas d'edition pixel par pixel
-(les graphismes sont produits par Codex/ChatGPT).
+et detecter les sprites manquants ou orphelins. Pas de generation ni de retouche
+artistique de sprite (les graphismes sont produits par Codex/ChatGPT) : l'editeur
+permet uniquement un ajustement geometrique manuel du cadrage d'une frame deja
+generee (redimensionnement uniforme + position, contraint a sa case dans la sheet),
+en complement du workflow de normalisation automatique.
 
 ## Articulation avec la zone jeu
 - `game_art/backlog_art.md` est l'entree de production : les assets a produire viennent
@@ -92,6 +95,7 @@ le test `test_preview_center.gd` couvre le centrage player et le cadrage du boss
 | Test audit UI | `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --headless --path "D:\ServOMorph\Jeu pour Nino\game_art" --script res://editeur/test_audit_ui.gd` |
 | Test centrage preview | `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --headless --path "D:\ServOMorph\Jeu pour Nino\game_art" --script res://editeur/test_preview_center.gd` |
 | Test export specs | `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --headless --path "D:\ServOMorph\Jeu pour Nino\game_art" --script res://editeur/test_specs_export.gd` |
+| Test edition sheet | `D:\tmp\godot45\Godot_v4.5-stable_win64.exe --headless --path "D:\ServOMorph\Jeu pour Nino\game_art" --script res://editeur/test_sheet_editor.gd` |
 
 ## Point d'attention
 
@@ -103,3 +107,6 @@ Le workflow de regeneration d'animation a maintenant ete confirme sur les mobs s
 `enemy_ground/walk` et `enemy_flyer/fly` sont branches comme sheets runtime candidates,
 mais leurs derives metriques restent au-dessus des seuils recommandes et doivent etre
 reduites avant validation finale.
+Le bouton `Editer sheet` permet desormais un ajustement manuel (scale uniforme + position,
+contraint a la case) des frames de l'etat selectionne, pour corriger un cadrage sans
+regeneration complete ; il ecrit directement le PNG source de la sheet.
