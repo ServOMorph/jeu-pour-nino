@@ -99,3 +99,6 @@ La migration de format est close pour le player et ses PNG legacy sont archives 
 audit. Les etats `player/idle`, `player/attack` et les 4 attaques directionnelles sont
 valides en lecture editeur. Le bouton `Recharger` est aussi valide en session ouverte.
 L'editeur est maintenant pilote a la souris uniquement ; les evenements manette y sont bloques.
+Le workflow de regeneration d'animation conserve pour la maintenance player passe par
+des frames separees, une normalisation automatique controlee et une sheet candidate
+avant validation manuelle puis sync runtime.

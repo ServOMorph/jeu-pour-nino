@@ -110,7 +110,7 @@
 - target_frame_size: 87x150
 - fps: 8.1
 - loop: true
-- frame_count: 2
+- frame_count: 8
 - sheet: res://assets/sprites/player/player_run_sheet.png
 - frame_size: 87x150
 - offset: [0.0, 0.0]

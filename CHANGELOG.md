@@ -1,3 +1,12 @@
+## v1.51 - 2026-07-12
+
+### Ajoute
+- `game_art/commands/generation_animation.md` et `game_art/tools/normalize_animation_frames.py` : workflow retenu pour les animations multi-frames, avec generation par frames separees, detourage, normalisation automatique controlee et production d'une sheet candidate.
+
+### Modifie
+- `game_art/assets/player/player_run_sheet.png`, `game_art/data/animations.json` et `game_art/specs/player.md` : animation `player/run` regeneree en 8 frames, branchee dans l'editeur puis synchronisee vers le jeu.
+- `game_art/_contexte/`, `game_art/backlog_art.md` et `game_art/roadmap_editeur.md` : contexte de maintenance realigne sur le nouveau workflow de regeneration d'animation retenu.
+
 ## v1.50 - 2026-07-12
 
 ### Modifie

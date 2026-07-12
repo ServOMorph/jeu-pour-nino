@@ -13,7 +13,8 @@ pour visualiser, animer et auditer les sprites. Cible player actuelle :
 
 ## Etat actuel
 La zone game_art reste en maintenance de production.
-Les validations manuelles player en editeur sont a jour, y compris `player/attack` et le flux `Recharger`.
+Le workflow de regeneration d'animation inclut maintenant une normalisation automatique controlee avant validation manuelle.
+`player/run` a ete regenere avec ce workflow, valide en editeur, puis synchronise dans le jeu.
 L'editeur rend les previews a leur resolution affichee, avec filtrage lineaire coherent avec le jeu.
 Les controles manette y sont desactives ; le pilotage courant se fait a la souris.
 Les sprites orphelins et assets de test ont ete retires ; `legacy_archive` reste conserve hors runtime.
@@ -37,3 +38,7 @@ Les sprites orphelins et assets de test ont ete retires ; `legacy_archive` reste
 - Les previews 2D standard emploient le filtrage lineaire, comme le runtime du jeu.
 - Les controles manette de l'editeur sont bloques a la source ; l'outil se pilote
   uniquement a la souris.
+- Le workflow d'animation retenu est : generation de frames separees, detourage,
+  normalisation automatique controlee, puis sheet candidate avant validation manuelle.
+- `player/run` est le premier cycle complet valide avec cette normalisation automatique,
+  conserve en runtime jeu comme nouvelle animation de course.
