@@ -1,3 +1,9 @@
+## v1.56 - 2026-07-13
+
+### Modifie
+- `game_art/_contexte/contexte.md`, `game_art/_contexte/signals.md` et `game_art/roadmap_editeur.md` : suivi de maintenance realigne sur l'etat reel, avec validations editeur acquises pour `player/jump`, `player/run`, `enemy_ground/walk` et `enemy_flyer/fly`, et ecart runtime `game/` explicite sur `player/run` et `player/jump`.
+- `game_art/backlog_art.md` : notes de maintenance player et mobs standard mises a jour pour refleter les validations editeur actuelles et la resynchronisation encore attendue cote `game/`.
+
 ## v1.55 - 2026-07-12
 
 ### Modifie

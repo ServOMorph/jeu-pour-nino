@@ -7,7 +7,7 @@ pour visualiser, animer et auditer les sprites. Cible player actuelle :
 
 ## Stack
 - Godot 4.5 (projet editeur autonome, res:// = game_art/)
-- Sprites : PNG individuels (migration vers spritesheets en cours)
+- Sprites : pipeline majoritairement en spritesheets pour les entites animees
 - Schema animations : game_art/data/animations.json (source de verite)
 - Synchro vers jeu : sync.py a la racine projet (gere par zone jeu)
 
@@ -15,7 +15,8 @@ pour visualiser, animer et auditer les sprites. Cible player actuelle :
 La zone game_art reste en maintenance de production.
 Le workflow de regeneration d'animation couvre maintenant `player/jump`, reintegre en lot `3` frames `87x150`.
 `player/run` conserve ses poses actuelles mais utilise des cases `104x150` pour faciliter l'edition manuelle dans l'editeur.
-`enemy_ground/walk` et `enemy_flyer/fly` restent des sheets runtime candidates a stabiliser metrologiquement avant validation finale.
+`enemy_ground/walk` et `enemy_flyer/fly` sont maintenant valides en lecture editeur sur l'etat courant.
+Le runtime `game/` n'est pas encore realigne sur cet etat pour `player/run` et `player/jump` : `game/data/animations.json` reste en ancien gabarit `run` (`87x150`) et ancien `jump` mono-frame.
 L'editeur dispose d'un bouton `Editer sheet`, rend les previews a leur resolution affichee, applique le filtrage lineaire du jeu et se pilote a la souris uniquement.
 
 ## Decisions structurantes
@@ -28,7 +29,7 @@ L'editeur dispose d'un bouton `Editer sheet`, rend les previews a leur resolutio
   conserve en runtime jeu comme nouvelle animation de course.
 - `enemy_ground` utilise desormais un gabarit runtime `128x128` avec `walk` en sheet candidate et `idle` regenere sur cette base.
 - `enemy_flyer` utilise desormais un gabarit runtime `112x80` avec `fly` en sheet candidate et `idle` regenere sur cette base.
-- Une animation mob peut etre branchee en runtime comme candidate si la lecture visuelle est exploitable, mais elle n'est consideree validee qu'une fois les derives metriques revenues dans les seuils du workflow.
+- Une animation mob peut etre branchee en runtime comme candidate si la lecture visuelle est exploitable ; dans l'etat courant, `enemy_ground/walk` et `enemy_flyer/fly` sont deja valides en editeur.
 - Le bouton `Editer sheet` permet un ajustement manuel (scale uniforme + position, contraint a la case, apercu temps reel) d'une frame de sheet directement dans l'editeur, avec reecriture du PNG source a la validation ; complement du workflow de normalisation automatique, pas un remplacement.
 - `player.jump` suit desormais une sheet `3` frames regeneree completement depuis la reference validee, au lieu d'une pose mono-frame.
 - `player.run` utilise des cases `104x150` dans la sheet pour permettre l'edition manuelle sans changer les poses source.
