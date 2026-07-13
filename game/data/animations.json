@@ -31,7 +31,7 @@
         ],
         "sheet": "res://assets/sprites/player/player_run_sheet.png",
         "frame_size": [
-          87.0,
+          104.0,
           150.0
         ],
         "frames": [
@@ -46,7 +46,7 @@
         ]
       },
       "jump": {
-        "fps": 1.0,
+        "fps": 8.0,
         "loop": false,
         "offset": [
           0.0,
@@ -58,7 +58,9 @@
           150.0
         ],
         "frames": [
-          0.0
+          0.0,
+          1.0,
+          2.0
         ]
       },
       "fall": {
@@ -86,7 +88,7 @@
         ],
         "sheet": "res://assets/sprites/player/player_attack_sheet.png",
         "frame_size": [
-          129.0,
+          150.0,
           150.0
         ],
         "frames": [

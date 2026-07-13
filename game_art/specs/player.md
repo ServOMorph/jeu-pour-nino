@@ -7,12 +7,12 @@
 
 ### attack
 
-- target_frame_size: 129x150
+- target_frame_size: 150x150
 - fps: 12.0
 - loop: false
 - frame_count: 9
 - sheet: res://assets/sprites/player/player_attack_sheet.png
-- frame_size: 129x150
+- frame_size: 150x150
 - offset: [0.0, 0.0]
 
 ### attack_down
@@ -118,4 +118,3 @@
 ## Anomalies ouvertes
 
 - aucune
-

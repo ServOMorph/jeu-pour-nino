@@ -1,3 +1,9 @@
+## v1.57 - 2026-07-13
+
+### Modifie
+- `game_art/assets/player/player_attack_sheet.png`, `game_art/data/animations.json` et `game/data/animations.json` : `player/attack` elargi en cases `150x150` sans retouche des pixels source, puis realigne cote runtime.
+- `game_art/_contexte/contexte.md`, `game_art/_contexte/signals.md`, `game_art/roadmap_editeur.md` et `game_art/backlog_art.md` : maintenance player closee sur l'etat reel, avec `player/run` et `player/jump` resynchronises puis valides en jeu.
+
 ## v1.56 - 2026-07-13
 
 ### Modifie

@@ -58,3 +58,4 @@
   d'interaction et ancrage au sol realignes.
 - Le zoom de preview doit rendre le viewport a la resolution affichee, puis agrandir
   le sprite ; il ne doit pas agrandir un rendu interne de faible resolution.
+- Les previews 2D standard emploient le filtrage lineaire, comme le runtime du jeu.

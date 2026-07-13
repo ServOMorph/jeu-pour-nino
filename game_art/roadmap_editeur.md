@@ -104,9 +104,8 @@ audit. Les etats `player/idle`, `player/attack` et les 4 attaques directionnelle
 valides en lecture editeur. `player/jump` est maintenant une sheet `3` frames et
 `player/run` utilise des cases `104x150` pour faciliter l'edition manuelle.
 Le bouton `Recharger` est aussi valide en session ouverte.
-Point de vigilance runtime actuel : `game_art` et `game` ne sont pas encore realignes
-sur `player/run` et `player/jump` ; le jeu lit encore un `run` en `87x150` et un
-`jump` mono-frame tant qu'une nouvelle synchro n'a pas ete poussee.
+Le runtime `game/` est maintenant realigne sur `player/run` et `player/jump`, et
+`player/attack` utilise des cases `150x150` apres elargissement lateral de la sheet.
 L'editeur est maintenant pilote a la souris uniquement ; les evenements manette y sont bloques.
 Le workflow de regeneration d'animation a maintenant ete confirme sur les mobs standards :
 `enemy_ground/walk` et `enemy_flyer/fly` sont valides sur l'etat courant apres controle
