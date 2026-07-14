@@ -1,4 +1,6 @@
 {
+  "id": "biome1",
+  "name": "Galeries Verdoyantes",
   "dimensions": {
     "width": 12800.0,
     "height": 1080.0,
@@ -6,13 +8,42 @@
     "arena_x": 10400.0
   },
   "background": {
-    "color": [0.12, 0.10, 0.08],
+    "color": [0.07, 0.08, 0.06],
     "z_index": -10,
-    "arena_color": [0.18, 0.08, 0.16],
-    "arena_z_index": -9
+    "arena_color": [0.10, 0.09, 0.07],
+    "arena_z_index": -9,
+    "layers": [
+      {
+        "texture": "res://assets/sprites/tiles/biome1_parallax_far.png",
+        "z_index": -8,
+        "scroll_scale": [0.22, 1.0],
+        "offset": [0.0, 0.0],
+        "scale": [1.0, 1.0],
+        "opacity": 0.42,
+        "repeat": false
+      },
+      {
+        "texture": "res://assets/sprites/tiles/biome1_parallax_mid.png",
+        "z_index": -7,
+        "scroll_scale": [0.45, 1.0],
+        "offset": [0.0, 0.0],
+        "scale": [1.0, 1.0],
+        "opacity": 0.72,
+        "repeat": false
+      },
+      {
+        "texture": "res://assets/sprites/tiles/biome1_parallax_fore.png",
+        "z_index": -6,
+        "scroll_scale": [0.72, 1.0],
+        "offset": [0.0, 0.0],
+        "scale": [1.0, 1.0],
+        "opacity": 0.88,
+        "repeat": false
+      }
+    ]
   },
   "platforms": {
-    "color": [0.22, 0.20, 0.18],
+    "color": [0.24, 0.22, 0.17],
     "rects": [
       [0, 960, 12800, 120],
       [-32, 0, 32, 1080],
@@ -85,6 +116,11 @@
   ],
   "workbench": {
     "pos": [4400, 888]
+  },
+  "exit_portal": {
+    "pos": [400, 850],
+    "label": "RETOUR HUB",
+    "color": [0.4, 0.8, 0.7]
   },
   "boss": {
     "pos": [11440, 888]

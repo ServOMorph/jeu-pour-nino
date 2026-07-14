@@ -52,7 +52,7 @@ Necessite Godot 4.5 disponible dans le PATH, ou via `D:\tmp\godot45\Godot_v4.5-s
     |-- scenes/
     |   |-- player/
     |   |-- enemies/    # enemy_ground, enemy_flyer, boss
-    |   |-- levels/     # biome1
+    |   |-- levels/     # hub, biome (generique, pilote par GameFlow)
     |   `-- ui/         # title, calibration
     `-- scripts/
         |-- player.gd
@@ -65,10 +65,10 @@ Necessite Godot 4.5 disponible dans le PATH, ou via `D:\tmp\godot45\Godot_v4.5-s
 
 ## Etat actuel
 
-**P1 restant de Phase 2 complete (2026-07-12).** Bareme/gain de PC en fin de run, armes a distance (arc/arbalete, meme bouton que le melee selon l'arme equipee), et suite de tests dediee livres. GUT 40/40 vert, validation manuelle complete (`tests_manuels.md`, sections 1-12).
-Outils de mode dev etendus et unifies entre le menu titre et le menu pause (100 MAT, VIE INF, PC INFINI, SANS MOBS, ONE SHOT, acces Grimoire).
-Decouverte de recettes non-starter branchee sur la victoire du boss (3 recettes) ; les triggers salle/porteur restent a brancher une fois les biomes multiples et les porteurs developpes.
-Prochaine etape : Phase 3 (HUB et selection de biome).
+**Phase 3 livree cote code (2026-07-14), validation en jeu encore a faire.** Le run est desormais multi-biomes : autoload `GameFlow` (`next_biome_id`, `start_run`/`enter_biome`/`return_to_hub`/`end_run`), HUB jouable (`scenes/levels/hub.tscn`, 4 portails dont 3 verrouilles, stele Grimoire, etabli tier 1, soin complet a l'entree), portail de sortie volontaire dans le biome, boss vaincu memorise par biome dans `RunState`.
+`RunState.reset()` n'a plus lieu qu'au lancement d'un nouveau run (`GameFlow.start_run()`), plus a chaque entree en biome. `data/level.json` -> `data/biomes/biome1.json` ; `biome1.tscn` -> `biome.tscn` (scene generique).
+GUT 49/49 vert, boot headless propre sur `hub.tscn` et `biome.tscn`.
+Prochaine etape : validation manuelle du jalon J1 (HUB -> biome -> retour HUB -> re-entree), puis Phase 4 (generation procedurale des biomes).
 
 ## Roadmap
 

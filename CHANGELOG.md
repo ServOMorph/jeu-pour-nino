@@ -1,3 +1,18 @@
+## v1.59 - 2026-07-14
+
+### Ajoute
+- `game/scripts/game_flow.gd` (autoload `GameFlow`) : flux de run centralise - `next_biome_id`, `start_run()` (seul point de `RunState.reset()`), `enter_biome()`, `return_to_hub()`, `end_run()`.
+- `game/scenes/levels/hub.tscn`, `game/scripts/hub.gd`, `game/data/hub.json` : HUB jouable (4 portails dont 3 verrouilles, stele Grimoire, etabli tier 1, soin complet a l'entree, decor `hub_decor.png` integre).
+- `game/scripts/hub_portal.gd` : interaction generique (portails du HUB, stele Grimoire, portail de sortie volontaire de biome).
+- `game/scripts/biome_cleared.gd` : ecran bref de retour au HUB apres victoire sur un boss de biome.
+- `game/tests/test_game_flow.gd` : 9 tests (chargement du biome, reset unique par run, revisite comptee une fois, conservation de l'etat sur aller-retour HUB/biome, PC de fin de run).
+
+### Modifie
+- `game/scripts/level.gd` : biome parametre par `GameFlow` au lieu d'une config fixe, boss non respawne s'il est deja vaincu dans le run, transitions vers le HUB.
+- `game/scripts/run_state.gd` : `visited_biomes` / `defeated_bosses` et leur API ; `player.gd` : `heal_full()` ; `hud.gd` : boss optionnel ; `title.gd` / `end_screen.gd` : transitions via `GameFlow` (plus de `quit()` ni de `reload_current_scene()`).
+- `game/data/level.json` -> `game/data/biomes/biome1.json` ; `game/scenes/levels/biome1.tscn` -> `biome.tscn` (scene generique pilotee par `GameFlow`).
+- `roadmap.md`, `README.md`, `_contexte/` : Phase 3 livree cote code, validation en jeu du jalon J1 reportee a la prochaine session.
+
 ## v1.58 - 2026-07-14
 
 ### Modifie

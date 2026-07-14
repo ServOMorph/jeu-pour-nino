@@ -6,22 +6,25 @@ const ENEMY_FLYER := preload("res://scenes/enemies/enemy_flyer.tscn")
 const BOSS := preload("res://scenes/enemies/boss.tscn")
 
 const RECIPE_CATALOG := preload("res://scripts/recipe_catalog.gd")
-const PROGRESSION := preload("res://scripts/progression.gd")
+const BIOME_CLEARED_SCRIPT := preload("res://scripts/biome_cleared.gd")
 const ORE_NODE := preload("res://scripts/ore_node.gd")
 const WORKBENCH_SCRIPT := preload("res://scripts/workbench.gd")
 const CRAFT_MENU_SCRIPT := preload("res://scripts/craft_menu.gd")
 const EQUIPMENT_MENU_SCRIPT := preload("res://scripts/equipment_menu.gd")
 
-const LEVEL_CONFIG := "res://data/level.json"
 const ORE_SURFACE_OFFSET := Vector2(0, 32)
+const HUB_PORTAL_SCRIPT := preload("res://scripts/hub_portal.gd")
 
 var player: CharacterBody2D
 var boss: Node = null
+var _biome_id := "biome1"
 var _boss_started := false
 var _ended := false
 var _door: StaticBody2D = null
 var _level_cfg: Dictionary = {}
 var _living_enemies := 0
+var _background_layers: Array = []
+var _camera: Camera2D = null
 
 const END_SCREEN := preload("res://scripts/end_screen.gd")
 const HUD_SCRIPT := preload("res://scripts/hud.gd")
@@ -36,9 +39,11 @@ var _grimoire_menu: CanvasLayer
 
 func _ready() -> void:
 	randomize()
-	_load_level_config()
-	RunState.reset()
-	RunState.increment_counter("biomes_visited", 1)
+	_biome_id = GameFlow.next_biome_id
+	_level_cfg = GameFlow.load_biome_config(_biome_id)
+	if _level_cfg.is_empty():
+		return
+	RunState.mark_biome_visited(_biome_id)
 	if Dev.dev_resources > 0:
 		RunState.grant_dev_materials(Dev.dev_resources)
 	_build_background()
@@ -50,23 +55,13 @@ func _ready() -> void:
 	_spawn_boss()
 	_spawn_ores()
 	_spawn_workbench()
+	_spawn_exit_portal()
 	_setup_hud()
 	_setup_pause_menu()
 	_setup_equipment_menu()
 	_setup_grimoire_menu()
-	if cfg["boss_active"]:
+	if cfg["boss_active"] and boss:
 		_start_boss_fight()
-
-func _load_level_config() -> void:
-	var f := FileAccess.open(LEVEL_CONFIG, FileAccess.READ)
-	if f == null:
-		push_error("Config niveau introuvable: %s" % LEVEL_CONFIG)
-		return
-	var parsed: Variant = JSON.parse_string(f.get_as_text())
-	if parsed is Dictionary:
-		_level_cfg = parsed
-	else:
-		push_error("Config niveau invalide: %s" % LEVEL_CONFIG)
 
 func _resolve_spawn() -> Dictionary:
 	var points: Dictionary = _level_cfg.get("spawns", {})
@@ -79,7 +74,7 @@ func _resolve_spawn() -> Dictionary:
 	}
 
 func _physics_process(_delta: float) -> void:
-	if _ended or _boss_started:
+	if _ended or _boss_started or boss == null:
 		return
 	var dims: Dictionary = _level_cfg["dimensions"]
 	if player and player.global_position.x > float(dims["arena_x"]):
@@ -88,6 +83,7 @@ func _physics_process(_delta: float) -> void:
 func _process(_delta: float) -> void:
 	if _ended:
 		return
+	_update_background_layers()
 	if Input.is_action_just_pressed("pause_menu") and _pause_menu and not _pause_menu.is_open():
 		_open_pause_menu()
 
@@ -116,6 +112,51 @@ func _build_background() -> void:
 	])
 	arena.z_index = int(bg_cfg["arena_z_index"])
 	add_child(arena)
+	for layer_cfg in bg_cfg.get("layers", []):
+		_add_background_layer(layer_cfg)
+
+func _add_background_layer(layer_cfg: Dictionary) -> void:
+	var texture_path := String(layer_cfg.get("texture", ""))
+	if texture_path.is_empty():
+		return
+	var image := Image.load_from_file(ProjectSettings.globalize_path(texture_path))
+	if image == null or image.is_empty():
+		push_warning("Background texture introuvable: %s" % texture_path)
+		return
+	var texture := ImageTexture.create_from_image(image)
+	var node := Node2D.new()
+	node.z_index = int(layer_cfg.get("z_index", -8))
+	add_child(node)
+	var dims: Dictionary = _level_cfg["dimensions"]
+	var level_width := float(dims["width"])
+	var scale := _cfg_vec2(layer_cfg.get("scale", [1.0, 1.0]), Vector2.ONE)
+	var offset := _cfg_vec2(layer_cfg.get("offset", [0.0, 0.0]), Vector2.ZERO)
+	var scroll_scale := _cfg_vec2(layer_cfg.get("scroll_scale", [1.0, 1.0]), Vector2.ONE)
+	var opacity := float(layer_cfg.get("opacity", 1.0))
+	var overlap := float(layer_cfg.get("overlap", 0.0))
+	var repeat := bool(layer_cfg.get("repeat", true))
+	var tile_width := texture.get_width() * scale.x
+	if tile_width <= 0.0:
+		return
+	var step: float = maxf(64.0, tile_width - overlap)
+	var x := -tile_width if repeat else 0.0
+	var limit := level_width + tile_width if repeat else 1.0
+	while x < limit:
+		var sprite := Sprite2D.new()
+		sprite.texture = texture
+		sprite.centered = false
+		sprite.position = Vector2(x, 0.0)
+		sprite.scale = scale
+		sprite.modulate = Color(1.0, 1.0, 1.0, opacity)
+		node.add_child(sprite)
+		if not repeat:
+			break
+		x += step
+	_background_layers.append({
+		"node": node,
+		"offset": offset,
+		"scroll_scale": scroll_scale,
+	})
 
 func _build_geometry() -> void:
 	var cfg: Dictionary = _level_cfg["platforms"]
@@ -151,11 +192,12 @@ func _spawn_player(spawn_pos: Vector2) -> void:
 	player.add_to_group("player")
 	player.global_position = spawn_pos
 	player.died.connect(_on_player_died)
-	var cam: Camera2D = player.get_node("Camera2D")
-	cam.limit_left = 0
-	cam.limit_top = 0
-	cam.limit_right = int(dims["width"])
-	cam.limit_bottom = int(dims["height"])
+	_camera = player.get_node("Camera2D")
+	_camera.limit_left = 0
+	_camera.limit_top = 0
+	_camera.limit_right = int(dims["width"])
+	_camera.limit_bottom = int(dims["height"])
+	_update_background_layers()
 
 func _spawn_enemies() -> void:
 	for cfg in _level_cfg["enemies"]:
@@ -209,10 +251,25 @@ func _try_respawn_enemy(cfg: Dictionary) -> void:
 	_spawn_enemy_from_config(cfg)
 
 func _spawn_boss() -> void:
+	if RunState.is_boss_defeated(_biome_id):
+		return
 	boss = BOSS.instantiate()
 	add_child(boss)
 	boss.global_position = _vec2(_level_cfg["boss"]["pos"])
 	boss.died.connect(_on_boss_died)
+
+func _spawn_exit_portal() -> void:
+	var exit_cfg: Dictionary = _level_cfg.get("exit_portal", {})
+	if not exit_cfg.has("pos"):
+		return
+	var col: Array = exit_cfg.get("color", [0.4, 0.8, 0.7])
+	var pos: Array = exit_cfg["pos"]
+	var portal := HUB_PORTAL_SCRIPT.new()
+	portal.label_text = String(exit_cfg.get("label", "RETOUR HUB"))
+	portal.color = _color(col)
+	add_child(portal)
+	portal.global_position = _vec2(pos)
+	portal.interact_requested.connect(_return_to_hub)
 
 func _spawn_ores() -> void:
 	for ore_cfg in _level_cfg["ores"]:
@@ -248,6 +305,29 @@ func _rect(data: Array) -> Rect2:
 
 func _color(data: Array) -> Color:
 	return Color(float(data[0]), float(data[1]), float(data[2]))
+
+func _cfg_vec2(value: Variant, default_value: Vector2) -> Vector2:
+	if value is Array and value.size() >= 2:
+		return Vector2(float(value[0]), float(value[1]))
+	if value is float or value is int:
+		var f := float(value)
+		return Vector2(f, f)
+	return default_value
+
+func _update_background_layers() -> void:
+	if _background_layers.is_empty() or _camera == null:
+		return
+	var viewport_size := get_viewport_rect().size
+	var left: float = maxf(0.0, _camera.global_position.x - viewport_size.x * 0.5)
+	var top: float = maxf(0.0, _camera.global_position.y - viewport_size.y * 0.5)
+	for layer in _background_layers:
+		var node: Node2D = layer["node"]
+		var offset: Vector2 = layer["offset"]
+		var scroll_scale: Vector2 = layer["scroll_scale"]
+		node.position = Vector2(
+			left * (1.0 - scroll_scale.x) + offset.x,
+			top * (1.0 - scroll_scale.y) + offset.y
+		)
 
 # ---------------------------------------------------------------------- HUD
 
@@ -310,12 +390,21 @@ func _close_pause_menu() -> void:
 	get_tree().paused = false
 
 func _restart_run() -> void:
-	get_tree().paused = false
-	get_tree().reload_current_scene()
+	_ended = true
+	GameFlow.end_run(true)
+	GameFlow.start_run()
+	GameFlow.return_to_hub()
 
 func _return_to_title() -> void:
-	get_tree().paused = false
-	get_tree().quit()
+	_ended = true
+	GameFlow.end_run(true)
+	GameFlow.return_to_title()
+
+func _return_to_hub() -> void:
+	if _ended:
+		return
+	_ended = true
+	GameFlow.return_to_hub()
 
 func _toggle_dev_resources() -> void:
 	if Dev.dev_resources > 0:
@@ -363,9 +452,7 @@ func _on_player_died() -> void:
 	if _ended:
 		return
 	_ended = true
-	RunState.set_counter_flag("run_failed", true)
-	var gained := _award_skill_points()
-	SaveManager.save_meta()
+	var gained := GameFlow.end_run(true)
 	_show_end_screen("VOUS ETES TOMBE", Color(0.8, 0.2, 0.2), false, gained)
 
 func _on_boss_died() -> void:
@@ -373,17 +460,17 @@ func _on_boss_died() -> void:
 		return
 	_ended = true
 	_hud.hide_boss_bar()
-	RunState.increment_counter("bosses_defeated", 1)
+	RunState.mark_boss_defeated(_biome_id)
 	RECIPE_CATALOG.discover_by_trigger(RECIPE_CATALOG.load_recipes(), "Victoire Gardien du Voile")
-	var gained := _award_skill_points()
 	SaveManager.save_meta()
-	_show_end_screen("NOYAU ATTEINT - VICTOIRE", Color(0.4, 0.85, 0.5), true, gained)
+	_show_biome_cleared()
 
-func _award_skill_points() -> int:
-	var bareme := PROGRESSION.load_bareme()
-	var gained := PROGRESSION.compute_skill_points(RunState.get_counters(), bareme)
-	MetaState.add_skill_points(gained)
-	return gained
+func _show_biome_cleared() -> void:
+	await get_tree().create_timer(0.8).timeout
+	var banner := BIOME_CLEARED_SCRIPT.new()
+	add_child(banner)
+	banner.setup(String(_level_cfg.get("name", _biome_id)))
+	banner.finished.connect(GameFlow.return_to_hub)
 
 func _show_end_screen(message: String, color: Color, victory: bool, pc_gained: int) -> void:
 	await get_tree().create_timer(0.8).timeout

@@ -20,7 +20,7 @@ var _dev_labels:  Array[Label] = []
 var _grimoire_menu: CanvasLayer
 
 const MAIN_ENTRIES := ["JOUER", "MODE DEV"]
-const DEV_ENTRIES  := ["[ ] 100 MAT", "[ ] VIE INF", "[ ] PC INFINI", "[ ] SANS MOBS", "[ ] ONE SHOT", "GRIMOIRE", "JOUER", "ATELIER", "TEST BOSS", "TOUT DECOUVRIR (DEV)", "RETOUR"]
+const DEV_ENTRIES  := ["[ ] 100 MAT", "[ ] VIE INF", "[ ] PC INFINI", "[ ] SANS MOBS", "[ ] ONE SHOT", "GRIMOIRE", "HUB", "BIOME DIRECT", "ATELIER", "TEST BOSS", "TOUT DECOUVRIR (DEV)", "RETOUR"]
 
 func _ready() -> void:
 	var bg := ColorRect.new()
@@ -78,13 +78,13 @@ func _build_dev_menu() -> void:
 	dev_title.size = Vector2(1920, 64)
 	_dev_root.add_child(dev_title)
 
-	const DEV_ROW_H := 54.0
+	const DEV_ROW_H := 50.0
 	for i in DEV_ENTRIES.size():
 		var lbl := Label.new()
 		lbl.text = DEV_ENTRIES[i]
 		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		lbl.add_theme_font_size_override("font_size", 30)
-		lbl.position = Vector2(0, 460 + i * DEV_ROW_H)
+		lbl.position = Vector2(0, 440 + i * DEV_ROW_H)
 		lbl.size = Vector2(1920, 46)
 		_dev_root.add_child(lbl)
 		_dev_labels.append(lbl)
@@ -181,7 +181,7 @@ func _confirm() -> void:
 	match _state:
 		State.MAIN:
 			match _selected:
-				0: _start_game("")
+				0: _start_game("", false)
 				1: _show_dev()
 		State.DEV:
 			match _selected:
@@ -191,11 +191,12 @@ func _confirm() -> void:
 				3: Dev.no_enemies = not Dev.no_enemies; _refresh()
 				4: Dev.one_shot = not Dev.one_shot; _refresh()
 				5: _grimoire_menu.open_menu()
-				6: _start_game("")
-				7: _start_game("atelier")
-				8: _start_game("boss")
-				9: _discover_all_recipes()
-				10: _show_main()
+				6: _start_game("", false)
+				7: _start_game("", true)
+				8: _start_game("atelier", true)
+				9: _start_game("boss", true)
+				10: _discover_all_recipes()
+				11: _show_main()
 
 func _toggle_dev_pc() -> void:
 	Dev.pc_infinite = not Dev.pc_infinite
@@ -211,9 +212,13 @@ func _setup_grimoire_menu() -> void:
 	_grimoire_menu = GRIMOIRE_MENU_SCRIPT.new()
 	add_child(_grimoire_menu)
 
-func _start_game(spawn: String) -> void:
+func _start_game(spawn: String, direct_biome: bool) -> void:
 	if _started:
 		return
 	_started = true
 	Dev.spawn = spawn
-	get_tree().change_scene_to_file("res://scenes/levels/biome1.tscn")
+	GameFlow.start_run()
+	if direct_biome:
+		GameFlow.enter_biome(GameFlow.next_biome_id)
+	else:
+		GameFlow.return_to_hub()

@@ -20,6 +20,7 @@ Dev="*res://scripts/dev.gd"
 RunState="*res://scripts/run_state.gd"
 MetaState="*res://scripts/meta_state.gd"
 SaveManager="*res://scripts/save_manager.gd"
+GameFlow="*res://scripts/game_flow.gd"
 
 [display]
 

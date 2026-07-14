@@ -1,20 +1,23 @@
-# Signals — jeu   (MAJ 2026-07-12)
+# Signals — jeu   (MAJ 2026-07-14)
 
 ## Question bloquante
-Aucune côté jeu.
+Attribution des PC en cas d'abandon de run : j'ai retenu que QUITTER/RECOMMENCER depuis la pause comptent comme une fin de run ratée (PC ×0.5 crédités, sauvegarde). Non tranché par `questions.md`. Confirmer ou choisir « abandon = zéro PC ».
 
 ## Actions ouvertes
-- [P1] Démarrer la Phase 3 — HUB et sélection de biome. Point de vigilance : déplacer `RunState.reset()` de `level.gd._ready()` vers `title.gd._start_game()` — un run est multi-biomes, le reset ne doit avoir lieu qu'au lancement d'un nouveau run, pas à chaque entrée en biome.
-  fait quand: HUB jouable, un aller-retour HUB↔biome en cours de run conserve matériaux/équipement/cicatrices ; test de non-régression dédié vert.
-  réf: `roadmap.md` Phase 3, `questions.md` Q001
-- [P2] Bumper `CHANGELOG.md` pour cette session (Phase 2 clôturée) : reporté car une édition concurrente côté `game_art` était en cours au moment du close (entrées v1.52/v1.53 non commitées).
-  fait quand: `CHANGELOG.md` contient une entrée décrivant la clôture Phase 2 (barème PC, armes à distance, outils dev, défilement UI), ajoutée sans écraser le travail game_art.
-  réf: voir `git log`/`git diff CHANGELOG.md` pour l'état au moment de la reprise
-- [P2] Triggers `Salle B1-B4` et `Porteur` (17 recettes non-starter restantes) non branchables : dépendent de systèmes absents (biomes multiples, ennemis porteurs — phases 4, 7a-c, 8). À traiter quand ces phases seront développées, pas avant.
+- [P1] Validation manuelle du jalon J1 (Phase 3) — non faite cette session. Parcours : titre → HUB (PV pleins, décor visible), stèle Grimoire, établi tier 1, portail biome1, miner/crafter/équiper, retour HUB via le portail « RETOUR HUB », vérifier conservation matériaux/équipement et PV pleins, re-entrer dans le biome, tuer le boss (écran « BOSS VAINCU » → HUB), ré-entrer et vérifier que le boss n'est plus là. Vérifier aussi les raccourcis dev du menu titre (HUB / BIOME DIRECT / ATELIER / TEST BOSS).
+  fait quand: parcours complet joué sans anomalie, section correspondante ajoutée à `tests_manuels.md`, case « Validation en jeu » cochée dans `roadmap.md` Phase 3.
+  réf: `roadmap.md` Phase 3, `game/scripts/game_flow.gd`, `game/scripts/hub.gd`, `python run_game.py`
+- [P2] Démarrer la Phase 4 — génération procédurale du biome 1 (jalon J2), une fois J1 validé.
+  fait quand: deux lancements du biome 1 produisent deux agencements différents et complétables ; `tests/test_biome_generator.gd` vert.
+  réf: `roadmap.md` Phase 4
+- [P2] Bumper `CHANGELOG.md` de la session Phase 2 : toujours en attente (le bump de cette session couvre la Phase 3, pas la clôture Phase 2).
+  fait quand: `CHANGELOG.md` contient une entrée décrivant la clôture Phase 2 (barème PC, armes à distance, outils dev, défilement UI).
+  réf: `CHANGELOG.md`, `git log`
+- [P2] Triggers `Salle B1-B4` et `Porteur` (17 recettes non-starter restantes) non branchables : dépendent des phases 4, 7a-c, 8.
   fait quand: n/a — dépend du développement des phases 4/7a-c/8.
   réf: `game/scripts/recipe_catalog.gd` (`discover_by_trigger`), `game/data/recipes.json`
 - [P3] Suivre l'avancement du pivot art via `game_art/backlog_art.md` (canal unique de handoff).
-  fait quand: n/a — le statut et la priorité de ces items vivent uniquement dans `backlog_art.md`, pas ici.
+  fait quand: n/a — statut et priorité des items art vivent uniquement dans `backlog_art.md`.
   réf: `game_art/backlog_art.md`
 
 ## Questions ouvertes
@@ -26,53 +29,44 @@ Aucune côté jeu.
 
 ## Contexte chaud
 - `questions.md` (racine) : 77+1 questions de conception v3 tranchées le 2026-07-06 — source de vérité pour tout arbitrage de design ambigu.
-- Ollama opérationnel sur cette machine — prêt pour délégation de tâches templated.
-- Godot 4.5 disponible via `D:\tmp\godot45\Godot_v4.5-stable_win64.exe`.
-- Source de vérité sprites/animations : `game_art/assets/` et `game_art/data/animations.json` — ne pas éditer `game/assets/sprites/` directement.
-- sync.py (racine) copie game_art/ → game/ automatiquement via run_game.py ; exclut `from_reference`, `generated_raw`, `*.import`, `sprite_contact_sheet.png`, `sprite_generation_manifest.json`.
-- Aucun fichier `.import` n'existe sous `game/assets/sprites/` — toutes les textures y sont chargées en runtime (`Image.load_from_file`), jamais via `preload()` sur un chemin PNG direct.
-- Manette : interact=JOY_BUTTON_Y, use_item=JOY_BUTTON_LEFT_SHOULDER, sprint=JOY_BUTTON_LEFT_STICK, pause_menu=JOY_BUTTON_START, attack=JOY_BUTTON_RIGHT_SHOULDER (joymap.gd). Pas de bouton dédié pour l'arme à distance : le bouton `attack` sert au tir si l'arme équipée est de type `ranged` (décision explicite utilisateur, cf. `player.gd._physics_process`).
-- Piège Godot : JOY_BUTTON_X = ui_up par défaut → ne pas l'utiliser pour action custom.
-- Règle absolue : toute valeur numérique gameplay dans game/data/*.json — aucune constante hardcodée.
-- Piège manette title.gd : _a_was doit être mis à jour EN TÊTE de _process avant tout return anticipé.
-- GUT v9.7.0 installé dans game/addons/gut/ — activer via Project Settings → Plugins avant premier run. Vérification headless : `Godot_v4.5-stable_win64.exe --headless --path game -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit`. 40/40 tests verts (4 scripts) au 2026-07-12.
-- `game/project.godot` : fenêtre en mode fenêtré (`window/size/mode=0`) — cible finale plein écran par défaut (Q072), à régler en Phase 10.
-- Piège Godot découvert 2026-07-05 : `SubViewportContainer.stretch = true` sans `stretch_shrink` réglé fait que le `SubViewport` interne se redimensionne à la taille du container au lieu de garder sa résolution fixe zoomée.
-- Piège GDScript découvert 2026-07-11 : un `const` de tableau non typé (`const X := [...]`) rend `X[i]` de type `Variant` — `var v := X[i]` échoue alors à l'inférence de type sous Godot 4.5 et casse la compilation du script entier (et de tout ce qui le précharge). Toujours typer les const tableaux utilisés pour de l'indexation (`const X: Array[String] = [...]`).
-- Slots `weapon`/`armor`/`accessory`/`tool`/`consumable` gérés par `equipment_menu.gd` ; les recettes de slot `utility` (`pioche_renforcee`, `corde`, `etabli_portable`) ne sont pas équipables via cet écran — `pioche_renforcee` agit automatiquement dès qu'elle est possédée (tier de minage), `corde`/`etabli_portable` n'ont aucun effet en jeu implémenté à ce stade.
-- Aucune recette starter n'a le slot `accessory` — le slot ACCESSOIRE reste normalement vide (`Aucun` seul choix) hors des 3 recettes débloquées par victoire boss.
-- `tests_manuels.md` (racine) : validation manuelle complète (2026-07-12), toutes sections 1-12 OK sans anomalie (Phase 2 + armes distance + gain PC + outils dev).
-- `RecipeCatalog.discover_by_trigger()` (`game/scripts/recipe_catalog.gd`) : appelé depuis `level.gd._on_boss_died()` — seul trigger de découverte de recette branché à ce jour (victoire boss). Pattern réutilisable pour brancher les futurs triggers salle/porteur.
-- Outils dev (`Dev` autoload, `dev.gd`) : `dev_resources`, `infinite_hp`, `pc_infinite`, `no_enemies`, `one_shot` — source de vérité unique lue/écrite à l'identique par `title.gd` (menu titre) ET `pause_menu.gd`/`level.gd` (menu pause en jeu, effet immédiat). Toute nouvelle bascule dev doit suivre ce pattern pour rester synchronisée entre les deux menus.
-- UI à liste scrollable (`craft_menu.gd`, `grimoire_menu.gd`) : pattern de fenêtre glissante (`VISIBLE_ROWS` fixe, `_window_start` recalculé sur la sélection) à réutiliser pour toute nouvelle UI listant un nombre variable d'éléments — ne jamais créer une ligne par élément total sans défilement (bug rencontré et corrigé cette session sur les deux écrans).
-- `game/scripts/progression.gd` (`Progression.compute_skill_points`) : fonction pure du barème PC (Q044), lit `game/data/progression.json`. Compteurs de run dans `RunState.run_counters` (API `increment_counter`/`get_counter`/`set_counter_flag`/`get_counters`, reset avec `RunState.reset()`).
+- Godot 4.5 : `D:\tmp\godot45\Godot_v4.5-stable_win64.exe`. GUT headless : `--headless --path game -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit` (49/49 verts au 2026-07-14). Lancement jeu : `python run_game.py`.
+- `GameFlow` (autoload, `scripts/game_flow.gd`) : unique point d'entrée du flux de run. `start_run()` est le SEUL appel de `RunState.reset()` du projet — ne jamais le rappeler ailleurs. `enter_biome(id)` charge `res://data/biomes/<id>.json` via `next_biome_id`, `return_to_hub()`, `end_run(failed)` (calcul PC + `SaveManager.save_meta()`).
+- `RunState` porte désormais `visited_biomes` et `defeated_bosses` (`mark_biome_visited`/`mark_boss_defeated`) : un biome revisité ne recompte pas son PC, un boss vaincu n'est plus spawné du run en cours.
+- Scène de biome générique : `scenes/levels/biome.tscn` (ex-`biome1.tscn`) — le biome joué est déterminé par `GameFlow.next_biome_id`, pas par la scène.
+- `hub_portal.gd` : script d'interaction générique (Area2D + prompt `interact`), utilisé pour les 4 portails du HUB, la stèle Grimoire et le portail de sortie de biome. Champ `locked` = « EN CONSTRUCTION ».
+- Parallax biome 1 branché dans `level.gd` (`background.layers` de `biomes/biome1.json`, textures `game_art/assets/tiles/biome1_parallax_*.png`) — travail issu de la zone game_art, commité avec cette session pour cohérence du repo.
+- Source de vérité sprites/animations : `game_art/assets/` + `game_art/data/animations.json` ; `game/assets/sprites/` est gitignoré et régénéré par sync.py (via `run_game.py`). Ne jamais y éditer directement.
+- Manette : interact=JOY_BUTTON_Y, use_item=LEFT_SHOULDER, sprint=LEFT_STICK, pause_menu=START, attack=RIGHT_SHOULDER (`joymap.gd`). Le bouton `attack` sert aussi au tir si l'arme équipée est `ranged`. JOY_BUTTON_X = ui_up par défaut → ne pas l'utiliser.
+- Règle absolue : toute valeur numérique gameplay dans `game/data/*.json`.
+- Piège GDScript : un `const` de tableau non typé rend l'indexation `Variant` et casse l'inférence — toujours typer (`const X: Array[String] = [...]`).
+- UI à liste scrollable (`craft_menu.gd`, `grimoire_menu.gd`) : pattern de fenêtre glissante à réutiliser pour toute nouvelle UI listant un nombre variable d'éléments.
+- Outils dev (`Dev` autoload) : `dev_resources`, `infinite_hp`, `pc_infinite`, `no_enemies`, `one_shot` — lus/écrits à l'identique par `title.gd`, `pause_menu.gd`, `level.gd` et `hub.gd`. Toute nouvelle bascule dev doit suivre ce pattern.
+- `tests_manuels.md` (racine) : sections 1-12 validées le 2026-07-12 (Phase 2). Aucune section Phase 3 encore écrite.
 
-## Dernière session (2026-07-12 — Phase 2 clôturée : barème PC, armes à distance, outils dev unifiés)
+## Dernière session (2026-07-14 — Phase 3 livrée côté code : HUB, run multi-biomes)
 
 ## Décisions prises
-- P1 restant de Phase 2 complété : barème/gain de PC (Q044), armes à distance (Q016), `tests/test_craft.gd`. Phase 2 reste techniquement ouverte dans `roadmap.md` (2 tâches mineures hors périmètre : retrait `_is_recipe_obsolete()`, test synergie cross-biome).
-- Arme à distance sans bouton manette dédié : le bouton `attack` (mêlée) sert aussi au tir si l'arme équipée est de type `ranged` (revirement explicite utilisateur après un premier essai avec un bouton séparé).
-- Outils dev étendus (`PC INFINI`, `SANS MOBS`, `ONE SHOT`, accès `GRIMOIRE`) et unifiés entre le menu titre et le menu pause via l'autoload `Dev` comme unique source de vérité, avec effet immédiat en jeu depuis la pause.
-- Bug de recettes hors écran corrigé sur `craft_menu.gd` et `grimoire_menu.gd` via un pattern de liste à défilement (fenêtre glissante suivant la sélection).
-- Bump `CHANGELOG.md` différé : édition concurrente `game_art` (v1.52/v1.53) non commitée au moment du close — ne pas écraser ce travail, à reprendre à la prochaine session une fois le repo stabilisé.
+- Le flux de run passe par un autoload `GameFlow` : `RunState.reset()` n'a plus lieu qu'au lancement d'un nouveau run, jamais à l'entrée d'un biome (Q001 respecté).
+- Battre un boss de biome ne termine plus le run : écran bref « BOSS VAINCU » puis retour HUB ; le boss est marqué vaincu pour le run et n'est plus spawné.
+- Fin de run = mort (écran de fin, PC ×0.5), ou abandon via pause (QUITTER/RECOMMENCER), traité comme un run raté pour ne pas perdre les PC accumulés — décision à confirmer (voir question bloquante).
+- Les 3 biomes non implémentés sont présents au HUB en portails `locked` (« EN CONSTRUCTION ») plutôt qu'absents.
+- Décor de HUB livré par game_art (`hub_decor.png`) intégré : entrée `backlog_art.md` passée `livre` → `integre`.
 
 ## Livrables produits ou modifiés
-- `game/data/progression.json`, `game/scripts/progression.gd` : barème PC + fonction pure `compute_skill_points`.
-- `game/scripts/run_state.gd`, `game/scripts/level.gd` : compteurs de run, gain de PC aux deux fins de run, affichage sur l'écran de fin (`end_screen.gd`).
-- `game/data/weapons.json`, `game/scripts/player.gd`, `game/scripts/player_projectile.gd`, `game/scenes/player/player_projectile.tscn`, `game/scripts/audio.gd` : armes à distance jouables.
-- `game/scripts/dev.gd`, `game/scripts/title.gd`, `game/scripts/pause_menu.gd` : outils dev étendus et unifiés (+ accès Grimoire en pause).
-- `game/scripts/craft_menu.gd`, `game/scripts/grimoire_menu.gd` : défilement en fenêtre glissante.
-- `game/data/level.json` : spawn `atelier` repositionné juste à gauche de l'établi.
-- `game/tests/test_craft.gd` (12 tests), `game/tests/test_run_state.gd` (+3 tests) : 40/40 GUT verts.
-- `roadmap.md`, `tests_manuels.md` : mis à jour (Phase 2 cases cochées, sections 10-12 validées).
+- `game/scripts/game_flow.gd` (nouveau, autoload) ; `game/project.godot` : autoload `GameFlow`.
+- `game/scripts/hub.gd`, `game/scenes/levels/hub.tscn`, `game/data/hub.json`, `game/scripts/hub_portal.gd`, `game/scripts/biome_cleared.gd` (nouveaux).
+- `game/scripts/level.gd` : biome paramétré par `GameFlow`, portail de sortie volontaire, boss conditionnel, transitions HUB.
+- `game/scripts/run_state.gd` : `visited_biomes`/`defeated_bosses` + API. `game/scripts/player.gd` : `heal_full()`. `game/scripts/hud.gd` : boss optionnel. `game/scripts/end_screen.gd`, `game/scripts/title.gd` : transitions via `GameFlow`.
+- `game/data/level.json` → `game/data/biomes/biome1.json` ; `game/scenes/levels/biome1.tscn` → `biome.tscn`.
+- `game/tests/test_game_flow.gd` (9 tests) ; `roadmap.md`, `README.md`, `game_art/backlog_art.md` mis à jour.
 
 ## Hypothèses validées / invalidées
-- VALIDE : 40/40 tests GUT verts et aucune erreur de script au boot headless après chaque étape de la session.
-- VALIDE : toutes les sections de tests manuels (1-12) validées en jeu par l'utilisateur, aucune anomalie bloquante restante.
-- EN ATTENTE : bump `CHANGELOG.md` de cette session, reporté à cause d'une édition concurrente game_art en cours.
+- VALIDE : 49/49 tests GUT verts ; boot headless de `hub.tscn` et `biome.tscn` sans erreur ni warning.
+- EN ATTENTE : validation manuelle du jalon J1 — aucun parcours joué cette session.
+- EN ATTENTE : arbitrage de l'attribution des PC sur abandon de run.
 
 ## Prochaine étape exacte
-Démarrer la Phase 3 (HUB et sélection de biome) — voir `roadmap.md` Phase 3. Reprendre aussi le bump `CHANGELOG.md` en attente.
+Lancer `python run_game.py` et jouer le parcours J1 complet (voir action P1), puis cocher la case « Validation en jeu » de la Phase 3 et écrire la section correspondante dans `tests_manuels.md`.
 
 ## Question bloquante pour la session suivante
-Aucune côté jeu.
+Abandon de run (QUITTER/RECOMMENCER en pause) : PC ×0.5 comme un run raté (choix actuel) ou zéro PC ?

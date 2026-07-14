@@ -1,0 +1,35 @@
+{
+  "dimensions": {
+    "width": 1920.0,
+    "height": 1080.0
+  },
+  "background": {
+    "color": [0.09, 0.08, 0.12],
+    "z_index": -10,
+    "texture": "res://assets/sprites/tiles/hub_decor.png"
+  },
+  "platforms": {
+    "color": [0.20, 0.18, 0.24],
+    "rects": [
+      [0, 960, 1920, 120],
+      [-32, 0, 32, 1080],
+      [1920, 0, 32, 1080]
+    ]
+  },
+  "spawn": [960, 881],
+  "workbench": {
+    "pos": [1100, 888],
+    "tier": 1
+  },
+  "grimoire": {
+    "pos": [820, 888],
+    "label": "GRIMOIRE",
+    "color": [0.7, 0.45, 0.9]
+  },
+  "portals": [
+    {"biome": "biome1", "label": "GALERIES VERDOYANTES", "pos": [200, 850], "color": [0.35, 0.75, 0.45], "locked": false},
+    {"biome": "biome2", "label": "MINES OBSCURES", "pos": [520, 850], "color": [0.5, 0.5, 0.55], "locked": true},
+    {"biome": "biome3", "label": "ILES CELESTES", "pos": [1420, 850], "color": [0.5, 0.5, 0.55], "locked": true},
+    {"biome": "biome4", "label": "DESCENTE VERS LE NOYAU", "pos": [1760, 850], "color": [0.5, 0.5, 0.55], "locked": true}
+  ]
+}

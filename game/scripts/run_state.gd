@@ -16,6 +16,8 @@ var consumables: Dictionary = {}
 var equipped: Dictionary = {}
 var active_consumable := ""
 var run_counters: Dictionary = {}
+var visited_biomes: Array[String] = []
+var defeated_bosses: Array[String] = []
 
 var _material_defs: Dictionary = {}
 var _weapon_defs: Dictionary = {}
@@ -27,6 +29,8 @@ func reset() -> void:
 	equipped.clear()
 	active_consumable = ""
 	run_counters.clear()
+	visited_biomes.clear()
+	defeated_bosses.clear()
 	_emit_all_materials()
 	items_changed.emit()
 	consumable_changed.emit("")
@@ -43,6 +47,26 @@ func set_counter_flag(key: String, value: bool) -> void:
 
 func get_counters() -> Dictionary:
 	return run_counters.duplicate()
+
+func mark_biome_visited(biome_id: String) -> bool:
+	if biome_id in visited_biomes:
+		return false
+	visited_biomes.append(biome_id)
+	increment_counter("biomes_visited", 1)
+	return true
+
+func has_visited_biome(biome_id: String) -> bool:
+	return biome_id in visited_biomes
+
+func mark_boss_defeated(biome_id: String) -> bool:
+	if biome_id in defeated_bosses:
+		return false
+	defeated_bosses.append(biome_id)
+	increment_counter("bosses_defeated", 1)
+	return true
+
+func is_boss_defeated(biome_id: String) -> bool:
+	return biome_id in defeated_bosses
 
 func add_material(id: String, qty: int) -> void:
 	if qty <= 0:

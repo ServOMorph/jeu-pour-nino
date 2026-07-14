@@ -8,7 +8,8 @@ var _consumable_label: Label
 
 func setup(player: Node, boss: Node) -> void:
 	_build_player_bar(player)
-	_build_boss_bar(boss)
+	if boss != null:
+		_build_boss_bar(boss)
 	_build_resource_counter()
 
 func _build_player_bar(player: Node) -> void:
@@ -99,10 +100,12 @@ func _on_consumable_changed(id: String) -> void:
 		_consumable_label.modulate = Color(0.5, 1.0, 0.5)
 
 func show_boss_bar() -> void:
-	_boss_bar_root.visible = true
+	if _boss_bar_root:
+		_boss_bar_root.visible = true
 
 func hide_boss_bar() -> void:
-	_boss_bar_root.visible = false
+	if _boss_bar_root:
+		_boss_bar_root.visible = false
 
 func _on_player_health_changed(current: int, maximum: int) -> void:
 	_hp_fill.size.x = 320.0 * float(current) / float(maximum)

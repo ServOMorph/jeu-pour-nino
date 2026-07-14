@@ -116,12 +116,11 @@ func _activate() -> void:
 	_buttons[_focus].pressed.emit()
 
 func _on_retry() -> void:
-	get_tree().paused = false
-	get_tree().reload_current_scene()
+	GameFlow.start_run()
+	GameFlow.return_to_hub()
 
 func _on_menu() -> void:
-	get_tree().paused = false
-	get_tree().change_scene_to_file("res://scenes/ui/title.tscn")
+	GameFlow.return_to_title()
 
 func _on_quit() -> void:
 	get_tree().quit()

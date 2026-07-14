@@ -413,6 +413,10 @@ func _apply_equipment() -> void:
 		hp = min(hp, max_hp)
 	health_changed.emit(hp, max_hp)
 
+func heal_full() -> void:
+	hp = max_hp
+	health_changed.emit(hp, max_hp)
+
 func _use_consumable() -> void:
 	var active_id := RunState.active_consumable
 	if _dead or active_id.is_empty() or RunState.get_consumable_count(active_id) <= 0:
