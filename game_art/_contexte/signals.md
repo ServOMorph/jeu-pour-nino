@@ -1,33 +1,34 @@
 # Signals - game_art
 
 ## Actions ouvertes
+- [P1] Completer l'habillage runtime de `Tileset et decors - Biome 1 Galeries Verdoyantes`.
+  fait quand: les plateformes et masses de decor du biome 1 ne reposent plus sur des rects/polygones colores visibles en jeu.
+  ref: `game_art/backlog_art.md`, `game_art/assets/tiles/biome1_parallax_*.png`, `game_art/assets/generated_raw/biome1/`.
 
 ## Blocages
 
 ## Derniere session
-# Session du 2026-07-13
+# Session du 2026-07-14
 
 ## Decisions prises
-- `game/` est resynchronise sur l'etat courant de `game_art` pour `player/run` et `player/jump`.
-- La verification runtime confirme `player/run` et `player/jump` sans regression visible.
-- `player/attack` passe en cases `150x150` par elargissement lateral de la sheet, sans retouche des pixels source.
-- `player/attack` est valide manuellement apres ce nouveau gabarit.
+- Une passe decor/parallax biome 1 est produite en `3` couches separees puis precomposees en grandes bandes pour limiter les jonctions visibles.
+- La passe actuelle du biome 1 est notee comme validee visuellement.
+- L'entree backlog `Tileset et decors - Biome 1 Galeries Verdoyantes` reste toutefois ouverte, car le placeholder de geometrie coloree n'est pas encore remplace.
 
 ## Livrables produits ou modifies
-- `game/data/animations.json` et `game/assets/sprites/player/player_{run,jump}_sheet.png` : runtime realigne sur l'etat valide de `game_art`.
-- `game_art/assets/player/player_attack_sheet.png` : sheet `attack` elargie de `129x150` a `150x150`.
-- `game_art/data/animations.json`, `game/data/animations.json` et `game_art/specs/player.md` : gabarit `attack` realigne en `150x150`.
-- `game_art/backlog_art.md`, `game_art/_contexte/contexte.md`, `game_art/_contexte/signals.md` et `game_art/roadmap_editeur.md` : suivi de maintenance realigne sur l'etat valide.
+- `game_art/assets/tiles/biome1_parallax_{far,mid,fore}.png` : couches decor/parallax finales du biome 1, precomposees en bandes `12800x1080`.
+- `game_art/assets/generated_raw/biome1/biome1_parallax_{far,mid,fore}_{raw,alpha}.png` : sources brutes et detourees conservees pour le biome 1.
+- `game_art/backlog_art.md`, `game_art/_contexte/contexte.md`, `game_art/_contexte/signals.md`, `game_art/roadmap_editeur.md` et `CHANGELOG.md` : protocole de reprise realigne sur l'etat reel de la passe biome 1.
 
 ## Hypotheses validees / invalidees
-- VALIDE : la sync vers `game/` remet bien `player/run` et `player/jump` au niveau de `game_art`, puis le jeu les lit correctement.
-- VALIDE : elargir `player/attack` a `150x150` sans retoucher les pixels suffit a redonner de la marge laterale utile.
-- EN ATTENTE : la prochaine session doit repartir sur une nouvelle entree `a_faire` du backlog art, pas sur une maintenance player residuelle connue.
+- VALIDE : precomposer les couches parallax du biome 1 en grandes bandes attenue les raccords visuels les plus visibles.
+- VALIDE : la passe actuelle du biome 1 est jugee visuellement exploitable.
+- EN ATTENTE : remplacement complet des placeholders de geometrie du biome 1.
 
 ## Prochaine etape exacte
-Ouvrir une nouvelle session de production sur la prochaine entree `a_faire` du
-`backlog_art.md`, en priorite `Tileset et decors - Biome 1 Galeries Verdoyantes`
-si la roadmap jeu n'a pas change d'ici la reprise.
+Completer l'habillage runtime du biome 1 pour sortir du placeholder de geometrie
+coloree, puis seulement reevaluer si l'entree `Tileset et decors - Biome 1 Galeries
+Verdoyantes` peut passer a `livre`.
 
 ## Question bloquante pour la session suivante
 Aucune

@@ -12,15 +12,13 @@ pour visualiser, animer et auditer les sprites. Cible player actuelle :
 - Synchro vers jeu : sync.py a la racine projet (gere par zone jeu)
 
 ## Etat actuel
-La zone game_art reste en maintenance de production.
-Le player est maintenant aligne entre `game_art` et `game` sur `idle`, `run`, `jump`, `attack` et les 4 attaques directionnelles.
-`player/run` utilise des cases `104x150`, `player/jump` une sheet `3` frames `87x150`, et `player/attack` des cases `150x150`.
-`enemy_ground/walk` et `enemy_flyer/fly` restent valides en lecture editeur sur l'etat courant.
-L'editeur dispose d'un bouton `Editer sheet`, rend les previews a leur resolution affichee, applique le filtrage lineaire du jeu et se pilote a la souris uniquement.
+La zone game_art est en production sur le biome 1.
+Une passe decor/parallax `Galeries Verdoyantes` en `3` couches a ete produite et jugee visuellement exploitable.
+Les PNG biome 1 sont conserves dans `game_art/assets/tiles/` avec leurs sources brutes dans `game_art/assets/generated_raw/biome1/`.
+L'entree backlog biome 1 reste ouverte car la geometrie runtime du biome utilise encore des placeholders colores.
+Le player et les mobs standards restent par ailleurs sur un etat valide conforme au contexte precedent.
 
 ## Decisions structurantes
-- Les controles manette de l'editeur sont bloques a la source ; l'outil se pilote
-  uniquement a la souris.
 - Le workflow d'animation retenu est : generation de frames separees, detourage,
   normalisation automatique controlee, puis sheet candidate avant validation manuelle.
 - `player/run` est le premier cycle complet valide avec cette normalisation automatique,
@@ -32,3 +30,4 @@ L'editeur dispose d'un bouton `Editer sheet`, rend les previews a leur resolutio
 - `player.jump` suit desormais une sheet `3` frames regeneree completement depuis la reference validee, au lieu d'une pose mono-frame.
 - `player.run` utilise des cases `104x150` dans la sheet pour permettre l'edition manuelle sans changer les poses source.
 - `player.attack` utilise desormais des cases `150x150`, validees apres elargissement lateral de la sheet sans retouche pixel.
+- Le biome 1 est maintenant servi par une passe parallax `3` couches precomposee en grandes bandes pour attenuer les jonctions visibles en runtime.

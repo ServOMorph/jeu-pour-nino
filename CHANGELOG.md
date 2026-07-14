@@ -1,3 +1,10 @@
+## v1.58 - 2026-07-14
+
+### Modifie
+- `game_art/assets/tiles/biome1_parallax_far.png`, `biome1_parallax_mid.png` et `biome1_parallax_fore.png` : passe decor/parallax biome 1 precomposee en grandes bandes `12800x1080` pour attenuer les jonctions visibles en runtime.
+- `game_art/assets/generated_raw/biome1/` : sources brutes et versions detourees conservees pour la reprise du biome 1.
+- `game_art/_contexte/contexte.md`, `game_art/_contexte/signals.md`, `game_art/backlog_art.md` et `game_art/roadmap_editeur.md` : validation visuelle de la passe biome 1 notee, avec entree backlog maintenue `en_cours` tant que la geometrie coloree reste visible.
+
 ## v1.57 - 2026-07-13
 
 ### Modifie

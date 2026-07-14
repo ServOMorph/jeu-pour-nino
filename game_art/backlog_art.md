@@ -150,7 +150,8 @@ Consequences pour cette zone (a traiter cote game_art, hors perimetre jeu) :
 - placeholder: rects/polygones colores
 - specs: decors 2D standard a resolution native, sans grille imposee, compatibles avec 8-10 templates de salles (5-7 salles par run, connexions 4 directions), 2-3 couches de parallax (Q069), ambiance cavernes vegetales, lumiere filtrante
 - priorite: haute
-- statut: a_faire
+- statut: en_cours
+- note: maintenance 2026-07-14 : passe decor/parallax `3` couches produite pour le biome 1 (`biome1_parallax_far/mid/fore.png`) et jugee visuellement exploitable, avec attenuation des jonctions visibles. L'entree reste `en_cours` tant que les plateformes/runtime utilisent encore des rects ou polygones colores visibles.
 
 ### Overlay d'obscurite - Biome 2 (Mines Obscures)
 - phase: 4/7a - Generation biomes / Mines Obscures

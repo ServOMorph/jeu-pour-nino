@@ -113,3 +113,6 @@ dans l'editeur.
 Le bouton `Editer sheet` permet desormais un ajustement manuel (scale uniforme + position,
 contraint a la case) des frames de l'etat selectionne, pour corriger un cadrage sans
 regeneration complete ; il ecrit directement le PNG source de la sheet.
+La session biome 1 du 2026-07-14 a produit une passe decor/parallax `3` couches jugee
+visuellement exploitable, mais les placeholders colores de geometrie runtime restent a
+remplacer avant de considerer l'entree backlog biome 1 comme livree.
