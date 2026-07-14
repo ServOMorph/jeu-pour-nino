@@ -64,33 +64,16 @@ Lire `.claude/zones.md` pour obtenir la table des alias → dossiers réels.
    - Ne pas toucher à "Objectif" sauf décision explicite. Ne pas toucher à "Stack" sauf changement technique.
    - Si rien n'a changé : ne pas toucher au fichier.
 
-6. Si une `roadmap_*.md` existe dans `<dossier>` : vérifier qu'elle reflète fidèlement l'état après
+6. Si une `roadmap*.md` existe dans `<dossier>` : vérifier qu'elle reflète fidèlement l'état après
    session (statuts des tâches et phases). Mettre à jour si périmée.
    Invariant : ce que lira le prochain `/start` doit être vrai.
 
-6bis. Si la zone est `game_art` :
-   - Pour chaque asset produit ou avancé pendant la session : mettre à jour son entrée dans
-     `game_art/backlog_art.md` (statut `a_faire` → `en_cours` → `livre`, champ `livraison:` rempli
-     au passage à `livre`).
-   - Ne jamais écrire dans `_contexte/signals.md` de la zone `jeu` : `backlog_art.md` est l'unique
-     canal de handoff, lu systématiquement par `/start jeu`.
-
-6ter. Si la zone est `jeu` :
-   - Si la session a posé un nouveau placeholder visuel : créer l'entrée correspondante dans
-     `game_art/backlog_art.md` avec le champ `debloque:` rempli (tâche/phase dev qui en dépend).
-   - Si la session a intégré un asset au statut `livre` : passer son statut à `integre` dans
-     `game_art/backlog_art.md`.
-   - Ne modifier que les champs `statut`, `debloque` et les entrées créées par le dev — jamais
-     `livraison:` ni les specs, qui appartiennent à game_art.
-
-7. Mettre à jour `README.md` à la racine du projet (uniquement pour la zone `jeu` — un `/close game_art`
-   ne touche jamais le README) :
+7. Mettre à jour `README.md` à la racine du projet :
    - Refléter l'état actuel du projet (section "État actuel" de `contexte.md`).
    - Ne pas modifier les sections stables (objectif, stack, structure) sauf changement explicite.
    - Si le README n'existe pas encore : ne pas le créer sans demander.
 
-8. Bumper la version dans `CHANGELOG.md` (les deux zones y ajoutent une entrée, mais jamais en parallèle —
-   si une session `/close` est en cours sur l'autre zone, attendre qu'elle se termine avant de bumper) :
+8. Bumper la version dans `CHANGELOG.md` :
    - Lire la dernière entrée de `CHANGELOG.md` pour extraire la version actuelle (ex: `v2.2`).
    - Déterminer le type de bump à partir de la synthèse de l'étape 3 :
      - **major** si : structure de `_contexte/` modifiée, placeholder renommé ou supprimé, commande supprimée
@@ -105,16 +88,39 @@ Lire `.claude/zones.md` pour obtenir la table des alias → dossiers réels.
      ```
    - Ne pas modifier les entrées existantes.
 
-9. Effectuer un commit git :
-   ```bash
-   git diff --name-only          # vérifier tous les fichiers modifiés pendant la session
-   git status                    # confirmer l'état du repo
-   git add <dossier>/_contexte/ CHANGELOG.md [autres fichiers modifiés identifiés ci-dessus]
-   git commit -m "close(<alias>): session AAAA-MM-JJ — <résumé 1 ligne>"
-   ```
-   - Le résumé reprend la première décision actée, ou la prochaine étape si aucune décision.
-   - En cas de doute sur ce qu'il faut stager : préférer un commit légèrement trop large
-     plutôt qu'un commit partiel laissant le repo dans un état incohérent.
-   - Ne pas inclure de fichiers sans lien avec la session.
+9. Avant de committer, relire les étapes 3 à 8 une par une et confirmer explicitement que chacune
+   a été exécutée (pas seulement planifiée). Si une étape a une commande associée (script de build,
+   régénération de vue, etc.) et qu'elle n'a pas encore été lancée dans cette session, l'exécuter
+   maintenant, avant le commit — jamais après.
 
-10. Afficher en fin de réponse en grand format : ✌️😎
+10. Effectuer un commit git :
+    ```bash
+    git diff --name-only          # vérifier tous les fichiers modifiés pendant la session
+    git status                    # confirmer l'état du repo
+    git add <dossier>/_contexte/ CHANGELOG.md [autres fichiers modifiés identifiés ci-dessus]
+    git commit -m "close(<alias>): session AAAA-MM-JJ — <résumé 1 ligne>"
+    ```
+    - Le résumé reprend la première décision actée, ou la prochaine étape si aucune décision.
+    - En cas de doute sur ce qu'il faut stager : préférer un commit légèrement trop large
+      plutôt qu'un commit partiel laissant le repo dans un état incohérent.
+    - Ne pas inclure de fichiers sans lien avec la session.
+    - Si une commande de génération a modifié des fichiers après le commit (cas non censé
+      survenir avec l'étape 9, mais à vérifier via `git status` après coup) : les inclure dans
+      ce même commit, jamais dans un commit séparé.
+
+11. Afficher en fin de réponse en grand format : ✌️😎
+
+<!-- SPECIFICITES PROJET : DEBUT (préservé par /update, ne pas toucher hors de ce bloc) -->
+<!-- Convention : toute règle liée à une étape précise de la Procédure ci-dessus doit la
+     référencer explicitement par son numéro (ex: "Étape 6 : ..."), plutôt que compter sur la
+     position physique de cette zone (toujours en fin de fichier). -->
+
+**Étape 6 (roadmap) — zones `game_art` et `jeu` :**
+- Zone `game_art` : pour chaque asset produit ou avancé pendant la session, mettre à jour son entrée dans `game_art/backlog_art.md` (statut `a_faire` → `en_cours` → `livre`, champ `livraison:` rempli au passage à `livre`). Ne jamais écrire dans `_contexte/signals.md` de la zone `jeu` : `backlog_art.md` est l'unique canal de handoff, lu systématiquement par `/start jeu`.
+- Zone `jeu` : si la session a posé un nouveau placeholder visuel, créer l'entrée correspondante dans `game_art/backlog_art.md` avec le champ `debloque:` rempli (tâche/phase dev qui en dépend). Si la session a intégré un asset au statut `livre`, passer son statut à `integre`. Ne modifier que les champs `statut`, `debloque` et les entrées créées par le dev — jamais `livraison:` ni les specs, qui appartiennent à game_art.
+
+**Étape 7 (README) :** uniquement pour la zone `jeu` — un `/close game_art` ne touche jamais le README.
+
+**Étape 8 (CHANGELOG) :** les deux zones y ajoutent une entrée, mais jamais en parallèle — si une session `/close` est en cours sur l'autre zone, attendre qu'elle se termine avant de bumper.
+
+<!-- SPECIFICITES PROJET : FIN -->
