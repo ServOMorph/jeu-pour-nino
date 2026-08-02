@@ -61,3 +61,8 @@
 - Le zoom de preview doit rendre le viewport a la resolution affichee, puis agrandir
   le sprite ; il ne doit pas agrandir un rendu interne de faible resolution.
 - Les previews 2D standard emploient le filtrage lineaire, comme le runtime du jeu.
+- `player/run` a ete le premier cycle complet normalise automatiquement conserve en runtime avant la refonte video guidee.
+- `enemy_ground` utilise un gabarit runtime `128x128` avec `walk` en sheet et `idle` regenere sur cette base.
+- `enemy_flyer` utilise un gabarit runtime `112x80` avec `fly` en sheet et `idle` regenere sur cette base.
+- Les animations `enemy_ground/walk` et `enemy_flyer/fly` ont ete validees en lecture editeur avant integration.
+- Le bouton `Editer sheet` ajuste manuellement scale uniforme et position d'une frame dans sa case ; il complete le workflow automatique sans autoriser une refonte partielle.

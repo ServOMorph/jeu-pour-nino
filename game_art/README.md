@@ -26,9 +26,13 @@ Projet Godot autonome pour visualiser, editer et auditer les sprites et animatio
 ## Workflow sprites 2D standard
 
 - Produire les sprites en source HD sur fond detourable, puis detourer et redimensionner exactement a la taille runtime.
-- Pour une animation, partir d'une frame maitre et deriver les autres frames pour limiter les derives de cadrage.
+- Pour une refonte d'animation, regenerer le lot complet depuis une reference maitre validee et un controle temporel fixe ; ne jamais corriger ou reutiliser une frame finale isolee.
 - Valider en priorite la lisibilite a taille reelle dans la preview `Produit`, puis dans le jeu.
 - `assets/generated_raw/` conserve les sources de generation et ne part pas dans le build du jeu.
+
+## Etat actuel
+
+La Phase 7 est en cours sur `player/run`. Wan2.2-Animate 14B quantifie fonctionne localement sur RTX 4060 8 Go avec offload RAM, mais aucun candidat n'a encore passe simultanement la validation visuelle et les seuils geometriques. La sheet runtime actuelle reste inchangee. Prochaine iteration : mode remplacement avec controle realiste pre-normalise, puis audit DWPose du lot complet.
 
 ## Edition
 

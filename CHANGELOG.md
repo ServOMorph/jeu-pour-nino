@@ -1,3 +1,12 @@
+## v1.61 - 2026-08-02
+
+### Ajoute
+- Outils locaux de controle OpenPose/SD1.5, reconstruction TripoSR, rig UniRig, sondes Flux et generation Wan2.2-Animate pour la refonte complete de `player/run`.
+- Reference maitre validee et sources/candidats d'audit conserves sous `game_art/assets/generated_raw/player/` sans remplacement de la sheet runtime.
+
+### Modifie
+- `game_art/_contexte/`, `game_art/roadmap_editeur.md` et `game_art/README.md` : Phase 7 passee `en_cours`, execution locale Wan2.2-Animate 14B INT8 validee materiellement, candidats actuels rejetes et pivot suivant fixe au mode remplacement avec controle pre-normalise.
+
 ## v1.59 - 2026-07-14
 
 ### Ajoute
@@ -370,3 +379,11 @@
 - `game_art` : sprite `player_idle_v2.png` redimensionnÃ© (40x56 â†’ 14x24) pour cohÃ©rence d'Ã©chelle avec `run`/`jump` ; offsets associÃ©s corrigÃ©s.
 - `game/project.godot` : fenÃªtre en mode fenÃªtrÃ© (`window/size/mode=0`) au lieu de plein Ã©cran.
 - `sync.py` : exclusion de `from_reference`, `generated_raw`, `*.import`, `sprite_contact_sheet.png`, `sprite_generation_manifest.json` de la copie vers `game/`.
+## v1.60 - 2026-08-01
+
+### Ajoute
+- `game_art/assets/tiles/biome1_terrain.png` et sa source `game_art/assets/generated_raw/biome1/biome1_terrain_raw.png` : texture rocheuse et vegetale repeteable pour les plateformes des Galeries Verdoyantes.
+
+### Modifie
+- `game/scripts/level.gd`, `game/data/biomes/biome1.json` : affichage texture des plateformes configure par biome, sans modification de collision.
+- `game_art/backlog_art.md` et `game_art/_contexte/` : livraison du decor runtime du biome 1 enregistree.
