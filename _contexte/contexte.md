@@ -8,15 +8,13 @@ Jeu de plateforme/action pixel art fait pour Nino. Roguelite : exploration de bi
 - GDScript
 
 ## État actuel (réécrit intégralement à chaque /close)
-**Phase 3 livrée côté code (2026-07-14) — validation en jeu non faite.** Le run est multi-biomes : autoload `GameFlow` (`next_biome_id`, `start_run`/`enter_biome`/`return_to_hub`/`end_run`), HUB jouable (4 portails dont 3 `locked`, stèle Grimoire, établi tier 1, soin complet à l'entrée), portail de sortie volontaire dans le biome, boss vaincu mémorisé par biome dans `RunState`.
-`RunState.reset()` n'a plus lieu qu'au lancement d'un nouveau run. `data/level.json` → `data/biomes/biome1.json` ; `biome1.tscn` → `biome.tscn` (scène générique pilotée par `GameFlow`).
-GUT 49/49 vert, boot headless propre sur `hub.tscn` et `biome.tscn`.
-Phase 2 reste techniquement ouverte : 2 tâches mineures non bloquantes (`_is_recipe_obsolete()` hardcodé, test de synergie cross-biome).
-Prochaine étape : jouer et valider le jalon J1 (HUB → biome → retour HUB), puis Phase 4 (génération procédurale).
+**Phase 3 livrée côté code — validation manuelle J1 non faite.** Le HUB est jouable avec quatre portails, Grimoire, établi tier 1 et soin complet à l'entrée ; `GameFlow` centralise le run multi-biomes.
+Le HUB a un fond plein écran avec quatre portes intégrées, sur une ligne de marche commune ; les zones de portails n'affichent plus de rectangles ni de noms. L'établi est à droite.
+Le boot headless de `hub.tscn` est vert après la refonte visuelle du 2026-09-13.
+Phase 2 conserve deux tâches mineures non bloquantes (`_is_recipe_obsolete()` hardcodé, test de synergie cross-biome).
+Prochaine étape : vérifier le HUB en jeu puis valider J1 avant la Phase 4.
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
-- 2026-07-07 : Pivot pixel art → 2D standard acté. Résolution 1920×1080 conservée. Pipeline de production : génération Codex + rescale.
-- 2026-07-08 : Migration résolution 1920×1080 validée formellement côté jeu (GUT + headless + test manuel).
 - 2026-07-08 : Socle Phase 2 branché côté jeu — schéma recettes cible, Grimoire dev, équipement via pause, craft filtré par maîtrise/tier.
 - 2026-07-11 : Menu titre/dev reformaté (suppression hint manette, menu dev tenant dans la fenêtre).
 - 2026-07-11 : Bug de compilation `equipment_menu.gd` (`SLOT_ORDER` non typé) corrigé ; affichage équipement retravaillé.
@@ -26,3 +24,4 @@ Prochaine étape : jouer et valider le jalon J1 (HUB → biome → retour HUB), 
 - 2026-07-12 : Audit mémoire projet + pivot pixel art — `.claude/memory.md` corrigé (bindings manette, dimensions player) ; confirmé qu'aucune trace active de l'ancien pixel art ne subsiste côté jeu, hors `ref_to_sprite.py` (dette game_art, tracée dans `backlog_art.md`).
 - 2026-07-14 : Phase 3 livrée côté code — autoload `GameFlow` (unique point de `RunState.reset()`), HUB (`hub.tscn`/`hub.gd`/`hub.json`), scène de biome générique paramétrée par `next_biome_id`, portail de sortie volontaire, soin complet au HUB, boss vaincu mémorisé par biome. Battre un boss de biome ne termine plus le run (retour HUB). Abandon de run via la pause traité comme un run raté (PC ×0.5) — décision à confirmer. Validation en jeu du jalon J1 reportée à la session suivante.
 - 2026-07-12 : P1 restant de Phase 2 complété — barème PC, armes à distance (bouton `attack` partagé avec le mêlée, sans bouton dédié, décision explicite utilisateur), outils dev unifiés menu titre/pause via l'autoload `Dev`, défilement ajouté à `craft_menu.gd`/`grimoire_menu.gd`. GUT 40/40 vert, validation manuelle complète (12 sections). 2 tâches mineures de Phase 2 restent ouvertes dans `roadmap.md` (hors périmètre demandé).
+- 2026-09-13 : Composition visuelle du HUB fixée : quatre portails intégrés au fond plein écran sur la ligne de marche, sans noms ni placeholders ; établi décalé à droite.

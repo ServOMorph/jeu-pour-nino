@@ -84,10 +84,11 @@ func _build_background() -> void:
 func _build_geometry() -> void:
 	var cfg: Dictionary = _cfg["platforms"]
 	var c := _color(cfg["color"])
+	var visible := bool(cfg.get("visible", true))
 	for rect_data in cfg["rects"]:
-		_add_platform(_rect(rect_data), c)
+		_add_platform(_rect(rect_data), c, visible)
 
-func _add_platform(rect: Rect2, color: Color) -> void:
+func _add_platform(rect: Rect2, color: Color, visible: bool) -> void:
 	var body := StaticBody2D.new()
 	body.collision_layer = 1
 	body.collision_mask = 0
@@ -98,6 +99,8 @@ func _add_platform(rect: Rect2, color: Color) -> void:
 	rs.size = rect.size
 	shape.shape = rs
 	body.add_child(shape)
+	if not visible:
+		return
 	var vis := Polygon2D.new()
 	vis.color = color
 	var h := rect.size * 0.5

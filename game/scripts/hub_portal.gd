@@ -2,7 +2,6 @@ extends Area2D
 
 signal interact_requested
 
-const SIZE := Vector2(120, 220)
 const ZONE_SIZE := Vector2(260, 260)
 
 var label_text := "ENTRER"
@@ -21,24 +20,6 @@ func _ready() -> void:
 	rs.size = ZONE_SIZE
 	shape.shape = rs
 	add_child(shape)
-
-	var vis := Polygon2D.new()
-	vis.color = color if not locked else Color(0.3, 0.3, 0.3)
-	var h := SIZE * 0.5
-	vis.polygon = PackedVector2Array([
-		Vector2(-h.x, -h.y), Vector2(h.x, -h.y),
-		Vector2(h.x, h.y), Vector2(-h.x, h.y)
-	])
-	add_child(vis)
-
-	var name_label := Label.new()
-	name_label.text = label_text
-	name_label.add_theme_font_size_override("font_size", 32)
-	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.position = Vector2(-160, -190)
-	name_label.size = Vector2(320, 48)
-	name_label.modulate = Color(1, 1, 1) if not locked else Color(0.5, 0.5, 0.5)
-	add_child(name_label)
 
 	_prompt = Label.new()
 	_prompt.text = "Y : entrer" if not locked else "EN CONSTRUCTION"

@@ -65,10 +65,10 @@ Necessite Godot 4.5 disponible dans le PATH, ou via `D:\tmp\godot45\Godot_v4.5-s
 
 ## Etat actuel
 
-**Phase 3 livree cote code (2026-07-14), validation en jeu encore a faire.** Le run est desormais multi-biomes : autoload `GameFlow` (`next_biome_id`, `start_run`/`enter_biome`/`return_to_hub`/`end_run`), HUB jouable (`scenes/levels/hub.tscn`, 4 portails dont 3 verrouilles, stele Grimoire, etabli tier 1, soin complet a l'entree), portail de sortie volontaire dans le biome, boss vaincu memorise par biome dans `RunState`.
-`RunState.reset()` n'a plus lieu qu'au lancement d'un nouveau run (`GameFlow.start_run()`), plus a chaque entree en biome. `data/level.json` -> `data/biomes/biome1.json` ; `biome1.tscn` -> `biome.tscn` (scene generique).
-GUT 49/49 vert, boot headless propre sur `hub.tscn` et `biome.tscn`.
-Prochaine etape : validation manuelle du jalon J1 (HUB -> biome -> retour HUB -> re-entree), puis Phase 4 (generation procedurale des biomes).
+**Phase 3 livree cote code, validation en jeu encore a faire.** Le run est desormais multi-biomes : autoload `GameFlow` (`next_biome_id`, `start_run`/`enter_biome`/`return_to_hub`/`end_run`), HUB jouable (`scenes/levels/hub.tscn`, 4 portails dont 3 verrouilles, stele Grimoire, etabli tier 1, soin complet a l'entree), portail de sortie volontaire dans le biome, boss vaincu memorise par biome dans `RunState`.
+Le HUB utilise un fond plein ecran avec quatre portes integrees et accessibles sur la ligne de marche ; les portails n'affichent plus de noms ni de rectangles placeholder. L'etabli est isole a droite.
+Le boot headless de `hub.tscn` est valide apres cette refonte visuelle (2026-09-13).
+Prochaine etape : verifier la disposition en jeu, puis valider le jalon J1 (HUB -> biome -> retour HUB -> re-entree) avant la Phase 4.
 
 ## Roadmap
 

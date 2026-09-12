@@ -387,3 +387,8 @@
 ### Modifie
 - `game/scripts/level.gd`, `game/data/biomes/biome1.json` : affichage texture des plateformes configure par biome, sans modification de collision.
 - `game_art/backlog_art.md` et `game_art/_contexte/` : livraison du decor runtime du biome 1 enregistree.
+## v1.62 - 2026-09-13
+
+### Modifie
+- `game_art/assets/tiles/hub_decor_portals_v2.png` : nouveau fond plein ecran du HUB, avec quatre portes accessibles alignees sur la ligne de marche.
+- `game/data/hub.json`, `game/scripts/hub.gd`, `game/scripts/hub_portal.gd` : positions du HUB alignees sur ce decor, sol de collision invisible, etabli a droite et suppression des noms/rectangles placeholder des portails.

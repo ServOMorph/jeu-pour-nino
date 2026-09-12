@@ -1,10 +1,10 @@
-# Signals — jeu   (MAJ 2026-07-14)
+# Signals — jeu   (MAJ 2026-09-13)
 
 ## Question bloquante
 Attribution des PC en cas d'abandon de run : j'ai retenu que QUITTER/RECOMMENCER depuis la pause comptent comme une fin de run ratée (PC ×0.5 crédités, sauvegarde). Non tranché par `questions.md`. Confirmer ou choisir « abandon = zéro PC ».
 
 ## Actions ouvertes
-- [P1] Validation manuelle du jalon J1 (Phase 3) — non faite cette session. Parcours : titre → HUB (PV pleins, décor visible), stèle Grimoire, établi tier 1, portail biome1, miner/crafter/équiper, retour HUB via le portail « RETOUR HUB », vérifier conservation matériaux/équipement et PV pleins, re-entrer dans le biome, tuer le boss (écran « BOSS VAINCU » → HUB), ré-entrer et vérifier que le boss n'est plus là. Vérifier aussi les raccourcis dev du menu titre (HUB / BIOME DIRECT / ATELIER / TEST BOSS).
+- [P1] Validation manuelle du jalon J1 (Phase 3) — non faite. Parcours : titre → HUB (fond plein écran, 4 portails accessibles sur la ligne de marche, établi à droite), stèle Grimoire, établi tier 1, portail biome1, miner/crafter/équiper, retour HUB via le portail « RETOUR HUB », vérifier conservation matériaux/équipement et PV pleins, re-entrer dans le biome, tuer le boss (écran « BOSS VAINCU » → HUB), ré-entrer et vérifier que le boss n'est plus là. Vérifier aussi les raccourcis dev du menu titre (HUB / BIOME DIRECT / ATELIER / TEST BOSS).
   fait quand: parcours complet joué sans anomalie, section correspondante ajoutée à `tests_manuels.md`, case « Validation en jeu » cochée dans `roadmap.md` Phase 3.
   réf: `roadmap.md` Phase 3, `game/scripts/game_flow.gd`, `game/scripts/hub.gd`, `python run_game.py`
 - [P2] Démarrer la Phase 4 — génération procédurale du biome 1 (jalon J2), une fois J1 validé.
@@ -20,20 +20,14 @@ Attribution des PC en cas d'abandon de run : j'ai retenu que QUITTER/RECOMMENCER
   fait quand: n/a — statut et priorité des items art vivent uniquement dans `backlog_art.md`.
   réf: `game_art/backlog_art.md`
 
-## Questions ouvertes
-
-## Échéances
-
-## Blocages
-*Aucun.*
-
 ## Contexte chaud
 - `questions.md` (racine) : 77+1 questions de conception v3 tranchées le 2026-07-06 — source de vérité pour tout arbitrage de design ambigu.
 - Godot 4.5 : `D:\tmp\godot45\Godot_v4.5-stable_win64.exe`. GUT headless : `--headless --path game -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit` (49/49 verts au 2026-07-14). Lancement jeu : `python run_game.py`.
 - `GameFlow` (autoload, `scripts/game_flow.gd`) : unique point d'entrée du flux de run. `start_run()` est le SEUL appel de `RunState.reset()` du projet — ne jamais le rappeler ailleurs. `enter_biome(id)` charge `res://data/biomes/<id>.json` via `next_biome_id`, `return_to_hub()`, `end_run(failed)` (calcul PC + `SaveManager.save_meta()`).
 - `RunState` porte désormais `visited_biomes` et `defeated_bosses` (`mark_biome_visited`/`mark_boss_defeated`) : un biome revisité ne recompte pas son PC, un boss vaincu n'est plus spawné du run en cours.
 - Scène de biome générique : `scenes/levels/biome.tscn` (ex-`biome1.tscn`) — le biome joué est déterminé par `GameFlow.next_biome_id`, pas par la scène.
-- `hub_portal.gd` : script d'interaction générique (Area2D + prompt `interact`), utilisé pour les 4 portails du HUB, la stèle Grimoire et le portail de sortie de biome. Champ `locked` = « EN CONSTRUCTION ».
+- HUB : `game_art/assets/tiles/hub_decor_portals_v2.png` remplit la fenêtre. Les 4 portails sont dans le fond, leurs zones d'interaction sont alignées sur la ligne de marche ; l'établi est à droite. `hub_portal.gd` n'affiche plus de rectangle ni nom de portail, seulement le prompt de proximité.
+- Le boot headless de `hub.tscn` est vert au 2026-09-13 après synchronisation des assets.
 - Parallax biome 1 branché dans `level.gd` (`background.layers` de `biomes/biome1.json`, textures `game_art/assets/tiles/biome1_parallax_*.png`) — travail issu de la zone game_art, commité avec cette session pour cohérence du repo.
 - Source de vérité sprites/animations : `game_art/assets/` + `game_art/data/animations.json` ; `game/assets/sprites/` est gitignoré et régénéré par sync.py (via `run_game.py`). Ne jamais y éditer directement.
 - Manette : interact=JOY_BUTTON_Y, use_item=LEFT_SHOULDER, sprint=LEFT_STICK, pause_menu=START, attack=RIGHT_SHOULDER (`joymap.gd`). Le bouton `attack` sert aussi au tir si l'arme équipée est `ranged`. JOY_BUTTON_X = ui_up par défaut → ne pas l'utiliser.
@@ -43,30 +37,24 @@ Attribution des PC en cas d'abandon de run : j'ai retenu que QUITTER/RECOMMENCER
 - Outils dev (`Dev` autoload) : `dev_resources`, `infinite_hp`, `pc_infinite`, `no_enemies`, `one_shot` — lus/écrits à l'identique par `title.gd`, `pause_menu.gd`, `level.gd` et `hub.gd`. Toute nouvelle bascule dev doit suivre ce pattern.
 - `tests_manuels.md` (racine) : sections 1-12 validées le 2026-07-12 (Phase 2). Aucune section Phase 3 encore écrite.
 
-## Dernière session (2026-07-14 — Phase 3 livrée côté code : HUB, run multi-biomes)
+## Dernière session (2026-09-13 — refonte visuelle et spatiale du HUB)
 
 ## Décisions prises
-- Le flux de run passe par un autoload `GameFlow` : `RunState.reset()` n'a plus lieu qu'au lancement d'un nouveau run, jamais à l'entrée d'un biome (Q001 respecté).
-- Battre un boss de biome ne termine plus le run : écran bref « BOSS VAINCU » puis retour HUB ; le boss est marqué vaincu pour le run et n'est plus spawné.
-- Fin de run = mort (écran de fin, PC ×0.5), ou abandon via pause (QUITTER/RECOMMENCER), traité comme un run raté pour ne pas perdre les PC accumulés — décision à confirmer (voir question bloquante).
-- Les 3 biomes non implémentés sont présents au HUB en portails `locked` (« EN CONSTRUCTION ») plutôt qu'absents.
-- Décor de HUB livré par game_art (`hub_decor.png`) intégré : entrée `backlog_art.md` passée `livre` → `integre`.
+- Composition du HUB validée par l'utilisateur : quatre portes en bas de l'écran, personnage sur leur ligne d'accès et établi isolé à droite.
+- Les noms et rectangles placeholder des portails sont retirés ; le décor contient désormais les portes.
 
 ## Livrables produits ou modifiés
-- `game/scripts/game_flow.gd` (nouveau, autoload) ; `game/project.godot` : autoload `GameFlow`.
-- `game/scripts/hub.gd`, `game/scenes/levels/hub.tscn`, `game/data/hub.json`, `game/scripts/hub_portal.gd`, `game/scripts/biome_cleared.gd` (nouveaux).
-- `game/scripts/level.gd` : biome paramétré par `GameFlow`, portail de sortie volontaire, boss conditionnel, transitions HUB.
-- `game/scripts/run_state.gd` : `visited_biomes`/`defeated_bosses` + API. `game/scripts/player.gd` : `heal_full()`. `game/scripts/hud.gd` : boss optionnel. `game/scripts/end_screen.gd`, `game/scripts/title.gd` : transitions via `GameFlow`.
-- `game/data/level.json` → `game/data/biomes/biome1.json` ; `game/scenes/levels/biome1.tscn` → `biome.tscn`.
-- `game/tests/test_game_flow.gd` (9 tests) ; `roadmap.md`, `README.md`, `game_art/backlog_art.md` mis à jour.
+- `game_art/assets/tiles/hub_decor_portals_v2.png` : fond plein écran généré avec quatre portails.
+- `game/data/hub.json` : positions du sol, du joueur, des portails, du Grimoire et de l'établi alignées sur la nouvelle composition.
+- `game/scripts/hub.gd` : géométrie de collision configurable sans masque visuel.
+- `game/scripts/hub_portal.gd` : suppression des rectangles et noms placeholder.
 
 ## Hypothèses validées / invalidées
-- VALIDE : 49/49 tests GUT verts ; boot headless de `hub.tscn` et `biome.tscn` sans erreur ni warning.
-- EN ATTENTE : validation manuelle du jalon J1 — aucun parcours joué cette session.
-- EN ATTENTE : arbitrage de l'attribution des PC sur abandon de run.
+- VALIDE : boot headless de `hub.tscn` sans erreur après synchronisation des assets.
+- EN ATTENTE : validation manuelle complète du jalon J1 et arbitrage des PC en cas d'abandon.
 
 ## Prochaine étape exacte
-Lancer `python run_game.py` et jouer le parcours J1 complet (voir action P1), puis cocher la case « Validation en jeu » de la Phase 3 et écrire la section correspondante dans `tests_manuels.md`.
+Lancer `python run_game.py`, vérifier visuellement la nouvelle disposition du HUB, puis jouer le parcours J1 complet. Cocher ensuite la validation Phase 3 et compléter `tests_manuels.md`.
 
 ## Question bloquante pour la session suivante
 Abandon de run (QUITTER/RECOMMENCER en pause) : PC ×0.5 comme un run raté (choix actuel) ou zéro PC ?
