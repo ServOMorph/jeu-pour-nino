@@ -1,3 +1,8 @@
+## v1.63 - 2026-09-13
+
+### Modifie
+- `_contexte/` et `README.md` : reprise de la refonte complete de `player/run` confiee a Astra pour la prochaine session ; essais ImageGen et WanGP enregistres comme non integrables.
+
 ## v1.61 - 2026-08-02
 
 ### Ajoute

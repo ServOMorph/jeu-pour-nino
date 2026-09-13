@@ -4,6 +4,9 @@
 Attribution des PC en cas d'abandon de run : j'ai retenu que QUITTER/RECOMMENCER depuis la pause comptent comme une fin de run ratée (PC ×0.5 crédités, sauvegarde). Non tranché par `questions.md`. Confirmer ou choisir « abandon = zéro PC ».
 
 ## Actions ouvertes
+- [P1] Reprendre la refonte complète de `player/run` avec Astra : trouver un workflow de génération qui produit 16 frames cohérentes, strictement de profil droit, à fond réellement transparent et sur une ligne de sol commune. Les essais ImageGen et WanGP sont rejetés ; ne pas intégrer ni retoucher les frames existantes.
+  fait quand: une sheet de 16 frames entièrement régénérées passe les contrôles alpha, cohérence visuelle et boucle de course, puis est validée manuellement dans le jeu.
+  réf: `game_art/assets/generated_raw/player/run_imagegen_sheet_test_v2.png`, `game_art/assets/generated_raw/player/run_video_v1/`, `game_art/roadmap_editeur.md` Phase 7
 - [P1] Validation manuelle du jalon J1 (Phase 3) — non faite. Parcours : titre → HUB (fond plein écran, 4 portails accessibles sur la ligne de marche, établi à droite), stèle Grimoire, établi tier 1, portail biome1, miner/crafter/équiper, retour HUB via le portail « RETOUR HUB », vérifier conservation matériaux/équipement et PV pleins, re-entrer dans le biome, tuer le boss (écran « BOSS VAINCU » → HUB), ré-entrer et vérifier que le boss n'est plus là. Vérifier aussi les raccourcis dev du menu titre (HUB / BIOME DIRECT / ATELIER / TEST BOSS).
   fait quand: parcours complet joué sans anomalie, section correspondante ajoutée à `tests_manuels.md`, case « Validation en jeu » cochée dans `roadmap.md` Phase 3.
   réf: `roadmap.md` Phase 3, `game/scripts/game_flow.gd`, `game/scripts/hub.gd`, `python run_game.py`
@@ -36,25 +39,25 @@ Attribution des PC en cas d'abandon de run : j'ai retenu que QUITTER/RECOMMENCER
 - UI à liste scrollable (`craft_menu.gd`, `grimoire_menu.gd`) : pattern de fenêtre glissante à réutiliser pour toute nouvelle UI listant un nombre variable d'éléments.
 - Outils dev (`Dev` autoload) : `dev_resources`, `infinite_hp`, `pc_infinite`, `no_enemies`, `one_shot` — lus/écrits à l'identique par `title.gd`, `pause_menu.gd`, `level.gd` et `hub.gd`. Toute nouvelle bascule dev doit suivre ce pattern.
 - `tests_manuels.md` (racine) : sections 1-12 validées le 2026-07-12 (Phase 2). Aucune section Phase 3 encore écrite.
+- Refonte `player/run` : ImageGen peut produire des poses de course convaincantes, mais ses planches ont soit un cadrage/alignement insuffisant, soit un damier opaque ; WanGP a rendu une vidéo mais dérive du profil droit. Aucun candidat ne doit remplacer la sheet runtime actuelle.
 
-## Dernière session (2026-09-13 — refonte visuelle et spatiale du HUB)
+## Dernière session (2026-09-13 — essais de génération de l'animation de course)
 
 ## Décisions prises
-- Composition du HUB validée par l'utilisateur : quatre portes en bas de l'écran, personnage sur leur ligne d'accès et établi isolé à droite.
-- Les noms et rectangles placeholder des portails sont retirés ; le décor contient désormais les portes.
+- La sheet runtime actuelle est conservée : aucun candidat généré n'est suffisamment fiable pour l'intégration.
+- La prochaine session doit confier à Astra la recherche d'un workflow efficace de génération complète de l'animation `player/run`.
 
 ## Livrables produits ou modifiés
-- `game_art/assets/tiles/hub_decor_portals_v2.png` : fond plein écran généré avec quatre portails.
-- `game/data/hub.json` : positions du sol, du joueur, des portails, du Grimoire et de l'établi alignées sur la nouvelle composition.
-- `game/scripts/hub.gd` : géométrie de collision configurable sans masque visuel.
-- `game/scripts/hub_portal.gd` : suppression des rectangles et noms placeholder.
+- `game_art/assets/generated_raw/player/run_imagegen_sheet_test_v2.png` : candidate ImageGen de 16 poses conservée pour audit, non intégrée.
+- `game_art/assets/generated_raw/player/run_video_v1/` : configuration, rendu et analyse WanGP conservés pour reprise, non intégrés.
 
 ## Hypothèses validées / invalidées
-- VALIDE : boot headless de `hub.tscn` sans erreur après synchronisation des assets.
-- EN ATTENTE : validation manuelle complète du jalon J1 et arbitrage des PC en cas d'abandon.
+- VALIDE : WanGP exécute le rendu vidéo, mais ne conserve pas le profil droit requis.
+- INVALIDE : les planches ImageGen actuelles ne sont pas intégrables — alpha/damier ou alignement des frames non conformes.
+- EN ATTENTE : workflow de génération complet fiable et validation manuelle J1.
 
 ## Prochaine étape exacte
-Lancer `python run_game.py`, vérifier visuellement la nouvelle disposition du HUB, puis jouer le parcours J1 complet. Cocher ensuite la validation Phase 3 et compléter `tests_manuels.md`.
+Demander à Astra de définir et tester un workflow de régénération complète de 16 frames pour `player/run` : profil droit, transparence réelle, grille régulière, appuis crédibles. N'intégrer qu'après contrôles techniques et visuels.
 
 ## Question bloquante pour la session suivante
-Abandon de run (QUITTER/RECOMMENCER en pause) : PC ×0.5 comme un run raté (choix actuel) ou zéro PC ?
+Aucune.
