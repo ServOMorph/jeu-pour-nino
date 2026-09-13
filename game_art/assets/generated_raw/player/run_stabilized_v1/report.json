@@ -1,0 +1,232 @@
+{
+  "verdict": "A_VALIDER_VISUELLEMENT",
+  "integration_runtime_autorisee": false,
+  "input_dir": "game_art/assets/generated_raw/player/run_frames_v2_alpha",
+  "sheet_out": "game_art\\assets\\generated_raw\\player\\run_stabilized_v1\\player_run_sheet_candidate.png",
+  "frame_size": [
+    104,
+    150
+  ],
+  "frame_count": 8,
+  "chroma_green": false,
+  "uniform_scale": 0.11737089201877934,
+  "source_median_height": 1027.0,
+  "ground_y": 149,
+  "ground_span": 0,
+  "checks": {
+    "alpha_sheet": true,
+    "grid_exacte": true,
+    "appuis_alignes": true,
+    "poses_et_boucle": "NON_MESUREES_REQUIERT_VALIDATION_VISUELLE"
+  },
+  "frames": [
+    {
+      "source": "frame_00.png",
+      "source_bbox": [
+        56,
+        315,
+        891,
+        1286
+      ],
+      "source_size": [
+        835,
+        971
+      ],
+      "scale": 0.11737089201877934,
+      "output_bbox": [
+        3,
+        36,
+        101,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        3,
+        36
+      ],
+      "output": "frame_00.png"
+    },
+    {
+      "source": "frame_01.png",
+      "source_bbox": [
+        119,
+        264,
+        847,
+        1221
+      ],
+      "source_size": [
+        728,
+        957
+      ],
+      "scale": 0.11737089201877934,
+      "output_bbox": [
+        10,
+        38,
+        95,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        10,
+        38
+      ],
+      "output": "frame_01.png"
+    },
+    {
+      "source": "frame_02.png",
+      "source_bbox": [
+        37,
+        191,
+        865,
+        1257
+      ],
+      "source_size": [
+        828,
+        1066
+      ],
+      "scale": 0.11737089201877934,
+      "output_bbox": [
+        4,
+        25,
+        101,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        4,
+        25
+      ],
+      "output": "frame_02.png"
+    },
+    {
+      "source": "frame_03.png",
+      "source_bbox": [
+        102,
+        218,
+        818,
+        1261
+      ],
+      "source_size": [
+        716,
+        1043
+      ],
+      "scale": 0.11737089201877934,
+      "output_bbox": [
+        10,
+        28,
+        94,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        10,
+        28
+      ],
+      "output": "frame_03.png"
+    },
+    {
+      "source": "frame_04.png",
+      "source_bbox": [
+        124,
+        246,
+        882,
+        1315
+      ],
+      "source_size": [
+        758,
+        1069
+      ],
+      "scale": 0.11737089201877934,
+      "output_bbox": [
+        8,
+        25,
+        97,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        8,
+        25
+      ],
+      "output": "frame_04.png"
+    },
+    {
+      "source": "frame_05.png",
+      "source_bbox": [
+        49,
+        189,
+        901,
+        1200
+      ],
+      "source_size": [
+        852,
+        1011
+      ],
+      "scale": 0.11737089201877934,
+      "output_bbox": [
+        2,
+        31,
+        102,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        2,
+        31
+      ],
+      "output": "frame_05.png"
+    },
+    {
+      "source": "frame_06.png",
+      "source_bbox": [
+        66,
+        255,
+        828,
+        1300
+      ],
+      "source_size": [
+        762,
+        1045
+      ],
+      "scale": 0.11737089201877934,
+      "output_bbox": [
+        8,
+        27,
+        97,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        8,
+        27
+      ],
+      "output": "frame_06.png"
+    },
+    {
+      "source": "frame_07.png",
+      "source_bbox": [
+        122,
+        242,
+        831,
+        1142
+      ],
+      "source_size": [
+        709,
+        900
+      ],
+      "scale": 0.11737089201877934,
+      "output_bbox": [
+        10,
+        44,
+        93,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        10,
+        44
+      ],
+      "output": "frame_07.png"
+    }
+  ]
+}

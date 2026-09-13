@@ -1,3 +1,12 @@
+## v1.64 - 2026-09-13
+
+### Ajoute
+- `game_art/tools/stabilize_generated_animation.py` : detourage chroma/alpha, echelle uniforme, alignement au sol, assembly de sheet et rapport de controle pour les candidats `player/run`.
+
+### Modifie
+- `game_art/assets/generated_raw/player/run_generated_16_v1/` : premier lot ImageGen complet de 16 frames, normalise et audite ; rejete visuellement, non integre.
+- `_contexte/` et `README.md` : etat de la refonte `player/run` et autorisation utilisateur de stabilisation geometrique limites aux candidats documentes.
+
 ## v1.63 - 2026-09-13
 
 ### Modifie

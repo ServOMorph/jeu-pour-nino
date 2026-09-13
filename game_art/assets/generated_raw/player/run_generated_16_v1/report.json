@@ -1,0 +1,441 @@
+{
+  "verdict": "REJETE_ECHEC_VISUEL",
+  "integration_runtime_autorisee": false,
+  "validation_visuelle": "REJETEE : les poses generees independamment ne forment pas une progression de course assez reguliere ; les variations de silhouette et d'appui restent visibles.",
+  "input_dir": "game_art/assets/generated_raw/player/run_generated_16_v1/source",
+  "sheet_out": "game_art\\assets\\generated_raw\\player\\run_generated_16_v1\\player_run_sheet_candidate_16f.png",
+  "frame_size": [
+    104,
+    150
+  ],
+  "frame_count": 16,
+  "chroma_green": true,
+  "uniform_scale": 0.11340996168582375,
+  "source_median_height": 1224.5,
+  "ground_y": 149,
+  "ground_span": 0,
+  "checks": {
+    "alpha_sheet": true,
+    "grid_exacte": true,
+    "appuis_alignes": true,
+    "poses_et_boucle": "NON_MESUREES_REQUIERT_VALIDATION_VISUELLE"
+  },
+  "frames": [
+    {
+      "source": "frame_00.png",
+      "source_bbox": [
+        105,
+        189,
+        955,
+        1340
+      ],
+      "source_size": [
+        850,
+        1151
+      ],
+      "scale": 0.11340996168582375,
+      "output_bbox": [
+        4,
+        19,
+        100,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        4,
+        19
+      ],
+      "output": "frame_00.png"
+    },
+    {
+      "source": "frame_01.png",
+      "source_bbox": [
+        100,
+        155,
+        900,
+        1343
+      ],
+      "source_size": [
+        800,
+        1188
+      ],
+      "scale": 0.11340996168582375,
+      "output_bbox": [
+        6,
+        15,
+        97,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        6,
+        15
+      ],
+      "output": "frame_01.png"
+    },
+    {
+      "source": "frame_02.png",
+      "source_bbox": [
+        166,
+        94,
+        802,
+        1399
+      ],
+      "source_size": [
+        636,
+        1305
+      ],
+      "scale": 0.11340996168582375,
+      "output_bbox": [
+        16,
+        2,
+        88,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        16,
+        2
+      ],
+      "output": "frame_02.png"
+    },
+    {
+      "source": "frame_03.png",
+      "source_bbox": [
+        116,
+        107,
+        867,
+        1394
+      ],
+      "source_size": [
+        751,
+        1287
+      ],
+      "scale": 0.11340996168582375,
+      "output_bbox": [
+        10,
+        4,
+        95,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        10,
+        4
+      ],
+      "output": "frame_03.png"
+    },
+    {
+      "source": "frame_04.png",
+      "source_bbox": [
+        72,
+        156,
+        930,
+        1270
+      ],
+      "source_size": [
+        858,
+        1114
+      ],
+      "scale": 0.11340996168582375,
+      "output_bbox": [
+        4,
+        24,
+        101,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        4,
+        24
+      ],
+      "output": "frame_04.png"
+    },
+    {
+      "source": "frame_05.png",
+      "source_bbox": [
+        51,
+        149,
+        878,
+        1316
+      ],
+      "source_size": [
+        827,
+        1167
+      ],
+      "scale": 0.11340996168582375,
+      "output_bbox": [
+        5,
+        18,
+        99,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        5,
+        18
+      ],
+      "output": "frame_05.png"
+    },
+    {
+      "source": "frame_06.png",
+      "source_bbox": [
+        102,
+        138,
+        958,
+        1354
+      ],
+      "source_size": [
+        856,
+        1216
+      ],
+      "scale": 0.11340996168582375,
+      "output_bbox": [
+        4,
+        12,
+        101,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        4,
+        12
+      ],
+      "output": "frame_06.png"
+    },
+    {
+      "source": "frame_07.png",
+      "source_bbox": [
+        109,
+        138,
+        934,
+        1365
+      ],
+      "source_size": [
+        825,
+        1227
+      ],
+      "scale": 0.11340996168582375,
+      "output_bbox": [
+        5,
+        11,
+        99,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        5,
+        11
+      ],
+      "output": "frame_07.png"
+    },
+    {
+      "source": "frame_08.png",
+      "source_bbox": [
+        160,
+        98,
+        883,
+        1386
+      ],
+      "source_size": [
+        723,
+        1288
+      ],
+      "scale": 0.11340996168582375,
+      "output_bbox": [
+        11,
+        4,
+        93,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        11,
+        4
+      ],
+      "output": "frame_08.png"
+    },
+    {
+      "source": "frame_09.png",
+      "source_bbox": [
+        106,
+        132,
+        925,
+        1354
+      ],
+      "source_size": [
+        819,
+        1222
+      ],
+      "scale": 0.11340996168582375,
+      "output_bbox": [
+        6,
+        11,
+        99,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        6,
+        11
+      ],
+      "output": "frame_09.png"
+    },
+    {
+      "source": "frame_10.png",
+      "source_bbox": [
+        79,
+        107,
+        841,
+        1392
+      ],
+      "source_size": [
+        762,
+        1285
+      ],
+      "scale": 0.11340996168582375,
+      "output_bbox": [
+        9,
+        4,
+        95,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        9,
+        4
+      ],
+      "output": "frame_10.png"
+    },
+    {
+      "source": "frame_11.png",
+      "source_bbox": [
+        126,
+        133,
+        871,
+        1390
+      ],
+      "source_size": [
+        745,
+        1257
+      ],
+      "scale": 0.11340996168582375,
+      "output_bbox": [
+        10,
+        7,
+        94,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        10,
+        7
+      ],
+      "output": "frame_11.png"
+    },
+    {
+      "source": "frame_12.png",
+      "source_bbox": [
+        107,
+        126,
+        897,
+        1292
+      ],
+      "source_size": [
+        790,
+        1166
+      ],
+      "scale": 0.11340996168582375,
+      "output_bbox": [
+        7,
+        18,
+        97,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        7,
+        18
+      ],
+      "output": "frame_12.png"
+    },
+    {
+      "source": "frame_13.png",
+      "source_bbox": [
+        54,
+        183,
+        911,
+        1305
+      ],
+      "source_size": [
+        857,
+        1122
+      ],
+      "scale": 0.11340996168582375,
+      "output_bbox": [
+        4,
+        23,
+        101,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        4,
+        23
+      ],
+      "output": "frame_13.png"
+    },
+    {
+      "source": "frame_14.png",
+      "source_bbox": [
+        176,
+        103,
+        918,
+        1370
+      ],
+      "source_size": [
+        742,
+        1267
+      ],
+      "scale": 0.11340996168582375,
+      "output_bbox": [
+        10,
+        6,
+        94,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        10,
+        6
+      ],
+      "output": "frame_14.png"
+    },
+    {
+      "source": "frame_15.png",
+      "source_bbox": [
+        174,
+        101,
+        895,
+        1388
+      ],
+      "source_size": [
+        721,
+        1287
+      ],
+      "scale": 0.11340996168582375,
+      "output_bbox": [
+        11,
+        4,
+        93,
+        150
+      ],
+      "output_bottom": 149,
+      "offset": [
+        11,
+        4
+      ],
+      "output": "frame_15.png"
+    }
+  ]
+}

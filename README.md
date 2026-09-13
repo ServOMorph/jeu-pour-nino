@@ -67,8 +67,8 @@ Necessite Godot 4.5 disponible dans le PATH, ou via `D:\tmp\godot45\Godot_v4.5-s
 
 **Phase 3 livree cote code, validation en jeu encore a faire.** Le run est desormais multi-biomes : autoload `GameFlow` (`next_biome_id`, `start_run`/`enter_biome`/`return_to_hub`/`end_run`), HUB jouable (`scenes/levels/hub.tscn`, 4 portails dont 3 verrouilles, stele Grimoire, etabli tier 1, soin complet a l'entree), portail de sortie volontaire dans le biome, boss vaincu memorise par biome dans `RunState`.
 Le HUB utilise un fond plein ecran avec quatre portes integrees et accessibles sur la ligne de marche ; les portails n'affichent plus de noms ni de rectangles placeholder. L'etabli est isole a droite.
-La sheet runtime de course est conservee : les essais de refonte complete ImageGen et WanGP sont rejetes (alpha/grille et profil droit insuffisants).
-La prochaine etape est de definir avec Astra un workflow fiable de regeneration complete des 16 frames de `player/run`, puis de verifier le HUB et valider J1 avant la Phase 4.
+Un outil de stabilisation automatise le detourage chroma/alpha, l'echelle uniforme, l'alignement au sol et l'assemblage des candidats `player/run`. Le premier lot de 16 frames est techniquement conforme mais rejete visuellement ; la sheet runtime validee reste utilisee.
+La prochaine etape est de produire des poses de course plus coherentes, puis de verifier le HUB et valider J1 avant la Phase 4.
 
 ## Roadmap
 

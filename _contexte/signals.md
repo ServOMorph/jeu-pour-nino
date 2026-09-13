@@ -4,9 +4,9 @@
 Attribution des PC en cas d'abandon de run : j'ai retenu que QUITTER/RECOMMENCER depuis la pause comptent comme une fin de run ratée (PC ×0.5 crédités, sauvegarde). Non tranché par `questions.md`. Confirmer ou choisir « abandon = zéro PC ».
 
 ## Actions ouvertes
-- [P1] Reprendre la refonte complète de `player/run` avec Astra : trouver un workflow de génération qui produit 16 frames cohérentes, strictement de profil droit, à fond réellement transparent et sur une ligne de sol commune. Les essais ImageGen et WanGP sont rejetés ; ne pas intégrer ni retoucher les frames existantes.
+- [P1] Reprendre la refonte complète de `player/run` avec un workflow de génération d'images puis stabilisation géométrique automatique des candidats : produire 16 frames cohérentes, strictement de profil droit, à fond transparent et sur une ligne de sol commune. L'autorisation utilisateur couvre uniquement les corrections géométriques automatiques de candidats, jamais la sheet runtime sans validation.
   fait quand: une sheet de 16 frames entièrement régénérées passe les contrôles alpha, cohérence visuelle et boucle de course, puis est validée manuellement dans le jeu.
-  réf: `game_art/assets/generated_raw/player/run_imagegen_sheet_test_v2.png`, `game_art/assets/generated_raw/player/run_video_v1/`, `game_art/roadmap_editeur.md` Phase 7
+  réf: `game_art/tools/stabilize_generated_animation.py`, `game_art/assets/generated_raw/player/run_generated_16_v1/`, `game_art/roadmap_editeur.md` Phase 7
 - [P1] Validation manuelle du jalon J1 (Phase 3) — non faite. Parcours : titre → HUB (fond plein écran, 4 portails accessibles sur la ligne de marche, établi à droite), stèle Grimoire, établi tier 1, portail biome1, miner/crafter/équiper, retour HUB via le portail « RETOUR HUB », vérifier conservation matériaux/équipement et PV pleins, re-entrer dans le biome, tuer le boss (écran « BOSS VAINCU » → HUB), ré-entrer et vérifier que le boss n'est plus là. Vérifier aussi les raccourcis dev du menu titre (HUB / BIOME DIRECT / ATELIER / TEST BOSS).
   fait quand: parcours complet joué sans anomalie, section correspondante ajoutée à `tests_manuels.md`, case « Validation en jeu » cochée dans `roadmap.md` Phase 3.
   réf: `roadmap.md` Phase 3, `game/scripts/game_flow.gd`, `game/scripts/hub.gd`, `python run_game.py`
@@ -39,25 +39,25 @@ Attribution des PC en cas d'abandon de run : j'ai retenu que QUITTER/RECOMMENCER
 - UI à liste scrollable (`craft_menu.gd`, `grimoire_menu.gd`) : pattern de fenêtre glissante à réutiliser pour toute nouvelle UI listant un nombre variable d'éléments.
 - Outils dev (`Dev` autoload) : `dev_resources`, `infinite_hp`, `pc_infinite`, `no_enemies`, `one_shot` — lus/écrits à l'identique par `title.gd`, `pause_menu.gd`, `level.gd` et `hub.gd`. Toute nouvelle bascule dev doit suivre ce pattern.
 - `tests_manuels.md` (racine) : sections 1-12 validées le 2026-07-12 (Phase 2). Aucune section Phase 3 encore écrite.
-- Refonte `player/run` : ImageGen peut produire des poses de course convaincantes, mais ses planches ont soit un cadrage/alignement insuffisant, soit un damier opaque ; WanGP a rendu une vidéo mais dérive du profil droit. Aucun candidat ne doit remplacer la sheet runtime actuelle.
+- Refonte `player/run` : le stabilisateur automatise le détourage chroma, l'échelle uniforme, l'alignement au sol et l'assemblage ; il ne corrige ni les poses ni la cohérence artistique. Le candidat ImageGen 16 frames est techniquement conforme mais rejeté visuellement ; la sheet runtime reste active.
 
-## Dernière session (2026-09-13 — essais de génération de l'animation de course)
+## Dernière session (2026-09-13 — génération et stabilisation de player/run)
 
 ## Décisions prises
-- La sheet runtime actuelle est conservée : aucun candidat généré n'est suffisamment fiable pour l'intégration.
-- La prochaine session doit confier à Astra la recherche d'un workflow efficace de génération complète de l'animation `player/run`.
+- La sheet runtime actuelle est conservée : le candidat 16 frames généré est rejeté après contrôle visuel.
+- L'utilisateur autorise, pour les candidats `player/run` uniquement, les corrections géométriques automatiques de détourage, échelle et alignement.
 
 ## Livrables produits ou modifiés
-- `game_art/assets/generated_raw/player/run_imagegen_sheet_test_v2.png` : candidate ImageGen de 16 poses conservée pour audit, non intégrée.
-- `game_art/assets/generated_raw/player/run_video_v1/` : configuration, rendu et analyse WanGP conservés pour reprise, non intégrés.
+- `game_art/tools/stabilize_generated_animation.py` : outil de détourage chroma/alpha, échelle uniforme, ancrage au sol, assembly et rapport de contrôle.
+- `game_art/assets/generated_raw/player/run_generated_16_v1/` : 16 sources ImageGen, frames normalisées, sheet `1664x150` et rapport ; non intégré.
 
 ## Hypothèses validées / invalidées
-- VALIDE : WanGP exécute le rendu vidéo, mais ne conserve pas le profil droit requis.
-- INVALIDE : les planches ImageGen actuelles ne sont pas intégrables — alpha/damier ou alignement des frames non conformes.
-- EN ATTENTE : workflow de génération complet fiable et validation manuelle J1.
+- VALIDE : le pipeline de stabilisation produit une sheet 16 × `104x150` à alpha réel, grille exacte et appuis alignés.
+- INVALIDE : des poses ImageGen générées indépendamment forment une course incohérente malgré la stabilisation ; le candidat est rejeté.
+- EN ATTENTE : une source de poses cohérente et la validation manuelle J1.
 
 ## Prochaine étape exacte
-Demander à Astra de définir et tester un workflow de régénération complète de 16 frames pour `player/run` : profil droit, transparence réelle, grille régulière, appuis crédibles. N'intégrer qu'après contrôles techniques et visuels.
+Générer un nouveau lot de 16 poses avec un contrôle de pose plus déterministe, le stabiliser avec l'outil puis le rejeter ou l'intégrer selon la lecture visuelle et en jeu.
 
 ## Question bloquante pour la session suivante
 Aucune.
