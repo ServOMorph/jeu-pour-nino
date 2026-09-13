@@ -2,7 +2,7 @@
 description: Clôture la session d'une zone — synthèse, mise à jour du contexte, commit
 argument-hint: <zone>
 model: sonnet
-allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git add:*), Bash(git commit:*), Bash(git push:*)
+allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git add:*), Bash(git commit:*), Bash(git push:*), Bash(codex mcp get:*), Bash(codex mcp remove:*)
 ---
 
 # /close <zone>
@@ -92,6 +92,16 @@ Lire `.claude/zones.md` pour obtenir la table des alias → dossiers réels.
    a été exécutée (pas seulement planifiée). Si une étape a une commande associée (script de build,
    régénération de vue, etc.) et qu'elle n'a pas encore été lancée dans cette session, l'exécuter
    maintenant, avant le commit — jamais après.
+
+9.1 Vérifier si le serveur MCP `blender` est activé :
+   ```bash
+   codex mcp get blender
+   ```
+   - S'il est présent et activé, le désactiver pour les prochaines sessions :
+     ```bash
+     codex mcp remove blender
+     ```
+   - Indiquer dans le bilan final si le serveur a été désactivé ou s'il était déjà absent.
 
 10. Effectuer un commit git :
     ```bash

@@ -39,3 +39,6 @@ Pour refaire une animation, toujours régénérer toutes les frames à partir d�
 
 ## 2026-07-12 — Bindings manette actuels (complète l'entrée 2026-06-21)
 Actions manette additionnelles actives dans `joymap.gd`, absentes de l'entrée initiale : `use_item` = JOY_BUTTON_LEFT_SHOULDER, `sprint` = JOY_BUTTON_LEFT_STICK, `pause_menu` = JOY_BUTTON_START.
+
+## 2026-09-13 — Workflow génération 3D
+Pour générer un personnage, objet ou autre asset réaliste : commencer par des références techniques multi-vues sur fond neutre, séparant silhouette, accessoires et matériaux. Utiliser ensuite un générateur image-vers-3D pour le maillage initial, puis Codex/Blender pour l'import, le nettoyage, les textures, le rig, les contrôles de rendu et l'export Godot. Ne pas créer le maillage initial avec des primitives Blender.

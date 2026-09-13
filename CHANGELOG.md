@@ -1,3 +1,13 @@
+## v1.65 - 2026-09-13
+
+### Ajoute
+- `game_art/models/` : prototypes 3D, base humaine MPFB2, rendus de controle et script reproductible de generation de personnage.
+- `.claude/memory.md` : workflow 3D durable base sur references multi-vues puis generation image-vers-3D.
+
+### Modifie
+- `_contexte/` et `README.md` : prototypes 3D declares non integres et prochaine etape de production documentee.
+- `.claude/commands/close.md` : verification et desactivation du MCP Blender pendant la cloture.
+
 ## v1.64 - 2026-09-13
 
 ### Ajoute

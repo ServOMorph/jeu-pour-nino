@@ -13,6 +13,9 @@ Attribution des PC en cas d'abandon de run : j'ai retenu que QUITTER/RECOMMENCER
 - [P2] Démarrer la Phase 4 — génération procédurale du biome 1 (jalon J2), une fois J1 validé.
   fait quand: deux lancements du biome 1 produisent deux agencements différents et complétables ; `tests/test_biome_generator.gd` vert.
   réf: `roadmap.md` Phase 4
+- [P2] Préparer une planche de références techniques multi-vues avant toute reprise de personnage ou objet 3D réaliste.
+  fait quand: une planche face/profils/dos sur fond neutre et des planches séparées pour accessoires et matériaux sont validées comme entrée d'un générateur image-vers-3D.
+  réf: `.claude/memory.md` (« Workflow génération 3D »), `game_art/assets/concept/`
 - [P2] Bumper `CHANGELOG.md` de la session Phase 2 : toujours en attente (le bump de cette session couvre la Phase 3, pas la clôture Phase 2).
   fait quand: `CHANGELOG.md` contient une entrée décrivant la clôture Phase 2 (barème PC, armes à distance, outils dev, défilement UI).
   réf: `CHANGELOG.md`, `git log`
@@ -41,23 +44,24 @@ Attribution des PC en cas d'abandon de run : j'ai retenu que QUITTER/RECOMMENCER
 - `tests_manuels.md` (racine) : sections 1-12 validées le 2026-07-12 (Phase 2). Aucune section Phase 3 encore écrite.
 - Refonte `player/run` : le stabilisateur automatise le détourage chroma, l'échelle uniforme, l'alignement au sol et l'assemblage ; il ne corrige ni les poses ni la cohérence artistique. Le candidat ImageGen 16 frames est techniquement conforme mais rejeté visuellement ; la sheet runtime reste active.
 
-## Dernière session (2026-09-13 — génération et stabilisation de player/run)
+## Dernière session (2026-09-13 — workflow 3D réaliste)
 
 ## Décisions prises
-- La sheet runtime actuelle est conservée : le candidat 16 frames généré est rejeté après contrôle visuel.
-- L'utilisateur autorise, pour les candidats `player/run` uniquement, les corrections géométriques automatiques de détourage, échelle et alignement.
+- Le maillage initial d'un asset 3D réaliste doit venir d'un générateur image-vers-3D, jamais de primitives Blender.
+- La référence de production doit être une planche technique multi-vues, séparant silhouette, accessoires et matériaux.
 
 ## Livrables produits ou modifiés
-- `game_art/tools/stabilize_generated_animation.py` : outil de détourage chroma/alpha, échelle uniforme, ancrage au sol, assembly et rapport de contrôle.
-- `game_art/assets/generated_raw/player/run_generated_16_v1/` : 16 sources ImageGen, frames normalisées, sheet `1664x150` et rapport ; non intégré.
+- `game_art/models/` : prototypes Blender, base MPFB2, rendus de contrôle et script de génération ; aucun n'est intégré au jeu.
+- `.claude/memory.md` : workflow 3D durable enregistré.
+- `.claude/commands/close.md` : contrôle et désactivation du MCP Blender ajoutés à la clôture.
 
 ## Hypothèses validées / invalidées
-- VALIDE : le pipeline de stabilisation produit une sheet 16 × `104x150` à alpha réel, grille exacte et appuis alignés.
-- INVALIDE : des poses ImageGen générées indépendamment forment une course incohérente malgré la stabilisation ; le candidat est rejeté.
-- EN ATTENTE : une source de poses cohérente et la validation manuelle J1.
+- VALIDE : Blender 4.5 LTS et MPFB2 génèrent une base humaine automatisée.
+- INVALIDE : primitives Blender et vêtements procéduraux suffisent à produire un personnage réaliste ; les prototypes sont rejetés comme versions finales.
+- EN ATTENTE : une planche de références technique validée et un accès à un générateur image-vers-3D.
 
 ## Prochaine étape exacte
-Générer un nouveau lot de 16 poses avec un contrôle de pose plus déterministe, le stabiliser avec l'outil puis le rejeter ou l'intégrer selon la lecture visuelle et en jeu.
+Créer puis valider une planche orthographique multi-vues du personnage, avant tout nouvel essai de génération 3D.
 
 ## Question bloquante pour la session suivante
-Aucune.
+Quel générateur image-vers-3D et quel accès API doivent être utilisés ?
