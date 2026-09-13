@@ -13,9 +13,9 @@ Attribution des PC en cas d'abandon de run : j'ai retenu que QUITTER/RECOMMENCER
 - [P2] Démarrer la Phase 4 — génération procédurale du biome 1 (jalon J2), une fois J1 validé.
   fait quand: deux lancements du biome 1 produisent deux agencements différents et complétables ; `tests/test_biome_generator.gd` vert.
   réf: `roadmap.md` Phase 4
-- [P2] Préparer une planche de références techniques multi-vues avant toute reprise de personnage ou objet 3D réaliste.
-  fait quand: une planche face/profils/dos sur fond neutre et des planches séparées pour accessoires et matériaux sont validées comme entrée d'un générateur image-vers-3D.
-  réf: `.claude/memory.md` (« Workflow génération 3D »), `game_art/assets/concept/`
+- [P2] Améliorer le personnage SF3D avec des références techniques plus précises, puis nettoyage du maillage, textures, rig et contrôles de rendu dans Blender.
+  fait quand: une version validée visuellement dispose d'une silhouette, matériaux, accessoires et proportions corrigés, avec rig exploitable et export Godot.
+  réf: `game_art/assets/concept/player_adventurer_orthographic_v1.png`, `game_art/models/sf3d_player_v1/player_adventurer_sf3d_v1.glb`, `.claude/memory.md` (« Workflow génération 3D »)
 - [P2] Bumper `CHANGELOG.md` de la session Phase 2 : toujours en attente (le bump de cette session couvre la Phase 3, pas la clôture Phase 2).
   fait quand: `CHANGELOG.md` contient une entrée décrivant la clôture Phase 2 (barème PC, armes à distance, outils dev, défilement UI).
   réf: `CHANGELOG.md`, `git log`
@@ -44,24 +44,24 @@ Attribution des PC en cas d'abandon de run : j'ai retenu que QUITTER/RECOMMENCER
 - `tests_manuels.md` (racine) : sections 1-12 validées le 2026-07-12 (Phase 2). Aucune section Phase 3 encore écrite.
 - Refonte `player/run` : le stabilisateur automatise le détourage chroma, l'échelle uniforme, l'alignement au sol et l'assemblage ; il ne corrige ni les poses ni la cohérence artistique. Le candidat ImageGen 16 frames est techniquement conforme mais rejeté visuellement ; la sheet runtime reste active.
 
-## Dernière session (2026-09-13 — workflow 3D réaliste)
+## Dernière session (2026-09-13 — génération SF3D locale)
 
 ## Décisions prises
-- Le maillage initial d'un asset 3D réaliste doit venir d'un générateur image-vers-3D, jamais de primitives Blender.
-- La référence de production doit être une planche technique multi-vues, séparant silhouette, accessoires et matériaux.
+- Stable Fast 3D local est retenu comme générateur gratuit de maillage initial, avec CUDA 12.8 et PyTorch 2.7.1 isolés sur `D:`.
+- La prochaine session améliorera le réalisme par références multi-vues plus précises, nettoyage, textures, rig et rendu Blender ; le GLB généré reste une base, pas un modèle final.
 
 ## Livrables produits ou modifiés
-- `game_art/models/` : prototypes Blender, base MPFB2, rendus de contrôle et script de génération ; aucun n'est intégré au jeu.
-- `.claude/memory.md` : workflow 3D durable enregistré.
-- `.claude/commands/close.md` : contrôle et désactivation du MCP Blender ajoutés à la clôture.
+- `game_art/assets/concept/player_adventurer_orthographic_v1.png` : planche technique multi-vues et vue de face préparée.
+- `game_art/models/run_sf3d_local.py` : génération locale SF3D autonome.
+- `game_art/models/sf3d_player_v1/player_adventurer_sf3d_v1.glb` : maillage texturé exporté et importé dans Blender avec succès.
 
 ## Hypothèses validées / invalidées
-- VALIDE : Blender 4.5 LTS et MPFB2 génèrent une base humaine automatisée.
-- INVALIDE : primitives Blender et vêtements procéduraux suffisent à produire un personnage réaliste ; les prototypes sont rejetés comme versions finales.
-- EN ATTENTE : une planche de références technique validée et un accès à un générateur image-vers-3D.
+- VALIDE : SF3D produit localement un GLB texturé à partir de la référence, importable dans Blender (11 107 sommets, 15 020 faces, un matériau).
+- INVALIDE : une vue de face unique suffit à obtenir un personnage réaliste final ; elle ne produit qu'une base de travail.
+- EN ATTENTE : amélioration manuelle assistée dans Blender selon les références multi-vues et les contrôles de rendu.
 
 ## Prochaine étape exacte
-Créer puis valider une planche orthographique multi-vues du personnage, avant tout nouvel essai de génération 3D.
+À partir du GLB SF3D, créer des références techniques plus précises si nécessaire, puis nettoyer le maillage, corriger matériaux/accessoires, rigger et rendre des vues de contrôle dans Blender.
 
 ## Question bloquante pour la session suivante
-Quel générateur image-vers-3D et quel accès API doivent être utilisés ?
+Aucune

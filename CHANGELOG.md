@@ -1,3 +1,12 @@
+## v1.66 - 2026-09-13
+
+### Ajoute
+- `game_art/assets/concept/` : références techniques multi-vues et vue de face du personnage pour la reconstruction 3D.
+- `game_art/models/run_sf3d_local.py` et `game_art/models/sf3d_player_v1/` : génération locale Stable Fast 3D et export GLB texturé validé dans Blender.
+
+### Modifie
+- `_contexte/` et `README.md` : état du workflow 3D aligné sur la base SF3D livrée et la passe de réalisme prévue.
+
 ## v1.65 - 2026-09-13
 
 ### Ajoute
