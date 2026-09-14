@@ -1,4 +1,4 @@
-# Signals — jeu   (MAJ 2026-09-13)
+# Signals — jeu   (MAJ 2026-09-14)
 
 ## Question bloquante
 Attribution des PC en cas d'abandon de run : j'ai retenu que QUITTER/RECOMMENCER depuis la pause comptent comme une fin de run ratée (PC ×0.5 crédités, sauvegarde). Non tranché par `questions.md`. Confirmer ou choisir « abandon = zéro PC ».
@@ -15,7 +15,7 @@ Attribution des PC en cas d'abandon de run : j'ai retenu que QUITTER/RECOMMENCER
   réf: `roadmap.md` Phase 4
 - [P2] Améliorer le personnage SF3D avec des références techniques plus précises, puis nettoyage du maillage, textures, rig et contrôles de rendu dans Blender.
   fait quand: une version validée visuellement dispose d'une silhouette, matériaux, accessoires et proportions corrigés, avec rig exploitable et export Godot.
-  réf: `game_art/assets/concept/player_adventurer_orthographic_v1.png`, `game_art/models/sf3d_player_v1/player_adventurer_sf3d_v1.glb`, `.claude/memory.md` (« Workflow génération 3D »)
+  réf: `game_art/models/BLENDER_SF3D_WORKFLOW.md`, `game_art/assets/concept/player_adventurer_orthographic_v1.png`, `game_art/models/sf3d_player_v1/player_adventurer_sf3d_v1.glb`, `.claude/memory.md` (« Workflow génération 3D »)
 - [P2] Bumper `CHANGELOG.md` de la session Phase 2 : toujours en attente (le bump de cette session couvre la Phase 3, pas la clôture Phase 2).
   fait quand: `CHANGELOG.md` contient une entrée décrivant la clôture Phase 2 (barème PC, armes à distance, outils dev, défilement UI).
   réf: `CHANGELOG.md`, `git log`
@@ -27,6 +27,7 @@ Attribution des PC en cas d'abandon de run : j'ai retenu que QUITTER/RECOMMENCER
   réf: `game_art/backlog_art.md`
 
 ## Contexte chaud
+- Blender local vérifié : `D:\blender\blender.exe` (5.2.0 LTS). Pour toute reprise SF3D, `start.md` charge `game_art/models/BLENDER_SF3D_WORKFLOW.md` avant action ; ne jamais déduire l'absence de Blender du `PATH` ou de l'état du MCP.
 - `questions.md` (racine) : 77+1 questions de conception v3 tranchées le 2026-07-06 — source de vérité pour tout arbitrage de design ambigu.
 - Godot 4.5 : `D:\tmp\godot45\Godot_v4.5-stable_win64.exe`. GUT headless : `--headless --path game -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit` (49/49 verts au 2026-07-14). Lancement jeu : `python run_game.py`.
 - `GameFlow` (autoload, `scripts/game_flow.gd`) : unique point d'entrée du flux de run. `start_run()` est le SEUL appel de `RunState.reset()` du projet — ne jamais le rappeler ailleurs. `enter_biome(id)` charge `res://data/biomes/<id>.json` via `next_biome_id`, `return_to_hub()`, `end_run(failed)` (calcul PC + `SaveManager.save_meta()`).
@@ -44,24 +45,23 @@ Attribution des PC en cas d'abandon de run : j'ai retenu que QUITTER/RECOMMENCER
 - `tests_manuels.md` (racine) : sections 1-12 validées le 2026-07-12 (Phase 2). Aucune section Phase 3 encore écrite.
 - Refonte `player/run` : le stabilisateur automatise le détourage chroma, l'échelle uniforme, l'alignement au sol et l'assemblage ; il ne corrige ni les poses ni la cohérence artistique. Le candidat ImageGen 16 frames est techniquement conforme mais rejeté visuellement ; la sheet runtime reste active.
 
-## Dernière session (2026-09-13 — génération SF3D locale)
+## Dernière session (2026-09-14 — reprise Blender persistante)
 
 ## Décisions prises
-- Stable Fast 3D local est retenu comme générateur gratuit de maillage initial, avec CUDA 12.8 et PyTorch 2.7.1 isolés sur `D:`.
-- La prochaine session améliorera le réalisme par références multi-vues plus précises, nettoyage, textures, rig et rendu Blender ; le GLB généré reste une base, pas un modèle final.
+- Toute demande de personnage, objet ou asset avec Blender charge le guide SF3D/Blender avant action.
+- Blender est vérifié par son chemin direct ; le MCP reste facultatif et désactivé par défaut.
 
 ## Livrables produits ou modifiés
-- `game_art/assets/concept/player_adventurer_orthographic_v1.png` : planche technique multi-vues et vue de face préparée.
-- `game_art/models/run_sf3d_local.py` : génération locale SF3D autonome.
-- `game_art/models/sf3d_player_v1/player_adventurer_sf3d_v1.glb` : maillage texturé exporté et importé dans Blender avec succès.
+- `.claude/commands/start.md` : reprise automatique du guide Blender/SF3D ajoutée.
+- `game_art/models/BLENDER_SF3D_WORKFLOW.md` : exécutable Blender, règles non destructives et passe de réalisme documentés.
 
 ## Hypothèses validées / invalidées
-- VALIDE : SF3D produit localement un GLB texturé à partir de la référence, importable dans Blender (11 107 sommets, 15 020 faces, un matériau).
-- INVALIDE : une vue de face unique suffit à obtenir un personnage réaliste final ; elle ne produit qu'une base de travail.
-- EN ATTENTE : amélioration manuelle assistée dans Blender selon les références multi-vues et les contrôles de rendu.
+- VALIDE : `D:\blender\blender.exe --version` confirme Blender 5.2.0 LTS.
+- INVALIDE : l'absence de Blender dans le `PATH` prouve son indisponibilité -> vérification directe obligatoire.
+- EN ATTENTE : passe de nettoyage, matériaux, rig et rendu du GLB SF3D.
 
 ## Prochaine étape exacte
-À partir du GLB SF3D, créer des références techniques plus précises si nécessaire, puis nettoyer le maillage, corriger matériaux/accessoires, rigger et rendre des vues de contrôle dans Blender.
+Lire le guide Blender/SF3D, puis produire une nouvelle itération non destructive du GLB avec nettoyage, matériaux, rig et rendus de contrôle.
 
 ## Question bloquante pour la session suivante
 Aucune

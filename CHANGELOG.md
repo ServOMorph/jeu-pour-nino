@@ -1,3 +1,12 @@
+## v1.67 - 2026-09-14
+
+### Ajoute
+- `game_art/models/BLENDER_SF3D_WORKFLOW.md` : procédure de reprise Blender/SF3D, exécutable local, contrôles non destructifs et passe de réalisme.
+
+### Modifie
+- `.claude/commands/start.md` : chargement obligatoire du guide pour toute reprise Blender/SF3D et vérification du chemin direct de Blender.
+- `_contexte/` et `README.md` : contexte 3D de démarrage fiabilisé.
+
 ## v1.66 - 2026-09-13
 
 ### Ajoute

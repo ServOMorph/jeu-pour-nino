@@ -10,13 +10,11 @@ Jeu de plateforme/action pixel art fait pour Nino. Roguelite : exploration de bi
 ## État actuel (réécrit intégralement à chaque /close)
 **Phase 3 livrée côté code — validation manuelle J1 non faite.** Le HUB est jouable avec quatre portails, Grimoire, établi tier 1 et soin complet à l'entrée ; `GameFlow` centralise le run multi-biomes.
 Un outil stabilise les candidats `player/run` par détourage chroma/alpha, échelle uniforme, ligne de sol et assembly de sheet ; le premier lot est rejeté visuellement et la sheet runtime validée est restaurée.
-Une première base 3D locale SF3D est générée et validée à l'import Blender ; elle n'est pas intégrée au jeu et reste à nettoyer, texturer, rigger et contrôler visuellement.
+Une première base 3D locale SF3D est générée et validée à l'import Blender ; `start.md` charge désormais le guide de reprise et vérifie `D:\blender\blender.exe` avant toute action 3D.
 L'autorisation utilisateur de correction géométrique automatique vaut seulement pour les candidats `player/run`, jamais pour une intégration sans validation.
 Prochaine étape 3D : améliorer cette base selon des références techniques multi-vues, puis vérifier le HUB en jeu et valider J1 avant la Phase 4.
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
-- 2026-07-11 : Validation manuelle Phase 2 engagée — deux blocages identifiés (découverte de recettes absente, sélection consommable sans effet visible) à traiter en priorité avant de clore la Phase 2.
-- 2026-07-12 : Validation manuelle Phase 2 complétée (sections 1-9, sans anomalie bloquante). Diagnostic 8.6 : faux bug, comportement correct.
 - 2026-07-12 : `discover_recipe()` branché sur victoire boss uniquement (3/20 recettes non-starter) — triggers salle/porteur attendent des systèmes non développés (biomes multiples, porteurs).
 - 2026-07-12 : Audit mémoire projet + pivot pixel art — `.claude/memory.md` corrigé (bindings manette, dimensions player) ; confirmé qu'aucune trace active de l'ancien pixel art ne subsiste côté jeu, hors `ref_to_sprite.py` (dette game_art, tracée dans `backlog_art.md`).
 - 2026-07-14 : Phase 3 livrée côté code — autoload `GameFlow` (unique point de `RunState.reset()`), HUB (`hub.tscn`/`hub.gd`/`hub.json`), scène de biome générique paramétrée par `next_biome_id`, portail de sortie volontaire, soin complet au HUB, boss vaincu mémorisé par biome. Battre un boss de biome ne termine plus le run (retour HUB). Abandon de run via la pause traité comme un run raté (PC ×0.5) — décision à confirmer. Validation en jeu du jalon J1 reportée à la session suivante.
@@ -26,3 +24,4 @@ Prochaine étape 3D : améliorer cette base selon des références techniques mu
 - 2026-09-13 : Pour les candidats `player/run`, l'utilisateur autorise la stabilisation géométrique automatique. Le premier lot 16 frames passe alpha/grille/appuis mais est rejeté visuellement ; la sheet runtime est restaurée.
 - 2026-09-13 : Workflow 3D acté : références techniques multi-vues, génération image-vers-3D du maillage initial, puis Codex/Blender pour nettoyage, rig, contrôles et export ; les primitives Blender ne servent pas à créer un asset réaliste initial.
 - 2026-09-13 : Stable Fast 3D local produit une première base GLB texturée du personnage depuis la référence ; son import Blender est validé, mais la qualité ne constitue pas un asset final et impose une passe de nettoyage, matériaux, rig et rendu.
+- 2026-09-14 : Reprise Blender fiabilisée : `start.md` charge le guide SF3D/Blender et vérifie l'exécutable local, sans dépendre du `PATH` ni du MCP.

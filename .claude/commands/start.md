@@ -75,4 +75,9 @@ Lire `.claude/zones.md` pour obtenir la table des alias → dossiers réels.
   3. à priorité égale, prendre les éléments au statut `en_cours` avant `a_faire`
   4. ignorer le reste tant que ces urgences ne sont pas traitées
 
+**Étape 4b (reprise Blender/SF3D) :**
+- Si `signals.md` contient l'action « Améliorer le personnage SF3D » ou si l'utilisateur demande de poursuivre un personnage, objet ou asset avec Blender : lire intégralement `game_art/models/BLENDER_SF3D_WORKFLOW.md` avant de répondre ou d'agir.
+- Vérifier Blender avec `D:\blender\blender.exe --version`. Ne jamais conclure que Blender est absent à partir du seul `PATH` ou de l'état du MCP.
+- Le MCP Blender reste désactivé par défaut. Utiliser Blender en arrière-plan pour les contrôles non destructifs ; n'activer le MCP que si l'utilisateur le demande explicitement.
+
 <!-- SPECIFICITES PROJET : FIN -->
