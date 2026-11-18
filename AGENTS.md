@@ -44,3 +44,10 @@ Certains dossiers ou fichiers peuvent contenir des données sensibles (informati
 
 ## Délégation Ollama
 Pour les tâches répétitives et templated (commits, posts, changelogs, données de test, digest de logs), déléguer à Ollama via `./ollama_call.sh` plutôt que de traiter en cloud. Ne jamais envoyer de données sensibles à un modèle cloud.
+
+## Modèle Codex
+
+Quand l'agent est Codex : modèle `gpt-6.1-sol` uniquement, jamais `astra`. Le modèle est
+affiché en tête de la sortie (ligne `model:`) ; le vérifier au démarrage. En cas de refus du
+modèle (« not supported with a ChatGPT account »), s'arrêter et le signaler, ne pas choisir un
+autre modèle.
